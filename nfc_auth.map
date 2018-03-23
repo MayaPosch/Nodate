@@ -1,0 +1,1658 @@
+Archive member included to satisfy reference by file (symbol)
+
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o (exit)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+                              obj/arduino/WString.o (symbol from plugin) (dtostrf)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+                              obj/arduino/WMath.o (symbol from plugin) (random)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+                              obj/arduino/WString.o (symbol from plugin) (atof)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+                              obj/arduino/WString.o (symbol from plugin) (atol)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strcpy_P.o)
+                              obj/arduino/WString.o (symbol from plugin) (strcpy_P)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+                              obj/arduino/WString.o (symbol from plugin) (__strlen_P)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+                              obj/arduino/WString.o (symbol from plugin) (__itoa)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o) (__itoa_ncheck)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+                              obj/arduino/WString.o (symbol from plugin) (__ltoa)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o) (__ltoa_ncheck)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsi10.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o) (__mulsi_const_10)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+                              obj/arduino/WString.o (symbol from plugin) (__ultoa)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o) (__ultoa_ncheck)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+                              obj/arduino/WString.o (symbol from plugin) (__utoa)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o) (__utoa_ncheck)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o) (dtoa_prf)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o) (strtod)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o) (__ftoa_engine)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (isspace)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (strncasecmp_P)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o) (strrev)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (__eqsf2)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (__floatunsisf)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_cmp.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o) (__fp_cmp)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (__mulsf3)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o) (__mulsf3x)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (errno)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o) (__ctype_isfalse)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_inf.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o) (__fp_inf)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_nan.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o) (__fp_nan)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscA.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o) (__fp_pscA)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscB.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o) (__fp_pscB)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_round.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o) (__fp_round)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o) (__fp_split3)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o) (__fp_szero)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o) (__divmodsi4)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o) (__negsi2)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o) (__do_copy_data)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o) (__do_clear_bss)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o) (__muluhisi3)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o) (__mulohisi3)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (__prologue_saves__)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o) (__epilogue_restores__)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o) (__udivmodsi4)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o) (__umulhisi3)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+                              D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o (__do_global_ctors)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o) (__tablejump2__)
+d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+                              D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o (abort)
+
+Allocating common symbols
+Common symbol       size              file
+
+errno               0x2               d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+
+Discarded input sections
+
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ .text          0x00000000        0x0 obj/arduino/CDC.o (symbol from plugin)
+ .text          0x00000000        0x0 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .data          0x00000000        0x0 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss           0x00000000        0x0 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN5Print5flushEv
+                0x00000000        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text.__cxa_pure_virtual
+                0x00000000        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer0_pin_mask
+                0x00000000        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer1_pin_mask
+                0x00000000        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer0_toggle_count
+                0x00000000        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer1_toggle_count
+                0x00000000        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text          0x00000000        0x0 obj/arduino/HardwareSerial.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV14HardwareSerial
+                0x00000000        0x0 obj/arduino/HardwareSerial.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/main.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/WMath.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/PluggableUSB.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/new.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/USBCore.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/abi.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/Stream.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/Print.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print17availableForWriteEv
+                0x00000000        0x0 obj/arduino/Print.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print5flushEv
+                0x00000000        0x0 obj/arduino/Print.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print5writeEPKc
+                0x00000000        0x0 obj/arduino/Print.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print5writeEPKcj
+                0x00000000        0x0 obj/arduino/Print.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV5Print
+                0x00000000        0x0 obj/arduino/Print.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/HardwareSerial1.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/HardwareSerial2.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/Tone.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/HardwareSerial3.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/WString.o (symbol from plugin)
+ .gnu.linkonce.t._ZNK6String14StringIfHelperEv
+                0x00000000        0x0 obj/arduino/WString.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/HardwareSerial0.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print17availableForWriteEv
+                0x00000000        0x0 obj/arduino/HardwareSerial0.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print5flushEv
+                0x00000000        0x0 obj/arduino/HardwareSerial0.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV6Stream
+                0x00000000        0x0 obj/arduino/HardwareSerial0.o (symbol from plugin)
+ .gnu.linkonce.t._ZN14HardwareSerial16_rx_complete_irqEv
+                0x00000000        0x0 obj/arduino/HardwareSerial0.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/IPAddress.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV9Printable
+                0x00000000        0x0 obj/arduino/IPAddress.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV9IPAddress
+                0x00000000        0x0 obj/arduino/IPAddress.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print17availableForWriteEv
+                0x00000000        0x0 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+ .gnu.linkonce.t._ZN5Print5flushEv
+                0x00000000        0x0 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV6Stream
+                0x00000000        0x0 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+ .gnu.linkonce.t._ZTV7TwoWire
+                0x00000000        0x0 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/wiring_shift.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/wiring_analog.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/wiring_pulse.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/hooks.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/WInterrupts.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/wiring_digital.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/wiring.o (symbol from plugin)
+ .text          0x00000000        0x0 obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+ .text.avr-libc
+                0x00000000       0x40 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+ .comment       0x00000000       0x31 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+ .data          0x00000000        0x4 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+ .text.avr-libc
+                0x00000000       0xb8 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+ .comment       0x00000000       0x31 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+ .text.avr-libc
+                0x00000000        0x8 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+ .text.avr-libc
+                0x00000000       0x4e d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strcpy_P.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strcpy_P.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strcpy_P.o)
+ .text.avr-libc
+                0x00000000        0xe d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strcpy_P.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+ .text.avr-libc
+                0x00000000       0x12 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .text.avr-libc
+                0x00000000       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+ .text.avr-libc
+                0x00000000       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+ .text.avr-libc
+                0x00000000       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+ .text.avr-libc
+                0x00000000       0x1e d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsi10.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsi10.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsi10.o)
+ .text.avr-libc
+                0x00000000       0x2a d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsi10.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .text.avr-libc
+                0x00000000       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+ .text.avr-libc
+                0x00000000       0x44 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .text.avr-libc
+                0x00000000       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+ .text.avr-libc
+                0x00000000       0x34 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+ .text.avr-libc
+                0x00000000      0x31c d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+ .comment       0x00000000       0x31 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+ .text.avr-libc
+                0x00000000      0x2ba d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+ .progmem.data  0x00000000       0x3b d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+ .comment       0x00000000       0x31 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+ .text.avr-libc
+                0x00000000      0x1b0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+ .progmem.data  0x00000000       0xfa d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+ .text.avr-libc
+                0x00000000       0x12 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+ .text.avr-libc
+                0x00000000       0x30 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .text.avr-libc
+                0x00000000       0x20 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+ .text.avr-libc.fplib
+                0x00000000        0xa d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+ .text.avr-libc.fplib
+                0x00000000       0x7a d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_cmp.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_cmp.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_cmp.o)
+ .text.avr-libc.fplib
+                0x00000000       0x48 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_cmp.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+ .text.avr-libc.fplib
+                0x00000000        0x8 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+ .text.avr-libc.fplib
+                0x00000000       0xd2 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+ .comment       0x00000000       0x2d d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+ COMMON         0x00000000        0x2 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+ .text.avr-libc
+                0x00000000        0x6 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_inf.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_inf.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_inf.o)
+ .text.avr-libc.fplib
+                0x00000000        0xc d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_inf.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_nan.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_nan.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_nan.o)
+ .text.avr-libc.fplib
+                0x00000000        0x6 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_nan.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscA.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscA.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscA.o)
+ .text.avr-libc.fplib
+                0x00000000        0xe d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscA.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscB.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscB.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscB.o)
+ .text.avr-libc.fplib
+                0x00000000        0xe d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscB.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_round.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_round.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_round.o)
+ .text.avr-libc.fplib
+                0x00000000       0x22 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_round.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+ .text.avr-libc.fplib
+                0x00000000       0x44 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+ .text.avr-libc.fplib
+                0x00000000        0xe d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc.div
+                0x00000000       0x2e d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc.div
+                0x00000000       0x10 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc.mul
+                0x00000000       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc.mul
+                0x00000000       0x10 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.prologue
+                0x00000000       0x38 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.prologue
+                0x00000000       0x36 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.mul
+                0x00000000       0x1e d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc   0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.div
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+ .text          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+ .data          0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+ .bss           0x00000000        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+ .text.avr-libc
+                0x00000000        0xa d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000003         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+user_signatures  0x00850000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+LOAD obj/arduino/CDC.o
+LOAD D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+LOAD obj/arduino/HardwareSerial.o
+LOAD obj/arduino/main.o
+LOAD obj/arduino/WMath.o
+LOAD obj/arduino/PluggableUSB.o
+LOAD obj/arduino/new.o
+LOAD obj/arduino/USBCore.o
+LOAD obj/arduino/abi.o
+LOAD obj/arduino/Stream.o
+LOAD obj/arduino/Print.o
+LOAD obj/arduino/HardwareSerial1.o
+LOAD obj/arduino/HardwareSerial2.o
+LOAD obj/arduino/Tone.o
+LOAD obj/arduino/HardwareSerial3.o
+LOAD obj/arduino/WString.o
+LOAD obj/arduino/HardwareSerial0.o
+LOAD obj/arduino/IPAddress.o
+LOAD obj/arduino/libraries/Wire/src/Wire.o
+LOAD obj/arduino/libraries/SPI/src/SPI.o
+LOAD obj/arduino/wiring_shift.o
+LOAD obj/arduino/wiring_analog.o
+LOAD obj/arduino/wiring_pulse.o
+LOAD obj/arduino/hooks.o
+LOAD obj/arduino/WInterrupts.o
+LOAD obj/arduino/wiring_digital.o
+LOAD obj/arduino/wiring.o
+LOAD obj/arduino/libraries/Wire/src/utility/twi.o
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libm.a
+START GROUP
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libm.a
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a
+LOAD d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libatmega328p.a
+END GROUP
+                0x00020000                __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x20000
+                0x0000ffa0                __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
+                0x00010000                __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
+                [0x00000003]                __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
+                0x00000400                __LOCK_REGION_LENGTH__ = DEFINED (__LOCK_REGION_LENGTH__)?__LOCK_REGION_LENGTH__:0x400
+                0x00000400                __SIGNATURE_REGION_LENGTH__ = DEFINED (__SIGNATURE_REGION_LENGTH__)?__SIGNATURE_REGION_LENGTH__:0x400
+                0x00000400                __USER_SIGNATURE_REGION_LENGTH__ = DEFINED (__USER_SIGNATURE_REGION_LENGTH__)?__USER_SIGNATURE_REGION_LENGTH__:0x400
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000      0xba6
+ *(.vectors)
+ .vectors       0x00000000       0x68 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+                0x00000000                __vector_default
+                0x00000000                __vectors
+ *(.vectors)
+ *(.progmem.gcc*)
+                0x00000068                . = ALIGN (0x2)
+                0x00000068                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x00000068        0x0 linker stubs
+ *(.trampolines*)
+                0x00000068                __trampolines_end = .
+ *libprintf_flt.a:*(.progmem.data)
+ *libc.a:*(.progmem.data)
+ *(.progmem*)
+ .progmem.data.port_to_output_PGM
+                0x00000068        0xa D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .progmem.data.digital_pin_to_port_PGM
+                0x00000072       0x14 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .progmem.data.digital_pin_to_bit_mask_PGM
+                0x00000086       0x14 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .progmem.data.digital_pin_to_timer_PGM
+                0x0000009a       0x14 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .progmem.data._ZL21tone_pin_to_timer_PGM
+                0x000000ae        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x000000b0                . = ALIGN (0x2)
+ *fill*         0x000000af        0x1 
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000000b0                __ctors_start = .
+ *(.ctors)
+ .ctors         0x000000b0        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x000000b2                __ctors_end = .
+                0x000000b2                __dtors_start = .
+ *(.dtors)
+                0x000000b2                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000000b2        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+                0x000000b2                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000000b2        0xc d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000000be       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+                0x000000be                __do_copy_data
+ .init4         0x000000d4       0x10 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+                0x000000d4                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ .init6         0x000000e4       0x16 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+                0x000000e4                __do_global_ctors
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000000fa        0x8 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ *(.init9)
+ *(.text)
+ .text          0x00000102        0x4 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+                0x00000102                __vector_22
+                0x00000102                __vector_12
+                0x00000102                __bad_interrupt
+                0x00000102                __vector_6
+                0x00000102                __vector_3
+                0x00000102                __vector_23
+                0x00000102                __vector_25
+                0x00000102                __vector_11
+                0x00000102                __vector_13
+                0x00000102                __vector_17
+                0x00000102                __vector_5
+                0x00000102                __vector_4
+                0x00000102                __vector_9
+                0x00000102                __vector_21
+                0x00000102                __vector_15
+                0x00000102                __vector_8
+                0x00000102                __vector_14
+                0x00000102                __vector_10
+                0x00000102                __vector_20
+                0x00000106                . = ALIGN (0x2)
+ *(.text.*)
+ .text.twi_stop
+                0x00000106       0x14 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text.twi_transmit
+                0x0000011a       0x50 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text.nothing  0x0000016a        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN7TwoWire5flushEv
+                0x0000016c        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN7TwoWire4peekEv
+                0x0000016e        0x6 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN7TwoWire4readEv
+                0x00000174        0x6 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN7TwoWire9availableEv
+                0x0000017a        0xe D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN7TwoWire5writeEPKhj
+                0x00000188       0x28 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN7TwoWire5writeEh
+                0x000001b0       0x22 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN5Print5writeEPKhj
+                0x000001d2       0x56 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN5Print17availableForWriteEv
+                0x00000228        0x6 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial17availableForWriteEv
+                0x0000022e       0x1e D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial4readEv
+                0x0000024c       0x28 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial4peekEv
+                0x00000274       0x1c D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial9availableEv
+                0x00000290       0x18 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial17_tx_udr_empty_irqEv
+                0x000002a8       0x44 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial5writeEh
+                0x000002ec       0x9a D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN14HardwareSerial5flushEv
+                0x00000386       0x44 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZN5Print11printNumberEmh
+                0x000003ca       0xb8 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text._ZNK9IPAddress7printToER5Print
+                0x00000482       0x94 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text.startup._GLOBAL__I_65535_0_CDC.o.2226
+                0x00000516       0x86 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .text.__vector_24
+                0x0000059c      0x25c D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x0000059c                __vector_24
+ .text.__vector_16
+                0x000007f8       0x94 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x000007f8                __vector_16
+ .text.__vector_2
+                0x0000088c       0x4e D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x0000088c                __vector_2
+ .text.__vector_1
+                0x000008da       0x4e D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x000008da                __vector_1
+ .text.__vector_19
+                0x00000928       0x4c D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x00000928                __vector_19
+ .text.__vector_18
+                0x00000974       0x64 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x00000974                __vector_18
+ .text.__vector_7
+                0x000009d8      0x17a D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                0x000009d8                __vector_7
+ .text.libgcc.div
+                0x00000b52       0x44 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+                0x00000b52                __udivmodsi4
+ .text.libgcc   0x00000b96        0xc d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+                0x00000b96                __tablejump2__
+                0x00000ba2                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00000ba2        0x0 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+                0x00000ba2                _exit
+                0x00000ba2                exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00000ba2        0x4 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ *(.fini0)
+                0x00000ba6                _etext = .
+
+.data           0x00800100       0x30 load address 0x00000ba6
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ *(.data*)
+ .data._ZL9tone_pins
+                0x00800100        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .data.intFunc  0x00800101        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ *(.rodata)
+ *(.rodata*)
+ .rodata._ZTV7TwoWire
+                0x00800105       0x12 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .rodata._ZTV9IPAddress
+                0x00800117        0x6 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .rodata._ZTV14HardwareSerial
+                0x0080011d       0x12 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ *(.gnu.linkonce.d*)
+                0x00800130                . = ALIGN (0x2)
+ *fill*         0x0080012f        0x1 
+                0x00800130                _edata = .
+                0x00800130                PROVIDE (__data_end, .)
+
+.bss            0x00800130      0x12e
+                0x00800130                PROVIDE (__bss_start, .)
+ *(.bss)
+ *(.bss*)
+ .bss.timer2_pin_port
+                0x00800130        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer2_pin_mask
+                0x00800132        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer2_toggle_count
+                0x00800133        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss._ZN7TwoWire13rxBufferIndexE
+                0x00800137        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer0_overflow_count
+                0x00800138        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer0_fract
+                0x0080013c        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.timer0_millis
+                0x0080013d        0x4 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_txBuffer
+                0x00800141       0x20 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_onSlaveTransmit
+                0x00800161        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_txBufferLength
+                0x00800163        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_txBufferIndex
+                0x00800164        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_onSlaveReceive
+                0x00800165        0x2 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_rxBuffer
+                0x00800167       0x20 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_rxBufferIndex
+                0x00800187        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_error
+                0x00800188        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_state
+                0x00800189        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_inRepStart
+                0x0080018a        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_sendStop
+                0x0080018b        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_masterBuffer
+                0x0080018c       0x20 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_masterBufferLength
+                0x008001ac        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_masterBufferIndex
+                0x008001ad        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.twi_slarw
+                0x008001ae        0x1 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.Wire      0x008001af        0xc D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss._ZL11INADDR_NONE
+                0x008001bb        0x6 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ .bss.Serial    0x008001c1       0x9d D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+ *(COMMON)
+                0x0080025e                PROVIDE (__bss_end, .)
+                0x00000ba6                __data_load_start = LOADADDR (.data)
+                0x00000bd6                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x0080025e        0x0
+                [!provide]                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                [!provide]                PROVIDE (__noinit_end, .)
+                0x0080025e                _end = .
+                [!provide]                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.user_signatures
+ *(.user_signatures*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x30
+ *(.comment)
+ .comment       0x00000000       0x30 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                 0x31 (size before relaxing)
+
+.note.gnu.avr.deviceinfo
+                0x00000000       0x40
+ .note.gnu.avr.deviceinfo
+                0x00000000       0x40 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x108
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000      0x108 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x2231
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x5f4 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ .debug_info    0x000005f4     0x1c3d D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_abbrev   0x00000000      0xbd5
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x5a2 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ .debug_abbrev  0x000005a2      0x633 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_line     0x00000000      0x9a0
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x00000000       0x1a d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ .debug_line    0x0000001a      0x986 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_frame    0x00000000      0x47c
+ *(.debug_frame)
+ .debug_frame   0x00000000      0x47c D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_str      0x00000000      0xa54
+ *(.debug_str)
+ .debug_str     0x00000000      0x208 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+ .debug_str     0x00000208      0x84c D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                0x8c3 (size before relaxing)
+
+.debug_loc      0x00000000     0x152a
+ *(.debug_loc)
+ .debug_loc     0x00000000     0x152a D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges   0x00000000      0x128
+ *(.debug_ranges)
+ .debug_ranges  0x00000000      0x128 D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+
+.debug_macro
+ *(.debug_macro)
+OUTPUT(bin/nfc_auth.elf elf32-avr)
+LOAD linker stubs
+
+Cross Reference Table
+
+Symbol                                            File
+SPI                                               obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+Serial                                            obj/arduino/HardwareSerial0.o (symbol from plugin)
+Wire                                              obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_Z10randomSeedm                                   obj/arduino/WMath.o (symbol from plugin)
+_Z11serialEventv                                  obj/arduino/HardwareSerial.o (symbol from plugin)
+_Z12disableTimerh                                 obj/arduino/Tone.o (symbol from plugin)
+_Z14serialEventRunv                               obj/arduino/HardwareSerial.o (symbol from plugin)
+_Z17Serial0_availablev                            obj/arduino/HardwareSerial0.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial.o (symbol from plugin)
+_Z3maplllll                                       obj/arduino/WMath.o (symbol from plugin)
+_Z4tonehjm                                        obj/arduino/Tone.o (symbol from plugin)
+_Z6noToneh                                        obj/arduino/Tone.o (symbol from plugin)
+_Z6randoml                                        obj/arduino/WMath.o (symbol from plugin)
+_Z6randomll                                       obj/arduino/WMath.o (symbol from plugin)
+_Z8makeWordhh                                     obj/arduino/WMath.o (symbol from plugin)
+_Z8makeWordj                                      obj/arduino/WMath.o (symbol from plugin)
+_Z8setupUSBv                                      obj/arduino/main.o (symbol from plugin)
+_ZN14HardwareSerial16_rx_complete_irqEv           obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZN14HardwareSerial17_tx_udr_empty_irqEv          obj/arduino/HardwareSerial.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZN14HardwareSerial17availableForWriteEv          obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial3endEv                         obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial4peekEv                        obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial4readEv                        obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial5beginEmh                      obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial5flushEv                       obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial5writeEh                       obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN14HardwareSerial9availableEv                   obj/arduino/HardwareSerial.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZN5Print10printFloatEdh                          obj/arduino/Print.o (symbol from plugin)
+_ZN5Print11printNumberEmh                         obj/arduino/Print.o (symbol from plugin)
+_ZN5Print17availableForWriteEv                    obj/arduino/Print.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZN5Print5flushEv                                 obj/arduino/Print.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZN5Print5printEPK19__FlashStringHelper           obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printEPKc                               obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printERK6String                         obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printERK9Printable                      obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printEc                                 obj/arduino/Print.o (symbol from plugin)
+                                                  obj/arduino/IPAddress.o (symbol from plugin)
+_ZN5Print5printEdi                                obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printEhi                                obj/arduino/Print.o (symbol from plugin)
+                                                  obj/arduino/IPAddress.o (symbol from plugin)
+_ZN5Print5printEii                                obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printEji                                obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printEli                                obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5printEmi                                obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5writeEPKc                               obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5writeEPKcj                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print5writeEPKhj                              obj/arduino/Print.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial.o (symbol from plugin)
+_ZN5Print7printlnEPK19__FlashStringHelper         obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEPKc                             obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnERK6String                       obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnERK9Printable                    obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEc                               obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEdi                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEhi                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEii                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEji                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEli                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEmi                              obj/arduino/Print.o (symbol from plugin)
+_ZN5Print7printlnEv                               obj/arduino/Print.o (symbol from plugin)
+_ZN6Stream10parseFloatE13LookaheadModec           obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream10readStringEv                          obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream10setTimeoutEm                          obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream13peekNextDigitE13LookaheadModeb        obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream14readBytesUntilEcPcj                   obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream15readStringUntilEc                     obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream4findEPc                                obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream4findEPcj                               obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream8parseIntE13LookaheadModec              obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream9findMultiEPNS_11MultiTargetEi          obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream9findUntilEPcS0_                        obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream9findUntilEPcjS0_j                      obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream9readBytesEPcj                          obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream9timedPeekEv                            obj/arduino/Stream.o (symbol from plugin)
+_ZN6Stream9timedReadEv                            obj/arduino/Stream.o (symbol from plugin)
+_ZN6String10invalidateEv                          obj/arduino/WString.o (symbol from plugin)
+_ZN6String11toLowerCaseEv                         obj/arduino/WString.o (symbol from plugin)
+_ZN6String11toUpperCaseEv                         obj/arduino/WString.o (symbol from plugin)
+_ZN6String12changeBufferEj                        obj/arduino/WString.o (symbol from plugin)
+_ZN6String4copyEPK19__FlashStringHelperj          obj/arduino/WString.o (symbol from plugin)
+_ZN6String4copyEPKcj                              obj/arduino/WString.o (symbol from plugin)
+_ZN6String4moveERS_                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String4trimEv                                 obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEPK19__FlashStringHelper         obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEPKc                             obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEPKcj                            obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatERKS_                            obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEc                               obj/arduino/WString.o (symbol from plugin)
+                                                  obj/arduino/Stream.o (symbol from plugin)
+_ZN6String6concatEd                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEf                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEh                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEi                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEj                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEl                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6concatEm                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6removeEj                               obj/arduino/WString.o (symbol from plugin)
+_ZN6String6removeEjj                              obj/arduino/WString.o (symbol from plugin)
+_ZN6String7replaceERKS_S1_                        obj/arduino/WString.o (symbol from plugin)
+_ZN6String7replaceEcc                             obj/arduino/WString.o (symbol from plugin)
+_ZN6String7reserveEj                              obj/arduino/WString.o (symbol from plugin)
+_ZN6String9setCharAtEjc                           obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1EO15StringSumHelper                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1EOS_                                  obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1EPK19__FlashStringHelper              obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1EPKc                                  obj/arduino/WString.o (symbol from plugin)
+                                                  obj/arduino/Stream.o (symbol from plugin)
+_ZN6StringC1ERKS_                                 obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Ec                                    obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Edh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Efh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Ehh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Eih                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Ejh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Elh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC1Emh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2EO15StringSumHelper                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2EOS_                                  obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2EPK19__FlashStringHelper              obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2EPKc                                  obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2ERKS_                                 obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Ec                                    obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Edh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Efh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Ehh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Eih                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Ejh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Elh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringC2Emh                                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringD1Ev                                    obj/arduino/WString.o (symbol from plugin)
+_ZN6StringD2Ev                                    obj/arduino/WString.o (symbol from plugin)
+_ZN6StringaSEO15StringSumHelper                   obj/arduino/WString.o (symbol from plugin)
+_ZN6StringaSEOS_                                  obj/arduino/WString.o (symbol from plugin)
+_ZN6StringaSEPK19__FlashStringHelper              obj/arduino/WString.o (symbol from plugin)
+_ZN6StringaSEPKc                                  obj/arduino/WString.o (symbol from plugin)
+_ZN6StringaSERKS_                                 obj/arduino/WString.o (symbol from plugin)
+_ZN6StringixEj                                    obj/arduino/WString.o (symbol from plugin)
+_ZN7TwoWire11requestFromEhh                       obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire11requestFromEhhh                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire11requestFromEhhmhh                    obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire11requestFromEii                       obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire11requestFromEiii                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire12transmittingE                        obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire13rxBufferIndexE                       obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire13txBufferIndexE                       obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire14rxBufferLengthE                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire14txBufferLengthE                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire14user_onReceiveE                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire14user_onRequestE                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire15endTransmissionEh                    obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire15endTransmissionEv                    obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire16onReceiveServiceEPhi                 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire16onRequestServiceEv                   obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire17beginTransmissionEh                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire17beginTransmissionEi                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire3endEv                                 obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire4peekEv                                obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire4readEv                                obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire5beginEh                               obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire5beginEi                               obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire5beginEv                               obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire5flushEv                               obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire5writeEPKhj                            obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire5writeEh                               obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire8rxBufferE                             obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire8setClockEm                            obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire8txBufferE                             obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire9availableEv                           obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire9onReceiveEPFviE                       obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire9onRequestEPFvvE                       obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWire9txAddressE                            obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWireC1Ev                                   obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN7TwoWireC2Ev                                   obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZN8SPIClass11initializedE                        obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass13interruptMaskE                      obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass13interruptModeE                      obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass13interruptSaveE                      obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass14usingInterruptEh                    obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass17notUsingInterruptEh                 obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass3endEv                                obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN8SPIClass5beginEv                              obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+_ZN9IPAddress10fromStringEPKc                     obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC1EPKh                               obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC1Ehhhh                              obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC1Em                                 obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC1Ev                                 obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC2EPKh                               obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC2Ehhhh                              obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC2Em                                 obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressC2Ev                                 obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressaSEPKh                               obj/arduino/IPAddress.o (symbol from plugin)
+_ZN9IPAddressaSEm                                 obj/arduino/IPAddress.o (symbol from plugin)
+_ZNK6String10startsWithERKS_                      obj/arduino/WString.o (symbol from plugin)
+_ZNK6String10startsWithERKS_j                     obj/arduino/WString.o (symbol from plugin)
+_ZNK6String11lastIndexOfERKS_                     obj/arduino/WString.o (symbol from plugin)
+_ZNK6String11lastIndexOfERKS_j                    obj/arduino/WString.o (symbol from plugin)
+_ZNK6String11lastIndexOfEc                        obj/arduino/WString.o (symbol from plugin)
+_ZNK6String11lastIndexOfEcj                       obj/arduino/WString.o (symbol from plugin)
+_ZNK6String14StringIfHelperEv                     obj/arduino/WString.o (symbol from plugin)
+_ZNK6String16equalsIgnoreCaseERKS_                obj/arduino/WString.o (symbol from plugin)
+_ZNK6String5toIntEv                               obj/arduino/WString.o (symbol from plugin)
+_ZNK6String6charAtEj                              obj/arduino/WString.o (symbol from plugin)
+_ZNK6String6equalsEPKc                            obj/arduino/WString.o (symbol from plugin)
+_ZNK6String6equalsERKS_                           obj/arduino/WString.o (symbol from plugin)
+_ZNK6String7indexOfERKS_                          obj/arduino/WString.o (symbol from plugin)
+_ZNK6String7indexOfERKS_j                         obj/arduino/WString.o (symbol from plugin)
+_ZNK6String7indexOfEc                             obj/arduino/WString.o (symbol from plugin)
+_ZNK6String7indexOfEcj                            obj/arduino/WString.o (symbol from plugin)
+_ZNK6String7toFloatEv                             obj/arduino/WString.o (symbol from plugin)
+_ZNK6String8endsWithERKS_                         obj/arduino/WString.o (symbol from plugin)
+_ZNK6String8getBytesEPhjj                         obj/arduino/WString.o (symbol from plugin)
+_ZNK6String8toDoubleEv                            obj/arduino/WString.o (symbol from plugin)
+_ZNK6String9compareToERKS_                        obj/arduino/WString.o (symbol from plugin)
+_ZNK6String9substringEjj                          obj/arduino/WString.o (symbol from plugin)
+_ZNK6StringgeERKS_                                obj/arduino/WString.o (symbol from plugin)
+_ZNK6StringgtERKS_                                obj/arduino/WString.o (symbol from plugin)
+_ZNK6StringixEj                                   obj/arduino/WString.o (symbol from plugin)
+_ZNK6StringleERKS_                                obj/arduino/WString.o (symbol from plugin)
+_ZNK6StringltERKS_                                obj/arduino/WString.o (symbol from plugin)
+_ZNK9IPAddress7printToER5Print                    obj/arduino/IPAddress.o (symbol from plugin)
+_ZNK9IPAddresseqEPKh                              obj/arduino/IPAddress.o (symbol from plugin)
+_ZTV14HardwareSerial                              obj/arduino/HardwareSerial.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZTV5Print                                        obj/arduino/Print.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+_ZTV6Stream                                       obj/arduino/HardwareSerial0.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZTV7TwoWire                                      obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+_ZTV9IPAddress                                    obj/arduino/IPAddress.o (symbol from plugin)
+_ZTV9Printable                                    obj/arduino/IPAddress.o (symbol from plugin)
+_ZdaPv                                            obj/arduino/new.o (symbol from plugin)
+_ZdlPv                                            obj/arduino/new.o (symbol from plugin)
+_Znaj                                             obj/arduino/new.o (symbol from plugin)
+_Znwj                                             obj/arduino/new.o (symbol from plugin)
+_ZplRK15StringSumHelperPK19__FlashStringHelper    obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperPKc                        obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperRK6String                  obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperc                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperd                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperf                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperh                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperi                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperj                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperl                          obj/arduino/WString.o (symbol from plugin)
+_ZplRK15StringSumHelperm                          obj/arduino/WString.o (symbol from plugin)
+__FUSE_REGION_LENGTH__                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__bad_interrupt                                   d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__bss_end                                         d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+__bss_start                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+__cmpsf2                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+__ctors_end                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+__ctors_start                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+__ctype_isfalse                                   d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+__ctype_istrue                                    d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cty_isfalse.o)
+__cxa_deleted_virtual                             obj/arduino/abi.o (symbol from plugin)
+__cxa_pure_virtual                                obj/arduino/abi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+                                                  obj/arduino/IPAddress.o (symbol from plugin)
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+                                                  obj/arduino/Print.o (symbol from plugin)
+__data_end                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+__data_load_start                                 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+__data_start                                      d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+__divmodsi4                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+__do_clear_bss                                    d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+                                                  D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+__do_copy_data                                    d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+                                                  D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+__do_global_ctors                                 d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+                                                  D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+__epilogue_restores__                             d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_epilogue.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+__eqsf2                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+__floatsisf                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+__floatunsisf                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(floatsisf.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+__fp_cmp                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_cmp.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+__fp_inf                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_inf.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__fp_nan                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_nan.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__fp_pscA                                         d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscA.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__fp_pscB                                         d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_pscB.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__fp_round                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_round.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+__fp_split3                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__fp_splitA                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_split3.o)
+__fp_szero                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__fp_zero                                         d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(fp_zero.o)
+__ftoa_engine                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+__heap_end                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__init                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__itoa                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__itoa_ncheck                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__lesf2                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+__ltoa                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__ltoa_ncheck                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__ltsf2                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+__mulohisi3                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+__mulsf3                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+__mulsf3_pse                                      d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+__mulsf3x                                         d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3x.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsf3.o)
+__mulshisi3                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+__mulsi_const_10                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(mulsi10.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+__muluhisi3                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_mulshisi3.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+__negsi2                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_negsi2.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+__nesf2                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(cmpsf2.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+__prologue_saves__                                d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_prologue.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+__stack                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__strlen_P                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__tablejump2__                                    d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_ctors.o)
+__udivmodsi4                                      d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+                                                  D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_divmodsi4.o)
+__ultoa                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__ultoa_common                                    d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa_ncheck.o)
+__ultoa_ncheck                                    d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__umulhisi3                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+__utoa                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__utoa_common                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa_ncheck.o)
+__utoa_ncheck                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+__vector_1                                        D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/WInterrupts.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_10                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_11                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_12                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_13                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_14                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_15                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_16                                       D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/wiring.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_17                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_18                                       D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_19                                       D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/HardwareSerial0.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_2                                        D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/WInterrupts.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_20                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_21                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_22                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_23                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_24                                       D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_25                                       d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_3                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_4                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_5                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_6                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_7                                        D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+                                                  obj/arduino/Tone.o (symbol from plugin)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_8                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_9                                        d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vector_default                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+__vectors                                         d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+_exit                                             d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+abort                                             d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(abort.o)
+                                                  D:\Dev\msys64\tmp\ccUkTCpx.ltrans0.ltrans.o
+analogRead                                        obj/arduino/wiring_analog.o (symbol from plugin)
+analogReference                                   obj/arduino/wiring_analog.o (symbol from plugin)
+analogWrite                                       obj/arduino/wiring_analog.o (symbol from plugin)
+analog_reference                                  obj/arduino/wiring_analog.o (symbol from plugin)
+atexit                                            obj/arduino/main.o (symbol from plugin)
+atof                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+atol                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atol.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+attachInterrupt                                   obj/arduino/WInterrupts.o (symbol from plugin)
+countPulseASM                                     obj/arduino/wiring_pulse.o (symbol from plugin)
+delay                                             obj/arduino/wiring.o (symbol from plugin)
+delayMicroseconds                                 obj/arduino/wiring.o (symbol from plugin)
+detachInterrupt                                   obj/arduino/WInterrupts.o (symbol from plugin)
+digitalRead                                       obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/wiring_shift.o (symbol from plugin)
+digitalWrite                                      obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/wiring_analog.o (symbol from plugin)
+                                                  obj/arduino/wiring_shift.o (symbol from plugin)
+                                                  obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+                                                  obj/arduino/Tone.o (symbol from plugin)
+digital_pin_to_bit_mask_PGM                       obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/wiring_pulse.o (symbol from plugin)
+                                                  obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+                                                  obj/arduino/Tone.o (symbol from plugin)
+digital_pin_to_port_PGM                           obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/wiring_pulse.o (symbol from plugin)
+                                                  obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+                                                  obj/arduino/Tone.o (symbol from plugin)
+digital_pin_to_timer_PGM                          obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/wiring_analog.o (symbol from plugin)
+dtoa_prf                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtoa_prf.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+dtostrf                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(dtostrf.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+errno                                             d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(errno.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+exit                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+init                                              obj/arduino/wiring.o (symbol from plugin)
+initVariant                                       obj/arduino/main.o (symbol from plugin)
+isspace                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(isspace.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+itoa                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(itoa.o)
+ltoa                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ltoa.o)
+main                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5/crtatmega328p.o
+micros                                            obj/arduino/wiring.o (symbol from plugin)
+                                                  obj/arduino/wiring_pulse.o (symbol from plugin)
+millis                                            obj/arduino/wiring.o (symbol from plugin)
+                                                  obj/arduino/Stream.o (symbol from plugin)
+pinMode                                           obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/wiring_analog.o (symbol from plugin)
+                                                  obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+                                                  obj/arduino/Tone.o (symbol from plugin)
+port_to_input_PGM                                 obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/wiring_pulse.o (symbol from plugin)
+port_to_mode_PGM                                  obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/libraries/SPI/src/SPI.o (symbol from plugin)
+port_to_output_PGM                                obj/arduino/wiring_digital.o (symbol from plugin)
+                                                  obj/arduino/Tone.o (symbol from plugin)
+pulseIn                                           obj/arduino/wiring_pulse.o (symbol from plugin)
+pulseInLong                                       obj/arduino/wiring_pulse.o (symbol from plugin)
+random                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+                                                  obj/arduino/WMath.o (symbol from plugin)
+random_r                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+shiftIn                                           obj/arduino/wiring_shift.o (symbol from plugin)
+shiftOut                                          obj/arduino/wiring_shift.o (symbol from plugin)
+srandom                                           d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(random.o)
+                                                  obj/arduino/WMath.o (symbol from plugin)
+strcpy_P                                          d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strcpy_P.o)
+                                                  obj/arduino/WString.o (symbol from plugin)
+strncasecmp_P                                     d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+strrev                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strrev.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa_ncheck.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa_ncheck.o)
+strtod                                            d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(strtod.o)
+                                                  d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(atof.o)
+timer0_millis                                     obj/arduino/wiring.o (symbol from plugin)
+timer0_overflow_count                             obj/arduino/wiring.o (symbol from plugin)
+timer0_pin_mask                                   obj/arduino/Tone.o (symbol from plugin)
+timer0_pin_port                                   obj/arduino/Tone.o (symbol from plugin)
+timer0_toggle_count                               obj/arduino/Tone.o (symbol from plugin)
+timer1_pin_mask                                   obj/arduino/Tone.o (symbol from plugin)
+timer1_pin_port                                   obj/arduino/Tone.o (symbol from plugin)
+timer1_toggle_count                               obj/arduino/Tone.o (symbol from plugin)
+timer2_pin_mask                                   obj/arduino/Tone.o (symbol from plugin)
+timer2_pin_port                                   obj/arduino/Tone.o (symbol from plugin)
+timer2_toggle_count                               obj/arduino/Tone.o (symbol from plugin)
+twi_attachSlaveRxEvent                            obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_attachSlaveTxEvent                            obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_disable                                       obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_init                                          obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_readFrom                                      obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_releaseBus                                    obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+twi_reply                                         obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+twi_setAddress                                    obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_setFrequency                                  obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_stop                                          obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+twi_transmit                                      obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+twi_writeTo                                       obj/arduino/libraries/Wire/src/utility/twi.o (symbol from plugin)
+                                                  obj/arduino/libraries/Wire/src/Wire.o (symbol from plugin)
+ultoa                                             d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(ultoa.o)
+utoa                                              d:/dev/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr5\libc.a(utoa.o)
+yield                                             obj/arduino/hooks.o (symbol from plugin)
+                                                  obj/arduino/wiring.o (symbol from plugin)

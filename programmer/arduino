@@ -1,0 +1,4 @@
+# Makefile for the Arduino programmer settings for AVRDude.
+
+BAUD = 57600
+

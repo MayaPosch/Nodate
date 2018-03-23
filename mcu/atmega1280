@@ -1,0 +1,4 @@
+# MCU-specific parameters for: ATMega1280
+
+AVR_TYPE = __AVR_ATmega2560__
+F_CPU = 16000000L

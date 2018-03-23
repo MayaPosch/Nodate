@@ -5,6 +5,9 @@
 
 
 int main () {
+	// Initialise.
+	init(); // for wiring.h
+	
 	// Set the pin mode on the built-in LED.
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);

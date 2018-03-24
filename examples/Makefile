@@ -5,7 +5,7 @@
 MCU ?= atmega2560
 PROGRAMMER ?= wiring
 
-# Pin variant. Set 'standard' for ATMega832P, 'mega' for ATMega2560.
+# Pin variant. Set 'standard' for ATMega328P, 'mega' for ATMega2560.
 VARIANT ?= mega
 
 # Set the name of the output (ELF & Hex) file.

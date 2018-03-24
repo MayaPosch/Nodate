@@ -7,6 +7,7 @@
 int main () {
 	// Initialise.
 	init(); // for wiring.h
+	initVariant();
 	
 	// Set the pin mode on the built-in LED.
 	pinMode(LED_BUILTIN, OUTPUT);
@@ -14,9 +15,9 @@ int main () {
 	
 	while (1) {
 		digitalWrite(LED_BUILTIN, HIGH);
-		delay(500);
+		delay(1000);
 		digitalWrite(LED_BUILTIN, LOW);
-		delay(500);
+		delay(1000);
 	}
 	
 	return 0;

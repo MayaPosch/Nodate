@@ -6,11 +6,14 @@ GPP = avr-g++
 GCC = avr-gcc
 OBJCOPY = avr-objcopy
 MAKEDIR = mkdir -p
+CD = cd
 RM = rm
+
 FORMAT = ihex
 
+
 OUTPUT := $(OUTPUT).$(MCU)
-INCLUDE = -I arduino -I arduino/variants/standard \
+INCLUDE = -I arduino -I arduino/variants/$(VARIANT) \
 			-I arduino/libraries/EEPROM/src \
 			-I arduino/libraries/Wire/src \
 			-I arduino/libraries/SPI/src
@@ -56,7 +59,9 @@ $(APPFOLDER)/bin/%.hex: $(APPFOLDER)/bin/%.elf
 	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
 	
 flash:
-	avrdude -v -p $(MCU) -c $(PROGRAMMER) -P $(COM_PORT) -b $(BAUD) -D -U flash:w:$(APPFOLDER)/bin/$(OUTPUT).hex:i
+	$(CD) $(APPFOLDER) && \
+	avrdude -v -p $(MCU) -c $(PROGRAMMER) -P $(COM_PORT) -b $(BAUD) -D -U flash:w:bin/$(OUTPUT).hex:i
 
 clean:
-	$(RM) $(COBJECTS) $(CPPOBJECTS) $(APPFOLDER)/bin/*
+	$(RM) $(COBJECTS) $(CPPOBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*
+	

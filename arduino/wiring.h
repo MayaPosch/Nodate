@@ -8,10 +8,10 @@ extern "C"{
 #endif
 
 #include "utils.h"
-#include "variants/standard/pins_arduino.h"
+#include "pins_arduino.h"
 
 void init(void);
-//void initVariant(void);
+void initVariant(void);
 
 void pinMode(uint8_t, uint8_t);
 void digitalWrite(uint8_t, uint8_t);

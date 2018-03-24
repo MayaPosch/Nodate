@@ -3,7 +3,10 @@
 
 # Set the MCU and programmer types.
 MCU ?= atmega2560
-PROGRAMMER ?= arduino
+PROGRAMMER ?= wiring
+
+# Pin variant. Set 'standard' for ATMega832P, 'mega' for ATMega2560.
+VARIANT ?= mega
 
 # Set the name of the output (ELF & Hex) file.
 OUTPUT := blinky
@@ -19,10 +22,11 @@ APP_C_FILES = $(wildcard src/*.c)
 #
 
 # Nodate includes. Requires that the NODATE_HOME environment variable has been set.
-include $(NODATE_HOME)/mcu/$(MCU)
-include $(NODATE_HOME)/programmer/$(PROGRAMMER)
 APPFOLDER=$(CURDIR)
 export
+
+include $(NODATE_HOME)/mcu/$(MCU)
+include $(NODATE_HOME)/programmer/$(PROGRAMMER)
 
 all:
 	$(MAKE) -C $(NODATE_HOME)

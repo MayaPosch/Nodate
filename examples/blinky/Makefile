@@ -2,6 +2,14 @@
 #
 
 # Set the MCU and programmer types.
+#
+# MCU, programmer, variant
+# atmega328p, arduino, standard
+# atmega1280, arduino, mega 
+# atmega2560, wiring, mega
+#
+ARCH ?= avr
+BOARD ?= arduino_mega
 MCU ?= atmega2560
 PROGRAMMER ?= wiring
 
@@ -25,8 +33,8 @@ APP_C_FILES = $(wildcard src/*.c)
 APPFOLDER=$(CURDIR)
 export
 
-include $(NODATE_HOME)/mcu/$(MCU)
-include $(NODATE_HOME)/programmer/$(PROGRAMMER)
+include $(NODATE_HOME)/arch/$(ARCH)/mcu/$(MCU)
+include $(NODATE_HOME)/arch/$(ARCH)/programmer/$(PROGRAMMER)
 
 all:
 	$(MAKE) -C $(NODATE_HOME)

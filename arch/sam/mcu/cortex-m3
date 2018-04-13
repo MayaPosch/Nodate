@@ -1,0 +1,6 @@
+# MCU-specific parameters for: Cortex-M3
+
+ARM_TYPE := __SAM3X8E__
+ARM_MCU := sam3x8e
+F_CPU := 84000000L
+EXTRA_FLAGS := -mthumb

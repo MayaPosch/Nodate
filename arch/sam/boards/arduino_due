@@ -1,0 +1,4 @@
+# Nodate definition for the Arduino Due board.
+
+MCU := cortex-m3
+

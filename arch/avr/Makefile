@@ -14,6 +14,14 @@ FORMAT = ihex
 TOP := $(NODATE_HOME)/arch/$(ARCH)
 
 
+ifdef BOARD
+include $(TOP)/boards/$(BOARD)
+endif
+
+include $(TOP)/mcu/$(MCU)
+include $(TOP)/programmer/$(PROGRAMMER)
+
+
 OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE = -I $(TOP)/arduino -I $(TOP)/arduino/variants/$(VARIANT) \
 			-I $(TOP)/arduino/libraries/EEPROM/src \

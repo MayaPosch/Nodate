@@ -4,3 +4,4 @@ FLASH_MODE := qio
 FLASH_FREQ := 40
 FLASH_SIZE := 4M
 F_CPU := 80000000L
+FLASH_LD := eagle.flash.4m.ld

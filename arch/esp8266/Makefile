@@ -24,8 +24,15 @@ INCLUDE = -I $(TOP)/arduino -I $(TOP)/variants/$(VARIANT) \
 			-I $(TOP)/sdk/lwip/include \
 			-I $(TOP)/sdk/lwip2/include
 
-FLAGS := $(INCLUDE) -DF_CPU=$(F_CPU) -DICACHE_FLASH -U__STRICT_ANSI__ -D__ets__ -fdata-sections -MMD -Os -g -mtext-section-literals -ffunction-sections -fdata-sections -mlongcalls -falign-functions=4 -L $(TOP)/sdk/lib -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,-wrap,system_restart_local -Wl,-wrap,spi_flash_read
-CFLAGS := $(FLAGS) -Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib -std=gnu11
+LIBS :=  -L$(TOP)/sdk/lib \
+		-L$(TOP)/sdk/libc/xtensa-lx106-elf/lib \
+		 -lhal -lphy -lpp -lnet80211 -llwip_gcc -lwpa -lcrypto -lmain -lwps -laxtls -lespnow \
+		 -lsmartconfig -lairkiss -lwpa2 -lstdc++ -lm \
+		-lc -lgcc
+LDFLAGS := $(LIBS) -Os -nostdlib -Wl,--no-check-sections -u call_user_start -u _printf_float -u _scanf_float -Wl,-static "-T$(TOP)/sdk/ld/$(FLASH_LD)" -Wl,--gc-sections -Wl,-wrap,system_restart_local -Wl,-wrap,spi_flash_read -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map
+
+FLAGS := $(INCLUDE) -DF_CPU=$(F_CPU) -DICACHE_FLASH -U__STRICT_ANSI__ -D__ets__ -DESP8266 -DLWIP_OPEN_SRC -fdata-sections -MMD -Os -g -mtext-section-literals -ffunction-sections -fdata-sections -mlongcalls -falign-functions=4 
+CFLAGS := $(FLAGS) -Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -std=gnu11 -nostdlib
 CPPFLAGS := $(FLAGS) -fno-exceptions -fno-rtti -std=c++11
 CPPSOURCES := $(wildcard arch/$(ARCH)/arduino/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/Wire/*.cpp) \
@@ -35,10 +42,12 @@ CPPSOURCES := $(wildcard arch/$(ARCH)/arduino/*.cpp) \
 CSOURCES := $(wildcard arch/$(ARCH)/arduino/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/Wire/src/utility/*.c) \
 			$(APP_C_FILES)
+SSOURCES := $(wildcard arch/$(ARCH)/arduino/*.s)
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o)) 
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
+SOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(SSOURCES:.s=.o))
 
-all: makedir $(CPPOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).hex
+all: makedir $(CPPOBJECTS) $(COBJECTS) $(SOBJECTS) $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).hex
 
 makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj
@@ -61,9 +70,12 @@ $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp
 
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.c
 	$(GCC) -c -o $@ $< $(CFLAGS)
+
+$(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.s
+	$(GCC) -c -o $@ $< $(CFLAGS)
 	
 $(APPFOLDER)/bin/$(OUTPUT).elf:
-	$(GPP) -o $@ $(CPPOBJECTS) $(COBJECTS) $(LIB) $(FLAGS)
+	$(GCC) -o $@ $(CPPOBJECTS) $(COBJECTS) $(SOBJECTS) $(LDFLAGS)
 	
 $(APPFOLDER)/bin/%.hex: $(APPFOLDER)/bin/%.elf
 	$(OBJCOPY) -eo $< -bo $@ -bm $(FLASH_MODE) -bf $(FLASH_FREQ) -bz $(FLASH_SIZE) -bs .text -bp 4096 -ec -bs .irom0.text -bs .text -bs .data -bs .rodata -bc -ec

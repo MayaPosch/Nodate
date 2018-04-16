@@ -27,3 +27,11 @@ Execute `make flash COM_PORT=<port>` to flash this file to the MCU's EEPROM/Flas
 This is a project in its early stages. While so far UART, GPIO and SPI have been successfully used on a limited number of configurations, this is no guarantee of success on other configurations. 
 
 Feedback and PRs would be most kind and helpful :)
+
+## Required Packages ##
+
+### Debian ###
+
+#### avr ####
+ * gcc-avr
+ * avr-libc

@@ -62,8 +62,8 @@ void initVariant() __attribute__((weak));
 void initVariant() {
 }
 
-extern void loop();
-extern void setup();
+//extern void loop();
+//extern void setup();
 
 void preloop_update_frequency() __attribute__((weak));
 void preloop_update_frequency() {
@@ -83,7 +83,7 @@ static uint32_t g_micros_at_task_start;
 
 extern "C" void esp_yield() {
     if (cont_can_yield(&g_cont)) {
-        cont_yield(&g_cont);
+        //cont_yield(&g_cont);
     }
 }
 
@@ -92,13 +92,13 @@ extern "C" void esp_schedule() {
 }
 
 extern "C" void __yield() {
-    if (cont_can_yield(&g_cont)) {
+   /*  if (cont_can_yield(&g_cont)) {
         esp_schedule();
         esp_yield();
     }
     else {
         panic();
-    }
+    } */
 }
 
 extern "C" void yield(void) __attribute__ ((weak, alias("__yield")));
@@ -115,10 +115,10 @@ static void loop_wrapper() {
     static bool setup_done = false;
     preloop_update_frequency();
     if(!setup_done) {
-        setup();
+        //setup();
         setup_done = true;
     }
-    loop();
+    //loop();
     run_scheduled_functions();
     esp_schedule();
 }
@@ -126,7 +126,7 @@ static void loop_wrapper() {
 static void loop_task(os_event_t *events) {
     (void) events;
     g_micros_at_task_start = system_get_time();
-    cont_run(&g_cont, &loop_wrapper);
+    //cont_run(&g_cont, &loop_wrapper);
     if (cont_check(&g_cont) != 0) {
         panic();
     }

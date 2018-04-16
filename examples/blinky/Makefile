@@ -9,7 +9,10 @@
 # atmega2560, wiring, mega
 #
 ARCH ?= avr
-BOARD ?= arduino_mega
+
+# not yet used?
+#BOARD ?= arduino_mega
+
 MCU ?= atmega2560
 PROGRAMMER ?= wiring
 

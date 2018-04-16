@@ -25,8 +25,8 @@ APP_C_FILES = $(wildcard src/*.c)
 APPFOLDER=$(CURDIR)
 export
 
-include $(NODATE_HOME)/mcu/$(MCU)
-include $(NODATE_HOME)/programmer/$(PROGRAMMER)
+include $(NODATE_HOME)/arch/$(ARCH)/mcu/$(MCU)
+include $(NODATE_HOME)/arch/$(ARCH)/programmer/$(PROGRAMMER)
 
 all:
 	$(MAKE) -C $(NODATE_HOME)

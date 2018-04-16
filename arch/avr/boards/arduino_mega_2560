@@ -1,0 +1,5 @@
+# Arduino Mega board with ATmega2560 MCU
+
+MCU := atmega2560
+PROGRAMMER := wiring
+VARIANT := mega 

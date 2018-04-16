@@ -1,0 +1,4 @@
+# MCU-specific parameters for: ATmega168
+
+AVR_TYPE = __AVR_ATmega168__
+F_CPU = 16000000L

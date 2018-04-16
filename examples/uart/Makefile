@@ -1,12 +1,24 @@
 # Makefile for example Nodate project for AVR.
 #
 
-# Set the MCU and programmer types.
-MCU ?= atmega2560
-PROGRAMMER ?= wiring
+# Architecture must be set.
+# E.g.: AVR, SAM, ESP8266.
+ARCH ?= avr
 
-# Pin variant. Set 'standard' for ATMega328P, 'mega' for ATMega2560.
-VARIANT ?= mega
+# One can use the board preset.
+BOARD ?= arduino_mega_2560
+
+# Set the MCU and programmer types.
+#
+# MCU, programmer, variant
+# atmega328p, arduino, standard
+# atmega1280, arduino, mega 
+# atmega2560, wiring, mega
+#
+#MCU ?= atmega2560
+#PROGRAMMER ?= wiring
+# Pin variant. Set 'standard' for ATmega328P, 'mega' for ATmega1280/2560.
+#VARIANT ?= mega
 
 # Set the name of the output (ELF & Hex) file.
 OUTPUT := uart
@@ -24,9 +36,6 @@ APP_C_FILES = $(wildcard src/*.c)
 # Nodate includes. Requires that the NODATE_HOME environment variable has been set.
 APPFOLDER=$(CURDIR)
 export
-
-include $(NODATE_HOME)/mcu/$(MCU)
-include $(NODATE_HOME)/programmer/$(PROGRAMMER)
 
 all:
 	$(MAKE) -C $(NODATE_HOME)

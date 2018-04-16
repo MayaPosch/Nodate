@@ -1,0 +1,5 @@
+# Arduino Duemilanove board with ATmega328p MCU
+
+MCU := atmega328p
+PROGRAMMER := arduino
+VARIANT := standard 

@@ -1,0 +1,5 @@
+# Arduino Mega board with ATmega1280 MCU
+
+MCU := atmega1280
+PROGRAMMER := arduino
+VARIANT := mega 

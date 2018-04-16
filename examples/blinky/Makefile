@@ -1,6 +1,13 @@
 # Makefile for example Nodate project for AVR.
 #
 
+# Architecture must be set.
+# E.g.: AVR, SAM, ESP8266.
+ARCH ?= avr
+
+# One can use the board preset.
+#BOARD ?= arduino_mega_2560
+
 # Set the MCU and programmer types.
 #
 # MCU, programmer, variant
@@ -8,15 +15,9 @@
 # atmega1280, arduino, mega 
 # atmega2560, wiring, mega
 #
-ARCH ?= avr
-
-# not yet used.
-#BOARD ?= arduino_mega
-
 MCU ?= atmega2560
 PROGRAMMER ?= wiring
-
-# Pin variant. Set 'standard' for ATMega328P, 'mega' for ATMega2560.
+# Pin variant. Set 'standard' for ATmega328P, 'mega' for ATmega1280/2560.
 VARIANT ?= mega
 
 # Set the name of the output (ELF & Hex) file.

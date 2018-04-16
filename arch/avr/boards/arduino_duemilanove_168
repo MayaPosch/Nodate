@@ -1,0 +1,5 @@
+# Arduino Duemilanove board with ATmega168 MCU
+
+MCU := atmega168
+PROGRAMMER := arduino
+VARIANT := standard 

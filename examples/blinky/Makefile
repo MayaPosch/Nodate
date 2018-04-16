@@ -10,7 +10,7 @@
 #
 ARCH ?= avr
 
-# not yet used?
+# not yet used.
 #BOARD ?= arduino_mega
 
 MCU ?= atmega2560

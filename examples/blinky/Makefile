@@ -9,7 +9,10 @@
 # atmega2560, wiring, mega
 #
 ARCH ?= avr
-BOARD ?= arduino_mega
+
+# not yet used.
+#BOARD ?= arduino_mega
+
 MCU ?= atmega2560
 PROGRAMMER ?= wiring
 
@@ -32,9 +35,6 @@ APP_C_FILES = $(wildcard src/*.c)
 # Nodate includes. Requires that the NODATE_HOME environment variable has been set.
 APPFOLDER=$(CURDIR)
 export
-
-include $(NODATE_HOME)/arch/$(ARCH)/mcu/$(MCU)
-include $(NODATE_HOME)/arch/$(ARCH)/programmer/$(PROGRAMMER)
 
 all:
 	$(MAKE) -C $(NODATE_HOME)

@@ -26,7 +26,9 @@ OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE = -I $(TOP)/arduino -I $(TOP)/arduino/variants/$(VARIANT) \
 			-I $(TOP)/arduino/libraries/EEPROM/src \
 			-I $(TOP)/arduino/libraries/Wire/src \
-			-I $(TOP)/arduino/libraries/SPI/src
+			-I $(TOP)/arduino/libraries/SPI/src \
+			-I $(TOP)/arduino/libraries/SD/src \
+			-I $(TOP)/arduino/libraries/SD/src/utility
 
 FLAGS := $(INCLUDE) -D$(AVR_TYPE) -DF_CPU=$(F_CPU) -mmcu=$(MCU) -D__OPTIMIZE__ -fno-exceptions -ffunction-sections -fdata-sections -MMD -Os -g -flto -fuse-linker-plugin -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections
 CFLAGS := $(FLAGS) -std=gnu11
@@ -34,6 +36,8 @@ CPPFLAGS := $(FLAGS) -std=gnu++11 -fpermissive -fno-threadsafe-statics
 CPPSOURCES := $(wildcard arch/avr/arduino/*.cpp) \
 			$(wildcard arch/avr/arduino/libraries/Wire/src/*.cpp) \
 			$(wildcard arch/avr/arduino/libraries/SPI/src/*.cpp) \
+			$(wildcard arch/avr/arduino/libraries/SD/src/*.cpp) \
+			$(wildcard arch/avr/arduino/libraries/SD/src/utility/*.cpp) \
 			$(APP_CPP_FILES)
 CSOURCES := $(wildcard arch/avr/arduino/*.c) \
 			$(wildcard arch/avr/arduino/libraries/Wire/src/utility/*.c) \
@@ -48,6 +52,8 @@ makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/avr/arduino/libraries/SPI/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/avr/arduino/libraries/Wire/src/utility
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/avr/arduino/libraries/SD/src/
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/avr/arduino/libraries/SD/src/utility
 	$(MAKEDIR) $(APPFOLDER)/bin
 
 $(APPFOLDER)/obj/%.o: %.cpp

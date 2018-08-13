@@ -32,6 +32,35 @@ Feedback and PRs would be most kind and helpful :)
 
 ### Debian ###
 
+Of course, `make` is needed.
+
 #### avr ####
- * gcc-avr
- * avr-libc
+
+To compile for AVR on Debian, install the following packages:
+ * `gcc-avr`
+ * `avr-libc`
+
+#### sam (Atmel ARM) ####
+
+To compile for sam on Arch Linux, install the following packages:
+ * `gcc-arm-none-eabi`
+
+### Arch Linux  ###
+
+Of course, `make` is needed.
+
+#### avr ####
+
+To compile for AVR on Arch Linux, install the following packages:
+ * `gcc-avr`
+ * `avr-libc`
+
+#### esp8266 ###
+
+To compile for esp8266 on Arch Linux, install the following packages:
+ * `esp-open-sdk` (from AUR, include /opt/esp-open-sdk/xtensa-lx106-elf/bin into PATH)
+
+#### sam (Atmel ARM) ####
+
+To compile for sam on Arch Linux, install the following packages:
+ * `gcc-arm-none-eabi-bin` (from AUR)

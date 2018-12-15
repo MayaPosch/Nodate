@@ -30,7 +30,7 @@ INCLUDE = -I $(TOP)/arduino -I $(TOP)/arduino/variants/$(VARIANT) \
 			-I $(TOP)/arduino/libraries/SD/src \
 			-I $(TOP)/arduino/libraries/SD/src/utility
 
-FLAGS := $(INCLUDE) -D$(AVR_TYPE) -DF_CPU=$(F_CPU) -mmcu=$(MCU) -D__OPTIMIZE__ -fno-exceptions -ffunction-sections -fdata-sections -MMD -Os -g -flto -fuse-linker-plugin -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections
+FLAGS := $(INCLUDE) -D$(AVR_TYPE) -DF_CPU=$(F_CPU) -DARDUINO=3000 -mmcu=$(MCU) -D__OPTIMIZE__ -fno-exceptions -ffunction-sections -fdata-sections -MMD -Os -g -flto -fuse-linker-plugin -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections
 CFLAGS := $(FLAGS) -std=gnu11
 CPPFLAGS := $(FLAGS) -std=gnu++11 -fpermissive -fno-threadsafe-statics
 CPPSOURCES := $(wildcard arch/avr/arduino/*.cpp) \

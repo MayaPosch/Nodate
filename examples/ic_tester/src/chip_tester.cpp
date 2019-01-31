@@ -91,8 +91,7 @@ void readChipConfig() {
 		Serial.print("Result pin: ");
 		Serial.print(result_pin);
 		Serial.print(", expecting: ");
-		Serial.print(result_val);
-		Serial.print("\n");
+		Serial.println(result_val);
 		
 		// Set the result pin to input mode.
 		pinMode(result_pin, INPUT);
@@ -100,19 +99,18 @@ void readChipConfig() {
 		// Now traverse through each pin/value combination in the 'pins' string.
 		// This will allow us to set the specified pins to the indicated value,
 		// prior to reading out the result pin and comparing it to the expected result.
-		int pin;
-		bool val;
 		int idx = 0;
 		unsigned int pos = 0;
 		while ((idx = pins.indexOf(':', pos)) > 0) {
 			// We got the double colon position, which precedes the pin number. 
 			// Convert it to an integer.
 			// TODO: validate pin number.
-			pin = pins.substring(pos, idx).toInt();
+			int pin = pins.substring(pos, idx).toInt();
 			pos = idx + 1; // Move to character beyond the double colon.
 			
 			// Get the value (first ',' or end of string).
 			// TODO: check for valid value.
+			bool val = false;
 			if ((idx = pins.indexOf(",", pos)) > 0) {
 				val = pins.substring(pos, idx).toInt();
 				pos = idx + 1;
@@ -125,8 +123,7 @@ void readChipConfig() {
 			Serial.print("Setting pin ");
 			Serial.print(pin);
 			Serial.print(" to ");
-			Serial.print(val);
-			Serial.print("\n");
+			Serial.println(val);
 			pinMode(pin, OUTPUT);
 			digitalWrite(pin, val);
 		}
@@ -139,8 +136,7 @@ void readChipConfig() {
 		if (res_val != result_val) {
 			Serial.print("Error: got value ");
 			Serial.print(res_val);
-			Serial.print(" on the output.");
-			Serial.print("\n");
+			Serial.println(" on the output.");
 		}
 		else {
 			Serial.println("Pass.");

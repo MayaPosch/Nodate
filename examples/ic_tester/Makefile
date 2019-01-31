@@ -5,10 +5,10 @@
 # E.g.: AVR, SAM, ESP8266.
 ARCH ?= avr
 
-# One can use the board preset.
+# Preset for the Arduino Mega 2560 board (otherwise use settings below)
 BOARD ?= arduino_mega_2560
 
-# Set the MCU and programmer types.
+# Settings for other MCU and programmer types
 #
 # MCU, programmer, variant
 # atmega328p, arduino, standard

@@ -39,8 +39,8 @@ bool SerialComm::readLine(String &str) {
 		}
 		
 		// Next check that the character we received is 
-		// a number or letter, or a space.
-		if (rc >= '0' || rc == ' ') {
+		// not a control character.
+		if (rc >= 0x20) {
 			charbuff[index++] = rc;
 			if (index > CHARBUFFERSIZE) {
 				// Buffer is full, but no newline found.

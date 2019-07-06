@@ -26,7 +26,7 @@
 
 #if !defined(USBCON) || !defined(USBD_USE_HID_COMPOSITE)
 
-#error "USB HID not enabled! Select 'HID' in the 'Tools->USB interface' menu."
+//#error "USB HID not enabled! Select 'HID' in the 'Tools->USB interface' menu."
 
 #else
 

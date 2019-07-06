@@ -3,3 +3,5 @@
 MCU_FLAGS := -mcpu=cortex-m7 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -DSTM32F7xx=1 -DSTM32F746xx=1
 MCU_UPLOAD_MAX_SIZE := 1048576
 MCU_UPLOAD_MAX_DATA_SIZE := 196608
+DEVICE := STM32F7xx
+STARTUP := stm32f746xx

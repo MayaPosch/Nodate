@@ -66,28 +66,30 @@ INCLUDE = -I $(TOP)/arduino -I $(TOP)/variants/$(VARIANT) \
 			-I $(TOP)/system/STM32WBxx \
 			-I $(TOP)/system/Drivers/CMSIS/Device/ST/STM32F7xx/Include \
 			-I $(TOP)/system/Drivers/CMSIS/Core/Include \
-			-I $(TOP)/system/Drivers/STM32F7xx_HAL_Driver/Inc
-			
-			
-#-I $(TOP)/system/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_wwdg.c
-			
-$(info $$INCLUDE is [${INCLUDE}])
+			-I $(TOP)/system/Drivers/STM32F7xx_HAL_Driver/Inc \
+			-I $(TOP)/system/Middlewares/ST/STM32_USB_Device_Library/Core/Inc \
+			-I $(APPFOLDER)/src
 			
 FLASH_OFFSET := 0
 
-FLAGS := $(INCLUDE) $(MCU_FLAGS) -w -DARDUINO=3000 -Os -g -Wl,--gc-sections
+FLAGS := $(INCLUDE) $(MCU_FLAGS) -w -DARDUINO=3000 -Os -g $(PROJECT_FLAGS)
 CFLAGS := $(FLAGS) -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -MMD
 CPPFLAGS := $(FLAGS) -std=gnu++14 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -MMD
-LDFLAGS := --specs=nano.specs -Wl,--defsym=LD_FLASH_OFFSET=$(FLASH_OFFSET)-Wl,--defsym=LD_MAX_SIZE=$(MCU_UPLOAD_MAX_SIZE) -Wl,--defsym=LD_MAX_DATA_SIZE=$(MCU_UPLOAD_MAX_DATA_SIZE) -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common
+LDFLAGS :="-T$(CURDIR)/arch/$(ARCH)/variants/$(VARIANT)/ldscript.ld" "-Wl,-Map,$(APPFOLDER)/bin/$(OUTPUT).map"  --specs=nano.specs -Wl,--defsym=LD_FLASH_OFFSET=$(FLASH_OFFSET) -Wl,--defsym=LD_MAX_SIZE=$(MCU_UPLOAD_MAX_SIZE) -Wl,--defsym=LD_MAX_DATA_SIZE=$(MCU_UPLOAD_MAX_DATA_SIZE) -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common 
+LIBS := -Wl,--start-group -Wl,--no-whole-archive -lc -Wl,--end-group -lm -lgcc -lstdc++
+
 CPPSOURCES := $(wildcard arch/$(ARCH)/arduino/*.cpp) \
 			$(wildcard arch/$(ARCH)/arduino/stm32/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/Wire/src/*.cpp) \
+			$(wildcard arch/$(ARCH)/libraries/Ethernet/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/SPI/src/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/IWatchdog/src/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/Keyboard/src/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/Mouse/src/*.cpp) \
 			$(wildcard arch/$(ARCH)/libraries/Servo/src/stm32/*.cpp) \
+			$(wildcard arch/$(ARCH)/variants/$(VARIANT)/*.cpp) \
 			$(APP_CPP_FILES)
+			
 CSOURCES := $(wildcard arch/$(ARCH)/arduino/*.c) \
 			$(wildcard arch/$(ARCH)/arduino/stm32/*.c) \
 			$(wildcard arch/$(ARCH)/arduino/stm32/HAL/*.c) \
@@ -96,7 +98,6 @@ CSOURCES := $(wildcard arch/$(ARCH)/arduino/*.c) \
 			$(wildcard arch/$(ARCH)/arduino/stm32/usb/cdc/*.c) \
 			$(wildcard arch/$(ARCH)/arduino/stm32/usb/hid/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/Wire/src/utility/*.c) \
-			$(wildcard arch/$(ARCH)/libraries/Ethernet/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/Ethernet/utility/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/LwIP/api/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/LwIP/core/*.c) \
@@ -106,23 +107,17 @@ CSOURCES := $(wildcard arch/$(ARCH)/arduino/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/LwIP/netif/ppp/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/LwIP/netif/ppp/polarssl/*.c) \
 			$(wildcard arch/$(ARCH)/libraries/LwIP/system/OS/*.c) \
-			$(wildcard arch/$(ARCH)/system/STM32F7xx/*.c) \
-			$(wildcard arch/$(ARCH)/system/Drivers/CMSIS\Device/ST/STM32F7xx/Source/Templates/*.c) \
-			$(wildcard arch/$(ARCH)/system/Drivers/STM32F7xx_HAL_Driver/Src/*.c) \
+			$(wildcard arch/$(ARCH)/variants/$(VARIANT)/*.c) \
 			$(APP_C_FILES)
-# CSOURCES := $(shell cd "$(NODATE_HOME)"; find ./arduino/ -name \*.c) \
-			# $(shell cd "$(NODATE_HOME)"; find ./libraries/ -name \*.c) \
-			# $(shell cd "$(NODATE_HOME)"; find ./system/ -name \*.c) \
-			# $(shell cd "$(NODATE_HOME)"; find ./variants/ -name \*.c) \
+
+ASMSOURCES := arch/$(ARCH)/system/Drivers/CMSIS/Device/ST/$(DEVICE)/Source/Templates/gcc/startup_$(STARTUP).s
+			
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
+ASMOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(ASMSOURCES:.s=.o))
 
-# $(info $$CPPSOURCES is [${CPPSOURCES}])
-# $(info $$CPPOBJECTS is [${CPPOBJECTS}])
-# $(info $$CSOURCES is [${CSOURCES}])
-# $(info $$COBJECTS is [${COBJECTS}])
 
-all: makedir $(CPPOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).hex
+all: makedir $(CPPOBJECTS) $(COBJECTS) $(ASMOBJECTS) $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).hex
 
 makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)
@@ -146,10 +141,12 @@ makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/libraries/IWatchdog/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/libraries/Keyboard/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/libraries/Mouse/src
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/libraries/Servo/stm32
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/libraries/Servo/src/stm32
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/system/STM32F7xx
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/system/Drivers/CMSIS\Device/ST/STM32F7xx/Source/Templates
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/variants/$(VARIANT)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/system/Drivers/STM32F7xx_HAL_Driver/Src
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/system/Middlewares/STM32_USB_Device_Library/Core/Src
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/$(ARCH)/system/Drivers/CMSIS/Device/ST/$(DEVICE)/Source/Templates/gcc/
 
 $(APPFOLDER)/obj/%.o: %.cpp
 	$(GPP) -c -o $@ $< $(CPPFLAGS)
@@ -157,15 +154,20 @@ $(APPFOLDER)/obj/%.o: %.cpp
 $(APPFOLDER)/obj/%.o: %.c
 	$(GCC) -c -o $@ $< $(CFLAGS)
 
+$(APPFOLDER)/obj/%.o: %.s
+	$(GCC) -c -o $@ $< -x assembler-with-cpp
+
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp
 	$(GPP) -c -o $@ $< $(CPPFLAGS)
 
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.c
-	#$(MKDIR) "$(@D)"
 	$(GCC) -c -o $@ $< $(CFLAGS)
+
+$(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.s
+	$(GCC) -c -o $@ $< -x assembler-with-cpp
 	
 $(APPFOLDER)/bin/$(OUTPUT).elf:
-	$(GPP) -o $@ $(CPPOBJECTS) $(COBJECTS) $(LIB) $(LDFLAGS) $(FLAGS)
+	$(GPP) -o $@ $(LDFLAGS) $(CPPOBJECTS) $(COBJECTS) $(ASMOBJECTS) $(LIB) $(FLAGS)
 	
 $(APPFOLDER)/bin/%.hex: $(APPFOLDER)/bin/%.elf
 	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@

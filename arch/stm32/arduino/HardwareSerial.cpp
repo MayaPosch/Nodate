@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include "Arduino.h"
 #include "HardwareSerial.h"
+#include "variant.h"
 
 #if defined(HAL_UART_MODULE_ENABLED)
 #if defined(HAVE_HWSERIAL1) || defined(HAVE_HWSERIAL2) || defined(HAVE_HWSERIAL3) ||\

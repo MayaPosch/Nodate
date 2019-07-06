@@ -35,7 +35,7 @@ extern "C" {
 #define PI0  5
 #define PH6  6
 #define PI3  7
-#define PI2  8
+#define PD13 8
 #define PA15 9
 #define PA8  10
 #define PB15 11

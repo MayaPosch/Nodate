@@ -2,10 +2,11 @@
 
 Restructuring of the Arduino AVR core in order to allow it to be used as a generic C++ framework while still remaining compatible with Arduino libraries.
 
-This initial version has been tested with the following boards:
+The current version has been tested with the following boards:
 
-* Arduino Duemilanove (ATMega328P)
-* Arduino Mega (ATMega1280, ATMega2560)
+* Arduino Duemilanove (ATmega328p)
+* Arduino Mega (ATmega1280, ATmega2560)
+* Arduino Uno (ATmega328p)
 
 ## Usage ##
 
@@ -16,6 +17,7 @@ Take a look at the Blinky example in the `examples/` folder to get an idea of ho
 * <wiring.h> - For GPIO.
 * <HardwareSerial.h> - For UART
 * <SPI.h> - For SPI.
+* <Wire.h> - For I2C.
 
 
 After adapting the example's Makefile for one's own use, simply execute `make` and a `bin/` folder will be created in the project's root folder containing both the ELF binary and the .hex file that is to be flashed to the device.

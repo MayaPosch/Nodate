@@ -4,6 +4,7 @@
 
 GPP = arm-none-eabi-g++
 GCC = arm-none-eabi-gcc
+AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
 MAKEDIR = mkdir -p
 CD = cd
@@ -79,4 +80,5 @@ flash:
 
 clean:
 	$(RM) $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*
+
 	

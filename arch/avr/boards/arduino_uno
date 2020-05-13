@@ -1,0 +1,6 @@
+# Arduino Uno board with ATmega328p MCU
+
+MCU := atmega328p
+PROGRAMMER := arduino
+VARIANT := standard 
+BAUD := 115200

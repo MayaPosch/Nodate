@@ -1,0 +1,14 @@
+# MCU definition file for the stm32f042k6t MCU.
+# Package: LQFP32.
+
+MCU_FAMILY := stm32f0
+MCU_GENUS := stm32f042x6
+
+MCU := stm32f042k6t
+MCU_CORE := stm32f042
+MCU_RAM := 6144
+MCU_PACKAGE := lqfp32
+
+MCU_FLAGS := -mcpu=cortex-m0 -mthumb
+
+MCU_LD := stm32f042x6.ld

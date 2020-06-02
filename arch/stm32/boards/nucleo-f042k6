@@ -1,7 +1,8 @@
 # Definition file for the STM32 Nucleo-F042K6 development board.
 
 MCU := stm32f042k6t
-PROGRAMMER := stlink
+#PROGRAMMER := stlink-v2-1
+PROGRAMMER := st_nucleo_f0.cfg
 
 # Pin mapping
 

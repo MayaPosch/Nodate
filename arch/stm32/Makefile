@@ -20,7 +20,7 @@ include $(TOP)/boards/$(BOARD)
 endif
 
 include $(TOP)/mcu/$(MCU)
-include $(TOP)/programmer/$(PROGRAMMER)
+#include $(TOP)/programmer/$(PROGRAMMER)
 
 
 OUTPUT := $(OUTPUT).$(MCU)
@@ -74,9 +74,10 @@ $(APPFOLDER)/bin/%.bin: $(APPFOLDER)/bin/%.elf
 	$(OBJCOPY) -O $(FORMAT) $< $@
 	
 flash:
-	#$(CD) $(APPFOLDER) && \
-	
-	#bossac -i -d --port=$(COM_PORT) --erase --write --verify --boot -U=1 -R bin/$(OUTPUT).bin
+	$(CD) $(APPFOLDER) && \
+	openocd -f board/$(PROGRAMMER) -c "program $(APPFOLDER)/bin/$(OUTPUT).elf verify reset exit"
+
+#openocd -f $(TOP)/programmer/$(PROGRAMMER).cfg  -c "program $(BUILD_DIR)/$(TARGET).elf verify reset exit"
 
 clean:
 	$(RM) $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*

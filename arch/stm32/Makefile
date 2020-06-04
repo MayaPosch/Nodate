@@ -75,7 +75,7 @@ $(APPFOLDER)/bin/%.bin: $(APPFOLDER)/bin/%.elf
 	
 flash:
 	$(CD) $(APPFOLDER) && \
-	openocd -f board/$(PROGRAMMER) -c "program $(APPFOLDER)/bin/$(OUTPUT).elf verify reset exit"
+	openocd -f board/$(PROGRAMMER) -d -c "program bin/$(OUTPUT).elf verify reset exit"
 
 #openocd -f $(TOP)/programmer/$(PROGRAMMER).cfg  -c "program $(BUILD_DIR)/$(TARGET).elf verify reset exit"
 

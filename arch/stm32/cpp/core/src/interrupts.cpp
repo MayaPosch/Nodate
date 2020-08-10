@@ -38,6 +38,20 @@ std::vector<InterruptSource>& Interrupts::interruptList() {
 	InterruptSource src;
 	static std::vector<InterruptSource>* itrSrcs = new std::vector<InterruptSource>(exti_lines, src);
 	
+	const uint8_t exticrs = 4;
+	uint8_t crcnt = 0;
+	uint8_t crpos = 0;
+	for (int i = 0; i < exti_lines; ++i) {
+		src.reg = (&(SYSCFG->EXTICR[crcnt]) * (crpos++ * 4));
+		
+		if (crpos >= 4) { crpos = 0; crcnt++; }
+		if (crcnt >= exticrs) {
+			// Error, somehow more EXTI lines were defined than there are EXTICR entries.
+			// TODO: set error.
+			break;
+		}
+	}
+	
 	return *ItrSrcs;
 }
 
@@ -60,28 +74,44 @@ Interrupts::~Interrupts() {
 
 
 // --- SET INTERRUPTS ---
-bool Interrupts::setInterrupts(uint8_t pin, uint8_t &handle) {
+bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, uint8_t &handle) {
 	// Set free EXTICRX register in SYSCFG peripheral to the port in question.
+	// This requires that we first check for an existing & valid entry in the queue of free entries.
 	static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
 	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
 	
 	if (freeExtis->empty()) {
+		// No free interrupts available any more.
 		// TODO: set reason.
 		return false;
 	}
 	
 	handle = freeExtis->front();
+	InterruptSource &src = (*sources)[handle];
+	if (src.active) {
+		// Already active EXICRx entry. Shouldn't happen.
+		// FIXME: try another entry in the queue?
+		// TODO: set reason.
+		return false;
+	}
 	
-	
+	// Assign the new entry information and set the requested port in the SYSCFG EXTICR.
+	src.port = port;
+	src.pin = pin;
+	src.trigger = trigger;
+	src.reg |= (uint8_t) port;
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.
 	// - set RTSR, FTSR or both for the pin.
+	// The interrupt handle corresponds to the EXTI line.
+	
 	
 	// Enable the NVIC interrupt on the registered EXTI line.
 	
 	
 	freeExtis->pop();
+	src.active = true;
 	
 	return true;
 }

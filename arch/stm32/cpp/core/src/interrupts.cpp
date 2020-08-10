@@ -99,16 +99,31 @@ bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger tr
 	src.port = port;
 	src.pin = pin;
 	src.trigger = trigger;
-	src.reg |= (uint8_t) port;
+	src.reg |= (1 << (uint8_t) port);
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.
 	// - set RTSR, FTSR or both for the pin.
 	// The interrupt handle corresponds to the EXTI line.
+	EXTI->IMR |= (1 << handle);
 	
+	if (trigger == INTERRUPT_TRIGGER_RISING) {
+		EXTI->RTSR |= (1 << handle);
+		EXTI->FTSR &= ~(1 << handle);
+	}
+	else if (trigger == INTERRUPT_TRIGGER_FALLING) {
+		EXTI->RTSR &= ~(1 << handle);
+		EXTI->FTSR |= (1 << handle);
+	}
+	else if (trigger == INTERRUPT_TRIGGER_BOTH) {
+		EXTI->RTSR |= (1 << handle);
+		EXTI->FTSR |= (1 << handle);
+	}
 	
 	// Enable the NVIC interrupt on the registered EXTI line.
-	
+	// TODO: make priority configurable.
+	NVIC_SetPriority(EXTI0_1_IRQn, 0x03);
+	NVIC_EnableIRQ(EXTI0_1_IRQn);
 	
 	freeExtis->pop();
 	src.active = true;

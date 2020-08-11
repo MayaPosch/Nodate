@@ -29,6 +29,7 @@ struct InterruptSource {
 	Gpio_ports port;
 	uint8_t pin;
 	InterruptTrigger trigger;
+	uint8_t priority;
 	uint8_t* reg;
 };
 
@@ -43,7 +44,8 @@ public:
 	Interrupts();
 	~Interrupts();
 
-	bool setInterrupt(uint8_t pin);
+	bool setInterrupt(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, 
+								uint8_t priority, uint8_t &handle);
 	void triggerInterrupt();
 	bool removeInterrupt(uint8_t handle);
 };

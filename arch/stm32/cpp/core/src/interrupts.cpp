@@ -74,7 +74,8 @@ Interrupts::~Interrupts() {
 
 
 // --- SET INTERRUPTS ---
-bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, uint8_t &handle) {
+bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, 
+								uint8_t priority, uint8_t &handle) {
 	// Set free EXTICRX register in SYSCFG peripheral to the port in question.
 	// This requires that we first check for an existing & valid entry in the queue of free entries.
 	static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
@@ -99,32 +100,39 @@ bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger tr
 	src.port = port;
 	src.pin = pin;
 	src.trigger = trigger;
+	src.priority = priority;
 	src.reg |= (1 << (uint8_t) port);
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.
 	// - set RTSR, FTSR or both for the pin.
-	// The interrupt handle corresponds to the EXTI line.
-	EXTI->IMR |= (1 << handle);
+	// The pin number corresponds to the EXTI line.
+	EXTI->IMR |= (1 << pin);
 	
 	if (trigger == INTERRUPT_TRIGGER_RISING) {
-		EXTI->RTSR |= (1 << handle);
-		EXTI->FTSR &= ~(1 << handle);
+		EXTI->RTSR |= (1 << pin);
+		EXTI->FTSR &= ~(1 << pin);
 	}
 	else if (trigger == INTERRUPT_TRIGGER_FALLING) {
-		EXTI->RTSR &= ~(1 << handle);
-		EXTI->FTSR |= (1 << handle);
+		EXTI->RTSR &= ~(1 << pin);
+		EXTI->FTSR |= (1 << pin);
 	}
 	else if (trigger == INTERRUPT_TRIGGER_BOTH) {
-		EXTI->RTSR |= (1 << handle);
-		EXTI->FTSR |= (1 << handle);
+		EXTI->RTSR |= (1 << pin);
+		EXTI->FTSR |= (1 << pin);
 	}
 	
 	// Enable the NVIC interrupt on the registered EXTI line.
-	// TODO: make priority configurable.
-	NVIC_SetPriority(EXTI0_1_IRQn, 0x03);
-	NVIC_EnableIRQ(EXTI0_1_IRQn);
+	// Priority level 0 is the highest, with M0 supporting up to 192.
+	// Cortex M3, M4 and M7 support 255 levels.
+	IRQn_Type irqType = EXTI4_15_IRQn;
+	if (pin == 0 || pin == 1) { irqType = EXTI0_1_IRQn; }
+	else if (pin == 2 || pin == 3) { irqType = EXTI2_3_IRQn; }
+		
+	NVIC_SetPriority(irqType, priority);
+	NVIC_EnableIRQ(irqType);
 	
+	// Remove the now unavailable EXTI entry from the queue and mark it as active.
 	freeExtis->pop();
 	src.active = true;
 	
@@ -139,7 +147,9 @@ void Interrupts::triggerInterrupt() {
 
 
 // --- REMOVE INTERRUPT ---
+// Use the provided handle to disable the interrupt.
 bool Interrupts::removeInterrupt(uint8_t handle) {
-	// FIXME: how to track set interrupts?
+	static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
+	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
 	
 }

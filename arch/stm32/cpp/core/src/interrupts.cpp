@@ -16,7 +16,10 @@
 
 
 // Static initialisations.
-const Interrupts::exti_lines = 16;
+const uint8_t Interrupts::exti_lines = 16;
+uint8_t Interrupts::exti0_1_pwr = 0;
+uint8_t Interrupts::exti2_3_pwr = 0;
+uint8_t Interrupts::exti4_15_pwr = 0;
 
 
 // Private.
@@ -125,9 +128,10 @@ bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger tr
 	// Enable the NVIC interrupt on the registered EXTI line.
 	// Priority level 0 is the highest, with M0 supporting up to 192.
 	// Cortex M3, M4 and M7 support 255 levels.
-	IRQn_Type irqType = EXTI4_15_IRQn;
-	if (pin == 0 || pin == 1) { irqType = EXTI0_1_IRQn; }
-	else if (pin == 2 || pin == 3) { irqType = EXTI2_3_IRQn; }
+	src.irqType = EXTI4_15_IRQn;
+	if (pin == 0 || pin == 1) { src.irqType = EXTI0_1_IRQn; exti0_1_pwr++; }
+	else if (pin == 2 || pin == 3) { src.irqType = EXTI2_3_IRQn; exti2_3_pwr++; }
+	else { exti4_15_pwr++; }
 		
 	NVIC_SetPriority(irqType, priority);
 	NVIC_EnableIRQ(irqType);
@@ -152,4 +156,38 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
 	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
 	
+	// Obtain and validate reference to interrupt source record.
+	InterruptSource &src = (*sources)[handle];
+	if (!src.active) {
+		// Set reason.
+		return false;
+	}
+	
+	// Set record to non-active.
+	src.active = false;
+	
+	// Disable the interrupt, starting with the NVIC.
+	bool nvic_disable = false;
+	if (src.irqType = EXTI0_1_IRQn) { 
+		if (--exti0_1_pwr == 0) { nvic_disable = true; }
+	}
+	else if (src.irqType = EXTI2_3_IRQn) {
+		if (--exti2_3_pwr == 0) { nvic_disable = true; }
+	}
+	else if (--exti4_15_pwr == 0) { nvic_disable = true; }
+	
+	if (nvic_disable) {	NVIC_DisableIRQ(src.irqType); }
+	
+	// Next reset the EXTI registers.
+	EXTI->IMR &= ~(1 << src.pin);
+	EXTI->FTSR &= ~(1 << src.pin);
+	EXTI->RTSR &= ~(1 << src.pin);
+	
+	// Finally reset the SYSCFG registers.
+	src.reg &= ~(1 << (uint8_t) port);
+	
+	// Add record ID back into the queue.
+	freeExtis->push(handle);
+	
+	return true;
 }

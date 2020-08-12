@@ -12,8 +12,8 @@
 
 #include "gpio.h"
 
-
 #include <vector>
+#include <functional>
 
 
 enum InterruptTrigger {
@@ -32,6 +32,7 @@ struct InterruptSource {
 	IRQn_Type irqType;
 	uint8_t priority;
 	uint8_t* reg;
+	std::function<void> callback;
 };
 
 
@@ -41,7 +42,7 @@ class Interrupts {
 	static uint8_t exti2_3_pwr;
 	static uint8_t exti4_15_pwr;
 	
-	static std::queue<uint8_t>& freeExti();
+	//static std::queue<uint8_t>& freeExti();
 	static std::vector<InterruptSource>& interruptList();
 	
 public:
@@ -49,7 +50,7 @@ public:
 	~Interrupts();
 
 	bool setInterrupt(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, 
-								uint8_t priority, uint8_t &handle);
+						std::function<void>() callback, uint8_t priority, uint8_t &handle);
 	void triggerInterrupt();
 	bool removeInterrupt(uint8_t handle);
 };

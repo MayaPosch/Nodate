@@ -11,13 +11,13 @@
 
 // The maximum handles per port or peripheral is determined by the counter type in the item struct.
 // If changed, the counter type should be updated both in the type definition and here.
-static const handle_max = std::numeric_limits<uint8_t>::max();
+static const uint8_t handle_max = std::numeric_limits<uint8_t>::max();
 
 
 // Private methods:
 
 // --- PORT HANDLES ---
-std::vector<RccPortHandle>& RCC::portHandles {
+std::vector<RccPortHandle>& Rcc::portHandles() {
 	static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>();
 	
 	RccPortHandle handle;
@@ -74,7 +74,7 @@ std::vector<RccPortHandle>& RCC::portHandles {
 
 
 // --- PERIPHERAL HANDLES ---
-std::vector<RccPeripheralHandle>& RCC::peripheralHandles() {
+std::vector<RccPeripheralHandle>& Rcc::peripheralHandles() {
 	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>();
 	
 	// AHB
@@ -428,8 +428,8 @@ std::vector<RccPeripheralHandle>& RCC::peripheralHandles() {
 // Enable the target peripheral. 
 // Returns true if the peripheral was successfully turned on, or if the peripheral was already on.
 // Returns false if the peripheral could not be turned on. 
-bool RCC::enable(RccPeripheral peripheral) {
-	static std::vector<RccPeripheralHandle> &perHandlesStatic = RCC::peripheralHandles();
+bool Rcc::enable(RccPeripheral peripheral) {
+	static std::vector<RccPeripheralHandle> &perHandlesStatic = Rcc::peripheralHandles();
 	uint8_t perNum = (uint8_t) peripheral;
 	RccPeripheralHandle &ph = perHandlesStatic[perNum];
 	
@@ -452,7 +452,7 @@ bool RCC::enable(RccPeripheral peripheral) {
 	else {
 		// Activate the peripheral.
 		ph.count = 1;
-		ph.enr |= ph.enable;
+		(*ph.enr) |= ph.enable;
 	}
 	
 	return true;
@@ -464,8 +464,8 @@ bool RCC::enable(RccPeripheral peripheral) {
 // Returns true if the disable request was received but not processed due to outstanding handles, or
 // if the peripheral was successfully disabled.
 // Returns false if the request was rejected or disabling the peripheral failed.
-bool RCC::disable(RccPeripheral peripheral) {
-	static std::vector<RccPeripheralHandle> &perHandlesStatic = RCC::peripheralHandles();
+bool Rcc::disable(RccPeripheral peripheral) {
+	static std::vector<RccPeripheralHandle> &perHandlesStatic = Rcc::peripheralHandles();
 	uint8_t perNum = (uint8_t) peripheral;
 	RccPeripheralHandle &ph = perHandlesStatic[perNum];
 	
@@ -481,7 +481,8 @@ bool RCC::disable(RccPeripheral peripheral) {
 	else {
 		// Deactivate the peripheral.
 		ph.count = 0;
-		ph.enr &= ~(ph.enable);
+		(*ph.enr) &= ~(ph.enable);
+	}
 	
 	return true;
 }
@@ -490,8 +491,8 @@ bool RCC::disable(RccPeripheral peripheral) {
 // --- ENABLE PORT ---
 // Returns true if the port was already enabled, or was successfully enabled.
 // Returns false if the port could not be enabled.
-bool RCC::enablePort(RccPort port) {
-	static std::vector<RccPortHandle> &portHandlesStatic = RCC::portHandles();
+bool Rcc::enablePort(RccPort port) {
+	static std::vector<RccPortHandle> &portHandlesStatic = Rcc::portHandles();
 	uint8_t portNum = (uint8_t) port;
 	RccPortHandle &ph = portHandlesStatic[portNum];
 	
@@ -524,8 +525,8 @@ bool RCC::enablePort(RccPort port) {
 // --- DISABLE PORT ---
 // Returns true if the port is already disabled, if the request was accepted, or the port disabled.
 // Returns false if the requested was rejected, or the port could not be disabled.
-bool RCC::disablePort(RccPort port) {
-	static std::vector<RccPortHandle> &portHandlesStatic = RCC::portHandles();
+bool Rcc::disablePort(RccPort port) {
+	static std::vector<RccPortHandle> &portHandlesStatic = Rcc::portHandles();
 	uint8_t portNum = (uint8_t) port;
 	RccPortHandle &ph = portHandlesStatic[portNum];
 	

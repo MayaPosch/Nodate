@@ -4,8 +4,8 @@
 */
 
 
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef RCC_H
+#define RCC_H
 
 
 #include "common.h"
@@ -55,7 +55,7 @@ enum RccPeripheral {
 struct RccPeripheralHandle {
 	uint8_t count = 0;
 	bool exists = false;
-	uint32_t enr;
+	volatile uint32_t* enr;
 	uint32_t enable;
 };
 
@@ -77,18 +77,18 @@ struct RccPortHandle {
 };
 
 
-class RCC {
+class Rcc {
 	static std::vector<RccPortHandle>& portHandles();
 	static std::vector<RccPeripheralHandle>& peripheralHandles();
 	
-	static bool initPorts();
+	//static bool initPorts();
 	
 public:
 	static bool enable(RccPeripheral peripheral);
 	static bool disable(RccPeripheral peripheral);
 	static bool enablePort(RccPort port);
 	static bool disablePort(RccPort port);
-}
+};
 
 
 #endif

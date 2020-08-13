@@ -1,5 +1,5 @@
 /*
-	gpio.h - Header to provide access to GPIO functionality.
+	timer.h - Header to provide access to Timer functionality.
 	
 */
 

@@ -26,31 +26,31 @@ enum InterruptTrigger {
 
 struct InterruptSource {
 	bool active = false;
-	Gpio_ports port;
+	GPIO_ports port;
 	uint8_t pin;
 	InterruptTrigger trigger;
 	IRQn_Type irqType;
 	uint8_t priority;
-	uint8_t* reg;
-	std::function<void> callback;
+	volatile uint32_t* reg;
+	std::function<void()> callback;
 };
 
 
 class Interrupts {
-	static const uint8_t exti_lines;
+	//static const uint8_t exti_lines;
 	static uint8_t exti0_1_pwr;
 	static uint8_t exti2_3_pwr;
 	static uint8_t exti4_15_pwr;
 	
 	//static std::queue<uint8_t>& freeExti();
-	static std::vector<InterruptSource>& interruptList();
+	//static std::vector<InterruptSource>& interruptList();
 	
 public:
 	Interrupts();
 	~Interrupts();
 
-	bool setInterrupt(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, 
-						std::function<void>() callback, uint8_t priority, uint8_t &handle);
+	bool setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger trigger, 
+						std::function<void()> callback, uint8_t priority, uint8_t &handle);
 	void triggerInterrupt();
 	bool removeInterrupt(uint8_t handle);
 };

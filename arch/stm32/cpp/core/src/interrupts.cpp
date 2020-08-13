@@ -16,55 +16,11 @@
 
 
 // Static initialisations.
-const uint8_t Interrupts::exti_lines = 16;
+const int exti_lines = 16;
 uint8_t Interrupts::exti0_1_pwr = 0;
 uint8_t Interrupts::exti2_3_pwr = 0;
 uint8_t Interrupts::exti4_15_pwr = 0;
 
-
-// Callback handlers.
-// Overrides the default handlers and allows the use of custom callback functions.
-// 
-void EXTI0_1_IRQ_handler() {
-	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
-	
-	// Determine whether pin 0 or 1 was triggered.
-	if (EXTI->PR & (1 << 1)) {
-		EXTI->PR |= (1 << 1);	// Clear the EXTI status flag.
-		sources[1].callback();	// Call the custom callback function.
-	}
-	else {
-		EXTI->PR |= 1;
-		sources[0].callback();
-	}
-}
-
-void EXTI2_3_IRQ_handler() {
-	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
-	
-	if (EXTI->PR & (1 << 2)) {
-		EXTI->PR |= (1 << 2);	// Clear the EXTI status flag.
-		sources[2].callback();	// Call the custom callback function.
-	}
-	else {
-		EXTI->PR |= (1 << 3);
-		sources[3].callback();
-	}
-}
-
-void EXTI4_15_IRQ_handler() {
-	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
-	
-	for (uint8_t i = 4; i < exti_lines; ++i) {
-		if (EXTI->PR & (1 << i)) {
-			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
-			sources[i].callback();	// Call the custom callback function.
-		}
-	}
-}
-
-
-// Private.
 
 // ---
 /* std::queue<uint8_t>& Interrupts::freeExti() {
@@ -79,7 +35,7 @@ void EXTI4_15_IRQ_handler() {
 
 // --- INTERRUPT LIST ---
 // Creates and returns a list of the interrupt entries.
-std::vector<InterruptSource>& Interrupts::interruptList() {
+std::vector<InterruptSource>* interruptList() {
 	InterruptSource src;
 	static std::vector<InterruptSource>* itrSrcs = new std::vector<InterruptSource>(exti_lines, src);
 	
@@ -88,7 +44,7 @@ std::vector<InterruptSource>& Interrupts::interruptList() {
 	uint8_t crcnt = 0;
 	uint8_t crpos = 0;
 	for (int i = 0; i < exti_lines; ++i) {
-		src.reg = (&(SYSCFG->EXTICR[crcnt]) * (crpos++ * 4));
+		src.reg = (&(SYSCFG->EXTICR[crcnt]) + (crpos++ * 4));
 		
 		if (crpos >= 4) { crpos = 0; crcnt++; }
 		if (crcnt >= exticrs) {
@@ -98,7 +54,51 @@ std::vector<InterruptSource>& Interrupts::interruptList() {
 		}
 	}
 	
-	return *ItrSrcs;
+	return itrSrcs;
+}
+
+static std::vector<InterruptSource>* sources = interruptList();
+
+
+// Callback handlers.
+// Overrides the default handlers and allows the use of custom callback functions.
+// 
+void EXTI0_1_IRQ_handler() {
+	//static std::vector<InterruptSource>* sources = interruptList();
+	
+	// Determine whether pin 0 or 1 was triggered.
+	if (EXTI->PR & (1 << 1)) {
+		EXTI->PR |= (1 << 1);	// Clear the EXTI status flag.
+		(*sources)[1].callback();	// Call the custom callback function.
+	}
+	else {
+		EXTI->PR |= 1;
+		(*sources)[0].callback();
+	}
+}
+
+void EXTI2_3_IRQ_handler() {
+	//static std::vector<InterruptSource>* sources = interruptList();
+	
+	if (EXTI->PR & (1 << 2)) {
+		EXTI->PR |= (1 << 2);	// Clear the EXTI status flag.
+		(*sources)[2].callback();	// Call the custom callback function.
+	}
+	else {
+		EXTI->PR |= (1 << 3);
+		(*sources)[3].callback();
+	}
+}
+
+void EXTI4_15_IRQ_handler() {
+	//static std::vector<InterruptSource>* sources = interruptList();
+	
+	for (uint8_t i = 4; i < exti_lines; ++i) {
+		if (EXTI->PR & (1 << i)) {
+			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
+			(*sources)[i].callback();	// Call the custom callback function.
+		}
+	}
 }
 
 
@@ -108,24 +108,24 @@ std::vector<InterruptSource>& Interrupts::interruptList() {
 Interrupts::Interrupts() {
 	// Ensure that the SysConfig peripheral is set to active in the RCC. 
 	// RCC register: RCC_APB2ENR, bit 0.
-	RCC::enable(RCC_SYSCFGCOMP);
+	Rcc::enable(RCC_SYSCFGCOMP);
 }
 
 
 // --- DESTRUCTOR ---
 Interrupts::~Interrupts() {
 	// Disable SYSCONFIG peripheral if it's enabled.
-	RCC::disable(RCC_SYSCFGCOMP);
+	Rcc::disable(RCC_SYSCFGCOMP);
 }
 
 
 // --- SET INTERRUPTS ---
-bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger trigger, 
-								std::function<void>() callback, uint8_t priority, uint8_t &handle) {
+bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger trigger, 
+								std::function<void()> callback, uint8_t priority, uint8_t &handle) {
 	// Set free EXTICRX register in SYSCFG peripheral to the port in question.
 	// This requires that we first check for an existing & valid entry in the queue of free entries.
 	//static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
-	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
+	//static std::vector<InterruptSource>* sources = interruptList();
 	
 	/* if (freeExtis->empty()) {
 		// No free interrupts available any more.
@@ -148,7 +148,7 @@ bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger tr
 	src.trigger = trigger;
 	src.callback = callback;
 	src.priority = priority;
-	src.reg |= (1 << (uint8_t) port);
+	(*src.reg) |= (1 << (uint8_t) port);
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.
@@ -177,8 +177,8 @@ bool Interrupts::setInterrupts(uint8_t pin, Gpio_ports port, InterruptTrigger tr
 	else if (pin == 2 || pin == 3) { src.irqType = EXTI2_3_IRQn; exti2_3_pwr++; }
 	else { exti4_15_pwr++; }
 		
-	NVIC_SetPriority(irqType, priority);
-	NVIC_EnableIRQ(irqType);
+	NVIC_SetPriority(src.irqType, priority);
+	NVIC_EnableIRQ(src.irqType);
 	
 	// Remove the now unavailable EXTI entry from the queue and mark it as active.
 	//freeExtis->pop();
@@ -198,7 +198,7 @@ void Interrupts::triggerInterrupt() {
 // Use the provided handle to disable the interrupt.
 bool Interrupts::removeInterrupt(uint8_t handle) {
 	//static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
-	static std::vector<InterruptSource>* sources = Interrupts::interruptList();
+	//static std::vector<InterruptSource>* sources = interruptList();
 	
 	// Obtain and validate reference to interrupt source record.
 	InterruptSource &src = (*sources)[handle];
@@ -228,7 +228,7 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	EXTI->RTSR &= ~(1 << src.pin);
 	
 	// Finally reset the SYSCFG registers.
-	src.reg &= ~(1 << (uint8_t) port);
+	(*src.reg) &= ~(1 << (uint8_t) src.port);
 	
 	// Add record ID back into the queue.
 	//freeExtis->push(handle);

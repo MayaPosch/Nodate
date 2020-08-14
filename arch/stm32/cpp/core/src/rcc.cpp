@@ -17,409 +17,369 @@ static const uint8_t handle_max = std::numeric_limits<uint8_t>::max();
 // Private methods:
 
 // --- PORT HANDLES ---
-std::vector<RccPortHandle>& Rcc::portHandles() {
-	static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>();
-	
+std::vector<RccPortHandle>* portHandles() {
 	RccPortHandle handle;
+	static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>(6, handle);
+	
 #ifdef RCC_AHBENR_GPIOAEN
-	handle.exists = true;
-	handle.enable = RCC_AHBENR_GPIOAEN;
+	((*portHandlesStatic))[RCC_PORT_A].exists = true;
+	((*portHandlesStatic))[RCC_PORT_A].enable = RCC_AHBENR_GPIOAEN;
 #else
-	handle.exists = false;
+	(*portHandlesStatic)[RCC_PORT_A].exists = false;
 #endif
-	portHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_GPIOBEN
-	handle.exists = true;
-	handle.enable = RCC_AHBENR_GPIOBEN;
+	(*portHandlesStatic)[RCC_PORT_B].exists = true;
+	(*portHandlesStatic)[RCC_PORT_B].enable = RCC_AHBENR_GPIOBEN;
 #else
-	handle.exists = false;
+	(*portHandlesStatic)[RCC_PORT_B].exists = false;
 #endif
-	portHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_GPIOCEN
-	handle.exists = true;
-	handle.enable = RCC_AHBENR_GPIOCEN;
+	(*portHandlesStatic)[RCC_PORT_C].exists = true;
+	(*portHandlesStatic)[RCC_PORT_C].enable = RCC_AHBENR_GPIOCEN;
 #else
-	handle.exists = false;
+	(*portHandlesStatic)[RCC_PORT_C].exists = false;
 #endif
-	portHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_GPIODEN
-	handle.exists = true;
-	handle.enable = RCC_AHBENR_GPIODEN;
+	(*portHandlesStatic)[RCC_PORT_D].exists = true;
+	(*portHandlesStatic)[RCC_PORT_D].enable = RCC_AHBENR_GPIODEN;
 #else
-	handle.exists = false;
+	(*portHandlesStatic)[RCC_PORT_D].exists = false;
 #endif
-	portHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_GPIOEEN
-	handle.exists = true;
-	handle.enable = RCC_AHBENR_GPIOEEN;
+	(*portHandlesStatic)[RCC_PORT_E].exists = true;
+	(*portHandlesStatic)[RCC_PORT_E].enable = RCC_AHBENR_GPIOEEN;
 #else
-	handle.exists = false;
+	(*portHandlesStatic)[RCC_PORT_E].exists = false;
 #endif
-	portHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_GPIOFEN
-	handle.exists = true;
-	handle.enable = RCC_AHBENR_GPIOFEN;
+	(*portHandlesStatic)[RCC_PORT_F].exists = true;
+	(*portHandlesStatic)[RCC_PORT_F].enable = RCC_AHBENR_GPIOFEN;
 #else
-	handle.exists = false;
+	(*portHandlesStatic)[RCC_PORT_F].exists = false;
 #endif
-	portHandlesStatic->push_back(handle);
 	
-	return *portHandlesStatic;
+	return portHandlesStatic;
 }
+
+static std::vector<RccPortHandle>* portHandlesStatic = portHandles();
 
 
 // --- PERIPHERAL HANDLES ---
-std::vector<RccPeripheralHandle>& Rcc::peripheralHandles() {
-	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>();
+std::vector<RccPeripheralHandle>* peripheralHandles() {
+	RccPeripheralHandle handle;
+	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(35, handle);
 	
 	// AHB
 	
-	RccPeripheralHandle handle;
 #ifdef RCC_AHBENR_TSCEN
-	handle.exists = true;
-	handle.enr = &(RCC->AHBENR);
-	handle.enable = RCC_AHBENR_TSCEN;
+	(*peripheralHandlesStatic)[RCC_TSC].exists = true;
+	(*peripheralHandlesStatic)[RCC_TSC].enr = &(RCC->AHBENR);
+	(*peripheralHandlesStatic)[RCC_TSC].enable = RCC_AHBENR_TSCEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TSC].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_CRCEN
-	handle.exists = true;
-	handle.enr = &(RCC->AHBENR);
-	handle.enable = RCC_AHBENR_CRCEN;
+	(*peripheralHandlesStatic)[RCC_CRC].exists = true;
+	(*peripheralHandlesStatic)[RCC_CRC].enr = &(RCC->AHBENR);
+	(*peripheralHandlesStatic)[RCC_CRC].enable = RCC_AHBENR_CRCEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_CRC].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_FLITFEN
-	handle.exists = true;
-	handle.enr = &(RCC->AHBENR);
-	handle.enable = RCC_AHBENR_FLITFEN;
+	(*peripheralHandlesStatic)[RCC_FLITF].exists = true;
+	(*peripheralHandlesStatic)[RCC_FLITF].enr = &(RCC->AHBENR);
+	(*peripheralHandlesStatic)[RCC_FLITF].enable = RCC_AHBENR_FLITFEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_FLITF].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_SRAMEN
-	handle.exists = true;
-	handle.enr = &(RCC->AHBENR);
-	handle.enable = RCC_AHBENR_SRAMEN;
+	(*peripheralHandlesStatic)[RCC_SRAM].exists = true;
+	(*peripheralHandlesStatic)[RCC_SRAM].enr = &(RCC->AHBENR);
+	(*peripheralHandlesStatic)[RCC_SRAM].enable = RCC_AHBENR_SRAMEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_SRAM].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_DMA2EN
-	handle.exists = true;
-	handle.enr = &(RCC->AHBENR);
-	handle.enable = RCC_AHBENR_DMA2EN;
+	(*peripheralHandlesStatic)[RCC_DMA2].exists = true;
+	(*peripheralHandlesStatic)[RCC_DMA2].enr = &(RCC->AHBENR);
+	(*peripheralHandlesStatic)[RCC_DMA2].enable = RCC_AHBENR_DMA2EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_DMA2].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_AHBENR_DMAEN
-	handle.exists = true;
-	handle.enr = &(RCC->AHBENR);
-	handle.enable = RCC_AHBENR_DMAEN;
+	(*peripheralHandlesStatic)[RCC_DMA].exists = true;
+	(*peripheralHandlesStatic)[RCC_DMA].enr = &(RCC->AHBENR);
+	(*peripheralHandlesStatic)[RCC_DMA].enable = RCC_AHBENR_DMAEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_DMA].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 	
 	// APB2
 
 #ifdef RCC_APB2ENR_SYSCFGCOMPEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_SYSCFGCOMPEN;
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = true;
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enable = RCC_APB2ENR_SYSCFGCOMPEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_USART6EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_USART6EN;
+	(*peripheralHandlesStatic)[RCC_USART6].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART6].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_USART6].enable = RCC_APB2ENR_USART6EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART6].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_USART7EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_USART7EN;
+	(*peripheralHandlesStatic)[RCC_USART7].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART7].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_USART7].enable = RCC_APB2ENR_USART7EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART7].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_USART8EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_USART8EN;
+	(*peripheralHandlesStatic)[RCC_USART8].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART8].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_USART8].enable = RCC_APB2ENR_USART8EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART8].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_ADCEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_ADCEN;
+	(*peripheralHandlesStatic)[RCC_ADC].exists = true;
+	(*peripheralHandlesStatic)[RCC_ADC].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_ADC].enable = RCC_APB2ENR_ADCEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_ADC].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_TIM1EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_TIM1EN;
+	(*peripheralHandlesStatic)[RCC_TIM1].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM1].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_TIM1].enable = RCC_APB2ENR_TIM1EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM1].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_SPI1EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_SPI1EN;
+	(*peripheralHandlesStatic)[RCC_SPI1].exists = true;
+	(*peripheralHandlesStatic)[RCC_SPI1].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_SPI1].enable = RCC_APB2ENR_SPI1EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_SPI1].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_USART1EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_USART1EN;
+	(*peripheralHandlesStatic)[RCC_USART1].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART1].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_USART1].enable = RCC_APB2ENR_USART1EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART1].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_TIM15EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_TIM15EN;
+	(*peripheralHandlesStatic)[RCC_TIM15].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM15].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_TIM15].enable = RCC_APB2ENR_TIM15EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM15].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_TIM16EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_TIM16EN;
+	(*peripheralHandlesStatic)[RCC_TIM16].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM16].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_TIM16].enable = RCC_APB2ENR_TIM16EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM16].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_TIM17EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_SYSCFGCOMPEN;
+	(*peripheralHandlesStatic)[RCC_TIM17].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM17].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_TIM17].enable = RCC_APB2ENR_SYSCFGCOMPEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM17].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB2ENR_DBGMCUEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB2ENR);
-	handle.enable = RCC_APB2ENR_DBGMCUEN;
+	(*peripheralHandlesStatic)[RCC_DBGMCU].exists = true;
+	(*peripheralHandlesStatic)[RCC_DBGMCU].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_DBGMCU].enable = RCC_APB2ENR_DBGMCUEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_DBGMCU].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 	
 	// APB1
 
 #ifdef RCC_APB1ENR_TIM2EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_TIM2EN;
+	(*peripheralHandlesStatic)[RCC_TIM2].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM2].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_TIM2].enable = RCC_APB1ENR_TIM2EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM2].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_TIM3EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_TIM3EN;
+	(*peripheralHandlesStatic)[RCC_TIM3].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM3].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_TIM3].enable = RCC_APB1ENR_TIM3EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM3].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_TIM6EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_TIM6EN;
+	(*peripheralHandlesStatic)[RCC_TIM6].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM6].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_TIM6].enable = RCC_APB1ENR_TIM6EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM6].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_TIM7EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_TIM7EN;
+	(*peripheralHandlesStatic)[RCC_TIM7].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM7].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_TIM7].enable = RCC_APB1ENR_TIM7EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM7].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_TIM14EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_TIM14EN;
+	(*peripheralHandlesStatic)[RCC_TIM14].exists = true;
+	(*peripheralHandlesStatic)[RCC_TIM14].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_TIM14].enable = RCC_APB1ENR_TIM14EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_TIM14].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_WWDGEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_WWDGEN;
+	(*peripheralHandlesStatic)[RCC_WWDG].exists = true;
+	(*peripheralHandlesStatic)[RCC_WWDG].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_WWDG].enable = RCC_APB1ENR_WWDGEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_WWDG].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_SPI2EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_SPI2EN;
+	(*peripheralHandlesStatic)[RCC_SPI2].exists = true;
+	(*peripheralHandlesStatic)[RCC_SPI2].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_SPI2].enable = RCC_APB1ENR_SPI2EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_SPI2].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_USART2EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_USART2EN;
+	(*peripheralHandlesStatic)[RCC_USART2].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART2].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USART2].enable = RCC_APB1ENR_USART2EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART2].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_USART3EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_USART3EN;
+	(*peripheralHandlesStatic)[RCC_USART3].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART3].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USART3].enable = RCC_APB1ENR_USART3EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART3].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_USART4EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_USART4EN;
+	(*peripheralHandlesStatic)[RCC_USART4].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART4].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USART4].enable = RCC_APB1ENR_USART4EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART4].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_USART5EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_USART5EN;
+	(*peripheralHandlesStatic)[RCC_USART5].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART5].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USART5].enable = RCC_APB1ENR_USART5EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USART5].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_I2C1EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_I2C1EN;
+	(*peripheralHandlesStatic)[RCC_I2C1].exists = true;
+	(*peripheralHandlesStatic)[RCC_I2C1].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_I2C1].enable = RCC_APB1ENR_I2C1EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_I2C1].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_I2C2EN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_I2C2EN;
+	(*peripheralHandlesStatic)[RCC_I2C2].exists = true;
+	(*peripheralHandlesStatic)[RCC_I2C2].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_I2C2].enable = RCC_APB1ENR_I2C2EN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_I2C2].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_USBEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_USBEN;
+	(*peripheralHandlesStatic)[RCC_USB].exists = true;
+	(*peripheralHandlesStatic)[RCC_USB].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USB].enable = RCC_APB1ENR_USBEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_USB].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_CANEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_CANEN;
+	(*peripheralHandlesStatic)[RCC_CAN].exists = true;
+	(*peripheralHandlesStatic)[RCC_CAN].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_CAN].enable = RCC_APB1ENR_CANEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_CAN].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_CRSEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_CRSEN;
+	(*peripheralHandlesStatic)[RCC_CRS].exists = true;
+	(*peripheralHandlesStatic)[RCC_CRS].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_CRS].enable = RCC_APB1ENR_CRSEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_CRS].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_PWREN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_PWREN;
+	(*peripheralHandlesStatic)[RCC_PWR].exists = true;
+	(*peripheralHandlesStatic)[RCC_PWR].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_PWR].enable = RCC_APB1ENR_PWREN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_PWR].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_DACEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_DACEN;
+	(*peripheralHandlesStatic)[RCC_DAC].exists = true;
+	(*peripheralHandlesStatic)[RCC_DAC].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_DAC].enable = RCC_APB1ENR_DACEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_DAC].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 
 #ifdef RCC_APB1ENR_CECEN
-	handle.exists = true;
-	handle.enr = &(RCC->APB1ENR);
-	handle.enable = RCC_APB1ENR_CECEN;
+	(*peripheralHandlesStatic)[RCC_CEC].exists = true;
+	(*peripheralHandlesStatic)[RCC_CEC].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_CEC].enable = RCC_APB1ENR_CECEN;
 #else
-	handle.exists = false;
+	(*peripheralHandlesStatic)[RCC_CEC].exists = false;
 #endif
-	peripheralHandlesStatic->push_back(handle);
 	
-	
-	return *peripheralHandlesStatic;
+	return peripheralHandlesStatic;
 }
+
+static std::vector<RccPeripheralHandle>* perHandlesStatic = peripheralHandles();
 
 
 // Public methods:
@@ -429,9 +389,9 @@ std::vector<RccPeripheralHandle>& Rcc::peripheralHandles() {
 // Returns true if the peripheral was successfully turned on, or if the peripheral was already on.
 // Returns false if the peripheral could not be turned on. 
 bool Rcc::enable(RccPeripheral peripheral) {
-	static std::vector<RccPeripheralHandle> &perHandlesStatic = Rcc::peripheralHandles();
+	//static std::vector<RccPeripheralHandle> &perHandlesStatic = Rcc::peripheralHandles();
 	uint8_t perNum = (uint8_t) peripheral;
-	RccPeripheralHandle &ph = perHandlesStatic[perNum];
+	RccPeripheralHandle &ph = (*perHandlesStatic)[perNum];
 	
 	if (ph.exists == false) {
 		// TODO: set reason.
@@ -452,7 +412,7 @@ bool Rcc::enable(RccPeripheral peripheral) {
 	else {
 		// Activate the peripheral.
 		ph.count = 1;
-		(*ph.enr) |= ph.enable;
+		*(ph.enr) |= ph.enable;
 	}
 	
 	return true;
@@ -465,9 +425,9 @@ bool Rcc::enable(RccPeripheral peripheral) {
 // if the peripheral was successfully disabled.
 // Returns false if the request was rejected or disabling the peripheral failed.
 bool Rcc::disable(RccPeripheral peripheral) {
-	static std::vector<RccPeripheralHandle> &perHandlesStatic = Rcc::peripheralHandles();
+	//static std::vector<RccPeripheralHandle> &perHandlesStatic = Rcc::peripheralHandles();
 	uint8_t perNum = (uint8_t) peripheral;
-	RccPeripheralHandle &ph = perHandlesStatic[perNum];
+	RccPeripheralHandle &ph = (*perHandlesStatic)[perNum];
 	
 	if (ph.exists == false) {
 		// TODO: set reason.
@@ -481,7 +441,7 @@ bool Rcc::disable(RccPeripheral peripheral) {
 	else {
 		// Deactivate the peripheral.
 		ph.count = 0;
-		(*ph.enr) &= ~(ph.enable);
+		*(ph.enr) &= ~(ph.enable);
 	}
 	
 	return true;
@@ -492,9 +452,9 @@ bool Rcc::disable(RccPeripheral peripheral) {
 // Returns true if the port was already enabled, or was successfully enabled.
 // Returns false if the port could not be enabled.
 bool Rcc::enablePort(RccPort port) {
-	static std::vector<RccPortHandle> &portHandlesStatic = Rcc::portHandles();
+	//static std::vector<RccPortHandle> &portHandlesStatic = Rcc::portHandles();
 	uint8_t portNum = (uint8_t) port;
-	RccPortHandle &ph = portHandlesStatic[portNum];
+	RccPortHandle &ph = (*portHandlesStatic)[portNum];
 	
 	if (ph.exists == false) {
 		// TODO: set reason.
@@ -526,9 +486,9 @@ bool Rcc::enablePort(RccPort port) {
 // Returns true if the port is already disabled, if the request was accepted, or the port disabled.
 // Returns false if the requested was rejected, or the port could not be disabled.
 bool Rcc::disablePort(RccPort port) {
-	static std::vector<RccPortHandle> &portHandlesStatic = Rcc::portHandles();
+	//static std::vector<RccPortHandle> &portHandlesStatic = Rcc::portHandles();
 	uint8_t portNum = (uint8_t) port;
-	RccPortHandle &ph = portHandlesStatic[portNum];
+	RccPortHandle &ph = (*portHandlesStatic)[portNum];
 	
 	if (ph.exists == false) {
 		// TODO: set reason.

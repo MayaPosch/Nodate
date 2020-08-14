@@ -34,6 +34,8 @@ enum RccPeripheral {
 	RCC_DBGMCU,
 	RCC_TIM2,		// APB1 peripherals
 	RCC_TIM3,
+	RCC_TIM6,
+	RCC_TIM7,
 	RCC_TIM14,
 	RCC_WWDG,
 	RCC_SPI2,
@@ -78,8 +80,8 @@ struct RccPortHandle {
 
 
 class Rcc {
-	static std::vector<RccPortHandle>& portHandles();
-	static std::vector<RccPeripheralHandle>& peripheralHandles();
+	//static std::vector<RccPortHandle>& portHandles();
+	//static std::vector<RccPeripheralHandle>& peripheralHandles();
 	
 	//static bool initPorts();
 	

@@ -8,7 +8,7 @@
 #define INTERRUPTS_H
 
 
-#include "common.h"
+#include <common.h>
 
 #include "gpio.h"
 
@@ -31,7 +31,9 @@ struct InterruptSource {
 	InterruptTrigger trigger;
 	IRQn_Type irqType;
 	uint8_t priority;
-	volatile uint32_t* reg;
+	//volatile uint32_t* reg;
+	uint8_t reg;
+	uint32_t offset;
 	std::function<void()> callback;
 };
 

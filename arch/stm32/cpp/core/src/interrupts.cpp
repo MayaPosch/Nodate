@@ -44,9 +44,11 @@ std::vector<InterruptSource>* interruptList() {
 	uint8_t crcnt = 0;
 	uint8_t crpos = 0;
 	for (int i = 0; i < exti_lines; ++i) {
-		src.reg = (&(SYSCFG->EXTICR[crcnt]) + (crpos++ * 4));
-		
-		if (crpos >= 4) { crpos = 0; crcnt++; }
+		//src.reg = (*SYSCFG).EXTICR;
+		//src.reg += crcnt;
+		(*itrSrcs)[i].reg = i;
+		(*itrSrcs)[i].offset = crpos * 4;
+		if (++crpos >= 4) { crpos = 0; crcnt++; }
 		if (crcnt >= exticrs) {
 			// Error, somehow more EXTI lines were defined than there are EXTICR entries.
 			// TODO: set error.
@@ -148,7 +150,9 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	src.trigger = trigger;
 	src.callback = callback;
 	src.priority = priority;
-	*(src.reg) |= (1 << (uint8_t) port);
+	//*(src.reg) |= (((uint32_t) port) << src.offset);
+	uint32_t p = (uint8_t) port;
+	SYSCFG->EXTICR[src.reg] = (((uint32_t) p) << src.offset);
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.
@@ -228,7 +232,8 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	EXTI->RTSR &= ~(1 << src.pin);
 	
 	// Finally reset the SYSCFG registers.
-	*(src.reg) &= ~(1 << (uint8_t) src.port);
+	//*(src.reg) &= ~(1 << (uint8_t) src.port);
+	SYSCFG->EXTICR[src.reg] &= (0xF << src.offset);
 	
 	// Add record ID back into the queue.
 	//freeExtis->push(handle);

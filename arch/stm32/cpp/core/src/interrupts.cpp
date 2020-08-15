@@ -22,17 +22,6 @@ uint8_t Interrupts::exti2_3_pwr = 0;
 uint8_t Interrupts::exti4_15_pwr = 0;
 
 
-// ---
-/* std::queue<uint8_t>& Interrupts::freeExti() {
-	static std::queue<uint8_t>* freeExtis = new std::queue<uint8_t>();
-	
-	for (int i = 0; i < exti_lines; ++i) {
-		freeExtis->push(i);
-	}
-	
-	return *freeExtis;
-} */
-
 // --- INTERRUPT LIST ---
 // Creates and returns a list of the interrupt entries.
 std::vector<InterruptSource>* interruptList() {
@@ -66,8 +55,6 @@ static std::vector<InterruptSource>* sources = interruptList();
 // Overrides the default handlers and allows the use of custom callback functions.
 // 
 void EXTI0_1_IRQHandler() {
-	//static std::vector<InterruptSource>* sources = interruptList();
-	
 	// Determine whether pin 0 or 1 was triggered.
 	if (EXTI->PR & (1 << 1)) {
 		EXTI->PR |= (1 << 1);	// Clear the EXTI status flag.
@@ -80,8 +67,6 @@ void EXTI0_1_IRQHandler() {
 }
 
 void EXTI2_3_IRQHandler() {
-	//static std::vector<InterruptSource>* sources = interruptList();
-	
 	if (EXTI->PR & (1 << 2)) {
 		EXTI->PR |= (1 << 2);	// Clear the EXTI status flag.
 		(*sources)[2].callback();	// Call the custom callback function.
@@ -93,8 +78,6 @@ void EXTI2_3_IRQHandler() {
 }
 
 void EXTI4_15_IRQHandler() {
-	//static std::vector<InterruptSource>* sources = interruptList();
-	
 	for (uint8_t i = 4; i < exti_lines; ++i) {
 		if (EXTI->PR & (1 << i)) {
 			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
@@ -124,18 +107,6 @@ Interrupts::~Interrupts() {
 // --- SET INTERRUPTS ---
 bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger trigger, 
 								std::function<void()> callback, uint8_t priority, uint8_t &handle) {
-	// Set free EXTICRX register in SYSCFG peripheral to the port in question.
-	// This requires that we first check for an existing & valid entry in the queue of free entries.
-	//static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
-	//static std::vector<InterruptSource>* sources = interruptList();
-	
-	/* if (freeExtis->empty()) {
-		// No free interrupts available any more.
-		// TODO: set reason.
-		return false;
-	} */
-	
-	//handle = freeExtis->front();
 	handle = pin;
 	InterruptSource &src = (*sources)[handle];
 	if (src.active) {
@@ -150,7 +121,6 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	src.trigger = trigger;
 	src.callback = callback;
 	src.priority = priority;
-	//*(src.reg) |= (((uint32_t) port) << src.offset);
 	uint32_t p = (uint8_t) port;
 	SYSCFG->EXTICR[src.reg] = (((uint32_t) p) << src.offset);
 	
@@ -184,8 +154,7 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	NVIC_SetPriority(src.irqType, priority);
 	NVIC_EnableIRQ(src.irqType);
 	
-	// Remove the now unavailable EXTI entry from the queue and mark it as active.
-	//freeExtis->pop();
+	// Mark the EXTI entry as active.
 	src.active = true;
 	
 	return true;
@@ -201,9 +170,6 @@ void Interrupts::triggerInterrupt() {
 // --- REMOVE INTERRUPT ---
 // Use the provided handle to disable the interrupt.
 bool Interrupts::removeInterrupt(uint8_t handle) {
-	//static std::vector<uint8_t>* freeExtis = Interrupts::freeExti();
-	//static std::vector<InterruptSource>* sources = interruptList();
-	
 	// Obtain and validate reference to interrupt source record.
 	InterruptSource &src = (*sources)[handle];
 	if (!src.active) {
@@ -232,11 +198,7 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	EXTI->RTSR &= ~(1 << src.pin);
 	
 	// Finally reset the SYSCFG registers.
-	//*(src.reg) &= ~(1 << (uint8_t) src.port);
 	SYSCFG->EXTICR[src.reg] &= (0xF << src.offset);
-	
-	// Add record ID back into the queue.
-	//freeExtis->push(handle);
 	
 	return true;
 }

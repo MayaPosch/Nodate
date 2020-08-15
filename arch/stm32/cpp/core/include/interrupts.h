@@ -31,7 +31,6 @@ struct InterruptSource {
 	InterruptTrigger trigger;
 	IRQn_Type irqType;
 	uint8_t priority;
-	//volatile uint32_t* reg;
 	uint8_t reg;
 	uint32_t offset;
 	std::function<void()> callback;
@@ -39,13 +38,9 @@ struct InterruptSource {
 
 
 class Interrupts {
-	//static const uint8_t exti_lines;
 	static uint8_t exti0_1_pwr;
 	static uint8_t exti2_3_pwr;
 	static uint8_t exti4_15_pwr;
-	
-	//static std::queue<uint8_t>& freeExti();
-	//static std::vector<InterruptSource>& interruptList();
 	
 public:
 	Interrupts();

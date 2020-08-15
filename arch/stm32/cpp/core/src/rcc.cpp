@@ -4,7 +4,7 @@
 */
 
 
-#include "rcc.h"
+#include <rcc.h>
 
 #include <limits>
 
@@ -72,7 +72,7 @@ static std::vector<RccPortHandle>* portHandlesStatic = portHandles();
 // --- PERIPHERAL HANDLES ---
 std::vector<RccPeripheralHandle>* peripheralHandles() {
 	RccPeripheralHandle handle;
-	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(35, handle);
+	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(37, handle);
 	
 	// AHB
 	
@@ -412,7 +412,7 @@ bool Rcc::enable(RccPeripheral peripheral) {
 	else {
 		// Activate the peripheral.
 		ph.count = 1;
-		*(ph.enr) |= ph.enable;
+		*(ph.enr) |= (1 << ph.enable);
 	}
 	
 	return true;
@@ -441,7 +441,7 @@ bool Rcc::disable(RccPeripheral peripheral) {
 	else {
 		// Deactivate the peripheral.
 		ph.count = 0;
-		*(ph.enr) &= ~(ph.enable);
+		*(ph.enr) &= ~(1 << ph.enable);
 	}
 	
 	return true;
@@ -475,7 +475,7 @@ bool Rcc::enablePort(RccPort port) {
 	else {
 		// Activate the port.
 		ph.count = 1;
-		RCC->AHBENR |= ph.enable;
+		RCC->AHBENR |= (1 << ph.enable);
 	}
 	
 	return true;
@@ -503,7 +503,7 @@ bool Rcc::disablePort(RccPort port) {
 	else {
 		// Deactivate the port.
 		ph.count = 0;
-		RCC->AHBENR &= ~(ph.enable);
+		RCC->AHBENR &= ~(1 << ph.enable);
 	}
 	
 	return true;

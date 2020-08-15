@@ -3,6 +3,10 @@
 */
 
 
+#ifndef COMMON_H
+#define COMMON_H
+
+
 #if MCU_FAMILY == stmf0
 
 #if MCU_GENUS == stm32f030x6
@@ -63,4 +67,6 @@
 #include <cstdint>
 #else
 #include <stdint.h>
+#endif
+
 #endif

@@ -53,8 +53,14 @@ static std::vector<InterruptSource>* sources = interruptList();
 
 // Callback handlers.
 // Overrides the default handlers and allows the use of custom callback functions.
-// 
-void EXTI0_1_IRQHandler() {
+// Forward declare the IRQ handlers in an 'extern C' block to disable C++ name mangling for these.
+extern "C" {
+	void EXTI0_1_IRQHandler(void);
+	void EXTI2_3_IRQHandler(void);
+	void EXTI4_15_IRQHandler(void);
+}
+
+void EXTI0_1_IRQHandler(void) {
 	// Determine whether pin 0 or 1 was triggered.
 	if (EXTI->PR & (1 << 1)) {
 		EXTI->PR |= (1 << 1);	// Clear the EXTI status flag.
@@ -66,7 +72,7 @@ void EXTI0_1_IRQHandler() {
 	}
 }
 
-void EXTI2_3_IRQHandler() {
+void EXTI2_3_IRQHandler(void) {
 	if (EXTI->PR & (1 << 2)) {
 		EXTI->PR |= (1 << 2);	// Clear the EXTI status flag.
 		(*sources)[2].callback();	// Call the custom callback function.
@@ -77,7 +83,7 @@ void EXTI2_3_IRQHandler() {
 	}
 }
 
-void EXTI4_15_IRQHandler() {
+void EXTI4_15_IRQHandler(void) {
 	for (uint8_t i = 4; i < exti_lines; ++i) {
 		if (EXTI->PR & (1 << i)) {
 			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.

@@ -6,10 +6,14 @@ SOURCE_ROOT := ../core/src
 FLAGS := -std=c++11 -g3
 
 
-all: rcc_test interrupts_test
+all: mkdir rcc_test interrupts_test
+
+mkdir:
+	mkdir -p bin
+	mkdir -p obj
 
 rcc_test: rcc_test.cpp
-	g++ -o rcc_test rcc_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp  $(FLAGS) $(INCLUDES)
+	g++ -o bin/rcc_test rcc_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp  $(FLAGS) $(INCLUDES)
 	
 interrupts_test:
-	g++ -o interrupts_test interrupts_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/interrupts.cpp  $(FLAGS) $(INCLUDES)
+	g++ -o bin/interrupts_test interrupts_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/interrupts.cpp  $(FLAGS) $(INCLUDES)

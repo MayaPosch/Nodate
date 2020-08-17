@@ -5,46 +5,56 @@
 
 #include "gpio.h"
 
+#include "rcc.h"
+
+#include <vector>
+
+
+// --- GPIO HANDLES ---
+std::vector<GPIO_instance>* GPIO_instances() {
+	GPIO_instance instance;
+	static std::vector<GPIO_instance>* instancesStatic = new std::vector<GPIO_instance>(6, instance);
+	
+#ifdef RCC_AHBENR_GPIOAEN
+	((*instancesStatic))[GPIO_PORT_A].regs = GPIOA;
+#endif
+
+#ifdef RCC_AHBENR_GPIOBEN
+	((*instancesStatic))[GPIO_PORT_B].regs = GPIOB;
+#endif
+
+#ifdef RCC_AHBENR_GPIOCEN
+	((*instancesStatic))[GPIO_PORT_C].regs = GPIOC;
+#endif
+
+#ifdef RCC_AHBENR_GPIODEN
+	((*instancesStatic))[GPIO_PORT_D].regs = GPIOD;
+#endif
+
+#ifdef RCC_AHBENR_GPIOEEN
+	((*instancesStatic))[GPIO_PORT_E].regs = GPIOE;
+#endif
+
+#ifdef RCC_AHBENR_GPIOFEN
+	((*instancesStatic))[GPIO_PORT_F].regs = GPIOF;
+#endif
+	
+	return instancesStatic;
+}
+
+static std::vector<GPIO_instance>* instancesStatic = GPIO_instances();
+
+
 
 // --- CONSTRUCTOR ---
 GPIO::GPIO() {
-	// Enable all GPIO banks.
-#ifdef GPIOA_BASE
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-#endif
-
-#ifdef GPIOB_BASE
-	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-#endif
-
-#ifdef GPIOC_BASE
-	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
-#endif
-
-#ifdef GPIOF_BASE
-	RCC->AHBENR |= RCC_AHBENR_GPIOFEN;
-#endif
+	//
 }
 
 
 // --- DESTRUCTOR ---
 GPIO::~GPIO() {
-	// Disable all GPIO banks.
-#ifdef GPIOA_BASE
-	RCC->AHBENR &= ~(RCC_AHBENR_GPIOAEN);
-#endif
-
-#ifdef GPIOB_BASE
-	RCC->AHBENR &= ~(RCC_AHBENR_GPIOBEN);
-#endif
-
-#ifdef GPIOC_BASE
-	RCC->AHBENR &= ~(RCC_AHBENR_GPIOCEN);
-#endif
-
-#ifdef GPIOF_BASE
-	RCC->AHBENR &= ~(RCC_AHBENR_GPIOFEN);
-#endif
+	// 
 }
 
 
@@ -52,62 +62,30 @@ GPIO::~GPIO() {
 bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	// Validate port & pin.
 	if (pin > 15) { return false; }
-#ifdef GPIOA
-	else if (port == GPIO_PORT_A) {
-		// Set parameters.
-		GPIOA->MODER &= ~(0x3 << (pin * 2));
-		GPIOA->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOA->PUPDR |= (0x1 << (pin * 2));
+	
+	GPIO_instance &instance = (*instancesStatic)[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (Rcc::enablePort((RccPort) port)) {
+			instance.active = true;
 		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOA->PUPDR |= (0x2 << (pin * 2));
+		else {
+			return false;
 		}
-	}
-#endif
-#ifdef GPIOB
-	else if (port == GPIO_PORT_B) {
-		// Set parameters.
-		GPIOB->MODER &= ~(0x3 << (pin * 2));
-		GPIOB->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOB->PUPDR |= (0x1 << (pin * 2));
-		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOB->PUPDR |= (0x2 << (pin * 2));
-		}
-	}
-#endif
-#ifdef GPIOC
-	else if (port == GPIO_PORT_C) {
-		// Set parameters.
-		GPIOC->MODER &= ~(0x3 << (pin * 2));
-		GPIOC->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOC->PUPDR |= (0x1 << (pin * 2));
-		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOC->PUPDR |= (0x2 << (pin * 2));
-		}
-	}
-#endif
-#ifdef GPIOF
-	else if (port == GPIO_PORT_F) {
-		// Set parameters.
-		GPIOF->MODER &= ~(0x3 << (pin * 2));
-		GPIOF->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOF->PUPDR |= (0x1 << (pin * 2));
-		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOF->PUPDR |= (0x2 << (pin * 2));
-		}
-	}
-#endif
-	else {
-		return false;
 	}
 	
+	// Set parameters.
+	// MODER is set to '00' for input mode.
+	instance.regs->MODER &= ~(0x3 << (pin * 2));
+	instance.regs->PUPDR &= ~(0x3 << (pin * 2));
+	if (pupd == GPIO_PULL_UP) {
+		instance.regs->PUPDR |= (0x1 << (pin * 2));
+	}
+	else {
+		instance.regs->PUPDR |= (0x2 << (pin * 2));
+	}
+
 	return true;
 }
 
@@ -117,144 +95,49 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 																	GPIO_out_speed speed) {
 	// Validate port & pin.
 	if (pin > 15) { return false; }
-#ifdef GPIOA
-	else if (port == GPIO_PORT_A) {
-		// Set parameters.
-		GPIOA->MODER &= ~(0x3 << (pin * 2));
-		GPIOA->MODER |= (0x1 << (pin * 2));
-		
-		GPIOA->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOA->PUPDR |= (0x1 << (pin * 2));
+	
+	GPIO_instance &instance = (*instancesStatic)[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (Rcc::enablePort((RccPort) port)) {
+			instance.active = true;
 		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOA->PUPDR |= (0x2 << (pin * 2));
-		}
-		
-		if (type == GPIO_PUSH_PULL) {
-			GPIOA->OTYPER &= ~(0x1 << pin);
-		}
-		else if (type == GPIO_OPEN_DRAIN) {
-			GPIOA->OTYPER |= (0x1 << pin);
-		}
-		
-		if (speed == GPIO_LOW) {
-			GPIOA->OSPEEDR &= ~(0x3 << (pin * 2));
-		}
-		else if (speed == GPIO_MID) {
-			GPIOA->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOA->OSPEEDR |= (0x1 << (pin * 2));
-		}
-		else if (speed == GPIO_HIGH) {
-			GPIOA->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOA->OSPEEDR |= (0x3 << (pin * 2));
+		else {
+			return false;
 		}
 	}
-#endif
-#ifdef GPIOB
-	else if (port == GPIO_PORT_B) {
-		// Set parameters.
-		GPIOB->MODER &= ~(0x3 << (pin * 2));
-		GPIOB->MODER |= (0x1 << (pin * 2));
-		
-		GPIOB->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOB->PUPDR |= (0x1 << (pin * 2));
-		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOB->PUPDR |= (0x2 << (pin * 2));
-		}
-		
-		if (type == GPIO_PUSH_PULL) {
-			GPIOB->OTYPER &= ~(0x1 << pin);
-		}
-		else if (type == GPIO_OPEN_DRAIN) {
-			GPIOB->OTYPER |= (0x1 << pin);
-		}
-		
-		if (speed == GPIO_LOW) {
-			GPIOB->OSPEEDR &= ~(0x3 << (pin * 2));
-		}
-		else if (speed == GPIO_MID) {
-			GPIOB->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOB->OSPEEDR |= (0x1 << (pin * 2));
-		}
-		else if (speed == GPIO_HIGH) {
-			GPIOB->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOB->OSPEEDR |= (0x3 << (pin * 2));
-		}
+	
+	// Set parameters.
+	uint8_t pin2 = pin * 2;
+	instance.regs->MODER &= ~(0x3 << pin2);
+	instance.regs->MODER |= (0x1 << pin2);
+	
+	instance.regs->PUPDR &= ~(0x3 << pin2);
+	if (pupd == GPIO_PULL_UP) {
+		instance.regs->PUPDR |= (0x1 << pin2);
 	}
-#endif
-#ifdef GPIOC
-	else if (port == GPIO_PORT_C) {
-		// Set parameters.
-		GPIOC->MODER &= ~(0x3 << (pin * 2));
-		GPIOC->MODER |= (0x1 << (pin * 2));
-		
-		GPIOC->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOC->PUPDR |= (0x1 << (pin * 2));
-		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOC->PUPDR |= (0x2 << (pin * 2));
-		}
-		
-		if (type == GPIO_PUSH_PULL) {
-			GPIOC->OTYPER &= ~(0x1 << pin);
-		}
-		else if (type == GPIO_OPEN_DRAIN) {
-			GPIOC->OTYPER |= (0x1 << pin);
-		}
-		
-		if (speed == GPIO_LOW) {
-			GPIOC->OSPEEDR &= ~(0x3 << (pin * 2));
-		}
-		else if (speed == GPIO_MID) {
-			GPIOC->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOC->OSPEEDR |= (0x1 << (pin * 2));
-		}
-		else if (speed == GPIO_HIGH) {
-			GPIOC->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOC->OSPEEDR |= (0x3 << (pin * 2));
-		}
+	else if (pupd == GPIO_PULL_DOWN) {
+		instance.regs->PUPDR |= (0x2 << pin2);
 	}
-#endif
-#ifdef GPIOF
-	else if (port == GPIO_PORT_F) {
-		// Set parameters.
-		GPIOF->MODER &= ~(0x3 << (pin * 2));
-		GPIOF->MODER |= (0x1 << (pin * 2));
-		
-		GPIOF->PUPDR &= ~(0x3 << (pin * 2));
-		if (pupd == GPIO_PULL_UP) {
-			GPIOF->PUPDR |= (0x1 << (pin * 2));
-		}
-		else if (pupd == GPIO_PULL_DOWN) {
-			GPIOF->PUPDR |= (0x2 << (pin * 2));
-		}
-		
-		if (type == GPIO_PUSH_PULL) {
-			GPIOF->OTYPER &= ~(0x1 << pin);
-		}
-		else if (type == GPIO_OPEN_DRAIN) {
-			GPIOF->OTYPER |= (0x1 << pin);
-		}
-		
-		if (speed == GPIO_LOW) {
-			GPIOF->OSPEEDR &= ~(0x3 << (pin * 2));
-		}
-		else if (speed == GPIO_MID) {
-			GPIOF->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOF->OSPEEDR |= (0x1 << (pin * 2));
-		}
-		else if (speed == GPIO_HIGH) {
-			GPIOF->OSPEEDR &= ~(0x3 << (pin * 2));
-			GPIOF->OSPEEDR |= (0x3 << (pin * 2));
-		}
+	
+	if (type == GPIO_PUSH_PULL) {
+		instance.regs->OTYPER &= ~(0x1 << pin);
 	}
-#endif
-	else {
-		return false;
+	else if (type == GPIO_OPEN_DRAIN) {
+		instance.regs->OTYPER |= (0x1 << pin);
+	}
+	
+	if (speed == GPIO_LOW) {
+		instance.regs->OSPEEDR &= ~(0x3 << pin2);
+	}
+	else if (speed == GPIO_MID) {
+		instance.regs->OSPEEDR &= ~(0x3 << pin2);
+		instance.regs->OSPEEDR |= (0x1 << pin2);
+	}
+	else if (speed == GPIO_HIGH) {
+		instance.regs->OSPEEDR &= ~(0x3 << pin2);
+		instance.regs->OSPEEDR |= (0x3 << pin2);
 	}
 	
 	return true;
@@ -282,46 +165,26 @@ bool GPIO::write(GPIO_ports port, uint8_t pin, GPIO_level level) {
 	// TODO: ensure pin is in output mode.
 	
 	if (pin > 15) { return false; }
-#ifdef GPIOA
-	else if (port == GPIO_PORT_A) {	
-		if (level == GPIO_LEVEL_LOW) {
-			GPIOA->ODR &= ~(0x1 << pin);
+	
+	GPIO_instance &instance = (*instancesStatic)[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (Rcc::enablePort((RccPort) port)) {
+			instance.active = true;
 		}
-		else if (level == GPIO_LEVEL_HIGH) {
-			GPIOA->ODR |= (0x1 << pin);
-		}
-	}
-#endif
-#ifdef GPIOB
-	else if (port == GPIO_PORT_B) {	
-		if (level == GPIO_LEVEL_LOW) {
-			GPIOB->ODR &= ~(0x1 << pin);
-		}
-		else if (level == GPIO_LEVEL_HIGH) {
-			GPIOB->ODR |= (0x1 << pin);
+		else {
+			return false;
 		}
 	}
-#endif
-#ifdef GPIOC
-	else if (port == GPIO_PORT_C) {	
-		if (level == GPIO_LEVEL_LOW) {
-			GPIOC->ODR &= ~(0x1 << pin);
-		}
-		else if (level == GPIO_LEVEL_HIGH) {
-			GPIOC->ODR |= (0x1 << pin);
-		}
+	
+	// Write to pin.
+	if (level == GPIO_LEVEL_LOW) {
+		instance.regs->ODR &= ~(0x1 << pin);
 	}
-#endif
-#ifdef GPIOF
-	else if (port == GPIO_PORT_F) {	
-		if (level == GPIO_LEVEL_LOW) {
-			GPIOF->ODR &= ~(0x1 << pin);
-		}
-		else if (level == GPIO_LEVEL_HIGH) {
-			GPIOF->ODR |= (0x1 << pin);
-		}
+	else if (level == GPIO_LEVEL_HIGH) {
+		instance.regs->ODR |= (0x1 << pin);
 	}
-#endif
 	
 	return true;
 }
@@ -340,31 +203,22 @@ bool GPIO::write(GPIO_ports port, uint8_t pin, uint32_t level) {
 uint8_t  GPIO::read(GPIO_ports port, uint8_t pin) {
 	uint8_t out = 0;
 	if (pin > 15) { return false; }
-#ifdef GPIOA
-	else if (port == GPIO_PORT_A) {
-		uint32_t idr = GPIOA->IDR;
-		out = (idr >> pin) & 1U; // Read out desired bit.
+	
+	GPIO_instance &instance = (*instancesStatic)[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (Rcc::enablePort((RccPort) port)) {
+			instance.active = true;
+		}
+		else {
+			return false;
+		}
 	}
-#endif
-#ifdef GPIOB
-	else if (port == GPIO_PORT_B) {
-		uint32_t idr = GPIOB->IDR;
-		out = (idr >> pin) & 1U; // Read out desired bit.
-	}
-#endif
-#ifdef GPIOC
-	else if (port == GPIO_PORT_C) {
-		uint32_t idr = GPIOC->IDR;
-		out = (idr >> pin) & 1U; // Read out desired bit.
-	}
-#endif
-#ifdef GPIOF
-	else if (port == GPIO_PORT_F) {
-		uint32_t idr = GPIOF->IDR;
-		out = (idr >> pin) & 1U; // Read out desired bit.
-	}
-#endif
-
+	
+	// Read from pin.
+	uint32_t idr = instance.regs->IDR;
+	out = (idr >> pin) & 1U;	// Read out desired bit.
 	
 	return out;
 }

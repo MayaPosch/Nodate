@@ -8,7 +8,7 @@
 #define GPIO_H
 
 
-#include "common.h"
+#include <common.h>
 
 
 enum GPIO_mode {
@@ -62,12 +62,16 @@ enum GPIO_ports {
 };
 
 
+struct GPIO_instance {
+	bool active = false;
+	GPIO_TypeDef* regs;
+};
+
+
 class GPIO {
 	struct ports {
 		bool exists;
 	};
-	
-	//
 	
 public:
 	GPIO();

@@ -1,0 +1,42 @@
+/*
+	gpio_test.cpp - Tests the GPIO class.
+	
+	Revision 0.
+	
+*/
+
+
+
+#include "../core/include/gpio.h"
+
+
+#include <iostream>
+#include <iomanip>
+#include <bitset>
+
+
+int main() {
+	std::cout << "Running GPIO test..." << std::endl;
+	
+	// Set pins in GPIO class.
+	GPIO gpio;
+	if (gpio.set_output(GPIO_PORT_A, 3, GPIO_PULL_UP)) { std::cout << "Set output." << std::endl; }
+	if (gpio.write(GPIO_PORT_A, 3, GPIO_LEVEL_HIGH)) { std::cout << "Wrote HIGH." << std::endl; }
+	
+	// Print out the RCC AHB register.
+	std::cout << std::endl;
+	std::cout << "RCC" << std::endl;
+	std::cout << "AHBENR:\t\t" << std::bitset<32>(RCC->AHBENR) << std::endl;
+	std::cout << std::endl;
+	
+	// Print out the GPIOA MODER, PUPDR, OTYPER, OSPEEDR, IDR and ODR registers.
+	std::cout << "GPIOA" << std::endl;
+	std::cout << "MODER:  \t" << std::bitset<32>(GPIOA->MODER) << std::endl;
+	std::cout << "PUPDR:  \t" << std::bitset<32>(GPIOA->PUPDR) << std::endl;
+	std::cout << "OTYPER: \t" << std::bitset<32>(GPIOA->OTYPER) << std::endl;
+	std::cout << "OSPEEDR:\t" << std::bitset<32>(GPIOA->OSPEEDR) << std::endl;
+	std::cout << "IDR:    \t" << std::bitset<32>(GPIOA->IDR) << std::endl;
+	std::cout << "ODR:    \t" << std::bitset<32>(GPIOA->ODR) << std::endl;
+	
+	return 0;
+}

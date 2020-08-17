@@ -80,10 +80,7 @@ struct RccPortHandle {
 
 
 class Rcc {
-	//static std::vector<RccPortHandle>& portHandles();
-	//static std::vector<RccPeripheralHandle>& peripheralHandles();
-	
-	//static bool initPorts();
+	//
 	
 public:
 	static bool enable(RccPeripheral peripheral);

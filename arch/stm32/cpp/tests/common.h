@@ -6,6 +6,27 @@
 #include <cstdint>
 
 #define __IO volatile
+#define __IM volatile const
+#define __IOM volatile
+
+
+struct GPIO_TypeDef {
+  __IO uint32_t MODER;        /*!< GPIO port mode register,                     Address offset: 0x00      */
+  __IO uint32_t OTYPER;       /*!< GPIO port output type register,              Address offset: 0x04      */
+  __IO uint32_t OSPEEDR;      /*!< GPIO port output speed register,             Address offset: 0x08      */
+  __IO uint32_t PUPDR;        /*!< GPIO port pull-up/pull-down register,        Address offset: 0x0C      */
+  __IO uint32_t IDR;          /*!< GPIO port input data register,               Address offset: 0x10      */
+  __IO uint32_t ODR;          /*!< GPIO port output data register,              Address offset: 0x14      */
+  __IO uint32_t BSRR;         /*!< GPIO port bit set/reset register,      Address offset: 0x1A */
+  __IO uint32_t LCKR;         /*!< GPIO port configuration lock register,       Address offset: 0x1C      */
+  __IO uint32_t AFR[2];       /*!< GPIO alternate function low register,  Address offset: 0x20-0x24 */
+  __IO uint32_t BRR;          /*!< GPIO bit reset register,                     Address offset: 0x28      */
+};
+
+extern GPIO_TypeDef* GPIOA;
+extern GPIO_TypeDef* GPIOB;
+extern GPIO_TypeDef* GPIOC;
+extern GPIO_TypeDef* GPIOF;
 
 
 struct RCC_TypeDef {
@@ -88,6 +109,40 @@ enum IRQn_Type {
   CEC_CAN_IRQn                = 30,     /*!< CEC and CAN global Interrupts & EXTI Line27 Interrupt           */
   USB_IRQn                    = 31      /*!< USB global Interrupt  & EXTI Line18 Interrupt                   */
 };
+
+
+/**
+  \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ */
+struct NVIC_Type {
+  __IOM uint32_t ISER[1U];               /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+        uint32_t RESERVED0[31U];
+  __IOM uint32_t ICER[1U];               /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register */
+        uint32_t RSERVED1[31U];
+  __IOM uint32_t ISPR[1U];               /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register */
+        uint32_t RESERVED2[31U];
+  __IOM uint32_t ICPR[1U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register */
+        uint32_t RESERVED3[31U];
+        uint32_t RESERVED4[64U];
+  __IOM uint32_t IP[8U];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
+};
+
+extern NVIC_Type* NVIC;
+
+
+//struct SCB_Type {
+//  __IM  uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+//  __IOM uint32_t ICSR;                   /*!< Offset: 0x004 (R/W)  Interrupt Control and State Register */
+        //uint32_t RESERVED0;
+  //__IOM uint32_t AIRCR;                  /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset Control Register */
+  //__IOM uint32_t SCR;                    /*!< Offset: 0x010 (R/W)  System Control Register */
+  //__IOM uint32_t CCR;                    /*!< Offset: 0x014 (R/W)  Configuration Control Register */
+        //uint32_t RESERVED1;
+  //__IOM uint32_t SHP[2U];                /*!< Offset: 0x01C (R/W)  System Handlers Priority Registers. [0] is RESERVED */
+  //__IOM uint32_t SHCSR;                  /*!< Offset: 0x024 (R/W)  System Handler Control and State Register */
+//};
+
+//extern SCB_Type* SCB;
 
 
 void NVIC_EnableIRQ(IRQn_Type IRQn);

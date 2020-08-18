@@ -33,9 +33,7 @@ std::vector<InterruptSource>* interruptList() {
 	uint8_t crcnt = 0;
 	uint8_t crpos = 0;
 	for (int i = 0; i < exti_lines; ++i) {
-		//src.reg = (*SYSCFG).EXTICR;
-		//src.reg += crcnt;
-		(*itrSrcs)[i].reg = i;
+		(*itrSrcs)[i].reg = crcnt;
 		(*itrSrcs)[i].offset = crpos * 4;
 		if (++crpos >= 4) { crpos = 0; crcnt++; }
 		if (crcnt >= exticrs) {
@@ -127,8 +125,7 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	src.trigger = trigger;
 	src.callback = callback;
 	src.priority = priority;
-	uint32_t p = (uint8_t) port;
-	SYSCFG->EXTICR[src.reg] = (((uint32_t) p) << src.offset);
+	SYSCFG->EXTICR[src.reg] |= (((uint32_t) port) << src.offset);
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.

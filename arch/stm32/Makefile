@@ -25,10 +25,10 @@ include $(TOP)/mcu/$(MCU)
 OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(LANGUAGE)/core/include -I $(TOP)/$(LANGUAGE)/core/include/$(MCU_FAMILY)
 
-FLAGS := $(INCLUDE) $(MCU_FLAGS) -fno-exceptions -fno-rtti --specs=nosys.specs -ffunction-sections -fdata-sections -MMD -Os -g -T $(TOP)/linker/$(MCU_GENUS).ld -lgcc
+FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections -MMD -Os -g -T $(TOP)/linker/$(MCU_GENUS).ld -lgcc
 LIBS := -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,--print-memory-usage -lstdc++_nano
 CFLAGS := $(FLAGS) -std=gnu11
-CPPFLAGS := $(FLAGS) -std=gnu++11 -fno-threadsafe-statics -fno-rtti
+CPPFLAGS := $(FLAGS) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions
 
 CPPSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/*.cpp) \
 				$(APP_CPP_FILES)

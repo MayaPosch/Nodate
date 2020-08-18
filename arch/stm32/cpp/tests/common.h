@@ -151,6 +151,9 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 
 
 #define RCC_AHBENR_GPIOAEN 			(17U)
+#define RCC_AHBENR_GPIOBEN 			(18U)
+#define RCC_AHBENR_GPIOCEN 			(19U)
+#define RCC_AHBENR_GPIOFEN 			(22U)
 
 #define RCC_APB2ENR_SYSCFGCOMPEN 	(0U)
 

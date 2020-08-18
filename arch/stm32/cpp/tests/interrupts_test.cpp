@@ -13,10 +13,20 @@
 #include <iostream>
 #include <iomanip>
 #include <bitset>
+#include <string>
 
 
 void callBack_A() {
 	std::cout << "CallBack_A triggered." << std::endl;
+}
+
+void callBack_B() {
+	std::cout << "CallBack_B triggered." << std::endl;
+}
+
+
+void error(std::string err) {
+	std::cout << err << std::endl;
 }
 
 
@@ -27,8 +37,14 @@ int main() {
 	Interrupts itrs;
 	
 	// Set interrupt.
-	uint8_t handleA;
-	itrs.setInterrupt(0, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_A, 0, handleA);
+	uint8_t handleA, handleB;
+	if (!itrs.setInterrupt(0, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_A, 0, handleA)) {
+		error("B.0.F fail.");
+	}
+	
+	if (!itrs.setInterrupt(1, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_B, 0, handleB)) {
+		error("B.1.F fail.");
+	}
 	
 	// Print out the RCC AHB, APB1 and APB2 registers.
 	std::cout << "RCC" << std::endl;

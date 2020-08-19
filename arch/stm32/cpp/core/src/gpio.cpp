@@ -77,13 +77,14 @@ bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	
 	// Set parameters.
 	// MODER is set to '00' for input mode.
-	instance.regs->MODER &= ~(0x3 << (pin * 2));
-	instance.regs->PUPDR &= ~(0x3 << (pin * 2));
+	uint8_t pin2 = pin * 2;
+	instance.regs->MODER &= ~(0x3 << pin2);
+	instance.regs->PUPDR &= ~(0x3 << pin2);
 	if (pupd == GPIO_PULL_UP) {
-		instance.regs->PUPDR |= (0x1 << (pin * 2));
+		instance.regs->PUPDR |= (0x1 << pin2);
 	}
 	else {
-		instance.regs->PUPDR |= (0x2 << (pin * 2));
+		instance.regs->PUPDR |= (0x2 << pin2);
 	}
 
 	return true;

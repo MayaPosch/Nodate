@@ -1,7 +1,6 @@
 // Basic Pushy example for Nodate's STM32 framework.
 
 #include <gpio.h>
-#include <timer.h>
 
 
 int main () {

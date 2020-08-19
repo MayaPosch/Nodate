@@ -150,11 +150,16 @@ void NVIC_DisableIRQ(IRQn_Type IRQn);
 void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 
 
-#define RCC_AHBENR_GPIOAEN 			(17U)
-#define RCC_AHBENR_GPIOBEN 			(18U)
-#define RCC_AHBENR_GPIOCEN 			(19U)
-#define RCC_AHBENR_GPIOFEN 			(22U)
+#define RCC_AHBENR_GPIOAEN_Pos                   (17U) 
+#define RCC_AHBENR_GPIOAEN 			(0x1UL << RCC_AHBENR_GPIOAEN_Pos)
+#define RCC_AHBENR_GPIOBEN_Pos                   (18U)
+#define RCC_AHBENR_GPIOBEN 			(0x1UL << RCC_AHBENR_GPIOBEN_Pos)
+#define RCC_AHBENR_GPIOCEN_Pos                   (19U)
+#define RCC_AHBENR_GPIOCEN 			(0x1UL << RCC_AHBENR_GPIOCEN_Pos)
+#define RCC_AHBENR_GPIOFEN_Pos                   (22U)   
+#define RCC_AHBENR_GPIOFEN 			(0x1UL << RCC_AHBENR_GPIOFEN_Pos)
 
-#define RCC_APB2ENR_SYSCFGCOMPEN 	(0U)
+#define RCC_APB2ENR_SYSCFGCOMPEN_Pos 	(0U)
+#define RCC_APB2ENR_SYSCFGCOMPEN 	(0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos)
 
 #endif

@@ -1,6 +1,54 @@
 # Nodate (野点) #
 
-Restructuring of the Arduino AVR core in order to allow it to be used as a generic C++ framework while still remaining compatible with Arduino libraries.
+A light-weight framework for STM32 and other architectures written in C++ and Ada.
+
+## Overview ##
+
+* The STM32 branch is currently under heavy development, aiming to support all major STM32 MCUs and features.
+* The SAM branch is considered a future development target once the STM32 branch stabilises.
+* The AVR branch is still a modified Arduino AVR core, supporting C++ and compatible with Arduino libraries. The future of this branch is currently undecided.
+* The ESP8266 branch is experimental and may be removed in the future.
+
+## STM32 ##
+
+**Supported boards:**
+
+* Nucleo-F042K6 (STM32F042K6T)
+* STM32F4-Discovery (STM32F407VGT)
+* Nucleo-F746ZG (STM32F746ZG)
+
+**Usage**
+
+Nodate can be installed in any location, with the only requirement being that the environment variable `NODATE_HOME` is set to the root of this location.
+
+Examples on how to use Nodate can be found in the `examples/stm32` folder. The basic structure of a Nodate project consists out of a Makefile and a source folder. This Makefile defines the project properties and target architecture, board or processor. E.g. the user-editable part of the 'Pushy' example's Makefile'
+
+	ARCH ?= stm32
+	
+	# Target programming language (Ada, C++)
+	LANGUAGE ?= cpp
+	
+	# Board preset.
+	BOARD ?= nucleo-f042k6
+	
+	# Set the name of the output (ELF & Hex) file.
+	OUTPUT := pushy	
+	
+	# Add files to include for compilation to these variables.
+	APP_CPP_FILES = $(wildcard src/*.cpp)
+	APP_C_FILES = $(wildcard src/*.c)
+
+When running `make` in the folder with the project Makefile, the project's `.map`, `.elf` and `.bin` files will be written to the `/bin/` sub-folder. Use `make clean` to remove any build files.
+
+In order to **flash** the target board, ensure that **OpenOCD** is installed, then run `make flash`.
+
+
+**Dependencies**
+
+Nodate-STM32 requires `make` and the `arm-none-eabi` GCC toolchain to be installed for compilation, and `OpenOCD` for flashing boards.
+
+
+## AVR & Others ##
 
 The current version has been tested with the following boards:
 
@@ -8,7 +56,7 @@ The current version has been tested with the following boards:
 * Arduino Mega (ATmega1280, ATmega2560)
 * Arduino Uno (ATmega328p)
 
-## Usage ##
+**Usage**
 
 Nodate can be copied to any location, with the environment variable `NODATE_HOME` set to this location so that it can be found later on.
 
@@ -24,13 +72,13 @@ After adapting the example's Makefile for one's own use, simply execute `make` a
 
 Execute `make flash COM_PORT=<port>` to flash this file to the MCU's EEPROM/Flash. The port is for example **COM4** on Windows, and **/dev/ttyUSB#** on Linux, depending on how the system is connected to the board or programming device. 
 
-## Note ##
+**Note**
 
 This is a project in its early stages. While so far UART, GPIO and SPI have been successfully used on a limited number of configurations, this is no guarantee of success on other configurations. 
 
 Feedback and PRs would be most kind and helpful :)
 
-## Required Packages ##
+**Required Packages**
 
 ### Debian ###
 

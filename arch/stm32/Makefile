@@ -35,7 +35,7 @@ CPPSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/*.cpp) \
 			
 CSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
 			$(APP_C_FILES)
-SSOURCES := arch/stm32/asm/startup_$(MCU_GENUS).S
+SSOURCES := arch/stm32/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
 SOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(SSOURCES:.S=.o))
@@ -46,7 +46,7 @@ all: makedir $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).bin
 
 makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/src
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/asm
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/asm/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(LANGUAGE)/core/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(LANGUAGE)/core/src/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/bin

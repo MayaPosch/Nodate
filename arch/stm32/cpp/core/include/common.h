@@ -63,6 +63,10 @@
 
 #endif
 
+#if MCU_FAMILY == stmf4
+#include "stm32f4/stm32f4xx.h"
+#endif
+
 #ifdef __cplusplus
 #include <cstdint>
 #else

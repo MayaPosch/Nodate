@@ -1,0 +1,6 @@
+# Definition file for the STM32F4-Discovery development board.
+
+MCU := stm32f407vgt6
+PROGRAMMER := st_nucleo_f4.cfg
+
+

@@ -68,7 +68,12 @@ enum RccPort {
 	RCC_PORT_C,
 	RCC_PORT_D,
 	RCC_PORT_E,
-	RCC_PORT_F
+	RCC_PORT_F,
+	RCC_PORT_G,
+	RCC_PORT_H,
+	RCC_PORT_I,
+	RCC_PORT_J,
+	RCC_PORT_K
 };
 
 

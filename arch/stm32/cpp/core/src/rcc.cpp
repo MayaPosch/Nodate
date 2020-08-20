@@ -19,7 +19,7 @@ static const uint8_t handle_max = std::numeric_limits<uint8_t>::max();
 // --- PORT HANDLES ---
 std::vector<RccPortHandle>* portHandles() {
 	RccPortHandle handle;
-	static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>(6, handle);
+	static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>(11, handle);
 	
 #ifdef RCC_AHBENR_GPIOAEN
 	(*portHandlesStatic)[RCC_PORT_A].exists = true;
@@ -85,6 +85,61 @@ std::vector<RccPortHandle>* portHandles() {
 	(*portHandlesStatic)[RCC_PORT_F].exists = true;
 	(*portHandlesStatic)[RCC_PORT_F].enr = &(RCC->AHB1ENR);
 	(*portHandlesStatic)[RCC_PORT_F].enable = RCC_AHB1ENR_GPIOFEN_Pos;
+#endif
+
+#ifdef RCC_AHBENR_GPIOGEN
+	(*portHandlesStatic)[RCC_PORT_G].exists = true;
+	(*portHandlesStatic)[RCC_PORT_G].enr = &(RCC->AHBENR);
+	(*portHandlesStatic)[RCC_PORT_G].enable = RCC_AHBENR_GPIOGEN_Pos;
+#endif
+#ifdef RCC_AHB1ENR_GPIOGEN
+	(*portHandlesStatic)[RCC_PORT_G].exists = true;
+	(*portHandlesStatic)[RCC_PORT_G].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_G].enable = RCC_AHB1ENR_GPIOGEN_Pos;
+#endif
+
+#ifdef RCC_AHBENR_GPIOHEN
+	(*portHandlesStatic)[RCC_PORT_H].exists = true;
+	(*portHandlesStatic)[RCC_PORT_H].enr = &(RCC->AHBENR);
+	(*portHandlesStatic)[RCC_PORT_H].enable = RCC_AHBENR_GPIOHEN_Pos;
+#endif
+#ifdef RCC_AHB1ENR_GPIOHEN
+	(*portHandlesStatic)[RCC_PORT_H].exists = true;
+	(*portHandlesStatic)[RCC_PORT_H].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_H].enable = RCC_AHB1ENR_GPIOHEN_Pos;
+#endif
+
+#ifdef RCC_AHBENR_GPIOIEN
+	(*portHandlesStatic)[RCC_PORT_I].exists = true;
+	(*portHandlesStatic)[RCC_PORT_I].enr = &(RCC->AHBENR);
+	(*portHandlesStatic)[RCC_PORT_I].enable = RCC_AHBENR_GPIOIEN_Pos;
+#endif
+#ifdef RCC_AHB1ENR_GPIOIEN
+	(*portHandlesStatic)[RCC_PORT_I].exists = true;
+	(*portHandlesStatic)[RCC_PORT_I].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_I].enable = RCC_AHB1ENR_GPIOIEN_Pos;
+#endif
+
+#ifdef RCC_AHBENR_GPIOJEN
+	(*portHandlesStatic)[RCC_PORT_J].exists = true;
+	(*portHandlesStatic)[RCC_PORT_J].enr = &(RCC->AHBENR);
+	(*portHandlesStatic)[RCC_PORT_J].enable = RCC_AHBENR_GPIOJEN_Pos;
+#endif
+#ifdef RCC_AHB1ENR_GPIOJEN
+	(*portHandlesStatic)[RCC_PORT_J].exists = true;
+	(*portHandlesStatic)[RCC_PORT_J].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_J].enable = RCC_AHB1ENR_GPIOJEN_Pos;
+#endif
+
+#ifdef RCC_AHBENR_GPIOKEN
+	(*portHandlesStatic)[RCC_PORT_K].exists = true;
+	(*portHandlesStatic)[RCC_PORT_K].enr = &(RCC->AHBENR);
+	(*portHandlesStatic)[RCC_PORT_K].enable = RCC_AHBENR_GPIOKEN_Pos;
+#endif
+#ifdef RCC_AHB1ENR_GPIOKEN
+	(*portHandlesStatic)[RCC_PORT_K].exists = true;
+	(*portHandlesStatic)[RCC_PORT_K].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_K].enable = RCC_AHB1ENR_GPIOKEN_Pos;
 #endif
 	
 	return portHandlesStatic;

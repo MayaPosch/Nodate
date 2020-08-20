@@ -75,6 +75,7 @@ enum RccPort {
 struct RccPortHandle {
 	uint8_t count = 0;
 	bool exists = false;
+	volatile uint32_t* enr;
 	uint32_t enable;
 };
 

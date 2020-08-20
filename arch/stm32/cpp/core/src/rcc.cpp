@@ -23,44 +23,68 @@ std::vector<RccPortHandle>* portHandles() {
 	
 #ifdef RCC_AHBENR_GPIOAEN
 	(*portHandlesStatic)[RCC_PORT_A].exists = true;
+	(*portHandlesStatic)[RCC_PORT_A].enr = &(RCC->AHBENR);
 	(*portHandlesStatic)[RCC_PORT_A].enable = RCC_AHBENR_GPIOAEN_Pos;
-#else
-	(*portHandlesStatic)[RCC_PORT_A].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_GPIOAEN
+	(*portHandlesStatic)[RCC_PORT_A].exists = true;
+	(*portHandlesStatic)[RCC_PORT_A].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_A].enable = RCC_AHB1ENR_GPIOAEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOBEN
 	(*portHandlesStatic)[RCC_PORT_B].exists = true;
+	(*portHandlesStatic)[RCC_PORT_B].enr = &(RCC->AHBENR);
 	(*portHandlesStatic)[RCC_PORT_B].enable = RCC_AHBENR_GPIOBEN_Pos;
-#else
-	(*portHandlesStatic)[RCC_PORT_B].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_GPIOBEN
+	(*portHandlesStatic)[RCC_PORT_B].exists = true;
+	(*portHandlesStatic)[RCC_PORT_B].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_B].enable = RCC_AHB1ENR_GPIOBEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOCEN
 	(*portHandlesStatic)[RCC_PORT_C].exists = true;
+	(*portHandlesStatic)[RCC_PORT_C].enr = &(RCC->AHBENR);
 	(*portHandlesStatic)[RCC_PORT_C].enable = RCC_AHBENR_GPIOCEN_Pos;
-#else
-	(*portHandlesStatic)[RCC_PORT_C].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_GPIOCEN
+	(*portHandlesStatic)[RCC_PORT_C].exists = true;
+	(*portHandlesStatic)[RCC_PORT_C].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_C].enable = RCC_AHB1ENR_GPIOCEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIODEN
 	(*portHandlesStatic)[RCC_PORT_D].exists = true;
+	(*portHandlesStatic)[RCC_PORT_D].enr = &(RCC->AHBENR);
 	(*portHandlesStatic)[RCC_PORT_D].enable = RCC_AHBENR_GPIODEN_Pos;
-#else
-	(*portHandlesStatic)[RCC_PORT_D].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_GPIODEN
+	(*portHandlesStatic)[RCC_PORT_D].exists = true;
+	(*portHandlesStatic)[RCC_PORT_D].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_D].enable = RCC_AHB1ENR_GPIODEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOEEN
 	(*portHandlesStatic)[RCC_PORT_E].exists = true;
+	(*portHandlesStatic)[RCC_PORT_E].enr = &(RCC->AHBENR);
 	(*portHandlesStatic)[RCC_PORT_E].enable = RCC_AHBENR_GPIOEEN_Pos;
-#else
-	(*portHandlesStatic)[RCC_PORT_E].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_GPIOEEN
+	(*portHandlesStatic)[RCC_PORT_E].exists = true;
+	(*portHandlesStatic)[RCC_PORT_E].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_E].enable = RCC_AHB1ENR_GPIOEEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOFEN
 	(*portHandlesStatic)[RCC_PORT_F].exists = true;
+	(*portHandlesStatic)[RCC_PORT_F].enr = &(RCC->AHBENR);
 	(*portHandlesStatic)[RCC_PORT_F].enable = RCC_AHBENR_GPIOFEN_Pos;
-#else
-	(*portHandlesStatic)[RCC_PORT_F].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_GPIOFEN
+	(*portHandlesStatic)[RCC_PORT_F].exists = true;
+	(*portHandlesStatic)[RCC_PORT_F].enr = &(RCC->AHB1ENR);
+	(*portHandlesStatic)[RCC_PORT_F].enable = RCC_AHB1ENR_GPIOFEN_Pos;
 #endif
 	
 	return portHandlesStatic;
@@ -475,7 +499,7 @@ bool Rcc::enablePort(RccPort port) {
 	else {
 		// Activate the port.
 		ph.count = 1;
-		RCC->AHBENR |= (1 << ph.enable);
+		*(ph.enr) |= (1 << ph.enable);
 	}
 	
 	return true;
@@ -503,7 +527,7 @@ bool Rcc::disablePort(RccPort port) {
 	else {
 		// Deactivate the port.
 		ph.count = 0;
-		RCC->AHBENR &= ~(1 << ph.enable);
+		*(ph.enr) &= ~(1 << ph.enable);
 	}
 	
 	return true;

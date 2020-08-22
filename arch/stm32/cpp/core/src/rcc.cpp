@@ -159,16 +159,17 @@ std::vector<RccPeripheralHandle>* peripheralHandles() {
 	(*peripheralHandlesStatic)[RCC_TSC].exists = true;
 	(*peripheralHandlesStatic)[RCC_TSC].enr = &(RCC->AHBENR);
 	(*peripheralHandlesStatic)[RCC_TSC].enable = RCC_AHBENR_TSCEN_Pos;
-#else
-	(*peripheralHandlesStatic)[RCC_TSC].exists = false;
 #endif
 
 #ifdef RCC_AHBENR_CRCEN
 	(*peripheralHandlesStatic)[RCC_CRC].exists = true;
 	(*peripheralHandlesStatic)[RCC_CRC].enr = &(RCC->AHBENR);
 	(*peripheralHandlesStatic)[RCC_CRC].enable = RCC_AHBENR_CRCEN_Pos;
-#else
-	(*peripheralHandlesStatic)[RCC_CRC].exists = false;
+#endif
+#ifdef RCC_AHB1ENR_CRCEN
+	(*peripheralHandlesStatic)[RCC_CRC].exists = true;
+	(*peripheralHandlesStatic)[RCC_CRC].enr = &(RCC->AHB1ENR);
+	(*peripheralHandlesStatic)[RCC_CRC].enable = RCC_AHB1ENR_CRCEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_FLITFEN
@@ -202,15 +203,18 @@ std::vector<RccPeripheralHandle>* peripheralHandles() {
 #else
 	(*peripheralHandlesStatic)[RCC_DMA].exists = false;
 #endif
-	
+
 	// APB2
 
 #ifdef RCC_APB2ENR_SYSCFGCOMPEN
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = true;
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enr = &(RCC->APB2ENR);
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enable = RCC_APB2ENR_SYSCFGCOMPEN_Pos;
-#else
-	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = false;
+#endif
+#ifdef RCC_APB2ENR_SYSCFGEN
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = true;
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enr = &(RCC->APB2ENR);
+	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enable = RCC_APB2ENR_SYSCFGEN_Pos;
 #endif
 
 #ifdef RCC_APB2ENR_USART6EN

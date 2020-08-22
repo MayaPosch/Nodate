@@ -38,9 +38,14 @@ struct InterruptSource {
 
 
 class Interrupts {
+#ifdef __stm32f0
 	static uint8_t exti0_1_pwr;
 	static uint8_t exti2_3_pwr;
 	static uint8_t exti4_15_pwr;
+#elif defined __stm32f4
+	static uint8_t exti5_9_pwr;
+	static uint8_t exti10_15_pwr;
+#endif
 	
 public:
 	Interrupts();

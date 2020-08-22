@@ -17,9 +17,15 @@
 
 // Static initialisations.
 const int exti_lines = 16;
+
+#ifdef __stm32f0
 uint8_t Interrupts::exti0_1_pwr = 0;
 uint8_t Interrupts::exti2_3_pwr = 0;
 uint8_t Interrupts::exti4_15_pwr = 0;
+#elif defined __stm32f4
+uint8_t Interrupts::exti5_9_pwr = 0;
+uint8_t Interrupts::exti10_15_pwr = 0;
+#endif
 
 
 // --- INTERRUPT LIST ---
@@ -52,6 +58,7 @@ static std::vector<InterruptSource>* sources = interruptList();
 // Callback handlers.
 // Overrides the default handlers and allows the use of custom callback functions.
 // Forward declare the IRQ handlers in an 'extern C' block to disable C++ name mangling for these.
+#ifdef __stm32f0
 extern "C" {
 	void EXTI0_1_IRQHandler(void);
 	void EXTI2_3_IRQHandler(void);
@@ -89,6 +96,55 @@ void EXTI4_15_IRQHandler(void) {
 		}
 	}
 }
+#elif defined __stm32f4
+extern "C" {
+	void EXTI0_IRQHandler(void);
+	void EXTI1_IRQHandler(void);
+	void EXTI2_IRQHandler(void);
+	void EXTI3_IRQHandler(void);
+	void EXTI4_IRQHandler(void);
+	void EXTI9_5_IRQHandler(void);
+	void EXTI15_10_IRQHandler(void);
+}
+
+void EXTI0_IRQHandler(void) {
+	(*sources)[0].callback();
+}
+
+void EXTI1_IRQHandler(void) {
+	(*sources)[1].callback();
+}
+
+void EXTI2_IRQHandler(void) {
+	(*sources)[2].callback();
+}
+
+void EXTI3_IRQHandler(void) {
+	(*sources)[3].callback();
+}
+
+void EXTI4_IRQHandler(void) {
+	(*sources)[4].callback();
+}
+
+void EXTI9_5_IRQHandler(void) {
+	for (uint8_t i = 5; i < 10; ++i) {
+		if (EXTI->PR & (1 << i)) {
+			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
+			(*sources)[i].callback();	// Call the custom callback function.
+		}
+	}
+}
+
+void EXTI15_10_IRQHandler(void) {
+	for (uint8_t i = 10; i < 16; ++i) {
+		if (EXTI->PR & (1 << i)) {
+			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
+			(*sources)[i].callback();	// Call the custom callback function.
+		}
+	}
+}
+#endif
 
 
 // Public.
@@ -149,10 +205,21 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	// Enable the NVIC interrupt on the registered EXTI line.
 	// Priority level 0 is the highest, with M0 supporting up to 192.
 	// Cortex M3, M4 and M7 support 255 levels.
+#ifdef __stm32f0
 	src.irqType = EXTI4_15_IRQn;
 	if (pin == 0 || pin == 1) { src.irqType = EXTI0_1_IRQn; exti0_1_pwr++; }
 	else if (pin == 2 || pin == 3) { src.irqType = EXTI2_3_IRQn; exti2_3_pwr++; }
 	else { exti4_15_pwr++; }
+#elif defined __stm32f4
+	src.irqType = EXTI15_10_IRQn;
+	if (pin == 0) { src.irqType = EXTI0_IRQn; }
+	else if (pin == 1) { src.irqType = EXTI1_IRQn; }
+	else if (pin == 2) { src.irqType = EXTI2_IRQn; }
+	else if (pin == 3) { src.irqType = EXTI3_IRQn; }
+	else if (pin == 4) { src.irqType = EXTI4_IRQn; }
+	else if (pin > 4 && pin < 10) { src.irqType = EXTI9_5_IRQn; exti5_9_pwr++; }
+	else if (pin > 9 && pin < 16) { src.irqType = EXTI15_10_IRQn; exti10_15_pwr++; }
+#endif
 		
 	NVIC_SetPriority(src.irqType, priority);
 	NVIC_EnableIRQ(src.irqType);
@@ -185,13 +252,23 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	
 	// Disable the interrupt, starting with the NVIC.
 	bool nvic_disable = false;
-	if (src.irqType = EXTI0_1_IRQn) { 
+
+#ifdef __stm32f0
+	if (src.irqType == EXTI0_1_IRQn) { 
 		if (--exti0_1_pwr == 0) { nvic_disable = true; }
 	}
-	else if (src.irqType = EXTI2_3_IRQn) {
+	else if (src.irqType == EXTI2_3_IRQn) {
 		if (--exti2_3_pwr == 0) { nvic_disable = true; }
 	}
 	else if (--exti4_15_pwr == 0) { nvic_disable = true; }
+#elif defined __stm32f4
+	if (src.irqType == EXTI9_5_IRQn) {
+		if (--exti5_9_pwr == 0) { nvic_disable == true; }
+	}
+	else if (src.irqType == EXTI15_10_IRQn) {
+		if (--exti10_15_pwr == 0) { nvic_disable == true; }
+	}
+#endif
 	
 	if (nvic_disable) {	NVIC_DisableIRQ(src.irqType); }
 	

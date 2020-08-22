@@ -15,27 +15,27 @@ std::vector<GPIO_instance>* GPIO_instances() {
 	GPIO_instance instance;
 	static std::vector<GPIO_instance>* instancesStatic = new std::vector<GPIO_instance>(6, instance);
 	
-#ifdef RCC_AHBENR_GPIOAEN
+#if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN
 	((*instancesStatic))[GPIO_PORT_A].regs = GPIOA;
 #endif
 
-#ifdef RCC_AHBENR_GPIOBEN
+#if defined RCC_AHBENR_GPIOBEN || defined RCC_AHB1ENR_GPIOBEN
 	((*instancesStatic))[GPIO_PORT_B].regs = GPIOB;
 #endif
 
-#ifdef RCC_AHBENR_GPIOCEN
+#if defined RCC_AHBENR_GPIOCEN || defined RCC_AHB1ENR_GPIOCEN
 	((*instancesStatic))[GPIO_PORT_C].regs = GPIOC;
 #endif
 
-#ifdef RCC_AHBENR_GPIODEN
+#if defined RCC_AHBENR_GPIODEN || defined RCC_AHB1ENR_GPIODEN
 	((*instancesStatic))[GPIO_PORT_D].regs = GPIOD;
 #endif
 
-#ifdef RCC_AHBENR_GPIOEEN
+#if defined RCC_AHBENR_GPIOEEN || defined RCC_AHB1ENR_GPIOEEN
 	((*instancesStatic))[GPIO_PORT_E].regs = GPIOE;
 #endif
 
-#ifdef RCC_AHBENR_GPIOFEN
+#if defined RCC_AHBENR_GPIOFEN || defined RCC_AHB1ENR_GPIOFEN
 	((*instancesStatic))[GPIO_PORT_F].regs = GPIOF;
 #endif
 	

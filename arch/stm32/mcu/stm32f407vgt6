@@ -3,6 +3,7 @@
 
 MCU_FAMILY := stm32f4
 MCU_GENUS := stm32f407xx
+MCU_GENUS_CAP := STM32F407xx
 
 MCU := stm32f407vgt6
 MCU_CORE := stm32f407

@@ -25,10 +25,11 @@ include $(TOP)/mcu/$(MCU)
 OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(LANGUAGE)/core/include -I $(TOP)/$(LANGUAGE)/core/include/$(MCU_FAMILY)
 
-FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections -MMD -Os -g -T $(TOP)/linker/$(MCU_GENUS).ld -lgcc
+DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
+FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections -MMD -Os -g -T $(TOP)/linker/$(MCU_LD) -lgcc
 LIBS := -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,--print-memory-usage -lstdc++_nano
-CFLAGS := $(FLAGS) -std=gnu11
-CPPFLAGS := $(FLAGS) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions
+CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11
+CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions
 
 CPPSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/*.cpp) \
 				$(APP_CPP_FILES)
@@ -39,8 +40,6 @@ SSOURCES := arch/stm32/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
 SOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(SSOURCES:.S=.o))
-
-#$(warning Print: $(CPPSOURCES))
 
 all: makedir $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).bin
 

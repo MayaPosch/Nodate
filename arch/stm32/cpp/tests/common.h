@@ -9,51 +9,111 @@
 #define __IM volatile const
 #define __IOM volatile
 
+// STM32F0
+/* struct GPIO_TypeDef {
+  __IO uint32_t MODER;        //!< GPIO port mode register,                     Address offset: 0x00      
+  __IO uint32_t OTYPER;       //!< GPIO port output type register,              Address offset: 0x04      
+  __IO uint32_t OSPEEDR;      //!< GPIO port output speed register,             Address offset: 0x08      
+  __IO uint32_t PUPDR;        //!< GPIO port pull-up/pull-down register,        Address offset: 0x0C      
+  __IO uint32_t IDR;          //!< GPIO port input data register,               Address offset: 0x10      
+  __IO uint32_t ODR;          //!< GPIO port output data register,              Address offset: 0x14      
+  __IO uint32_t BSRR;         //!< GPIO port bit set/reset register,      Address offset: 0x1A 
+  __IO uint32_t LCKR;         //!< GPIO port configuration lock register,       Address offset: 0x1C      
+  __IO uint32_t AFR[2];       //!< GPIO alternate function low register,  Address offset: 0x20-0x24 
+  __IO uint32_t BRR;          //!< GPIO bit reset register,                     Address offset: 0x28      
+}; */
 
+// STM32F4
 struct GPIO_TypeDef {
-  __IO uint32_t MODER;        /*!< GPIO port mode register,                     Address offset: 0x00      */
-  __IO uint32_t OTYPER;       /*!< GPIO port output type register,              Address offset: 0x04      */
-  __IO uint32_t OSPEEDR;      /*!< GPIO port output speed register,             Address offset: 0x08      */
-  __IO uint32_t PUPDR;        /*!< GPIO port pull-up/pull-down register,        Address offset: 0x0C      */
-  __IO uint32_t IDR;          /*!< GPIO port input data register,               Address offset: 0x10      */
-  __IO uint32_t ODR;          /*!< GPIO port output data register,              Address offset: 0x14      */
-  __IO uint32_t BSRR;         /*!< GPIO port bit set/reset register,      Address offset: 0x1A */
-  __IO uint32_t LCKR;         /*!< GPIO port configuration lock register,       Address offset: 0x1C      */
-  __IO uint32_t AFR[2];       /*!< GPIO alternate function low register,  Address offset: 0x20-0x24 */
-  __IO uint32_t BRR;          /*!< GPIO bit reset register,                     Address offset: 0x28      */
+  __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
+  __IO uint32_t OTYPER;   /*!< GPIO port output type register,        Address offset: 0x04      */
+  __IO uint32_t OSPEEDR;  /*!< GPIO port output speed register,       Address offset: 0x08      */
+  __IO uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register,  Address offset: 0x0C      */
+  __IO uint32_t IDR;      /*!< GPIO port input data register,         Address offset: 0x10      */
+  __IO uint32_t ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
+  __IO uint32_t BSRR;     /*!< GPIO port bit set/reset register,      Address offset: 0x18      */
+  __IO uint32_t LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
+  __IO uint32_t AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x20-0x24 */
 };
 
 extern GPIO_TypeDef* GPIOA;
 extern GPIO_TypeDef* GPIOB;
 extern GPIO_TypeDef* GPIOC;
+extern GPIO_TypeDef* GPIOD;
+extern GPIO_TypeDef* GPIOE;
 extern GPIO_TypeDef* GPIOF;
 
 
+// STM32F0
+/* struct RCC_TypeDef {
+  __IO uint32_t CR;            //!< RCC clock control register,                                   Address offset: 0x00 
+  __IO uint32_t CFGR;       //!< RCC clock configuration register,                            Address offset: 0x04 
+  __IO uint32_t CIR;        //!< RCC clock interrupt register,                                Address offset: 0x08 
+  __IO uint32_t APB2RSTR;   //!< RCC APB2 peripheral reset register,                          Address offset: 0x0C 
+  __IO uint32_t APB1RSTR;   //!< RCC APB1 peripheral reset register,                          Address offset: 0x10 
+  __IO uint32_t AHBENR;     //!< RCC AHB peripheral clock register,                           Address offset: 0x14 
+  __IO uint32_t APB2ENR;    //!< RCC APB2 peripheral clock enable register,                   Address offset: 0x18 
+  __IO uint32_t APB1ENR;    //!< RCC APB1 peripheral clock enable register,                   Address offset: 0x1C 
+  __IO uint32_t BDCR;       //!< RCC Backup domain control register,                          Address offset: 0x20 
+  __IO uint32_t CSR;        //!< RCC clock control & status register,                         Address offset: 0x24 
+  __IO uint32_t AHBRSTR;    //!< RCC AHB peripheral reset register,                           Address offset: 0x28 
+  __IO uint32_t CFGR2;      //!< RCC clock configuration register 2,                          Address offset: 0x2C 
+  __IO uint32_t CFGR3;      //!< RCC clock configuration register 3,                          Address offset: 0x30 
+  __IO uint32_t CR2;        //!< RCC clock control register 2,                                Address offset: 0x34 
+}; */
+
+// STM32F4
 struct RCC_TypeDef {
-  __IO uint32_t CR;            /*!< RCC clock control register,                                   Address offset: 0x00 */
-  __IO uint32_t CFGR;       /*!< RCC clock configuration register,                            Address offset: 0x04 */
-  __IO uint32_t CIR;        /*!< RCC clock interrupt register,                                Address offset: 0x08 */
-  __IO uint32_t APB2RSTR;   /*!< RCC APB2 peripheral reset register,                          Address offset: 0x0C */
-  __IO uint32_t APB1RSTR;   /*!< RCC APB1 peripheral reset register,                          Address offset: 0x10 */
-  __IO uint32_t AHBENR;     /*!< RCC AHB peripheral clock register,                           Address offset: 0x14 */
-  __IO uint32_t APB2ENR;    /*!< RCC APB2 peripheral clock enable register,                   Address offset: 0x18 */
-  __IO uint32_t APB1ENR;    /*!< RCC APB1 peripheral clock enable register,                   Address offset: 0x1C */
-  __IO uint32_t BDCR;       /*!< RCC Backup domain control register,                          Address offset: 0x20 */
-  __IO uint32_t CSR;        /*!< RCC clock control & status register,                         Address offset: 0x24 */
-  __IO uint32_t AHBRSTR;    /*!< RCC AHB peripheral reset register,                           Address offset: 0x28 */
-  __IO uint32_t CFGR2;      /*!< RCC clock configuration register 2,                          Address offset: 0x2C */
-  __IO uint32_t CFGR3;      /*!< RCC clock configuration register 3,                          Address offset: 0x30 */
-  __IO uint32_t CR2;        /*!< RCC clock control register 2,                                Address offset: 0x34 */
+  __IO uint32_t CR;            /*!< RCC clock control register,                                  Address offset: 0x00 */
+  __IO uint32_t PLLCFGR;       /*!< RCC PLL configuration register,                              Address offset: 0x04 */
+  __IO uint32_t CFGR;          /*!< RCC clock configuration register,                            Address offset: 0x08 */
+  __IO uint32_t CIR;           /*!< RCC clock interrupt register,                                Address offset: 0x0C */
+  __IO uint32_t AHB1RSTR;      /*!< RCC AHB1 peripheral reset register,                          Address offset: 0x10 */
+  __IO uint32_t AHB2RSTR;      /*!< RCC AHB2 peripheral reset register,                          Address offset: 0x14 */
+  __IO uint32_t AHB3RSTR;      /*!< RCC AHB3 peripheral reset register,                          Address offset: 0x18 */
+  uint32_t      RESERVED0;     /*!< Reserved, 0x1C                                                                    */
+  __IO uint32_t APB1RSTR;      /*!< RCC APB1 peripheral reset register,                          Address offset: 0x20 */
+  __IO uint32_t APB2RSTR;      /*!< RCC APB2 peripheral reset register,                          Address offset: 0x24 */
+  uint32_t      RESERVED1[2];  /*!< Reserved, 0x28-0x2C                                                               */
+  __IO uint32_t AHB1ENR;       /*!< RCC AHB1 peripheral clock register,                          Address offset: 0x30 */
+  __IO uint32_t AHB2ENR;       /*!< RCC AHB2 peripheral clock register,                          Address offset: 0x34 */
+  __IO uint32_t AHB3ENR;       /*!< RCC AHB3 peripheral clock register,                          Address offset: 0x38 */
+  uint32_t      RESERVED2;     /*!< Reserved, 0x3C                                                                    */
+  __IO uint32_t APB1ENR;       /*!< RCC APB1 peripheral clock enable register,                   Address offset: 0x40 */
+  __IO uint32_t APB2ENR;       /*!< RCC APB2 peripheral clock enable register,                   Address offset: 0x44 */
+  uint32_t      RESERVED3[2];  /*!< Reserved, 0x48-0x4C                                                               */
+  __IO uint32_t AHB1LPENR;     /*!< RCC AHB1 peripheral clock enable in low power mode register, Address offset: 0x50 */
+  __IO uint32_t AHB2LPENR;     /*!< RCC AHB2 peripheral clock enable in low power mode register, Address offset: 0x54 */
+  __IO uint32_t AHB3LPENR;     /*!< RCC AHB3 peripheral clock enable in low power mode register, Address offset: 0x58 */
+  uint32_t      RESERVED4;     /*!< Reserved, 0x5C                                                                    */
+  __IO uint32_t APB1LPENR;     /*!< RCC APB1 peripheral clock enable in low power mode register, Address offset: 0x60 */
+  __IO uint32_t APB2LPENR;     /*!< RCC APB2 peripheral clock enable in low power mode register, Address offset: 0x64 */
+  uint32_t      RESERVED5[2];  /*!< Reserved, 0x68-0x6C                                                               */
+  __IO uint32_t BDCR;          /*!< RCC Backup domain control register,                          Address offset: 0x70 */
+  __IO uint32_t CSR;           /*!< RCC clock control & status register,                         Address offset: 0x74 */
+  uint32_t      RESERVED6[2];  /*!< Reserved, 0x78-0x7C                                                               */
+  __IO uint32_t SSCGR;         /*!< RCC spread spectrum clock generation register,               Address offset: 0x80 */
+  __IO uint32_t PLLI2SCFGR;    /*!< RCC PLLI2S configuration register,                           Address offset: 0x84 */
 };
 
 extern RCC_TypeDef* RCC;
 
 
+// STM32F0
+/* struct SYSCFG_TypeDef {
+  __IO uint32_t CFGR1;       //!< SYSCFG configuration register 1,                           Address offset: 0x00 
+       uint32_t RESERVED;    //!< Reserved,                                                                  0x04 
+  __IO uint32_t EXTICR[4];   //!< SYSCFG external interrupt configuration register,     Address offset: 0x14-0x08 
+  __IO uint32_t CFGR2;       //!< SYSCFG configuration register 2,                           Address offset: 0x18 
+}; */
+
+// STM32F4
 struct SYSCFG_TypeDef {
-  __IO uint32_t CFGR1;       /*!< SYSCFG configuration register 1,                           Address offset: 0x00 */
-       uint32_t RESERVED;    /*!< Reserved,                                                                  0x04 */
-  __IO uint32_t EXTICR[4];   /*!< SYSCFG external interrupt configuration register,     Address offset: 0x14-0x08 */
-  __IO uint32_t CFGR2;       /*!< SYSCFG configuration register 2,                           Address offset: 0x18 */
+  __IO uint32_t MEMRMP;       /*!< SYSCFG memory remap register,                      Address offset: 0x00      */
+  __IO uint32_t PMC;          /*!< SYSCFG peripheral mode configuration register,     Address offset: 0x04      */
+  __IO uint32_t EXTICR[4];    /*!< SYSCFG external interrupt configuration registers, Address offset: 0x08-0x14 */
+  uint32_t      RESERVED[2];  /*!< Reserved, 0x18-0x1C                                                          */
+  __IO uint32_t CMPCR;        /*!< SYSCFG Compensation cell control register,         Address offset: 0x20      */
 };
 
 extern SYSCFG_TypeDef* SYSCFG;
@@ -150,16 +210,52 @@ void NVIC_DisableIRQ(IRQn_Type IRQn);
 void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 
 
-#define RCC_AHBENR_GPIOAEN_Pos                   (17U) 
+// STM32F0
+/* #define RCC_AHBENR_GPIOAEN_Pos                   (17U) 
 #define RCC_AHBENR_GPIOAEN 			(0x1UL << RCC_AHBENR_GPIOAEN_Pos)
 #define RCC_AHBENR_GPIOBEN_Pos                   (18U)
 #define RCC_AHBENR_GPIOBEN 			(0x1UL << RCC_AHBENR_GPIOBEN_Pos)
 #define RCC_AHBENR_GPIOCEN_Pos                   (19U)
 #define RCC_AHBENR_GPIOCEN 			(0x1UL << RCC_AHBENR_GPIOCEN_Pos)
 #define RCC_AHBENR_GPIOFEN_Pos                   (22U)   
-#define RCC_AHBENR_GPIOFEN 			(0x1UL << RCC_AHBENR_GPIOFEN_Pos)
+#define RCC_AHBENR_GPIOFEN 			(0x1UL << RCC_AHBENR_GPIOFEN_Pos) */
 
-#define RCC_APB2ENR_SYSCFGCOMPEN_Pos 	(0U)
-#define RCC_APB2ENR_SYSCFGCOMPEN 	(0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos)
+// STM32F4
+#define RCC_AHB1ENR_GPIOAEN_Pos            (0U)                                
+#define RCC_AHB1ENR_GPIOAEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOAEN_Pos)   /*!< 0x00000001 */
+#define RCC_AHB1ENR_GPIOAEN                RCC_AHB1ENR_GPIOAEN_Msk             
+#define RCC_AHB1ENR_GPIOBEN_Pos            (1U)                                
+#define RCC_AHB1ENR_GPIOBEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOBEN_Pos)   /*!< 0x00000002 */
+#define RCC_AHB1ENR_GPIOBEN                RCC_AHB1ENR_GPIOBEN_Msk             
+#define RCC_AHB1ENR_GPIOCEN_Pos            (2U)                                
+#define RCC_AHB1ENR_GPIOCEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOCEN_Pos)   /*!< 0x00000004 */
+#define RCC_AHB1ENR_GPIOCEN                RCC_AHB1ENR_GPIOCEN_Msk             
+#define RCC_AHB1ENR_GPIODEN_Pos            (3U)                                
+#define RCC_AHB1ENR_GPIODEN_Msk            (0x1UL << RCC_AHB1ENR_GPIODEN_Pos)   /*!< 0x00000008 */
+#define RCC_AHB1ENR_GPIODEN                RCC_AHB1ENR_GPIODEN_Msk             
+#define RCC_AHB1ENR_GPIOEEN_Pos            (4U)                                
+#define RCC_AHB1ENR_GPIOEEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOEEN_Pos)   /*!< 0x00000010 */
+#define RCC_AHB1ENR_GPIOEEN                RCC_AHB1ENR_GPIOEEN_Msk             
+#define RCC_AHB1ENR_GPIOFEN_Pos            (5U)                                
+#define RCC_AHB1ENR_GPIOFEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOFEN_Pos)   /*!< 0x00000020 */
+#define RCC_AHB1ENR_GPIOFEN                RCC_AHB1ENR_GPIOFEN_Msk             
+#define RCC_AHB1ENR_GPIOGEN_Pos            (6U)                                
+#define RCC_AHB1ENR_GPIOGEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOGEN_Pos)   /*!< 0x00000040 */
+#define RCC_AHB1ENR_GPIOGEN                RCC_AHB1ENR_GPIOGEN_Msk             
+#define RCC_AHB1ENR_GPIOHEN_Pos            (7U)                                
+#define RCC_AHB1ENR_GPIOHEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOHEN_Pos)   /*!< 0x00000080 */
+#define RCC_AHB1ENR_GPIOHEN                RCC_AHB1ENR_GPIOHEN_Msk             
+#define RCC_AHB1ENR_GPIOIEN_Pos            (8U)                                
+#define RCC_AHB1ENR_GPIOIEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOIEN_Pos)   /*!< 0x00000100 */
+#define RCC_AHB1ENR_GPIOIEN                RCC_AHB1ENR_GPIOIEN_Msk  
+
+// STM32F0
+/* #define RCC_APB2ENR_SYSCFGCOMPEN_Pos 	(0U)
+#define RCC_APB2ENR_SYSCFGCOMPEN 	(0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos) */
+
+// STM32F4
+#define RCC_APB2ENR_SYSCFGEN_Pos           (14U)                               
+#define RCC_APB2ENR_SYSCFGEN_Msk           (0x1UL << RCC_APB2ENR_SYSCFGEN_Pos)  /*!< 0x00004000 */
+#define RCC_APB2ENR_SYSCFGEN               RCC_APB2ENR_SYSCFGEN_Msk   
 
 #endif

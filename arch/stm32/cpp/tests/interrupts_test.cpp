@@ -48,7 +48,7 @@ int main() {
 	
 	// Print out the RCC AHB, APB1 and APB2 registers.
 	std::cout << "RCC" << std::endl;
-	std::cout << "AHBENR:\t\t" << std::bitset<32>(RCC->AHBENR) << std::endl;
+	std::cout << "AHB1ENR:\t" << std::bitset<32>(RCC->AHB1ENR) << std::endl;
 	std::cout << "APB1ENR:\t" << std::bitset<32>(RCC->APB1ENR) << std::endl;
 	std::cout << "APB2ENR:\t" << std::bitset<32>(RCC->APB2ENR) << std::endl;
 	std::cout << std::endl;

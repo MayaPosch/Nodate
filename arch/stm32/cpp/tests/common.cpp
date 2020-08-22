@@ -6,6 +6,10 @@ GPIO_TypeDef tGpioB;
 GPIO_TypeDef* GPIOB = &tGpioB;
 GPIO_TypeDef tGpioC;
 GPIO_TypeDef* GPIOC = &tGpioC;
+GPIO_TypeDef tGpioD;
+GPIO_TypeDef* GPIOD = &tGpioD;
+GPIO_TypeDef tGpioE;
+GPIO_TypeDef* GPIOE = &tGpioD;
 GPIO_TypeDef tGpioF;
 GPIO_TypeDef* GPIOF = &tGpioF;
 

@@ -7,7 +7,7 @@
 #define COMMON_H
 
 
-#if MCU_FAMILY == stmf0
+#ifdef __stm32f0
 
 #if MCU_GENUS == stm32f030x6
 //#include "stm32f0/stm32f030x6.h"
@@ -63,7 +63,7 @@
 
 #endif
 
-#if MCU_FAMILY == stmf4
+#ifdef __stm32f4
 #include "stm32f4/stm32f4xx.h"
 #endif
 

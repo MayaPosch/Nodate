@@ -22,7 +22,7 @@ const int exti_lines = 16;
 uint8_t Interrupts::exti0_1_pwr = 0;
 uint8_t Interrupts::exti2_3_pwr = 0;
 uint8_t Interrupts::exti4_15_pwr = 0;
-#elif defined __stm32f4
+#elif defined __stm32f4 || defined __stm32f7
 uint8_t Interrupts::exti5_9_pwr = 0;
 uint8_t Interrupts::exti10_15_pwr = 0;
 #endif
@@ -96,7 +96,7 @@ void EXTI4_15_IRQHandler(void) {
 		}
 	}
 }
-#elif defined __stm32f4
+#elif defined __stm32f4 || defined __stm32f7
 extern "C" {
 	void EXTI0_IRQHandler(void);
 	void EXTI1_IRQHandler(void);
@@ -210,7 +210,7 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	if (pin == 0 || pin == 1) { src.irqType = EXTI0_1_IRQn; exti0_1_pwr++; }
 	else if (pin == 2 || pin == 3) { src.irqType = EXTI2_3_IRQn; exti2_3_pwr++; }
 	else { exti4_15_pwr++; }
-#elif defined __stm32f4
+#elif defined __stm32f4 || defined __stm32f7
 	src.irqType = EXTI15_10_IRQn;
 	if (pin == 0) { src.irqType = EXTI0_IRQn; }
 	else if (pin == 1) { src.irqType = EXTI1_IRQn; }
@@ -251,22 +251,22 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	src.active = false;
 	
 	// Disable the interrupt, starting with the NVIC.
-	bool nvic_disable = false;
+	bool nvic_disable = true;
 
 #ifdef __stm32f0
 	if (src.irqType == EXTI0_1_IRQn) { 
-		if (--exti0_1_pwr == 0) { nvic_disable = true; }
+		if (--exti0_1_pwr != 0) { nvic_disable = false; }
 	}
 	else if (src.irqType == EXTI2_3_IRQn) {
-		if (--exti2_3_pwr == 0) { nvic_disable = true; }
+		if (--exti2_3_pwr != 0) { nvic_disable = false; }
 	}
-	else if (--exti4_15_pwr == 0) { nvic_disable = true; }
-#elif defined __stm32f4
+	else if (--exti4_15_pwr != 0) { nvic_disable = false; }
+#elif defined __stm32f4 || defined __stm32f7
 	if (src.irqType == EXTI9_5_IRQn) {
-		if (--exti5_9_pwr == 0) { nvic_disable == true; }
+		if (--exti5_9_pwr != 0) { nvic_disable == false; }
 	}
 	else if (src.irqType == EXTI15_10_IRQn) {
-		if (--exti10_15_pwr == 0) { nvic_disable == true; }
+		if (--exti10_15_pwr != 0) { nvic_disable == false; }
 	}
 #endif
 	

@@ -18,8 +18,8 @@ int main () {
 	//const GPIO_ports button_port = GPIO_PORT_B;
 	//const uint8_t button_pin = 0; // STM32F4-Discovery (PA0)
 	//const GPIO_ports button_port = GPIO_PORT_A;
-	const uint8_t button_pin = 0; // Nucleo-F746ZG (PC13)
-	const GPIO_ports button_port = GPIO_PORT_A;
+	const uint8_t button_pin = 13; // Nucleo-F746ZG (PC13)
+	const GPIO_ports button_port = GPIO_PORT_C;
 	
 	// Set the pin mode on the LED pin.
 	gpio.set_output(led_port, led_pin, GPIO_PULL_UP);

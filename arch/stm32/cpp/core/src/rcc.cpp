@@ -210,8 +210,7 @@ std::vector<RccPeripheralHandle>* peripheralHandles() {
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = true;
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enr = &(RCC->APB2ENR);
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enable = RCC_APB2ENR_SYSCFGCOMPEN_Pos;
-#endif
-#ifdef RCC_APB2ENR_SYSCFGEN
+#elif defined RCC_APB2ENR_SYSCFGEN
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].exists = true;
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enr = &(RCC->APB2ENR);
 	(*peripheralHandlesStatic)[RCC_SYSCFGCOMP].enable = RCC_APB2ENR_SYSCFGEN_Pos;

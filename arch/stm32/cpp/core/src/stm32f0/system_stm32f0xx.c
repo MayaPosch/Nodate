@@ -63,8 +63,7 @@
   * @{
   */
 
-//#include "stm32f0xx.h"
-#include "common.h"
+#include "stm32f0xx.h"
 
 /**
   * @}

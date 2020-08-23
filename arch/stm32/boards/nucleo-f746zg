@@ -1,0 +1,4 @@
+# Definition file for the Nucleo-STM32F746ZG development board.
+
+MCU := stm32f746zg
+PROGRAMMER := stm32f4discovery.cfg

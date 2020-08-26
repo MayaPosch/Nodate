@@ -69,9 +69,7 @@ struct GPIO_instance {
 
 
 class GPIO {
-	struct ports {
-		bool exists;
-	};
+	//
 	
 public:
 	GPIO();

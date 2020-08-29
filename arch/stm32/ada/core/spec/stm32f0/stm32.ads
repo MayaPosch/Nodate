@@ -6,7 +6,7 @@ with stdint_h;
 with Interfaces.C.Extensions;
 limited with stm32f0_stm32f030x6_h;
 
-package stm32_h is
+package stm32 is
 
    type RccPeripheral is 
      (RCC_TSC,
@@ -48,17 +48,17 @@ package stm32_h is
       RCC_CEC)
    with Convention => C;  -- stm32.h:9
 
-   package Class_RccPeripheralHandle is
+   --package Class_RccPeripheralHandle is
       type RccPeripheralHandle is limited record
          count : aliased stdint_h.uint8_t;  -- stm32.h:51
-         exists : aliased Extensions.bool;  -- stm32.h:52
+         exists : aliased Boolean;  -- stm32.h:52
          enr : access stdint_h.uint32_t;  -- stm32.h:53
          enable : aliased stdint_h.uint32_t;  -- stm32.h:54
-      end record
-      with Import => True,
-           Convention => CPP;
-   end;
-   use Class_RccPeripheralHandle;
+      end record;
+      --with Import => True,
+        --   Convention => CPP;
+   --end;
+   --use Class_RccPeripheralHandle;
    type RccPort is 
      (RCC_PORT_A,
       RCC_PORT_B,
@@ -73,17 +73,17 @@ package stm32_h is
       RCC_PORT_K)
    with Convention => C;  -- stm32.h:58
 
-   package Class_RccPortHandle is
+   --package Class_RccPortHandle is
       type RccPortHandle is limited record
          count : aliased stdint_h.uint8_t;  -- stm32.h:74
          exists : aliased Extensions.bool;  -- stm32.h:75
          enr : access stdint_h.uint32_t;  -- stm32.h:76
          enable : aliased stdint_h.uint32_t;  -- stm32.h:77
-      end record
-      with Import => True,
-           Convention => CPP;
-   end;
-   use Class_RccPortHandle;
+      end record;
+      --with Import => True,
+        --   Convention => CPP;
+   --end;
+   --use Class_RccPortHandle;
    function portHandles return access RccPortHandle  -- stm32.h:81
    with Import => True, 
         Convention => CPP, 
@@ -152,15 +152,15 @@ package stm32_h is
       GPIO_PORT_L)
    with Convention => C;  -- stm32.h:125
 
-   package Class_GPIO_instance is
+   --package Class_GPIO_instance is
       type GPIO_instance is limited record
          active : aliased Extensions.bool;  -- stm32.h:142
          regs : access stm32f0_stm32f030x6_h.GPIO_TypeDef;  -- stm32.h:143
       end record
-      with Import => True,
-           Convention => CPP;
-   end;
-   use Class_GPIO_instance;
+      --with Import => True,
+        --   Convention => CPP;
+   --end;
+   --use Class_GPIO_instance;
    function GPIO_instances return access GPIO_instance  -- stm32.h:147
    with Import => True, 
         Convention => CPP, 
@@ -171,4 +171,4 @@ package stm32_h is
         Convention => C, 
         External_Name => "instancesStatic";
 
-end stm32_h;
+end stm32;

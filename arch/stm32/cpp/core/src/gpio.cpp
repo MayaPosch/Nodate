@@ -13,7 +13,7 @@
 // --- GPIO HANDLES ---
 std::vector<GPIO_instance>* GPIO_instances() {
 	GPIO_instance instance;
-	static std::vector<GPIO_instance>* instancesStatic = new std::vector<GPIO_instance>(6, instance);
+	static std::vector<GPIO_instance>* instancesStatic = new std::vector<GPIO_instance>(12, instance);
 	
 #if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN
 	((*instancesStatic))[GPIO_PORT_A].regs = GPIOA;

@@ -20,4 +20,28 @@ package stm32_records is
 	  CR2 : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:317
 	end record
 	with Convention => C_Pass_By_Copy;
+	
+	type GPIO_TypeDef_array1045 is array (0 .. 1) of aliased stdint_h.uint32_t;
+   type GPIO_TypeDef is record
+      MODER : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:232
+      OTYPER : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:233
+      OSPEEDR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:234
+      PUPDR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:235
+      IDR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:236
+      ODR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:237
+      BSRR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:238
+      LCKR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:239
+      AFR : aliased GPIO_TypeDef_array1045;  -- ../core/include/stm32f0/stm32f030x6.h:240
+      BRR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:241
+   end record
+   with Convention => C_Pass_By_Copy;
+   
+   type SYSCFG_TypeDef_array1096 is array (0 .. 3) of aliased stdint_h.uint32_t;
+   type SYSCFG_TypeDef is record
+      CFGR1 : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:250
+      RESERVED : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:251
+      EXTICR : aliased SYSCFG_TypeDef_array1096;  -- ../core/include/stm32f0/stm32f030x6.h:252
+      CFGR2 : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:253
+   end record
+   with Convention => C_Pass_By_Copy;
 end stm32_records;

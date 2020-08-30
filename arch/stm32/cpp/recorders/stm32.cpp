@@ -6,10 +6,8 @@ const int portCount = 12;
 const int peripheralCount = 37;
 
 // --- PORT HANDLES ---
-//std::vector<RccPortHandle>* portHandles() {
 RccPortHandle* portHandles() {
 	RccPortHandle handle;
-	//static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>(11, handle);
 	static RccPortHandle portHandlesStatic[portCount];
 	for (int i = 0; i < portCount; ++i) {
 		portHandlesStatic[i] = handle;
@@ -139,7 +137,6 @@ RccPortHandle* portHandles() {
 	return portHandlesStatic;
 }
 
-//static std::vector<RccPortHandle>* portHandlesStatic = portHandles();
 extern "C" {
 RccPortHandle* portHandlesStatic = portHandles();
 }
@@ -149,7 +146,6 @@ RccPortHandle* portHandlesStatic = portHandles();
 //std::vector<RccPeripheralHandle>* peripheralHandles() {
 RccPeripheralHandle* peripheralHandles() {
 	RccPeripheralHandle handle;
-	//static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(37, handle);
 	static RccPeripheralHandle peripheralHandlesStatic[peripheralCount];
 	for (int i = 0; i < peripheralCount; ++i) {
 		peripheralHandlesStatic[i] = handle;

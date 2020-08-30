@@ -2,8 +2,7 @@
 -- gpio.ads - Specification for the GPIO functionality.
 --
 
-with stm32;
-use stm32;
+with stm32_h; use stm32_h;
 
 package GPIO is
 	function set_input(port: GPIO_ports; pin: Integer; pupd: GPIO_pupd) return Boolean;
@@ -15,7 +14,7 @@ package GPIO is
 	function write(port: GPIO_ports; pin: Integer; level: GPIO_level) return Boolean;
 	function write(port: GPIO_ports; pin: Integer; level: Integer) return Boolean;
 	function read(port: GPIO_ports; pin: Integer) return Integer;
-	function readAnalog() return Integer;
+	function readAnalog(port: GPIO_ports; pin: Integer) return Integer;
 	
 private
 	--

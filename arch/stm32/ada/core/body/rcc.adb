@@ -6,11 +6,12 @@ with Interfaces; use Interfaces;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Extensions;
 with stdint_h; use stdint_h;
-with stm32; use stm32;
+with stm32_h; use stm32_h;
 
 
 package body RCC is
-	--package crph renames Class_RccPeripheralHandle;
+	use Class_RccPeripheralHandle;
+	use Class_RccPortHandle;
 	type PeripheralRange is range 0 .. 50;
 	type PeripheralArray is array(PeripheralRange) of aliased RccPeripheralHandle;
 	type PortRange is range 0 .. 50;

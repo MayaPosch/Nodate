@@ -2,8 +2,7 @@
 -- rcc.ads - Specification for the RCC functionality.
 --
 
-with stm32;
-use stm32;
+with stm32_h; use stm32_h;
 
 package RCC is
 	function enable(peripheral: RccPeripheral) return Boolean;

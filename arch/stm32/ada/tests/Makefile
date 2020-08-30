@@ -11,8 +11,8 @@ BIN_OUTPUT 	:= rcc_test
 ADAFLAGS 	:= -aI../core/spec -aI../core/body -aI../core/spec/stm32f0 -aI../core/body/stm32f0 -D obj/
 
 CPP_ROOT := ../../cpp
-INCLUDES := -I. -I $(CPP_ROOT)/core/include
-CPPFLAGS := -std=c++11 -g3
+INCLUDES := -I. -I $(CPP_ROOT)/tests
+CPPFLAGS := -std=c++11 -g3 -DSTM32F0=1
 
 
 all: mkdir rcc_test interrupts_test gpio_test eventful
@@ -26,7 +26,7 @@ rcc_test:
 	$(CPP) -c -o obj/stm32.o $(CPP_ROOT)/recorders/stm32.cpp $(CPPFLAGS) $(INCLUDES)
 	$(CPP) -c -o obj/common.o $(CPP_ROOT)/tests/common.cpp $(CPPFLAGS) $(INCLUDES)
 	$(GNATBIND) -n obj/rcc_test
-	$(GNATLINK) rcc_test -o bin/rcc_test --LINK=g++ -lstdc++ obj/stm32.o obj/common.o
+	$(GNATLINK) obj/rcc_test -o bin/rcc_test --LINK=g++ -D obj/ obj/common.o
 	
 interrupts_test:
 	#g++ -o bin/interrupts_test interrupts_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/interrupts.cpp  $(FLAGS) $(INCLUDES)

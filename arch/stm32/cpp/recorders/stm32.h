@@ -1,4 +1,7 @@
 
+#ifndef STM32_H
+#define STM32_H
+
 
 #include <common.h>
 
@@ -78,11 +81,14 @@ struct RccPortHandle {
 };
 
 
-RccPortHandle* portHandles();
-RccPeripheralHandle* peripheralHandles();
+//RccPortHandle* portHandles();
+//RccPeripheralHandle* peripheralHandles();
 
 extern RccPortHandle* portHandlesStatic;
 extern RccPeripheralHandle* perHandlesStatic;
+
+extern const int portCount;
+extern const int peripheralCount;
 
 
 // --- GPIO ---
@@ -144,9 +150,14 @@ struct GPIO_instance {
 };
 
 
-GPIO_instance* GPIO_instances();
+//GPIO_instance* GPIO_instances();
 
 extern GPIO_instance* instancesStatic;
 
+extern const int gpioCount;
+
 
 // --- 
+
+
+#endif

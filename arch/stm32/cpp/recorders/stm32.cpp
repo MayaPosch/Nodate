@@ -2,13 +2,16 @@
 #include "stm32.h"
 
 
+const int portCount = 12;
+const int peripheralCount = 37;
+
 // --- PORT HANDLES ---
 //std::vector<RccPortHandle>* portHandles() {
 RccPortHandle* portHandles() {
 	RccPortHandle handle;
 	//static std::vector<RccPortHandle>* portHandlesStatic = new std::vector<RccPortHandle>(11, handle);
-	static RccPortHandle portHandlesStatic[11];
-	for (int i = 0; i < 11; ++i) {
+	static RccPortHandle portHandlesStatic[portCount];
+	for (int i = 0; i < portCount; ++i) {
 		portHandlesStatic[i] = handle;
 	}
 	
@@ -137,7 +140,7 @@ RccPortHandle* portHandles() {
 }
 
 //static std::vector<RccPortHandle>* portHandlesStatic = portHandles();
-RccPortHandle* portHandlesStatic = portHandles();
+RccPortHandle* portHandlesList = portHandles();
 
 
 // --- PERIPHERAL HANDLES ---
@@ -145,8 +148,8 @@ RccPortHandle* portHandlesStatic = portHandles();
 RccPeripheralHandle* peripheralHandles() {
 	RccPeripheralHandle handle;
 	//static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(37, handle);
-	static RccPeripheralHandle peripheralHandlesStatic[37];
-	for (int i = 0; i < 37; ++i) {
+	static RccPeripheralHandle peripheralHandlesStatic[peripheralCount];
+	for (int i = 0; i < peripheralCount; ++i) {
 		peripheralHandlesStatic[i] = handle;
 	}
 	
@@ -463,11 +466,13 @@ RccPeripheralHandle* perHandlesStatic = peripheralHandles();
 
 // --- GPIO ---
 
+const int gpioCount = 12;
+
 // --- GPIO HANDLES ---
 GPIO_instance* GPIO_instances() {
 	GPIO_instance instance;
-	static GPIO_instance instancesStatic[6];
-	for (int i = 0; i < 6; ++i) {
+	static GPIO_instance instancesStatic[gpioCount];
+	for (int i = 0; i < gpioCount; ++i) {
 		instancesStatic[i] = instance;
 	}
 	

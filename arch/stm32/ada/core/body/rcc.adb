@@ -14,7 +14,7 @@ package body RCC is
 	type PeripheralRange is range 0 .. 50;
 	type PeripheralArray is array(PeripheralRange) of aliased RccPeripheralHandle;
 	type PortRange is range 0 .. 50;
-	type PortArray is array(PortRange) of aliased RccPortHandle;
+	type PortArrayType is array(PortRange) of aliased RccPortHandle;
 		
 		
 	-- ENABLE --
@@ -85,7 +85,7 @@ package body RCC is
 	-- ENABLE PORT --
 	function enablePort(port: RccPort) return Boolean is
 		--portArray: array(Integer range <>) of aliased RccPortHandle
-		portArray: PortArray
+		portArray: PortArrayType
 		with Import, Convention => C, Address => portHandlesStatic.all'Address;
 		
 		--portNum	: Integer := Integer(port);
@@ -119,7 +119,7 @@ package body RCC is
 	-- DISABLE PORT --
 	function disablePort(port: RccPort) return Boolean is
 		--portArray: array(Integer range <>) of aliased RccPortHandle
-		portArray: PortArray
+		portArray: PortArrayType
 		with Import, Convention => C, Address => portHandlesStatic.all'Address;
 		
 		--portNum	: Integer := Integer(peripheral);

@@ -140,7 +140,9 @@ RccPortHandle* portHandles() {
 }
 
 //static std::vector<RccPortHandle>* portHandlesStatic = portHandles();
-RccPortHandle* portHandlesList = portHandles();
+extern "C" {
+RccPortHandle* portHandlesStatic = portHandles();
+}
 
 
 // --- PERIPHERAL HANDLES ---
@@ -461,7 +463,9 @@ RccPeripheralHandle* peripheralHandles() {
 	return peripheralHandlesStatic;
 }
 
+extern "C" {
 RccPeripheralHandle* perHandlesStatic = peripheralHandles();
+}
 
 
 // --- GPIO ---
@@ -503,4 +507,6 @@ GPIO_instance* GPIO_instances() {
 	return instancesStatic;
 }
 
+extern "C" {
 GPIO_instance* instancesStatic = GPIO_instances();
+}

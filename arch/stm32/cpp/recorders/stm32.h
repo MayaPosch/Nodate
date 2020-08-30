@@ -83,12 +83,13 @@ struct RccPortHandle {
 
 //RccPortHandle* portHandles();
 //RccPeripheralHandle* peripheralHandles();
-
+extern "C" {
 extern RccPortHandle* portHandlesStatic;
 extern RccPeripheralHandle* perHandlesStatic;
 
 extern const int portCount;
 extern const int peripheralCount;
+}
 
 
 // --- GPIO ---
@@ -151,11 +152,11 @@ struct GPIO_instance {
 
 
 //GPIO_instance* GPIO_instances();
-
+extern "C" {
 extern GPIO_instance* instancesStatic;
 
 extern const int gpioCount;
-
+}
 
 // --- 
 

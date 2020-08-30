@@ -49,7 +49,7 @@ package body RCC is
 			end if;
 		else
 			ph.count := 1;
-			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) or Shift_Left(Unsigned_32(ph.enable), 1));
+			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) or Shift_Left(1, Integer(ph.enable)));
 		end if;
 		
 		return true;
@@ -76,7 +76,7 @@ package body RCC is
 		else
 			-- Deactivate the peripheral.
 			ph.count := 0;
-			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) and (not Shift_Left(Unsigned_32(ph.enable), 1)));
+			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) and (not Shift_Left(1, Integer(ph.enable))));
 		end if;
 		
 		return true;
@@ -110,7 +110,7 @@ package body RCC is
 		else
 			-- Activate the port.
 			ph.count := 1;
-			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) or Shift_Left(Unsigned_32(ph.enable), 1));
+			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) or Shift_Left(1, Integer(ph.enable)));
 		end if;
 		
 		return true;
@@ -137,7 +137,7 @@ package body RCC is
 		else
 			-- Deactivate the port.
 			ph.count := 0;
-			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) and (not Shift_Left(Unsigned_32(ph.enable), 1)));
+			ph.enr.all := uint32_t(Unsigned_32(ph.enr.all) and (not Shift_Left(1, Integer(ph.enable))));
 		end if;
 		
 		return true;

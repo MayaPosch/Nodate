@@ -56,8 +56,6 @@ package stm32_h is
          enable : aliased stdint_h.uint32_t;  -- stm32.h:54
       end record
 	  with Convention => C;
-      --with Import => True,
-         --Convention => C;
    end;
    use Class_RccPeripheralHandle;
    type RccPort is 
@@ -82,19 +80,8 @@ package stm32_h is
          enable : aliased stdint_h.uint32_t;  -- stm32.h:77
       end record
 	  with Convention => C;
-    --with Import => True,
-        --Convention => C;
    end;
    use Class_RccPortHandle;
-   -- function portHandles return access RccPortHandle  -- stm32.h:81
-   -- with Import => True, 
-        -- Convention => CPP, 
-        -- External_Name => "_Z11portHandlesv";
-
-   -- function peripheralHandles return access RccPeripheralHandle  -- stm32.h:82
-   -- with Import => True, 
-        -- Convention => CPP, 
-        -- External_Name => "_Z17peripheralHandlesv";
 
    portHandlesStatic : access RccPortHandle  -- stm32.h:84
    with Import => True, 
@@ -154,20 +141,14 @@ package stm32_h is
       GPIO_PORT_L)
    with Convention => C;  -- stm32.h:125
 
-   --package Class_GPIO_instance is
+   package Class_GPIO_instance is
       type GPIO_instance is record
          active : aliased Extensions.bool;  -- stm32.h:142
          regs : access GPIO_TypeDef;  -- stm32.h:143
       end record
-	  with Convention => C_Pass_By_Copy;
-      --with Import => True,
-        --   Convention => CPP;
-   --end;
-   --use Class_GPIO_instance;
-   -- function GPIO_instances return access GPIO_instance  -- stm32.h:147
-   -- with Import => True, 
-        -- Convention => CPP, 
-        -- External_Name => "_Z14GPIO_instancesv";
+	  with Convention => C;
+   end;
+   use Class_GPIO_instance;
 
    instancesStatic : access GPIO_instance  -- stm32.h:149
    with Import => True, 

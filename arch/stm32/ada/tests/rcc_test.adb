@@ -8,15 +8,11 @@ with RCC;
 with Ada.Text_IO, Interfaces;
 use Ada.Text_IO, Interfaces;
 
---with stm32f0_stm32f030x6_h;
-
 with stm32_records;
 with stm32_h; use stm32_h;
 
 
 procedure rcc_test is
-	--package stm32f0 renames stm32f0_stm32f030x6_h;
-
 	RCC_regs: access stm32_records.RCC_TypeDef
 	with Import, Convention => C, External_name => "RCC";
 	

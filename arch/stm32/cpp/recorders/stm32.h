@@ -155,7 +155,35 @@ extern GPIO_instance* instancesStatic;
 extern const int gpioCount;
 }
 
-// --- 
+
+// --- Interrupts
+
+enum InterruptTrigger {
+	INTERRUPT_TRIGGER_NONE = 0,
+	INTERRUPT_TRIGGER_RISING,
+	INTERRUPT_TRIGGER_FALLING,
+	INTERRUPT_TRIGGER_BOTH
+};
+
+
+struct InterruptSource {
+	bool active = false;
+	GPIO_ports port;
+	uint8_t pin;
+	InterruptTrigger trigger;
+	IRQn_Type irqType;
+	uint8_t priority;
+	volatile uint32_t* exti;
+	volatile uint32_t* syscfg;
+	uint8_t reg;
+	uint32_t offset;
+	std::function<void()> callback;
+};
+
+
+extern "C" {
+	extern InterruptSource* InterruptSources;
+}
 
 
 #endif

@@ -506,3 +506,39 @@ GPIO_instance* GPIO_instances() {
 extern "C" {
 GPIO_instance* instancesStatic = GPIO_instances();
 }
+
+
+// --- INTERRUPTS ---
+
+const int exti_lines = 16;
+
+// --- INTERRUPT LIST ---
+// Creates and returns a list of the interrupt entries.
+std::vector<InterruptSource>* interruptList() {
+	InterruptSource src;
+	static InterruptSource itrSrcs[exti_lines];
+	for (int i = 0; i < exti_lines; ++i) {
+		itrSrcs[i] = src;
+	}
+	
+	// Each interrupt sources list item refers to a single EXTI line, starting at EXTI0 ([0]).
+	const uint8_t exticrs = 4;
+	uint8_t crcnt = 0;
+	uint8_t crpos = 0;
+	for (int i = 0; i < exti_lines; ++i) {
+		(*itrSrcs)[i].reg = crcnt;
+		(*itrSrcs)[i].offset = crpos * 4;
+		if (++crpos >= 4) { crpos = 0; crcnt++; }
+		if (crcnt >= exticrs) {
+			// Error, somehow more EXTI lines were defined than there are EXTICR entries.
+			// TODO: set error.
+			break;
+		}
+		
+		(*itrSrcs)[i].exti = EXTI;
+	}
+	
+	return itrSrcs;
+}
+
+InterruptSource* InterruptSources = interruptList();

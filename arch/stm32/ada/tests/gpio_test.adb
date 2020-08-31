@@ -1,5 +1,5 @@
 --
--- rcc_test.adb - Tests the RCC package.
+-- gpio_test.adb - Tests the GPIO package.
 --
 
 

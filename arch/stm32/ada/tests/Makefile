@@ -29,7 +29,11 @@ rcc_test:
 	$(GNATLINK) -g -o bin/rcc_test --LINK=g++ obj/rcc_test obj/common.o obj/stm32.o
 	
 interrupts_test:
-	#g++ -o bin/interrupts_test interrupts_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/interrupts.cpp  $(FLAGS) $(INCLUDES)
+	$(GNATMAKE) $(ADAFLAGS) -c interrupts_test
+	$(CPP) -c -o obj/stm32.o $(CPP_ROOT)/recorders/stm32.cpp $(CPPFLAGS) $(INCLUDES)
+	$(CPP) -c -o obj/common.o $(CPP_ROOT)/tests/common.cpp $(CPPFLAGS) $(INCLUDES)
+	$(GNATBIND) obj/interrupts_test
+	$(GNATLINK) -g -o bin/interrupts_test --LINK=g++ obj/interrupts_test obj/common.o obj/stm32.o
 	
 gpio_test:
 	$(GNATMAKE) $(ADAFLAGS) -c gpio_test

@@ -32,12 +32,12 @@ begin
 	-- Set pins in GPIO class.
 	ret := GPIO.set_output(GPIO_PORT_A, 3, GPIO_PULL_UP);
 	Put_Line("Set output: " & Boolean'Image(ret));
-	ret := GPIO.write(GPIO_PORT_A, 3, GPIO_LEVEL_HIGH));
+	ret := GPIO.write(GPIO_PORT_A, 3, GPIO_LEVEL_HIGH);
 	Put_Line("Write output: " & Boolean'Image(ret));
 	
 	ret := GPIO.set_output(GPIO_PORT_B, 1, GPIO_PULL_UP);
 	Put_Line("Set output: " & Boolean'Image(ret));
-	ret := GPIO.write(GPIO_PORT_B, 1, GPIO_LEVEL_HIGH));
+	ret := GPIO.write(GPIO_PORT_B, 1, GPIO_LEVEL_HIGH);
 	Put_Line("Write output: " & Boolean'Image(ret));
 	
 	ret := GPIO.set_input(GPIO_PORT_A, 1, GPIO_PULL_UP);

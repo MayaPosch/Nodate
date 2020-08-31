@@ -278,7 +278,7 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	EXTI->RTSR &= ~(1 << src.pin);
 	
 	// Finally reset the SYSCFG registers.
-	SYSCFG->EXTICR[src.reg] &= (0xF << src.offset);
+	SYSCFG->EXTICR[src.reg] &= ~(0xF << src.offset);
 	
 	return true;
 }

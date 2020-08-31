@@ -36,6 +36,16 @@ package stm32_records is
    end record
    with Convention => C_Pass_By_Copy;
    
+   type EXTI_TypeDef is record
+      IMR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:190
+      EMR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:191
+      RTSR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:192
+      FTSR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:193
+      SWIER : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:194
+      PR : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:195
+   end record
+   with Convention => C_Pass_By_Copy;
+   
    type SYSCFG_TypeDef_array1096 is array (0 .. 3) of aliased stdint_h.uint32_t;
    type SYSCFG_TypeDef is record
       CFGR1 : aliased stdint_h.uint32_t;  -- ../core/include/stm32f0/stm32f030x6.h:250

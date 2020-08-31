@@ -37,7 +37,6 @@ gpio_test:
 	$(CPP) -c -o obj/common.o $(CPP_ROOT)/tests/common.cpp $(CPPFLAGS) $(INCLUDES)
 	$(GNATBIND) obj/gpio_test
 	$(GNATLINK) -g -o bin/gpio_test --LINK=g++ obj/gpio_test obj/common.o obj/stm32.o
-	#g++ -o bin/gpio_test gpio_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/gpio.cpp  $(FLAGS) $(INCLUDES)
 	
 eventful:
 	#g++ -o bin/eventful eventful.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp \

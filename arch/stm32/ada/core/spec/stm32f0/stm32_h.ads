@@ -143,7 +143,7 @@ package stm32_h is
 
    package Class_GPIO_instance is
       type GPIO_instance is record
-         active : aliased Extensions.bool;  -- stm32.h:142
+         active : aliased Boolean;  -- stm32.h:142
          regs : access GPIO_TypeDef;  -- stm32.h:143
       end record
 	  with Convention => C;

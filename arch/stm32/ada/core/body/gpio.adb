@@ -6,6 +6,8 @@
 with RCC;
 with stm32_h; use stm32_h;
 with stdint_h; use stdint_h;
+with Interfaces; use Interfaces;
+with Interfaces.C; use Interfaces.C;
 
 
 package body GPIO is
@@ -27,8 +29,8 @@ package body GPIO is
 		end if;
 		
 		-- Check if port is active. If not, try to activate it.
-		if instance is not active then
-			if RCC.enablePort(RccPort(port)) = true then
+		if instance.active = false then
+			if RCC.enablePort(RccPort'Val(GPIO_ports'Pos(port))) = true then
 				instance.active := true;
 			else
 				return false;
@@ -66,8 +68,8 @@ package body GPIO is
 		end if;
 		
 		-- Check if port is active. If not, try to activate it.
-		if instance is not active then
-			if RCC.enablePort(RccPort(port)) = true then
+		if instance.active = false then
+			if RCC.enablePort(RccPort'Val(GPIO_ports'Pos(port))) = true then
 				instance.active := true;
 			else
 				return false;
@@ -118,8 +120,8 @@ package body GPIO is
 		end if;
 		
 		-- Check if port is active. If not, try to activate it.
-		if instance is not active then
-			if RCC.enablePort(RccPort(port)) = true then
+		if instance.active = false then
+			if RCC.enablePort(RccPort'Val(GPIO_ports'Pos(port))) = true then
 				instance.active := true;
 			else
 				return false;
@@ -132,6 +134,8 @@ package body GPIO is
 		elsif level = GPIO_LEVEL_HIGH then
 			instance.regs.all.ODR := uint32_t(Unsigned_32(instance.regs.all.ODR) or Shift_Left(1, pin));
 		end if;
+		
+		return true;
 	end write;
 	
 	
@@ -149,32 +153,33 @@ package body GPIO is
 		
 		instance	: GPIO_instance renames portArray(GPIO_ports'Pos(port));
 		idr			: Unsigned_32;
-		output		: Unsigned_8;
+		output		: Unsigned_32;
+		mask_base	: Unsigned_32	:= 1;
 	begin
 		-- Validate pin.
 		if pin > 15 then
-			return false;
+			return 0;
 		end if;
 		
 		-- Check if port is active. If not, try to activate it.
-		if instance is not active then
-			if RCC.enablePort(RccPort(port)) = true then
+		if instance.active = false then
+			if RCC.enablePort(RccPort'Val(GPIO_ports'Pos(port))) = true then
 				instance.active := true;
 			else
-				return false;
+				return 0;
 			end if;
 		end if;
 		
 		-- Read from pin.
-		idr := instance.regs.all.IDR;
-		output := Right_Shift(pin, idr) and 1;
+		idr := Unsigned_32(instance.regs.all.IDR);
+		output := Shift_Right(idr, pin) and mask_base;
 		
-		return output;
+		return Integer(output);
 	end read;
 	
 	
 	-- READ ANALOG --
-	function readAnalog() return Integer is
+	function readAnalog(port: GPIO_ports; pin: Integer) return Integer is
 	begin
 		return 0;
 	end readAnalog;

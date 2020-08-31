@@ -33,26 +33,53 @@ package body Interrupts is
 	
 	-- STM32F0 
 	procedure EXTI0_1_IRQHandler is
+		srcArray: SourceArrayType
+		with Import, Convention => C, Address => InterruptSources.all'Address;
+		--src		: InterruptSource renames srcArray(InterruptSource'Pos(pin));
 	begin
 		-- Determine whether pin 0 or 1 was triggered.
-		if 
+		if (Unsigned_32(src.exti.all.PR) and Shift_Left(1, 1) = 1) then
+			-- Clear the EXTI status flag.
+			srcArray(1).exti.all.PR := uint32_t(Unsigned_32(srcArray(1).exti.all.PR) or Shift_Left(1, 1));
+			srcArray(1).callback.all; -- Call the callback function.
+		else
+			srcArray(0).exti.all.PR := uint32_t(Unsigned_32(srcArray(0).exti.all.PR) or Shift_Left(1, 1));
+			srcArray(0).callback.all;
+		end if;
 	end EXTI0_1_IRQHandler
 	with Export, Convention => C, External_Name => "EXTI0_1_IRQHandler";
 	
 	procedure EXTI2_3_IRQHandler is
+		srcArray: SourceArrayType
+		with Import, Convention => C, Address => InterruptSources.all'Address;
 	begin
-		--
+		if (Unsigned_32(src.exti.all.PR) and Shift_Left(1, 2) = 1) then
+			-- Clear the EXTI status flag.
+			srcArray(2).exti.all.PR := uint32_t(Unsigned_32(srcArray(2).exti.all.PR) or Shift_Left(1, 2));
+			srcArray(2).callback.all; -- Call the callback function.
+		else
+			srcArray(3).exti.all.PR := uint32_t(Unsigned_32(srcArray(3).exti.all.PR) or Shift_Left(1, 3));
+			srcArray(3).callback.all;
+		end if;
 	end EXTI2_3_IRQHandler
 	with Export, Convention => C, External_Name => "EXTI2_3_IRQHandler";
 	
 	procedure EXTI4_15_IRQHandler is
+		srcArray: SourceArrayType
+		with Import, Convention => C, Address => InterruptSources.all'Address;
+		src		: InterruptSource renames srcArray(InterruptSource'Pos(pin));
 	begin
-		--
+		for i in 4 .. 16 loop
+			-- TODO
+		end loop;
 	end EXTI4_15_IRQHandler
 	with Export, Convention => C, External_Name => "EXTI4_15_IRQHandler";
 	
 	-- STM32F4/F7
 	procedure EXTI0_IRQHandler is
+		srcArray: SourceArrayType
+		with Import, Convention => C, Address => InterruptSources.all'Address;
+		src		: InterruptSource renames srcArray(InterruptSource'Pos(pin));
 	begin
 		--
 	end EXTI0_IRQHandler

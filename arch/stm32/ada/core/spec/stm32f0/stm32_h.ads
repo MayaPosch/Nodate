@@ -8,6 +8,10 @@ with stm32f0_stm32f030x6_h; use stm32f0_stm32f030x6_h;
 
 package stm32_h is
 
+	-- Define the family this MCU package belongs to.
+	-- The integer refers to the 'x' in 'STM32Fx', i.e. '0' refers to STM32F0.
+	stm32_type : constant := 0;
+
    type RccPeripheral is 
      (RCC_TSC,
       RCC_CRC,
@@ -150,9 +154,9 @@ package stm32_h is
    end;
    use Class_GPIO_instance;
 
-   instancesStatic : access GPIO_instance  -- stm32.h:149
+   InterruptSources : access GPIO_instance  -- stm32.h:149
    with Import => True, 
         Convention => C, 
-        External_Name => "instancesStatic";
+        External_Name => "InterruptSources";
 
 end stm32_h;

@@ -3,13 +3,15 @@
 --
 
 
-with Interrupts;
+with Interrupts; use Interrupts;
 
 with Ada.Text_IO, Interfaces;
 use Ada.Text_IO, Interfaces;
 
 with stm32_records;
 with stm32_h; use stm32_h;
+
+with interrupts_callbacks; use interrupts_callbacks;
 
 
 procedure interrupts_test is
@@ -22,12 +24,6 @@ procedure interrupts_test is
 	EXTI_regs: access stm32_records.EXTI_TypeDef
 	with Import, Convention => C, External_name => "EXTI";
 	
-	procedure callback is
-		--
-	begin
-		--
-	end callback;
-	
 	ret		: Boolean;
 	handleA	: Integer;
 	handleB	: Integer;
@@ -35,12 +31,13 @@ begin
 	Put_Line("Running Interrupts test...");
 
 	-- Start Interrupts.
-	Interrupts.enable();
+	ret := Interrupts.enable;
+	Put_Line("Set output: " & Boolean'Image(ret));
 	
 	-- Set interrupts.
-	ret := Interrupts.setInterrupt(0, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callback, 0, handleA);
+	ret := Interrupts.setInterrupt(0, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callback'Access, 0, handleA);
 	Put_Line("Set output: " & Boolean'Image(ret));
-	ret := Interrupts.setInterrupt(1, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callback, 0, handleB);
+	ret := Interrupts.setInterrupt(1, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callback'Access, 0, handleB);
 	Put_Line("Set output: " & Boolean'Image(ret));
 	
 	-- Print out the RCC AHB, APB1 and APB2 registers.
@@ -52,10 +49,10 @@ begin
 	
 	-- Print out the RCC AHB register.
 	Put_Line("SYSCFG");
-	Put("EXTICR1:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR1))); New_Line;
-	Put("EXTICR2:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR2))); New_Line;
-	Put("EXTICR3:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR3))); New_Line;
-	Put("EXTICR4:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR4))); New_Line;
+	Put("EXTICR1:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR(0)))); New_Line;
+	Put("EXTICR2:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR(1)))); New_Line;
+	Put("EXTICR3:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR(2)))); New_Line;
+	Put("EXTICR4:  "); Put(Unsigned_32'Image(Unsigned_32(SYSCFG_regs.all.EXTICR(3)))); New_Line;
 	New_Line;
 	
 	-- Print out the EXTI IMR, RTSR, FTSR & PR registers.

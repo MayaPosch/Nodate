@@ -6,7 +6,7 @@
 ARCH ?= stm32
 
 # Target programming language (Ada, C++)
-LANGUAGE ?= cpp
+LANGUAGE ?= ada
 
 # One can use the board preset.
 BOARD ?= nucleo-f042k6
@@ -26,10 +26,12 @@ BOARD ?= nucleo-f042k6
 # Set the name of the output (ELF & Hex) file.
 OUTPUT := pushy
 
+# Set the name of the main Ada project file, without the .adb extension.
+APP_MAIN := pushy
 
 # Add files to include for compilation to these variables.
-APP_CPP_FILES = $(wildcard src/*.cpp)
-APP_C_FILES = $(wildcard src/*.c)
+#APP_CPP_FILES = $(wildcard src/*.cpp)
+#APP_C_FILES = $(wildcard src/*.c)
 
 
 #

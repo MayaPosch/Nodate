@@ -16,13 +16,9 @@ with Interfaces.C; use Interfaces.C;
 package body Interrupts is
 	type SourceRange is range 0 .. 50;
 	type SourceArrayType is array(SourceRange) of aliased InterruptSource;
-	--type SourceArrayType is array(0 .. 50) of aliased InterruptSource;
 	
-	-- type CallbackRange is range 0 .. 16;
-	-- type CallbackArrayType is array(CallbackRange) of InterruptCallback;
 	type callbackArrayType is array(SourceRange) of InterruptCallback;
 	callbackArray : CallbackArrayType;
-	--callbackArray : array (0 .. 16) of InterruptCallback;
 	
 	procedure NVIC_EnableIRQ(IRQn: IRQn_Type)
 	with Import, Convention => C, External_Name => "NVIC_EnableIRQ";
@@ -206,7 +202,7 @@ package body Interrupts is
 		--src.callback := callback;
 		callbackArray(SourceRange(pin)) := callback;
 		src.priority := Unsigned_8(priority);
-		src.syscfg.all.EXTICR(Integer(src.reg)) := uint32_t(Unsigned_32(src.syscfg.all.EXTICR(Integer(src.reg))) or Shift_Left(Unsigned_32(GPIO_ports'Pos(port)), Integer(Integer(src.offset))));
+		src.syscfg.all.EXTICR(Integer(src.reg)) := uint32_t(Unsigned_32(src.syscfg.all.EXTICR(Integer(src.reg))) or Shift_Left(Unsigned_32(GPIO_ports'Pos(port)), Integer(src.offset)));
 		
 		-- In the EXTI peripheral.
 		-- - set interrupt mask (IM) for the pin.

@@ -2,6 +2,7 @@ pragma Ada_2012;
 pragma Style_Checks (Off);
 
 with Interfaces.C; use Interfaces.C;
+with Interfaces; use Interfaces;
 with stdint_h;
 with Interfaces.C.Extensions;
 with stm32f0_stm32f030x6_h; use stm32f0_stm32f030x6_h;
@@ -153,10 +154,41 @@ package stm32_h is
 	  with Convention => C;
    end;
    use Class_GPIO_instance;
+   
+   instancesStatic : access GPIO_instance;
+   
+	-- Interrupts
+	
+	type InterruptCallback is access procedure;
+	
+	type InterruptTrigger is
+		(INTERRUPT_TRIGGER_NONE,
+		INTERRUPT_TRIGGER_RISING,
+		INTERRUPT_TRIGGER_FALLING,
+		INTERRUPT_TRIGGER_BOTH)
+	with Convention => C;
+	
+	type InterruptSource is record
+		active	: aliased Boolean;
+		port	: aliased GPIO_ports;
+		pin		: aliased Unsigned_8;
+		trigger	: aliased InterruptTrigger;
+		irqType	: aliased IRQn_Type;
+		priority: aliased Unsigned_8;
+		exti	: access EXTI_TypeDef;
+		syscfg	: access SYSCFG_TypeDef;
+		reg		: aliased Unsigned_8;
+		offset	: aliased Unsigned_32;
+	end record
+	with Convention => C;
 
    InterruptSources : access GPIO_instance  -- stm32.h:149
    with Import => True, 
         Convention => C, 
         External_Name => "InterruptSources";
+		
+		
+	procedure setIrqType(irqType: out IRQn_Type; pin: Integer);
+	procedure checkIrqDisable(irqType: in IRQn_Type; nvic_disable: out Boolean);
 
 end stm32_h;

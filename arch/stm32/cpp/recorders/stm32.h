@@ -173,11 +173,10 @@ struct InterruptSource {
 	InterruptTrigger trigger;
 	IRQn_Type irqType;
 	uint8_t priority;
-	volatile uint32_t* exti;
-	volatile uint32_t* syscfg;
+	EXTI_TypeDef* exti;
+	SYSCFG_TypeDef* syscfg;
 	uint8_t reg;
 	uint32_t offset;
-	std::function<void()> callback;
 };
 
 

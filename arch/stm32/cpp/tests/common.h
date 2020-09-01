@@ -215,10 +215,11 @@ extern NVIC_Type* NVIC;
 
 //extern SCB_Type* SCB;
 
-
+extern "C" {
 void NVIC_EnableIRQ(IRQn_Type IRQn);
 void NVIC_DisableIRQ(IRQn_Type IRQn);
 void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
+}
 
 
 // STM32F0

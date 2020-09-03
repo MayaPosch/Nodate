@@ -2,7 +2,7 @@
 #
 
 # Architecture must be set.
-# E.g.: AVR, SAM, ESP8266.
+# E.g.: STM32, AVR, SAM, ESP8266.
 ARCH ?= stm32
 
 # Target programming language (Ada, C++)
@@ -10,18 +10,13 @@ LANGUAGE ?= cpp
 
 # One can use the board preset.
 BOARD ?= nucleo-f042k6
+#BOARD ?= stm32f4-discovery
+#BOARD ?= nucleo-f746zg
 
 # Set the MCU and programmer types.
 #
-# MCU, programmer, variant
-# atmega328p, arduino, standard
-# atmega1280, arduino, mega 
-# atmega2560, wiring, mega
-#
-#MCU ?= atmega2560
-#PROGRAMMER ?= wiring
-# Pin variant. Set 'standard' for ATmega328P, 'mega' for ATmega1280/2560.
-#VARIANT ?= mega
+# MCU
+#MCU ?= stm32f042k6t
 
 # Set the name of the output (ELF & Hex) file.
 OUTPUT := blinky

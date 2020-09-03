@@ -7,10 +7,14 @@
 
 
 // Delay counter
-static __IO uint32_t DelayCounter;
+static volatile uint32_t DelayCounter;
 
 
 // SysTick interrupt handler
+extern "C" {
+	void SysTick_Handler(void);
+}
+
 void SysTick_Handler() {
 	DelayCounter++;
 }
@@ -18,18 +22,16 @@ void SysTick_Handler() {
 
 // --- CONSTRUCTOR ---
 Timer::Timer() {
-	// Configure the SysTick for ms resolution.
-	
-	// Set reload register to generate IRQ every millisecond
-	SysTick->LOAD = (uint32_t)(SystemCoreClock / (1000UL - 1UL));
+	// Set reload register to generate an interrupt every millisecond.
+	SysTick->LOAD = (uint32_t)((SystemCoreClock / 1000) - 1);
 
 	// Set priority for SysTick IRQ
-	NVIC_SetPriority(SysTick_IRQn,(1 << __NVIC_PRIO_BITS) - 1);
+	//NVIC_SetPriority(SysTick_IRQn,(1 << __NVIC_PRIO_BITS) - 1);
 
-	// Set the SysTick counter value
+	// Reset the SysTick counter value.
 	SysTick->VAL = 0UL;
 
-	// Set SysTick source and IRQ
+	// Set SysTick source and IRQ.
 	SysTick->CTRL = (SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk);
 }
 

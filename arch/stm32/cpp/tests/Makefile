@@ -6,7 +6,7 @@ SOURCE_ROOT := ../core/src
 FLAGS := -std=c++11 -g3 -DSTM32F4=1
 
 
-all: mkdir rcc_test interrupts_test gpio_test eventful
+all: mkdir rcc_test interrupts_test gpio_test eventful uart_test
 
 mkdir:
 	mkdir -p bin
@@ -26,3 +26,6 @@ eventful:
 												$(SOURCE_ROOT)/gpio.cpp \
 												$(SOURCE_ROOT)/interrupts.cpp \
 												$(FLAGS) $(INCLUDES)
+	
+uart_test:
+	g++ -o bin/uart_test uart_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/gpio.cpp $(SOURCE_ROOT)/usart.cpp  $(FLAGS) $(INCLUDES)

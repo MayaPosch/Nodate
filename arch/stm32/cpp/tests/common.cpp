@@ -1,4 +1,9 @@
+
 #include "common.h"
+
+
+uint32_t SystemCoreClock = 8000000;
+
 
 GPIO_TypeDef tGpioA;
 GPIO_TypeDef* GPIOA = &tGpioA;
@@ -77,3 +82,9 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority) {
        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
 	} */
 }
+
+
+USART_TypeDef tUsart1;
+USART_TypeDef* USART1 = & tUsart1;
+USART_TypeDef tUsart2;
+USART_TypeDef* USART2 = & tUsart2;

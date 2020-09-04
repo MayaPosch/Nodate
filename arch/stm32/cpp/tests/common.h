@@ -10,6 +10,9 @@
 #define __IOM volatile
 
 
+extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Clock) */
+
+
 #ifdef STM32F0
 // STM32F0
 struct GPIO_TypeDef {
@@ -222,6 +225,31 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 }
 
 
+// --- USART ---
+
+struct USART_TypeDef {
+  __IO uint32_t CR1;    /*!< USART Control register 1,                 Address offset: 0x00 */ 
+  __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */ 
+  __IO uint32_t CR3;    /*!< USART Control register 3,                 Address offset: 0x08 */
+  __IO uint32_t BRR;    /*!< USART Baud rate register,                 Address offset: 0x0C */
+  __IO uint32_t GTPR;   /*!< USART Guard time and prescaler register,  Address offset: 0x10 */
+  __IO uint32_t RTOR;   /*!< USART Receiver Time Out register,         Address offset: 0x14 */  
+  __IO uint32_t RQR;    /*!< USART Request register,                   Address offset: 0x18 */
+  __IO uint32_t ISR;    /*!< USART Interrupt and status register,      Address offset: 0x1C */
+  __IO uint32_t ICR;    /*!< USART Interrupt flag Clear register,      Address offset: 0x20 */
+  __IO uint16_t RDR;    /*!< USART Receive Data register,              Address offset: 0x24 */
+  uint16_t  RESERVED1;  /*!< Reserved, 0x26                                                 */
+  __IO uint16_t TDR;    /*!< USART Transmit Data register,             Address offset: 0x28 */
+  uint16_t  RESERVED2;  /*!< Reserved, 0x2A                                                 */
+};
+
+extern USART_TypeDef* USART1;
+extern USART_TypeDef* USART2;
+
+
+// --- DEFINES ---
+
+
 // STM32F0
 #ifdef STM32F0
 #define RCC_AHBENR_GPIOAEN_Pos                   (17U) 
@@ -271,6 +299,33 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 #define RCC_APB2ENR_SYSCFGCOMPEN_Pos 	(0U)
 #define RCC_APB2ENR_SYSCFGCOMPEN 	(0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos)
 
+#define RCC_APB2ENR_USART1EN_Pos                 (14U)                         
+#define RCC_APB2ENR_USART1EN_Msk                 (0x1UL << RCC_APB2ENR_USART1EN_Pos) /*!< 0x00004000 */
+#define RCC_APB2ENR_USART1EN                     RCC_APB2ENR_USART1EN_Msk      /*!< USART1 clock enable */
+
+#define RCC_APB1ENR_USART2EN_Pos                 (17U)                         
+#define RCC_APB1ENR_USART2EN_Msk                 (0x1UL << RCC_APB1ENR_USART2EN_Pos) /*!< 0x00020000 */
+#define RCC_APB1ENR_USART2EN                     RCC_APB1ENR_USART2EN_Msk      /*!< USART2 clock enable */
+
+#define USART_CR1_UE_Pos              (0U)                                     
+#define USART_CR1_UE_Msk              (0x1UL << USART_CR1_UE_Pos)               /*!< 0x00000001 */
+#define USART_CR1_UE                  USART_CR1_UE_Msk                         /*!< USART Enable */
+#define USART_CR1_UESM_Pos            (1U)                                     
+#define USART_CR1_UESM_Msk            (0x1UL << USART_CR1_UESM_Pos)             /*!< 0x00000002 */
+#define USART_CR1_UESM                USART_CR1_UESM_Msk                       /*!< USART Enable in STOP Mode */
+#define USART_CR1_RE_Pos              (2U)                                     
+#define USART_CR1_RE_Msk              (0x1UL << USART_CR1_RE_Pos)               /*!< 0x00000004 */
+#define USART_CR1_RE                  USART_CR1_RE_Msk                         /*!< Receiver Enable */
+#define USART_CR1_TE_Pos              (3U)                                     
+#define USART_CR1_TE_Msk              (0x1UL << USART_CR1_TE_Pos)               /*!< 0x00000008 */
+#define USART_CR1_TE                  USART_CR1_TE_Msk                         /*!< Transmitter Enable */
+#define USART_CR1_IDLEIE_Pos          (4U)                                     
+#define USART_CR1_IDLEIE_Msk          (0x1UL << USART_CR1_IDLEIE_Pos)           /*!< 0x00000010 */
+#define USART_CR1_IDLEIE              USART_CR1_IDLEIE_Msk                     /*!< IDLE Interrupt Enable */
+#define USART_CR1_RXNEIE_Pos          (5U)                                     
+#define USART_CR1_RXNEIE_Msk          (0x1UL << USART_CR1_RXNEIE_Pos)           /*!< 0x00000020 */
+#define USART_CR1_RXNEIE              USART_CR1_RXNEIE_Msk                     /*!< RXNE Interrupt Enable */
+
 #else
 
 // STM32F4
@@ -278,6 +333,31 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 #define RCC_APB2ENR_SYSCFGEN_Msk           (0x1UL << RCC_APB2ENR_SYSCFGEN_Pos)  //!< 0x00004000
 #define RCC_APB2ENR_SYSCFGEN               RCC_APB2ENR_SYSCFGEN_Msk
 
+#define RCC_APB2ENR_USART1EN_Pos           (4U)                                
+#define RCC_APB2ENR_USART1EN_Msk           (0x1UL << RCC_APB2ENR_USART1EN_Pos)  /*!< 0x00000010 */
+#define RCC_APB2ENR_USART1EN               RCC_APB2ENR_USART1EN_Msk     
+
+#define RCC_APB1ENR_USART2EN_Pos           (17U)                               
+#define RCC_APB1ENR_USART2EN_Msk           (0x1UL << RCC_APB1ENR_USART2EN_Pos)  /*!< 0x00020000 */
+#define RCC_APB1ENR_USART2EN               RCC_APB1ENR_USART2EN_Msk                
+
+#define USART_CR1_UE_Pos              (13U)                                    
+#define USART_CR1_UE_Msk              (0x1UL << USART_CR1_UE_Pos)               /*!< 0x00002000 */
+#define USART_CR1_UE                  USART_CR1_UE_Msk                         /*!<USART Enable                           */
+#define USART_CR1_RE_Pos              (2U)                                     
+#define USART_CR1_RE_Msk              (0x1UL << USART_CR1_RE_Pos)               /*!< 0x00000004 */
+#define USART_CR1_RE                  USART_CR1_RE_Msk                         /*!<Receiver Enable                        */
+#define USART_CR1_TE_Pos              (3U)                                     
+#define USART_CR1_TE_Msk              (0x1UL << USART_CR1_TE_Pos)               /*!< 0x00000008 */
+#define USART_CR1_TE                  USART_CR1_TE_Msk                         /*!<Transmitter Enable                     */
+#define USART_CR1_IDLEIE_Pos          (4U)                                     
+#define USART_CR1_IDLEIE_Msk          (0x1UL << USART_CR1_IDLEIE_Pos)           /*!< 0x00000010 */
+#define USART_CR1_IDLEIE              USART_CR1_IDLEIE_Msk                     /*!<IDLE Interrupt Enable                  */
+#define USART_CR1_RXNEIE_Pos          (5U)                                     
+#define USART_CR1_RXNEIE_Msk          (0x1UL << USART_CR1_RXNEIE_Pos)           /*!< 0x00000020 */
+#define USART_CR1_RXNEIE              USART_CR1_RXNEIE_Msk                     /*!<RXNE Interrupt Enable                  */
+
 #endif
+
 
 #endif

@@ -145,6 +145,46 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 }
 
 
+// --- SET AF ---
+// Set alternate function mode on a pin.
+bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
+	// Validate port & pin.
+	if (pin > 15) { return false; }
+	if (af > 7) { return false; }
+	
+	GPIO_instance &instance = (*instancesStatic)[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (!Rcc::enablePort((RccPort) port)) { return false; }
+		instance.active = true;
+	}
+	
+	// Set parameters.
+	uint8_t pin2 = pin * 2;
+	uint8_t pin4 = pin * 4;
+	instance.regs->MODER &= ~(0x3 << pin2);
+	instance.regs->MODER |= (0x2 << pin2);		// AF mode.
+	
+	instance.regs->OSPEEDR &= ~(0x3 << pin2);
+	instance.regs->OSPEEDR |= (0x3 << pin2);	// High speed.
+	
+	instance.regs->OTYPER &= ~(0x1 << pin);		// Push-pull.
+	
+	// Set AF mode in appropriate (high/low) register.
+	if (pin < 8) {
+		instance.regs->AFR[0] &= ~(0xF << pin4);
+		instance.regs->AFR[0] |= (af << pin4);
+	}
+	else {
+		instance.regs->AFR[1] &= ~(0xF << pin4);
+		instance.regs->AFR[1] |= (af << pin4);
+	}
+	
+	return true;
+}
+
+
 /* bool GPIO::mode(uint32_t pin, GPIO_mode mode) {
 	if (mode == GPIO_MODE_INPUT) {
 		//

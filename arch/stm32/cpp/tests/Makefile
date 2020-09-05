@@ -3,7 +3,7 @@
 
 INCLUDES := -I. -I ../core/include
 SOURCE_ROOT := ../core/src
-FLAGS := -std=c++11 -g3 -DSTM32F4=1
+FLAGS := -std=c++11 -g3 -DSTM32F4=1 -D__stm32f4
 
 
 all: mkdir rcc_test interrupts_test gpio_test eventful uart_test

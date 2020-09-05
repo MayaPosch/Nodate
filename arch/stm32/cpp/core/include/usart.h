@@ -12,6 +12,8 @@
 #include <gpio.h>
 #include <rcc.h>
 
+#include <functional>
+
 
 enum USART_devices {
 	USART_1,
@@ -34,6 +36,8 @@ struct USART_device {
 	uint8_t rx_af;
 	uint32_t baudrate;
 	RccPeripheral per;
+	IRQn_Type irqType;
+	std::function<void(char)> callback;
 };
 
 
@@ -43,7 +47,7 @@ class USART {
 public:
 	static bool startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, uint8_t tx_af,
 											GPIO_ports rx_port, uint8_t rx_pin, uint8_t rx_af,
-											uint32_t baudrate);
+											uint32_t baudrate, std::function<void(char)> callback);
 	static bool stopUart(USART_devices device);
 };
 

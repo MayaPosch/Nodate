@@ -15,14 +15,18 @@
 #include <bitset>
 
 
+void uartCallback(char ch) {
+	std::cout << "Received character: " << ch << std::endl;
+}
+
+
 int main() {
 	std::cout << "Running USART test..." << std::endl;
 	
 	// Start UART device.
-	//USART usart;
 	if (USART::startUart(USART_1, GPIO_PORT_A, 2, 1, 
 								GPIO_PORT_A, 3, 1, 
-								9600)) { std::cout << "Start USART1." << std::endl; }
+								9600, uartCallback)) { std::cout << "Start USART1." << std::endl; }
 	
 	// Print out the RCC AHB & APB1/2 registers.
 	std::cout << std::endl;

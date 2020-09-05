@@ -227,6 +227,7 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority);
 
 // --- USART ---
 
+#if defined STM32F0
 struct USART_TypeDef {
   __IO uint32_t CR1;    /*!< USART Control register 1,                 Address offset: 0x00 */ 
   __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */ 
@@ -242,6 +243,34 @@ struct USART_TypeDef {
   __IO uint16_t TDR;    /*!< USART Transmit Data register,             Address offset: 0x28 */
   uint16_t  RESERVED2;  /*!< Reserved, 0x2A                                                 */
 };
+
+#elif defined STM32F4
+struct USART_TypeDef {
+  __IO uint32_t SR;         /*!< USART Status register,                   Address offset: 0x00 */
+  __IO uint32_t DR;         /*!< USART Data register,                     Address offset: 0x04 */
+  __IO uint32_t BRR;        /*!< USART Baud rate register,                Address offset: 0x08 */
+  __IO uint32_t CR1;        /*!< USART Control register 1,                Address offset: 0x0C */
+  __IO uint32_t CR2;        /*!< USART Control register 2,                Address offset: 0x10 */
+  __IO uint32_t CR3;        /*!< USART Control register 3,                Address offset: 0x14 */
+  __IO uint32_t GTPR;       /*!< USART Guard time and prescaler register, Address offset: 0x18 */
+};
+
+#elif STM32F7
+struct USART_TypeDef {
+  __IO uint32_t CR1;    /*!< USART Control register 1,                 Address offset: 0x00 */
+  __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */
+  __IO uint32_t CR3;    /*!< USART Control register 3,                 Address offset: 0x08 */
+  __IO uint32_t BRR;    /*!< USART Baud rate register,                 Address offset: 0x0C */
+  __IO uint32_t GTPR;   /*!< USART Guard time and prescaler register,  Address offset: 0x10 */
+  __IO uint32_t RTOR;   /*!< USART Receiver Time Out register,         Address offset: 0x14 */
+  __IO uint32_t RQR;    /*!< USART Request register,                   Address offset: 0x18 */
+  __IO uint32_t ISR;    /*!< USART Interrupt and status register,      Address offset: 0x1C */
+  __IO uint32_t ICR;    /*!< USART Interrupt flag Clear register,      Address offset: 0x20 */
+  __IO uint32_t RDR;    /*!< USART Receive Data register,              Address offset: 0x24 */
+  __IO uint32_t TDR;    /*!< USART Transmit Data register,             Address offset: 0x28 */
+};
+
+#endif
 
 extern USART_TypeDef* USART1;
 extern USART_TypeDef* USART2;
@@ -334,6 +363,10 @@ extern USART_TypeDef* USART2;
 #define USART_BRR_DIV_MANTISSA_Msk    (0xFFFUL << USART_BRR_DIV_MANTISSA_Pos)   /*!< 0x0000FFF0 */
 #define USART_BRR_DIV_MANTISSA        USART_BRR_DIV_MANTISSA_Msk               /*!< Mantissa of USARTDIV */
 
+#define USART_ISR_RXNE_Pos            (5U)                                     
+#define USART_ISR_RXNE_Msk            (0x1UL << USART_ISR_RXNE_Pos)             /*!< 0x00000020 */
+#define USART_ISR_RXNE                USART_ISR_RXNE_Msk                       /*!< Read Data Register Not Empty */
+
 #else
 
 // STM32F4
@@ -372,6 +405,10 @@ extern USART_TypeDef* USART2;
 #define USART_BRR_DIV_Mantissa_Pos    (4U)                                     
 #define USART_BRR_DIV_Mantissa_Msk    (0xFFFUL << USART_BRR_DIV_Mantissa_Pos)   /*!< 0x0000FFF0 */
 #define USART_BRR_DIV_Mantissa        USART_BRR_DIV_Mantissa_Msk               /*!<Mantissa of USARTDIV */
+
+#define USART_SR_RXNE_Pos             (5U)                                     
+#define USART_SR_RXNE_Msk             (0x1UL << USART_SR_RXNE_Pos)              /*!< 0x00000020 */
+#define USART_SR_RXNE                 USART_SR_RXNE_Msk                        /*!<Read Data Register Not Empty */
 
 #endif
 

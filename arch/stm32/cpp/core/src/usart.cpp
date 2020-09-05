@@ -94,8 +94,15 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	// Set up and enable the USART peripheral.
 	// Set the baud rate (BR register).
 	// TODO: adjust for STM32F1.
-	// FIXME: needs mantissa/fraction on F4 as well.
-	instance.regs->BRR = SystemCoreClock / baudrate;
+	//instance.regs->BRR = SystemCoreClock / baudrate;
+	uint16_t uartdiv = SystemCoreClock / baudrate;
+#if defined __stm32f0 || defined __stm32f7
+	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_MANTISSA_Pos) |
+							((uartdiv % 16) << USART_BRR_DIV_FRACTION_Pos));
+#elif defined __stm32f4
+	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_Mantissa_Pos) |
+							((uartdiv % 16) << USART_BRR_DIV_Fraction_Pos));
+#endif
 	
 	// Enable the USART via its CR1 register.
 	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE);

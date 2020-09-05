@@ -23,13 +23,6 @@ int main() {
 	if (USART::startUart(USART_1, GPIO_PORT_A, 2, 1, 
 								GPIO_PORT_A, 3, 1, 
 								9600)) { std::cout << "Start USART1." << std::endl; }
-	/* if (gpio.write(GPIO_PORT_A, 3, GPIO_LEVEL_HIGH)) { std::cout << "Wrote HIGH." << std::endl; }
-	if (gpio.set_output(GPIO_PORT_B, 1, GPIO_PULL_UP)) { std::cout << "Set output." << std::endl; }
-	if (gpio.write(GPIO_PORT_B, 1, GPIO_LEVEL_HIGH)) { std::cout << "Wrote HIGH." << std::endl; }
-	
-	if (gpio.set_input(GPIO_PORT_A, 1, GPIO_PULL_UP)) { std::cout << "Set input." << std::endl; }
-	if (gpio.set_input(GPIO_PORT_B, 3, GPIO_PULL_UP)) { std::cout << "Set input." << std::endl; }
-	if (gpio.set_input(GPIO_PORT_D, 1, GPIO_PULL_UP)) { std::cout << "Set input." << std::endl; } */
 	
 	// Print out the RCC AHB & APB1/2 registers.
 	std::cout << std::endl;

@@ -1,0 +1,52 @@
+// Basic UART example for Nodate framework (STM32).
+
+#include <usart.h>
+
+
+volatile bool led_on;
+
+
+void uartCallback(char ch) {
+	// Copy character into send buffer.
+	USART::sendUart(USART_2, ch);
+	
+	led_on = !led_on;
+}
+
+
+int main () {
+	// Start UART.
+	// Nucleo-F042K6 (STM32F042): USART2 (TX: PA2 (AF1), RX: PA15 (AF1)).
+	// USART2 is normally connected to USB (ST-Link) on the Nucleo board.
+	USART::startUart(USART_2, GPIO_PORT_A, 2, 1, GPIO_PORT_A, 15, 1, 9600, uartCallback);
+	
+	const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
+	const GPIO_ports led_port = GPIO_PORT_B;
+	//const uint8_t led_pin = 13; // STM32F4-Discovery: Port D, pin 13 (orange)
+	//const GPIO_ports led_port = GPIO_PORT_D;
+	//const uint8_t led_pin = 7; // Nucleo-F746ZG: Port B, pin 7 (blue)
+	//const GPIO_ports led_port = GPIO_PORT_B;
+	
+	GPIO gpio;
+	
+	// Set the pin mode on the LED pin.
+	gpio.set_output(led_port, led_pin, GPIO_PULL_UP);
+	gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+	
+	char c = 'h';
+	USART::sendUart(USART_2, c);
+	
+	while (1) {
+		// The interrupt handler will handle things from here.
+		
+		// The LED is used to indicate reception of data.
+		if (led_on) {
+			gpio.write(led_port, led_pin, GPIO_LEVEL_HIGH);
+		}
+		else {
+			gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+		}
+	}
+	
+	return 0;
+}

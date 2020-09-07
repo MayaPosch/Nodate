@@ -248,6 +248,22 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 }
 
 
+// --- SEND UART ---
+bool USART::sendUart(USART_devices device, char &ch) {
+	USART_device &instance = (*devicesStatic)[device];
+	if (!instance.active) { return false; }
+	
+	// Copy bit to the device's transmission register.
+#if defined __stm32f0 || defined __stm32f7
+	instance.regs->TDR = (uint8_t) ch;
+#elif defined __stm32f4
+	instance.regs->DR = (uint8_t) ch;
+#endif
+	
+	return true;
+}
+
+
 // --- STOP UART ---
 bool USART::stopUart(USART_devices device) {
 	USART_device &instance = (*devicesStatic)[device];
@@ -258,7 +274,7 @@ bool USART::stopUart(USART_devices device) {
 	NVIC_DisableIRQ(instance.irqType);
 	
 	// Disable USART & ativated ports.
-	instance.regs->CR1 &= ~(USART_CR1_RE | USART_CR1_TE | USART_CR1_UE);
+	instance.regs->CR1 &= ~(USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
 	if (!Rcc::disable(instance.per)) { return false; }
 	if (!Rcc::disablePort((RccPort) instance.tx_port)) { return false; }
 	if (!Rcc::disablePort((RccPort) instance.rx_port)) { return false; }

@@ -366,8 +366,6 @@ std::vector<RccPeripheralHandle>* peripheralHandles() {
 	(*peripheralHandlesStatic)[RCC_USART2].exists = true;
 	(*peripheralHandlesStatic)[RCC_USART2].enr = &(RCC->APB1ENR);
 	(*peripheralHandlesStatic)[RCC_USART2].enable = RCC_APB1ENR_USART2EN_Pos;
-#else
-	(*peripheralHandlesStatic)[RCC_USART2].exists = false;
 #endif
 
 #ifdef RCC_APB1ENR_USART3EN

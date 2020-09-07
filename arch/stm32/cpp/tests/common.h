@@ -112,15 +112,16 @@ struct RCC_TypeDef {
 
 extern RCC_TypeDef* RCC;
 
-
+#ifdef STM32F0
 // STM32F0
-/* struct SYSCFG_TypeDef {
+struct SYSCFG_TypeDef {
   __IO uint32_t CFGR1;       //!< SYSCFG configuration register 1,                           Address offset: 0x00 
        uint32_t RESERVED;    //!< Reserved,                                                                  0x04 
   __IO uint32_t EXTICR[4];   //!< SYSCFG external interrupt configuration register,     Address offset: 0x14-0x08 
   __IO uint32_t CFGR2;       //!< SYSCFG configuration register 2,                           Address offset: 0x18 
-}; */
+};
 
+#else
 // STM32F4
 struct SYSCFG_TypeDef {
   __IO uint32_t MEMRMP;       /*!< SYSCFG memory remap register,                      Address offset: 0x00      */
@@ -129,6 +130,7 @@ struct SYSCFG_TypeDef {
   uint32_t      RESERVED[2];  /*!< Reserved, 0x18-0x1C                                                          */
   __IO uint32_t CMPCR;        /*!< SYSCFG Compensation cell control register,         Address offset: 0x20      */
 };
+#endif
 
 extern SYSCFG_TypeDef* SYSCFG;
 
@@ -255,7 +257,7 @@ struct USART_TypeDef {
   __IO uint32_t GTPR;       /*!< USART Guard time and prescaler register, Address offset: 0x18 */
 };
 
-#elif STM32F7
+#elif defined STM32F7
 struct USART_TypeDef {
   __IO uint32_t CR1;    /*!< USART Control register 1,                 Address offset: 0x00 */
   __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */

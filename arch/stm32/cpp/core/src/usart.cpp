@@ -211,6 +211,12 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
+	} 
+	
+	if (!gpio.set_input(rx_port, rx_pin, GPIO_FLOATING)) { 
+		Rcc::disablePort((RccPort) tx_port);
+		Rcc::disablePort((RccPort) rx_port);
+		return false;
 	}
 	
 	// Set up and enable the USART peripheral.

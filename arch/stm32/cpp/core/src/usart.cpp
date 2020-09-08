@@ -21,27 +21,27 @@ std::vector<USART_device>* USART_list() {
 
 #if defined RCC_APB1ENR_USART2EN
 	((*devicesStatic))[USART_2].regs = USART2;
-	((*devicesStatic))[USART_1].irqType = USART2_IRQn;
+	((*devicesStatic))[USART_2].irqType = USART2_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_USART3EN
 	((*devicesStatic))[USART_3].regs = USART3;
-	((*devicesStatic))[USART_1].irqType = USART3_IRQn;
+	((*devicesStatic))[USART_3].irqType = USART3_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART4EN
 	((*devicesStatic))[USART_4].regs = USART4;
-	((*devicesStatic))[USART_1].irqType = USART4_IRQn;
+	((*devicesStatic))[USART_4].irqType = USART4_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART5EN
 	((*devicesStatic))[USART_5].regs = USART5;
-	((*devicesStatic))[USART_1].irqType = USART5_IRQn;
+	((*devicesStatic))[USART_5].irqType = USART5_IRQn;
 #endif
 
 #if defined RCC_APB2ENR_USART6EN
 	((*devicesStatic))[USART_6].regs = USART6;
-	((*devicesStatic))[USART_1].irqType = USART6_IRQn;
+	((*devicesStatic))[USART_6].irqType = USART6_IRQn;
 #endif
 	
 	return devicesStatic;
@@ -64,13 +64,14 @@ extern "C" {
 	void USART6_IRQHandler(void);
 }
 
-volatile char rxb = '\0';
+volatile char rxb = 'a';
 
 #if defined __stm32f0 || defined __stm32f7
 
 void USART1_IRQHandler(void) {
 	USART_device &instance = (*devicesStatic)[0];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
+		instance.regs->TDR = 'h';
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
 	}
@@ -201,25 +202,33 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	}
 	
 	// Set AF mode on the specified pins.
-	if (!gpio.set_af(tx_port, tx_pin, tx_af)) { 
+	if (!gpio.set_af(tx_port, tx_pin, tx_af)) {
+		Rcc::disablePort((RccPort) tx_port);
+		Rcc::disablePort((RccPort) rx_port);
+		return false;
+	}
+	
+	// Set TX as high speed, push-pull.
+	if (!gpio.set_output_parameters(tx_port, tx_pin, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_LOW)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
 		
-	if (!gpio.set_af(rx_port, rx_pin, rx_af)) { 
-		Rcc::disablePort((RccPort) tx_port);
-		Rcc::disablePort((RccPort) rx_port);
-		return false;
-	} 
-	
-	if (!gpio.set_input(rx_port, rx_pin, GPIO_FLOATING)) { 
+	if (!gpio.set_af(rx_port, rx_pin, rx_af)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
 	
+	/* if (!gpio.set_input(rx_port, rx_pin, GPIO_FLOATING)) { 
+		Rcc::disablePort((RccPort) tx_port);
+		Rcc::disablePort((RccPort) rx_port);
+		return false;
+	} */
+	
 	// Set up and enable the USART peripheral.
+	
 	// Set the baud rate (BR register).
 	// TODO: adjust for STM32F1.
 	//instance.regs->BRR = SystemCoreClock / baudrate;
@@ -233,7 +242,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 #endif
 	
 	// Enable the USART via its CR1 register.
-	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE);
+	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
 	
 	// Save parameters.
 	instance.tx_pin 	= tx_pin;
@@ -247,7 +256,8 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	instance.callback	= callback;
 	
 	// Configure interrupt.
-	instance.regs->CR1 |= USART_CR1_RXNEIE;
+	//instance.regs->CR1 |= USART_CR1_RXNEIE;
+	//NVIC_SetPriority(instance.irqType, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
 	NVIC_EnableIRQ(instance.irqType);
 	
 	return true;

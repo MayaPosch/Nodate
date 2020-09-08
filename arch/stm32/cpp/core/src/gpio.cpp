@@ -166,10 +166,10 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	instance.regs->MODER &= ~(0x3 << pin2);
 	instance.regs->MODER |= (0x2 << pin2);		// AF mode.
 	
-	instance.regs->OSPEEDR &= ~(0x3 << pin2);
+	/* instance.regs->OSPEEDR &= ~(0x3 << pin2);
 	instance.regs->OSPEEDR |= (0x3 << pin2);	// High speed.
 	
-	instance.regs->OTYPER &= ~(0x1 << pin);		// Push-pull.
+	instance.regs->OTYPER &= ~(0x1 << pin);		// Push-pull. */
 	
 	// Set AF mode in appropriate (high/low) register.
 	if (pin < 8) {
@@ -179,6 +179,52 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	else {
 		instance.regs->AFR[1] &= ~(0xF << pin4);
 		instance.regs->AFR[1] |= (af << pin4);
+	}
+	
+	return true;
+}
+
+
+bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, 
+							GPIO_out_type type, GPIO_out_speed speed) {
+	// Validate port & pin.
+	if (pin > 15) { return false; }
+	
+	GPIO_instance &instance = (*instancesStatic)[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (!Rcc::enablePort((RccPort) port)) { return false; }
+		instance.active = true;
+	}
+	
+	uint8_t pin2 = pin * 2;
+	
+	instance.regs->PUPDR &= ~(0x3 << pin2);
+	if (pupd == GPIO_PULL_UP) {
+		instance.regs->PUPDR |= (0x1 << pin2);
+	}
+	else if (pupd == GPIO_PULL_DOWN) {
+		instance.regs->PUPDR |= (0x2 << pin2);
+	}
+	
+	if (type == GPIO_PUSH_PULL) {
+		instance.regs->OTYPER &= ~(0x1 << pin);
+	}
+	else if (type == GPIO_OPEN_DRAIN) {
+		instance.regs->OTYPER |= (0x1 << pin);
+	}
+	
+	if (speed == GPIO_LOW) {
+		instance.regs->OSPEEDR &= ~(0x3 << pin2);
+	}
+	else if (speed == GPIO_MID) {
+		instance.regs->OSPEEDR &= ~(0x3 << pin2);
+		instance.regs->OSPEEDR |= (0x1 << pin2);
+	}
+	else if (speed == GPIO_HIGH) {
+		instance.regs->OSPEEDR &= ~(0x3 << pin2);
+		instance.regs->OSPEEDR |= (0x3 << pin2);
 	}
 	
 	return true;

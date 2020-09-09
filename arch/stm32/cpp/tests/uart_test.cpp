@@ -24,8 +24,8 @@ int main() {
 	std::cout << "Running USART test..." << std::endl;
 	
 	// Start UART devices.
-	if (USART::startUart(USART_1, GPIO_PORT_A, 2, 1, 
-								GPIO_PORT_A, 3, 1, 
+	if (USART::startUart(USART_1, GPIO_PORT_A, 9, 1, 
+								GPIO_PORT_A, 10, 1, 
 								9600, uartCallback)) { std::cout << "Start USART1." << std::endl; }
 	if (USART::startUart(USART_2, GPIO_PORT_B, 0, 1, 
 								GPIO_PORT_B, 8, 1, 

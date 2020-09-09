@@ -83,6 +83,21 @@ void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority) {
 	} */
 }
 
+uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uint32_t SubPriority) {
+	/* uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);   // only values 0..7 are used
+	uint32_t PreemptPriorityBits;
+	uint32_t SubPriorityBits;
+
+	PreemptPriorityBits = ((7UL - PriorityGroupTmp) > (uint32_t)(__NVIC_PRIO_BITS)) ? (uint32_t)(__NVIC_PRIO_BITS) : (uint32_t)(7UL - PriorityGroupTmp);
+	SubPriorityBits     = ((PriorityGroupTmp + (uint32_t)(__NVIC_PRIO_BITS)) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((PriorityGroupTmp - 7UL) + (uint32_t)(__NVIC_PRIO_BITS));
+
+	return (
+		   ((PreemptPriority & (uint32_t)((1UL << (PreemptPriorityBits)) - 1UL)) << SubPriorityBits) |
+		   ((SubPriority     & (uint32_t)((1UL << (SubPriorityBits    )) - 1UL)))
+		 ); */
+	return 0;
+}
+
 
 USART_TypeDef tUsart1;
 USART_TypeDef* USART1 = & tUsart1;

@@ -209,7 +209,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	}
 	
 	// Set TX as high speed, push-pull.
-	if (!gpio.set_output_parameters(tx_port, tx_pin, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_LOW)) {
+	if (!gpio.set_output_parameters(tx_port, tx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
@@ -220,12 +220,6 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
-	
-	/* if (!gpio.set_input(rx_port, rx_pin, GPIO_FLOATING)) { 
-		Rcc::disablePort((RccPort) tx_port);
-		Rcc::disablePort((RccPort) rx_port);
-		return false;
-	} */
 	
 	// Set up and enable the USART peripheral.
 	
@@ -257,7 +251,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	
 	// Configure interrupt.
 	//instance.regs->CR1 |= USART_CR1_RXNEIE;
-	//NVIC_SetPriority(instance.irqType, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+	NVIC_SetPriority(instance.irqType, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 1));
 	NVIC_EnableIRQ(instance.irqType);
 	
 	return true;

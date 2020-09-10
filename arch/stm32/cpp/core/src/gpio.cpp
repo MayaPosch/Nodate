@@ -162,21 +162,17 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	
 	// Set parameters.
 	uint8_t pin2 = pin * 2;
-	uint8_t pin4 = pin * 4;
 	instance.regs->MODER &= ~(0x3 << pin2);
 	instance.regs->MODER |= (0x2 << pin2);		// AF mode.
 	
-	/* instance.regs->OSPEEDR &= ~(0x3 << pin2);
-	instance.regs->OSPEEDR |= (0x3 << pin2);	// High speed.
-	
-	instance.regs->OTYPER &= ~(0x1 << pin);		// Push-pull. */
-	
 	// Set AF mode in appropriate (high/low) register.
 	if (pin < 8) {
+		uint8_t pin4 = pin * 4;
 		instance.regs->AFR[0] &= ~(0xF << pin4);
 		instance.regs->AFR[0] |= (af << pin4);
 	}
 	else {
+		uint8_t pin4 = (pin - 8) * 4;
 		instance.regs->AFR[1] &= ~(0xF << pin4);
 		instance.regs->AFR[1] |= (af << pin4);
 	}

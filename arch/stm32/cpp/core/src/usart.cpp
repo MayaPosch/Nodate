@@ -181,37 +181,18 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	if (tx_af > 7 || rx_af > 7) { return false; }
 	USART_device &instance = (*devicesStatic)[device];
 	RccPeripheral per;
-	if (!instance.active) {
-		if (!Rcc::enablePort((RccPort) tx_port)) { return false; }
-		if (!Rcc::enablePort((RccPort) rx_port)) { Rcc::disablePort((RccPort) tx_port); return false; }
-		
-		if (device == USART_1) { per = RCC_USART1; }
-		else if (device == USART_2) { per = RCC_USART2; }
-		else if (device == USART_3) { per = RCC_USART3; }
-		else if (device == USART_4) { per = RCC_USART4; }
-		else if (device == USART_5) { per = RCC_USART5; }
-		else if (device == USART_6) { per = RCC_USART6; }
-		
-		if (!Rcc::enable(per)) { 
-			Rcc::disablePort((RccPort) tx_port);
-			Rcc::disablePort((RccPort) rx_port);
-			return false;
-		}
-		
-		instance.active = true;
-	}
+	
+	if (instance.active) { return true; }
 	
 	// Set AF mode on the specified pins.
 	if (!gpio.set_af(tx_port, tx_pin, tx_af)) {
 		Rcc::disablePort((RccPort) tx_port);
-		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
 	
 	// Set TX as high speed, push-pull.
 	if (!gpio.set_output_parameters(tx_port, tx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) tx_port);
-		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
 		
@@ -220,8 +201,28 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
+		
+	if (!gpio.set_output_parameters(rx_port, rx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
+		Rcc::disablePort((RccPort) tx_port);
+		Rcc::disablePort((RccPort) rx_port);
+		return false;
+	}
 	
 	// Set up and enable the USART peripheral.
+	if (device == USART_1) { per = RCC_USART1; }
+	else if (device == USART_2) { per = RCC_USART2; }
+	else if (device == USART_3) { per = RCC_USART3; }
+	else if (device == USART_4) { per = RCC_USART4; }
+	else if (device == USART_5) { per = RCC_USART5; }
+	else if (device == USART_6) { per = RCC_USART6; }
+	
+	if (!Rcc::enable(per)) { 
+		Rcc::disablePort((RccPort) tx_port);
+		Rcc::disablePort((RccPort) rx_port);
+		return false;
+	}
+	
+	instance.active = true;
 	
 	// Set the baud rate (BR register).
 	// TODO: adjust for STM32F1.

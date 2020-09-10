@@ -8,7 +8,6 @@ volatile bool led_on = false;
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
-	//ch = 'e';
 	//USART::sendUart(USART_2, ch);
 	USART::sendUart(USART_1, ch);
 	

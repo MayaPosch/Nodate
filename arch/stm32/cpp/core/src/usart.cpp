@@ -71,7 +71,6 @@ volatile char rxb = 'a';
 void USART1_IRQHandler(void) {
 	USART_device &instance = (*devicesStatic)[0];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
-		instance.regs->TDR = 'h';
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
 	}

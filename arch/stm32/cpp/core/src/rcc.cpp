@@ -392,6 +392,18 @@ std::vector<RccPeripheralHandle>* peripheralHandles() {
 	(*peripheralHandlesStatic)[RCC_USART5].exists = false;
 #endif
 
+#ifdef RCC_APB1ENR_USART7EN
+	(*peripheralHandlesStatic)[RCC_USART7].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART7].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USART7].enable = RCC_APB1ENR_UART7EN_Pos;
+#endif
+
+#ifdef RCC_APB1ENR_USART8EN
+	(*peripheralHandlesStatic)[RCC_USART8].exists = true;
+	(*peripheralHandlesStatic)[RCC_USART8].enr = &(RCC->APB1ENR);
+	(*peripheralHandlesStatic)[RCC_USART8].enable = RCC_APB1ENR_UART8EN_Pos;
+#endif
+
 #ifdef RCC_APB1ENR_I2C1EN
 	(*peripheralHandlesStatic)[RCC_I2C1].exists = true;
 	(*peripheralHandlesStatic)[RCC_I2C1].enr = &(RCC->APB1ENR);

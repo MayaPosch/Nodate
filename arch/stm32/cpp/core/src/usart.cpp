@@ -43,6 +43,16 @@ std::vector<USART_device>* USART_list() {
 	((*devicesStatic))[USART_6].regs = USART6;
 	((*devicesStatic))[USART_6].irqType = USART6_IRQn;
 #endif
+
+#if defined RCC_APB2ENR_USART7EN
+	((*devicesStatic))[USART_7].regs = USART7;
+	((*devicesStatic))[USART_7].irqType = USART7_IRQn;
+#endif
+
+#if defined RCC_APB2ENR_USART8EN
+	((*devicesStatic))[USART_8].regs = USART8;
+	((*devicesStatic))[USART_8].irqType = USART8_IRQn;
+#endif
 	
 	return devicesStatic;
 }
@@ -62,6 +72,8 @@ extern "C" {
 	void USART4_IRQHandler(void);
 	void USART5_IRQHandler(void);
 	void USART6_IRQHandler(void);
+	void USART7_IRQHandler(void);
+	void USART8_IRQHandler(void);
 }
 
 volatile char rxb = 'a';
@@ -116,6 +128,22 @@ void USART6_IRQHandler(void) {
 	}
 }
 
+void USART7_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[6];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART8_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[7];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
 #elif defined __stm32f4
 
 void USART1_IRQHandler(void) {
@@ -160,6 +188,22 @@ void USART5_IRQHandler(void) {
 
 void USART6_IRQHandler(void) {
 	USART_device &instance = (*devicesStatic)[5];
+	if (instance.regs->SR & USART_SR_RXNE) {
+		rxb = instance.regs->DR;
+		instance.callback(rxb);
+	}
+}
+
+void USART7_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[6];
+	if (instance.regs->SR & USART_SR_RXNE) {
+		rxb = instance.regs->DR;
+		instance.callback(rxb);
+	}
+}
+
+void USART8_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[7];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -265,8 +309,10 @@ bool USART::sendUart(USART_devices device, char &ch) {
 	
 	// Copy bit to the device's transmission register.
 #if defined __stm32f0 || defined __stm32f7
+	while (!(instance.regs->ISR & USART_ISR_TXE)) {};
 	instance.regs->TDR = (uint8_t) ch;
 #elif defined __stm32f4
+	while (!(instance.regs->SR & USART_SR_TXE)) {};
 	instance.regs->DR = (uint8_t) ch;
 #endif
 	

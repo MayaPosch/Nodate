@@ -30,13 +30,13 @@ std::vector<USART_device>* USART_list() {
 #endif
 
 #if defined RCC_APB1ENR_UART4EN
-	((*devicesStatic))[USART_4].regs = USART4;
-	((*devicesStatic))[USART_4].irqType = USART4_IRQn;
+	((*devicesStatic))[USART_4].regs = UART4;
+	((*devicesStatic))[USART_4].irqType = UART4_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART5EN
-	((*devicesStatic))[USART_5].regs = USART5;
-	((*devicesStatic))[USART_5].irqType = USART5_IRQn;
+	((*devicesStatic))[USART_5].regs = UART5;
+	((*devicesStatic))[USART_5].irqType = UART5_IRQn;
 #endif
 
 #if defined RCC_APB2ENR_USART6EN
@@ -44,14 +44,14 @@ std::vector<USART_device>* USART_list() {
 	((*devicesStatic))[USART_6].irqType = USART6_IRQn;
 #endif
 
-#if defined RCC_APB2ENR_USART7EN
-	((*devicesStatic))[USART_7].regs = USART7;
-	((*devicesStatic))[USART_7].irqType = USART7_IRQn;
+#if defined RCC_APB1ENR_UART7EN
+	((*devicesStatic))[USART_7].regs = UART7;
+	((*devicesStatic))[USART_7].irqType = UART7_IRQn;
 #endif
 
-#if defined RCC_APB2ENR_USART8EN
-	((*devicesStatic))[USART_8].regs = USART8;
-	((*devicesStatic))[USART_8].irqType = USART8_IRQn;
+#if defined RCC_APB1ENR_UART8EN
+	((*devicesStatic))[USART_8].regs = UART8;
+	((*devicesStatic))[USART_8].irqType = UART8_IRQn;
 #endif
 	
 	return devicesStatic;

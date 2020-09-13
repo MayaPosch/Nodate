@@ -26,10 +26,11 @@ OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(LANGUAGE)/core/include -I $(TOP)/$(LANGUAGE)/core/include/$(MCU_FAMILY)
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
-FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections -MMD -Os -g -T $(TOP)/linker/$(MCU_LD) -lgcc
+FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections \
+			-MMD -Os -g -T $(TOP)/linker/$(MCU_LD) -lgcc $(APP_FLAGS)
 LIBS := -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,--print-memory-usage -lstdc++_nano
-CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11
-CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions
+CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11 $(APP_C_FLAGS)
+CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions $(APP_CPP_FLAGS)
 
 CPPSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/*.cpp) \
 				$(APP_CPP_FILES)

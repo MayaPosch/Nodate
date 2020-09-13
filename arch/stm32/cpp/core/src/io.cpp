@@ -20,6 +20,10 @@
 bool IO::stdout_active = false;
 USART_devices IO::usart;
 
+extern "C" {
+	int _write(int handle, char* data, int size);
+}
+
 
 int _write(int handle, char* data, int size) {
 	int count = size;

@@ -47,6 +47,26 @@ In order to **flash** the target board, ensure that **OpenOCD** is installed, th
 
 Nodate-STM32 requires `make` and the `arm-none-eabi` GCC toolchain to be installed for compilation, and `OpenOCD` for flashing boards.
 
+For Ada, use the STM32 toolchain from AdaCore.
+
+**Implemented features**
+
+At this point in time, the following functionality has been implemented on the C++ side:
+
+* RCC.
+* GPIO (digital & AF).
+* USART (basic UART with settable baud rate).
+* SysTick (millisecond-accurate delay function).
+* IO: set stdout to e.g. a UART.
+
+In progress:
+
+* U(S)ART with DMA.
+* I2S.
+* I2C.
+* SPI.
+* SDIO (with FatFS).
+
 
 ## AVR & Others ##
 

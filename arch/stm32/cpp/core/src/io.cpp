@@ -17,7 +17,7 @@
 
 
 // Static definitions.
-bool IO::stdout_active = false;
+bool stdout_active = false;
 USART_devices IO::usart;
 
 extern "C" {
@@ -26,6 +26,8 @@ extern "C" {
 
 
 int _write(int handle, char* data, int size) {
+	if (!stdout_active) { return 0; }
+	
 	int count = size;
 	while (count-- > 0) {
 		USART::sendUart(IO::usart, *data);

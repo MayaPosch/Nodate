@@ -20,7 +20,7 @@
 
 
 class IO {
-	static bool stdout_active;
+	//
 	
 public:
 	static USART_devices usart;

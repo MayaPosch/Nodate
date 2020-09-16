@@ -150,7 +150,7 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	// Validate port & pin.
 	if (pin > 15) { return false; }
-	if (af > 7) { return false; }
+	if (af > 15) { return false; }
 	
 	GPIO_instance &instance = (*instancesStatic)[port];
 	

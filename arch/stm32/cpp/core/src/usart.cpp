@@ -221,7 +221,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	// If device is already active, return false.
 	// Otherwise try to activate it.
 	if (tx_pin > 15 || rx_pin > 15) { return false;}
-	if (tx_af > 7 || rx_af > 7) { return false; }
+	if (tx_af > 15 || rx_af > 15) { return false; }
 	USART_device &instance = (*devicesStatic)[device];
 	RccPeripheral per;
 	

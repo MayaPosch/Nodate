@@ -3,7 +3,49 @@
 */
 
 
-#include "clock.h"
+#include <clock.h>
+#include <rcc.h>
+
+#include <sys/times.h>
+
+
+extern "C" {
+	int _times(struct tms* buf);
+}
+
+/**
+  * @brief  Converts from 2 digit BCD to Binary.
+  * @param  Value BCD value to be converted
+  * @retval Converted word
+  */
+uint8_t RTC_Bcd2ToByte(uint8_t Value) {
+  uint32_t tmp = 0U;
+  tmp = ((uint8_t)(Value & (uint8_t)0xF0) >> (uint8_t)0x4) * 10;
+  return (tmp + (Value & (uint8_t)0x0F));
+}
+
+
+int _times(struct tms* buf) {
+#if defined RTC_TR_SU
+	// Fill tms struct from RTC registers.
+	// struct tms {
+	//		clock_t tms_utime;  /* user time */
+	//		clock_t tms_stime;  /* system time */
+	//		clock_t tms_cutime; /* user time of children */
+	//		clock_t tms_cstime; /* system time of children */
+	//	};
+	int ticks = SystemCoreClock * (RTC_Bcd2ToByte(RTC->TR & (RTC_TR_ST | RTC_TR_SU)));
+	buf->tms_utime = ticks;
+	buf->tms_stime = ticks;
+	buf->tms_cutime = ticks;
+	buf->tms_cstime = ticks;
+	
+	return ticks; // Return clock ticks.
+#else
+	// No usable RTC peripheral exists. Return -1.
+	return -1;
+#endif 
+}
 
 
 bool Clock::enableMaxClock() {

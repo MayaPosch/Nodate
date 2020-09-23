@@ -17,8 +17,8 @@ public:
 	Clock();
 	~Clock();
 	
-	bool enableMaxClock();
-	uint32_t currentSysClock();
+	static bool enableMaxClock();
+	static uint32_t currentSysClock();
 };
 
 #endif

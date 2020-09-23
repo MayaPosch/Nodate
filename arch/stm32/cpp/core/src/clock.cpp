@@ -4,7 +4,7 @@
 
 
 #include <clock.h>
-#include <rcc.h>
+#include <rtc.h>
 
 #include <sys/times.h>
 
@@ -12,6 +12,9 @@
 extern "C" {
 	int _times(struct tms* buf);
 }
+
+bool rtc_pwr_enabled = false;
+
 
 /**
   * @brief  Converts from 2 digit BCD to Binary.
@@ -27,6 +30,11 @@ uint8_t RTC_Bcd2ToByte(uint8_t Value) {
 
 int _times(struct tms* buf) {
 #if defined RTC_TR_SU
+	if (!rtc_pwr_enabled) {
+		if (!Rtc::enableRTC()) { return -1; }
+		rtc_pwr_enabled = true;
+	}
+	
 	// Fill tms struct from RTC registers.
 	// struct tms {
 	//		clock_t tms_utime;  /* user time */

@@ -304,9 +304,10 @@ int main () {
 							/ (float) Number_Of_Runs;
 		Dhrystones_Per_Second = (float) Number_Of_Runs / (float) User_Time;
 #else
+		// Note: replaced original 'HZ' with SystemCoreClock.
 		Microseconds = (float) User_Time * Mic_secs_Per_Second 
-							/ ((float) HZ * ((float) Number_Of_Runs));
-		Dhrystones_Per_Second = ((float) HZ * (float) Number_Of_Runs)
+							/ ((float) SystemCoreClock * ((float) Number_Of_Runs));
+		Dhrystones_Per_Second = ((float) SystemCoreClock * (float) Number_Of_Runs)
 							/ (float) User_Time;
 #endif
 		printf ("Microseconds for one run through Dhrystone: ");

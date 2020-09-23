@@ -91,7 +91,7 @@ int main () {
 	// USART 2, (TX) PA2:1 [A7], (RX) PA3:1 [A2].
 	//USART::startUart(USART_2, GPIO_PORT_A, 2, 1, GPIO_PORT_A, 3, 1, 9600, uartCallback);
 	// USART 1, (TX) PA9:1 [D1], (RX) PA10:1 [D0].
-	USART::startUart(USART_1, GPIO_PORT_A, 9, 1, GPIO_PORT_A, 10, 1, 9600, uartCallback);
+	//USART::startUart(USART_1, GPIO_PORT_A, 9, 1, GPIO_PORT_A, 10, 1, 9600, uartCallback);
 	
 	// STM32F4-Discovery (STM32F407).
 	// USART2, (TX) PA2:7, (RX) PA3:7.
@@ -105,7 +105,7 @@ int main () {
 	//const GPIO_ports led_port = GPIO_PORT_B;
 	
 	// Set up stdout.
-	IO::setStdOutTarget(USART_1);
+	IO::setStdOutTarget(USART_2);
 	
 	GPIO gpio;
 	Timer timer;

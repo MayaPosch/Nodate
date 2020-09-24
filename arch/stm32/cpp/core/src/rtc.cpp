@@ -24,15 +24,15 @@ bool Rtc::enableRTC() {
 	//
 #if defined __stm32f4
 	if (rtc_enabled) { return true; }
-	if (!Rcc::enable(RCC_PWR)) { return false; }
 	
 	// Use LSI for the RTC. Ensure it's enabled.
-	if (!RCC->CSR & RCC_CSR_LSION) {
-		RCC->CSR |= RCC_CSR_LSION;
-		while (!RCC->CSR & RCC_CSR_LSIRDY) {
-			// TODO: handle time-out.
-		}
+	RCC->CSR |= RCC_CSR_LSION;
+	while ((RCC->CSR & RCC_CSR_LSIRDY) != RCC_CSR_LSIRDY) {
+		// TODO: handle time-out.
 	}
+	
+	// Enable PWR.
+	if (!Rcc::enable(RCC_PWR)) { return false; }
 	
 	// Enable PWR backup access.
 	PWR->CR |= PWR_CR_DBP;
@@ -42,25 +42,37 @@ bool Rtc::enableRTC() {
 		// TODO: handle time-out.
 	}
 	
+	// Reset backup domain.
+	//RCC->BDCR |= RCC_BDCR_BDRST;
+	
+	// Configure LSI as RTC clock source.
+	// Enable RTC clock.
+	RCC->BDCR = (RCC->BDCR & ~RCC_BDCR_RTCSEL) | RCC_BDCR_RTCEN | RCC_BDCR_RTCSEL_1;
+	
+	// Disable PWR.
+	if (!Rcc::disable(RCC_PWR)) { return false; }
+	
+	// RTC init phase.
+	
 	// Unlock RTC write protection.
 	RTC->WPR = 0xCA;
 	RTC->WPR = 0x53;
 	
-	// Reset backup domain.
-	RCC->BDCR |= RCC_BDCR_BDRST;
-	
-	// Configure RTC clock source.
-	RCC->BDCR &= ~(0xF << RCC_BDCR_RTCSEL_Pos);
-	RCC->BDCR |= (0x2 << RCC_BDCR_RTCSEL_Pos); // LSI source.
-	
-	// Enable RTC clock.
-	RCC->BDCR |= RCC_BDCR_RTCEN;
+	// Enable RTC init phase.
+	RTC->ISR |= RTC_ISR_INIT;
+	while ((RTC->ISR & RTC_ISR_INITF) != RTC_ISR_INITF) {
+		// TODO: handle time-out.
+	}
 	
 	// End backup domain reset.
-	RCC->BDCR &= ~(RCC_BDCR_BDRST);
+	//RCC->BDCR &= ~(RCC_BDCR_BDRST);
 	
 	// Clear RTC init state.
 	RTC->ISR &= ~(RTC_ISR_INIT);
+	
+	// Disable write access.
+	RTC->WPR = 0xFE;
+	RTC->WPR = 0x64; 
 	
 	// Wait for RTC APB register synchronisation.
 	/* int i = 10000;

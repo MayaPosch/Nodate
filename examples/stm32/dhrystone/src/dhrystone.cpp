@@ -160,7 +160,7 @@ int main () {
 		printf ("\n");
 	}
 	
-	Number_Of_Runs = 10000;
+	Number_Of_Runs = 100000;
 	/* printf ("Please give the number of runs through the benchmark: ");
 	{
 		int n;
@@ -292,6 +292,10 @@ int main () {
 	printf ("\n");
 
 	User_Time = End_Time - Begin_Time;
+	
+	printf("Begin_Time: %d\n", Begin_Time);
+	printf("End_Time: %d\n", End_Time);
+	printf("\n");
 
 	if (User_Time < Too_Small_Time) {
 		printf ("Measured time too small to obtain meaningful results\n");

@@ -1,0 +1,63 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_UNCHECKED_CONVERSION
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+RR NO_ELABORATION_CODE
+
+U system.memory_types%s	s-memtyp.ads		5490ad89 NE OL PR PK
+W ada%s			ada.ads			ada.ali
+W ada.unchecked_conversion%s
+W system%s		system.ads		system.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-memtyp.ads		20200819171408 bc90fe5b system.memory_types%s
+G a e
+G c Z s s [to_ia system__memory_types 46 13 none]
+G c Z s s [to_byte_ptr system__memory_types 58 13 none]
+G c Z s s [to_word_ptr system__memory_types 72 13 none]
+X 1 ada.ads
+16K9*Ada 20e8 4|32r6 46r26 58r32 72r32
+X 2 a-unccon.ads
+20v14*Unchecked_Conversion 4|32w10 46r30 58r36 72r36
+X 3 system.ads
+60K9*System 172e11 4|34r9 43r19 64r26 65r22 77r5
+90M9*Address 4|46r52
+94N4*Storage_Unit 4|75r40
+95N4*Word_Size 4|64r33 65r29
+96N4*Memory_Size 4|43r26
+X 4 s-memtyp.ads
+34K16*Memory_Types 3|60k9 4|77l12 77e24
+38M9*size_t
+43M9*IA 46r61 58r58 72r58
+46V13*To_IA[2|20]{43M9}
+51M9*Byte 52r8 55r28
+55P9*Byte_Ptr(51M9) 58r62
+58V13*To_Byte_Ptr[2|20]{55P9}
+61N4*Byte_Unit
+64M9*Word 65r8 69r28 75r28
+69P9*Word_Ptr(64M9) 72r62
+72V13*To_Word_Ptr[2|20]{69P9}
+75N4*Word_Unit
+

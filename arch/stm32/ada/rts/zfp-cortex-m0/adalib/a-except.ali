@@ -1,0 +1,64 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -O1
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -g
+A -fno-inline
+A -fno-toplevel-reorder
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_OBSOLESCENT_FEATURES
+
+U ada.exceptions%b	a-except.adb		defc8b77 NE OL PK
+W ada%s			ada.ads			ada.ali
+Z system%s		system.ads		system.ali
+
+U ada.exceptions%s	a-except.ads		cbbce633 BN NE OL PR PK
+W ada%s			ada.ads			ada.ali
+W system%s		system.ads		system.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-except.ads		20200819171408 5b5f0f2f ada.exceptions%s
+D a-except.adb		20200819171408 85a38458 ada.exceptions%b
+D system.ads		20200819171408 e69b74bd system%s
+G a e
+G c Z s b [raise_exception ada__exceptions 51 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 2|42r9 71r5 3|32r14 85r5
+X 2 a-except.ads
+42K13*Exceptions 1|16k9 2|66E9 71l9 71e19 3|32b18 85l9 85t19
+46P9*Exception_Id 47r41 49r23 51r35 66c9 67r23 3|40r35
+49p4*Null_Id{46P9} 67c4
+51U14*Raise_Exception 51>31 51>49 52r22 69r26 3|40b14 83l8 83t23
+51p31 E{46P9} 3|40b31 41r28
+51a49 Message{string} 3|40b49 52r10 64r25 64r42 65r39 69r37
+X 3 a-except.adb
+34a4 Empty_C_String{string} 54r31
+43U17*Last_Chance_Handler 43>38 43>60 44b<c,__gnat_last_chance_handler>25
+. 45r25 54s10 69s16 78s19
+43m38 Msg{4|90M9}
+43i60 Line{integer}
+64a13 S{string} 67r16 67r19 75r49
+75a19 C_Message{string} 77m19 77r30 78m40 78r40
+X 4 system.ads
+60K9*System 2|40w6 66r36 3|43r44 4|172e11
+90M9*Address 2|66r43 3|43r51
+

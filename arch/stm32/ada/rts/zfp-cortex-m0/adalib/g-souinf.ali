@@ -1,0 +1,48 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U gnat.source_info%s	g-souinf.ads		9c857b76 NE OL PR PK
+W gnat%s		gnat.ads		gnat.ali
+
+D gnat.ads		20200819171408 b5988c27 gnat%s
+D g-souinf.ads		20200819171408 291df751 gnat.source_info%s
+D system.ads		20200819171408 e69b74bd system%s
+G a e
+G c Z s s [file gnat__source_info 49 13 none]
+G c Z s s [line gnat__source_info 54 13 none]
+G c Z s s [source_location gnat__source_info 59 13 none]
+G c Z s s [enclosing_entity gnat__source_info 68 13 none]
+G c Z s s [compilation_iso_date gnat__source_info 82 13 none]
+G c Z s s [compilation_date gnat__source_info 86 13 none]
+G c Z s s [compilation_time gnat__source_info 91 13 none]
+X 1 gnat.ads
+34K9*GNAT 57e9 2|39r9 96r5
+X 2 g-souinf.ads
+39K14*Source_Info 1|34k9 2|96l10 96e21
+49V13*File{string}
+54V13*Line{positive}
+59V13*Source_Location{string}
+68V13*Enclosing_Entity{string}
+82V13*Compilation_ISO_Date{string}
+86V13*Compilation_Date{string}
+91V13*Compilation_Time{string}
+

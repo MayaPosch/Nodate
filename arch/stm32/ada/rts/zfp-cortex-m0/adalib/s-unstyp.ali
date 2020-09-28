@@ -1,0 +1,160 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_LONG_LONG_INTEGERS
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+RR NO_ELABORATION_CODE
+
+U system.unsigned_types%s  s-unstyp.ads		b85406af NE OL PU PK
+W system%s		system.ads		system.ali
+
+D system.ads		20200819171408 e69b74bd system%s
+D s-unstyp.ads		20200819171408 5ecf7212 system.unsigned_types%s
+G a e
+G c Z s s [shift_left system__unsigned_types 118 13 none]
+G c Z s s [shift_right system__unsigned_types 122 13 none]
+G c Z s s [shift_right_arithmetic system__unsigned_types 126 13 none]
+G c Z s s [rotate_left system__unsigned_types 130 13 none]
+G c Z s s [rotate_right system__unsigned_types 134 13 none]
+G c Z s s [shift_left system__unsigned_types 138 13 none]
+G c Z s s [shift_right system__unsigned_types 142 13 none]
+G c Z s s [shift_right_arithmetic system__unsigned_types 146 13 none]
+G c Z s s [rotate_left system__unsigned_types 150 13 none]
+G c Z s s [rotate_right system__unsigned_types 154 13 none]
+G c Z s s [shift_left system__unsigned_types 158 13 none]
+G c Z s s [shift_right system__unsigned_types 162 13 none]
+G c Z s s [shift_right_arithmetic system__unsigned_types 166 13 none]
+G c Z s s [rotate_left system__unsigned_types 170 13 none]
+G c Z s s [rotate_right system__unsigned_types 174 13 none]
+G c Z s s [shift_left system__unsigned_types 178 13 none]
+G c Z s s [shift_right system__unsigned_types 182 13 none]
+G c Z s s [shift_right_arithmetic system__unsigned_types 186 13 none]
+G c Z s s [rotate_left system__unsigned_types 190 13 none]
+G c Z s s [rotate_right system__unsigned_types 194 13 none]
+G c Z s s [shift_left system__unsigned_types 198 13 none]
+G c Z s s [shift_right system__unsigned_types 202 13 none]
+G c Z s s [shift_right_arithmetic system__unsigned_types 206 13 none]
+G c Z s s [rotate_left system__unsigned_types 210 13 none]
+G c Z s s [rotate_right system__unsigned_types 214 13 none]
+X 1 system.ads
+60K9*System 172e11 2|40r9 233r5
+X 2 s-unstyp.ads
+40K16*Unsigned_Types 1|60k9 2|233l12 233e26
+44M9*Short_Short_Unsigned 119r16 120r32 123r16 124r32 127r16 128r32 131r16
+. 132r32 135r16 136r32
+45M9*Short_Unsigned 139r16 140r32 143r16 144r32 147r16 148r32 151r16 152r32
+. 155r16 156r32
+46M9*Unsigned 159r16 160r32 163r16 164r32 167r16 168r32 171r16 172r32 175r16
+. 176r32
+47M9*Long_Unsigned 179r16 180r32 183r16 184r32 187r16 188r32 191r16 192r32
+. 195r16 196r32
+48M9*Long_Long_Unsigned 199r16 200r32 203r16 204r32 207r16 208r32 211r16
+. 212r32 215r16 216r32
+50M9*Float_Unsigned
+53M9*Packed_Byte 54r8 55r31 60r62 62r41
+60A9*Packed_Bytes1(53M9)<integer> 61r8 62r8 63r36 70r30 81r30 92r34 231r38
+70A9*Packed_Bytes2<60A9>(53M9)<integer> 71r8 72r36 98r34
+81A9*Packed_Bytes4<60A9>(53M9)<integer> 82r8 83r36 104r34 115r23 230r38
+92A9*Rev_Packed_Bytes1<60A9>(53M9)<integer> 93r36
+98A9*Rev_Packed_Bytes2<70A9>(53M9)<integer> 99r36
+104A9*Rev_Packed_Bytes4<81A9>(53M9)<integer> 105r36
+110M9*Bits_1
+111M9*Bits_2
+112M9*Bits_4
+115A12*Bytes_F{81A9}(53M9)<integer>
+118V13*Shift_Left{44M9} 119>7 120>7 218b30
+119m7 Value{44M9}
+120i7 Amount{natural}
+122V13*Shift_Right{44M9} 123>7 124>7 219b30
+123m7 Value{44M9}
+124i7 Amount{natural}
+126V13*Shift_Right_Arithmetic{44M9} 127>7 128>7 220b30
+127m7 Value{44M9}
+128i7 Amount{natural}
+130V13*Rotate_Left{44M9} 131>7 132>7 221b30
+131m7 Value{44M9}
+132i7 Amount{natural}
+134V13*Rotate_Right{44M9} 135>7 136>7 222b30
+135m7 Value{44M9}
+136i7 Amount{natural}
+138V13*Shift_Left{45M9} 139>7 140>7 218b30
+139m7 Value{45M9}
+140i7 Amount{natural}
+142V13*Shift_Right{45M9} 143>7 144>7 219b30
+143m7 Value{45M9}
+144i7 Amount{natural}
+146V13*Shift_Right_Arithmetic{45M9} 147>7 148>7 220b30
+147m7 Value{45M9}
+148i7 Amount{natural}
+150V13*Rotate_Left{45M9} 151>7 152>7 221b30
+151m7 Value{45M9}
+152i7 Amount{natural}
+154V13*Rotate_Right{45M9} 155>7 156>7 222b30
+155m7 Value{45M9}
+156i7 Amount{natural}
+158V13*Shift_Left{46M9} 159>7 160>7 218b30
+159m7 Value{46M9}
+160i7 Amount{natural}
+162V13*Shift_Right{46M9} 163>7 164>7 219b30
+163m7 Value{46M9}
+164i7 Amount{natural}
+166V13*Shift_Right_Arithmetic{46M9} 167>7 168>7 220b30
+167m7 Value{46M9}
+168i7 Amount{natural}
+170V13*Rotate_Left{46M9} 171>7 172>7 221b30
+171m7 Value{46M9}
+172i7 Amount{natural}
+174V13*Rotate_Right{46M9} 175>7 176>7 222b30
+175m7 Value{46M9}
+176i7 Amount{natural}
+178V13*Shift_Left{47M9} 179>7 180>7 218b30
+179m7 Value{47M9}
+180i7 Amount{natural}
+182V13*Shift_Right{47M9} 183>7 184>7 219b30
+183m7 Value{47M9}
+184i7 Amount{natural}
+186V13*Shift_Right_Arithmetic{47M9} 187>7 188>7 220b30
+187m7 Value{47M9}
+188i7 Amount{natural}
+190V13*Rotate_Left{47M9} 191>7 192>7 221b30
+191m7 Value{47M9}
+192i7 Amount{natural}
+194V13*Rotate_Right{47M9} 195>7 196>7 222b30
+195m7 Value{47M9}
+196i7 Amount{natural}
+198V13*Shift_Left{48M9} 199>7 200>7 218b30
+199m7 Value{48M9}
+200i7 Amount{natural}
+202V13*Shift_Right{48M9} 203>7 204>7 219b30
+203m7 Value{48M9}
+204i7 Amount{natural}
+206V13*Shift_Right_Arithmetic{48M9} 207>7 208>7 220b30
+207m7 Value{48M9}
+208i7 Amount{natural}
+210V13*Rotate_Left{48M9} 211>7 212>7 221b30
+211m7 Value{48M9}
+212i7 Amount{natural}
+214V13*Rotate_Right{48M9} 215>7 216>7 222b30
+215m7 Value{48M9}
+216i7 Amount{natural}
+230A12*Packed_Bytes{81A9}(53M9)<integer>
+231A12*Packed_Bytes_Unaligned{60A9}<integer>
+

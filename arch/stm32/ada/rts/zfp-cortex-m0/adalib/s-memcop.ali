@@ -1,0 +1,65 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.memory_copy%b	s-memcop.adb		fb3986c7 NE OL PK
+W system%s		system.ads		system.ali
+W system.memory_types%s	s-memtyp.ads		s-memtyp.ali
+
+U system.memory_copy%s	s-memcop.ads		b06a764b NE OL PK
+W system%s		system.ads		system.ali
+W system.memory_types%s	s-memtyp.ads		s-memtyp.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-memcop.ads		20200819171408 ea61fcad system.memory_copy%s
+D s-memcop.adb		20200819171408 adc88431 system.memory_copy%b
+D s-memtyp.ads		20200819171408 bc90fe5b system.memory_types%s
+G a e
+G c Z s b [memcpy system__memory_copy 40 13 none]
+X 3 system.ads
+60K9*System 172e11 4|35r6 37r9 47r5 5|32r6 32r31 34r14 71r5
+90M9*Address 4|41r14 41r29 41r70 5|41r14 41r29 41r57
+X 4 s-memcop.ads
+37K16*Memory_Copy 3|60k9 4|47l12 47e23 5|34b21 71l12 71t23
+40V13*memcpy{3|90M9} 41>7 41>23 41>38 42i<c,memcpy>22 5|40b13 69l8 69t14
+41m7 Dest{3|90M9} 5|41b7 43r28 68r14
+41m23 Src{3|90M9} 5|41b23 44r28
+41m38 N{6|38M9} 5|41b38 45r21
+X 5 s-memcop.adb
+43m7 D{6|43M9} 50r12 52r26 53m13 53r18 62r23 63m10 63r15
+44m7 S{6|43M9} 50r17 52r49 54m13 54r18 62r46 64m10 64r15
+45m7 C{6|38M9} 51r16 55m13 55r18 61r13 65m10 65r15
+X 6 s-memtyp.ads
+34K16*Memory_Types 4|35w13 41r42 5|32w13 32r38 6|77e24
+38M9*size_t 4|41r55 5|41r42 45r11
+43M9*IA 5|43r11 44r11
+46V13*To_IA[2|20]{43M9} 5|43s21 44s21
+51M9*Byte
+55P9*Byte_Ptr(51M9)
+58V13*To_Byte_Ptr[2|20]{55P9} 5|62s10 62s33
+61N4*Byte_Unit 5|63r19 64r19 65r19
+64M9*Word 5|50r25
+69P9*Word_Ptr(64M9)
+72V13*To_Word_Ptr[2|20]{69P9} 5|52s13 52s36
+75N4*Word_Unit 5|51r21 53r22 54r22 55r22
+

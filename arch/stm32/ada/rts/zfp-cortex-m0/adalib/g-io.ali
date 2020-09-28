@@ -1,0 +1,75 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_OBSOLESCENT_FEATURES
+
+U gnat.io%b		g-io.adb		4532ac0b NE OL PK
+W gnat%s		gnat.ads		gnat.ali
+W system%s		system.ads		system.ali
+W system.text_io%s	s-textio.adb		s-textio.ali
+
+U gnat.io%s		g-io.ads		8654d1b7 NE OL PR PK
+W gnat%s		gnat.ads		gnat.ali
+
+D gnat.ads		20200819171408 b5988c27 gnat%s
+D g-io.ads		20200819171408 33cc5d90 gnat.io%s
+D g-io.adb		20200819171408 4d6a3348 gnat.io%b
+D g-io-put.adb		20200819171408 3b94c2d3 gnat.io.put
+D system.ads		20200819171408 e69b74bd system%s
+D s-textio.ads		20200819171408 22178fc9 system.text_io%s
+G a e
+G c Z s b [put gnat__io 46 14 none]
+G c Z s b [put gnat__io 50 14 none]
+G c Z s b [put gnat__io 53 14 none]
+G c Z s b [put_line gnat__io 56 14 none]
+G c Z s b [new_line gnat__io 60 14 none]
+X 1 gnat.ads
+34K9*GNAT 57e9 2|43r9 63r5 3|32r14 100r5 4|36r11
+X 2 g-io.ads
+43K14*IO 1|34k9 2|63l10 63e12 3|32b19 100l10 100t12 4|36r16
+46U14*Put 46>19 3|51b14 77l8 77t11
+46i19 X{integer} 3|51b19 59r18 59r29 59r37 71r10
+50U14*Put 50>19 3|34b14 43s10 86s10 4|37b11 57l5 57t8
+50e19 C{character} 3|34b19 4|37b16 44r7 56r24
+53U14*Put 53>19 3|76s7 83b14 88l8 88t11 96s7
+53a19 S{string} 3|83b19 85r16 86r15
+56U14*Put_Line 56>24 3|94b14 98l8 98t16
+56a24 S{string} 3|94b24 96r12
+60U14*New_Line 60>24 3|40b14 45l8 45t16 97s7
+60i24 Spacing{positive} 3|40b24 42r21
+X 3 g-io.adb
+42i11 J{integer}
+52i7 Int{integer} 59m7 64r17 65m10 65r18 68r20
+53a7 S{string} 54r26 67m10 73m10 76r12 76r24
+54i7 First{natural} 66m10 66r19 67r13 72m10 72r19 73r13 76r15
+55i7 Val{integer} 64m10 65r24 67r60
+85i11 J{integer} 86r18
+X 5 system.ads
+60K9*System 4|34r6 34r26 49r7 56r4 5|172e11
+X 6 s-textio.ads
+35K16*Text_IO 4|34w13 34r33 49r14 56r11 6|82e19
+43U14*Initialize 4|40s7
+47b4*Initialized{boolean} 4|39r11
+55V13*Is_Tx_Ready{boolean} 4|45s17 52s14
+62U14*Put 4|49s22 56s19
+66V13*Use_Cr_Lf_For_New_Line{boolean} 4|44s29
+

@@ -1,0 +1,33 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U unchecked_deallocation%s  unchdeal.ads	214516a4 NE OL GE
+
+D system.ads		20200819171408 e69b74bd system%s
+D unchdeal.ads		20200819171408 214516a4 unchecked_deallocation%s
+G a e
+X 2 unchdeal.ads
+17+9 Object 18r24
+18P9 Name(17+9) 20r46
+20u11*Unchecked_Deallocation 20=35 21b27
+20*35 X{18P9}
+

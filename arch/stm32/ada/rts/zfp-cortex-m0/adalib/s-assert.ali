@@ -1,0 +1,48 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -g
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_EXCEPTIONS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.assertions%b	s-assert.adb		748adc27 NE OL PK
+Z ada.exceptions%s	a-except.adb		a-except.ali
+W system%s		system.ads		system.ali
+
+U system.assertions%s	s-assert.ads		2b165829 NE OL PK
+W system%s		system.ads		system.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-except.ads		20200819171408 5b5f0f2f ada.exceptions%s
+D a-except.adb		20200819171408 85a38458 ada.exceptions%b
+D system.ads		20200819171408 e69b74bd system%s
+D s-assert.ads		20200819171408 cd8d2c94 system.assertions%s
+D s-assert.adb		20200819171408 b907f0b3 system.assertions%b
+G a e
+G c Z s b [raise_assert_failure system__assertions 46 14 none]
+X 4 system.ads
+60K9*System 172e11 5|41r9 50r5 6|34r14 45r5
+X 5 s-assert.ads
+41K16*Assertions 4|60k9 5|50l12 50e22 6|34b21 45l12 45t22
+43X4*Assert_Failure 6|42r13
+46U14*Raise_Assert_Failure 46>36 47r22 6|40b14 43l8 43t28
+46a36 Msg{string} 6|40b36 42r33
+

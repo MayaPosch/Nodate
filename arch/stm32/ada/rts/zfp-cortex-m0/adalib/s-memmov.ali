@@ -1,0 +1,68 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.memory_move%b	s-memmov.adb		c90410e9 NE OL PK
+W system%s		system.ads		system.ali
+W system.memory_types%s	s-memtyp.ads		s-memtyp.ali
+
+U system.memory_move%s	s-memmov.ads		3c4a2b57 NE OL PR PK
+W system%s		system.ads		system.ali
+W system.memory_types%s	s-memtyp.ads		s-memtyp.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-memmov.ads		20200819171408 6641a1b1 system.memory_move%s
+D s-memmov.adb		20200819171408 13d54f03 system.memory_move%b
+D s-memtyp.ads		20200819171408 bc90fe5b system.memory_types%s
+G a e
+G c Z s b [memmove system__memory_move 41 13 none]
+X 3 system.ads
+60K9*System 172e11 4|35r6 37r9 51r5 5|32r6 32r31 34r14 107r5
+90M9*Address 4|42r14 42r29 42r70 5|41r14 41r29 41r57
+X 4 s-memmov.ads
+37K16*Memory_Move 3|60k9 4|51l12 51e23 5|34b21 107l12 107t23
+41V13*memmove{3|90M9} 42>7 42>23 42>38 43i<c,memmove>22 5|40b13 105l8 105t15
+42m7 Dest{3|90M9} 5|41b7 42r24 104r14
+42m23 Src{3|90M9} 5|41b23 43r24
+42m38 N{6|38M9} 5|41b38 44r21
+X 5 s-memmov.adb
+42m7 D{6|43M9} 54r10 54r25 58m10 58r15 63r15 65m16 65r21 67r29 76m13 76r18
+. 78r26 85r15 87r29 88m16 88r21 97r26 98m13 98r18
+43m7 S{6|43M9} 54r14 54r29 59m10 59r15 63r20 66m16 66r21 67r52 77m13 77r18
+. 78r49 85r20 87r52 89m16 89r21 97r49 99m13 99r18
+44m7 C{6|43M9} 54r33 58r19 59r19 64r19 69m16 69r21 75r16 80m13 80r18 86r19
+. 90m16 90r21 96r16 100m13 100r18
+X 6 s-memtyp.ads
+34K16*Memory_Types 4|35w13 42r42 5|32w13 32r38 6|77e24
+38M9*size_t 4|42r55 5|41r42
+43M9*IA 5|42r11 43r11 44r11 44r17
+46V13*To_IA[2|20]{43M9} 5|42s17 43s17
+51M9*Byte
+55P9*Byte_Ptr(51M9)
+58V13*To_Byte_Ptr[2|20]{55P9} 5|78s13 78s36 97s13 97s36
+61N4*Byte_Unit 5|76r22 77r22 80r22 98r22 99r22 100r22
+64M9*Word 5|63r28 85r28
+69P9*Word_Ptr(64M9)
+72V13*To_Word_Ptr[2|20]{69P9} 5|67s16 67s39 87s16 87s39
+75N4*Word_Unit 5|64r24 65r25 66r25 69r25 86r24 88r25 89r25 90r25
+

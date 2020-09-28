@@ -1,0 +1,115 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_EXCEPTIONS
+RV NO_LONG_LONG_INTEGERS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_UNCHECKED_CONVERSION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_IMPLICIT_LOOPS
+
+U system.secondary_stack%b  s-secsta.adb	3a251268 NE OL PK
+W ada%s			ada.ads			ada.ali
+W ada.unchecked_conversion%s
+Z system%s		system.ads		system.ali
+
+U system.secondary_stack%s  s-secsta.ads	639c7da8 NE OL PR PK
+W system%s		system.ads		system.ali
+W system.parameters%s	s-parame.ads		s-parame.ali
+W system.storage_elements%s  s-stoele.adb	s-stoele.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-parame.ads		20200819171408 fe66c50d system.parameters%s
+D s-secsta.ads		20200819171408 56a2861c system.secondary_stack%s
+D s-secsta.adb		20200819171408 621cb31b system.secondary_stack%b
+D s-stoele.ads		20200819171408 2dc34a04 system.storage_elements%s
+G a e
+G c Z s b [ss_init system__secondary_stack 49 14 none]
+G c Z s b [ss_allocate system__secondary_stack 58 14 none]
+G c Z s b [ss_mark system__secondary_stack 67 13 none]
+G c Z s b [ss_release system__secondary_stack 70 14 none]
+G c Z s b [ss_get_max system__secondary_stack 73 13 none]
+G c Z s s [memoryIP system__secondary_stack 99 9 none]
+G c Z s s [ss_stackIP system__secondary_stack 106 9 none]
+G c Z b b [get_sec_stack system__secondary_stack 40 13 none]
+X 1 ada.ads
+16K9*Ada 20e8 6|34r6 205r18 209r18
+X 2 a-unccon.ads
+20v14*Unchecked_Conversion 6|34w10 205r22 209r22
+X 3 system.ads
+60K9*System 172e11 5|34r6 35r6 37r9 40r23 41r24 59r26 146r28 154r5 6|36r14
+. 38r13 101r16 214r36 260r5
+90M9*Address 5|59r33 146r35 6|98r26 205r44 209r44 214r43
+X 4 s-parame.ads
+49K16*Parameters 72e22 5|34w13 40r30 6|38r20 166r11
+56I9*Size_Type<integer> 5|43r29 51r18 94r25 106r29 140r25 6|38r31 164r18
+65i4*Unspecified_Size{56I9} 5|51r34 6|164r34 179r20
+X 5 s-secsta.ads
+37K16*Secondary_Stack 3|60k9 5|79E4 154l12 154e27 6|36b21 260l12 260t27
+40K12*SP=40:30 43r26 51r15 51r31 94r22 106r26 140r22 6|164r15 164r31
+41K12*SSE=41:31 60r22 99r46 6|99r22 113r10
+43R9*SS_Stack 43d19 46r36 106c9 119e14 6|201r26
+43i19 Size{4|56I9} 106r19 117r37 6|130r19
+46P9*SS_Stack_Ptr(43R9) 50r22 6|40r34 106r24 163r22 209r53
+49U14*SS_Init 50=7 51>7 6|162b14 240l8 240t15
+50p7 Stack{46P9} 6|163b7 176r10 222m16 238r7 239r7
+51i7 Size{4|56I9} 6|164b7 179r13
+58U14*SS_Allocate 59<7 60>7 6|97b14 143l8 143t19
+59m7 Addr{3|90M9} 6|98b7 141m7
+60i7 Storage_Size{7|62I12} 6|99b7 114r9 119r32
+64I9*Mark_Id<4|56I9> 67r28 70r30 121c9 6|246r28 248r14 255r30
+67V13*SS_Mark{64I9} 6|246b13 249l8 249t15
+70U14*SS_Release 70>26 6|255b14 258l8 258t18
+70i26 M{64I9} 6|255b26 257r36
+73V13*SS_Get_Max{long_long_integer} 6|149b13 156l8 156t18
+79i4 SS_Pool{integer}
+94I12 SS_Ptr{4|56I9} 99r26 107r13 111r13 121r24 6|103r30 103r40 104r21 113r29
+. 119r24 257r28
+99A9 Memory(7|64M9)<4|56I9> 100r8 117r24
+107i7*Top{94I12} 6|124r28 130r32 136r29 141r43 142m13 142r26 238m13 248r37
+. 257m21
+111i7*Max{94I12} 6|124r16 136m16 155r47 239m13
+117a7*Internal_Chunk{99A9} 6|141m21
+136i4 Binder_SS_Count{natural} 137m24 137r24 6|180r21 181r46 200r51 230r16
+140i4 Default_SS_Size{4|56I9} 141m24 141r24 6|201r36
+146m4 Default_Sized_SS_Pool{3|90M9} 147m24 147r24 6|221r21
+151i4 Num_Of_Assigned_Stacks{natural} 6|181r21 217m16 217r42 221r45
+X 6 s-secsta.adb
+40V13 Get_Sec_Stack{5|46P9} 41b<c,__gnat_get_secondary_stack>22 106s40 155s33
+. 248s23 257s7
+103i7 Max_Align{5|94I12} 119r48 119r65 120r24
+104i7 Mem_Request{5|94I12} 119m7 124r34 130r38 136r35 142r32
+106p7 Stack{5|46P9} 124r10 124r22 130r13 130r26 136r10 136r23 141r15 141r37
+. 142r7 142r20
+200A21 Stk_Pool_Array(5|43R9)<integer> 202r47
+202P21 Stk_Pool_Access(200A21) 205r53
+204V25 To_Stack_Pool[2|20]{202P21} 220s18
+208V25 To_Global_Ptr[2|20]{5|46P9} 222s25
+214m16 Local_Stk_Address{3|90M9} 219m16 222r40
+X 7 s-stoele.ads
+42K16*Storage_Elements 5|35w13 41r31 6|101r23 7|117e28
+54I9*Storage_Offset<integer>
+62I12*Storage_Count{54I9} 5|60r26 6|99r26 101r40 113r14
+64M9*Storage_Element 5|99r50
+

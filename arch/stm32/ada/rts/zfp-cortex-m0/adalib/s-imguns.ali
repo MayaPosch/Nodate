@@ -1,0 +1,56 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_RECURSION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.img_uns%b	s-imguns.adb		8631cc2e NE OL PK
+W system%s		system.ads		system.ali
+W system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
+
+U system.img_uns%s	s-imguns.ads		27a03a58 BN NE OL PU PK
+W system%s		system.ads		system.ali
+W system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
+
+D system.ads		20200819171408 e69b74bd system%s
+D s-imguns.ads		20200819171408 9ff43cf7 system.img_uns%s
+D s-imguns.adb		20200819171408 470a82cb system.img_uns%b
+D s-unstyp.ads		20200819171408 5ecf7212 system.unsigned_types%s
+G a e
+G c Z s b [image_unsigned system__img_uns 41 14 none]
+G c Z s b [set_image_unsigned system__img_uns 50 14 none]
+X 1 system.ads
+60K9*System 172e11 2|36r6 38r9 42r11 51r11 60r5 3|32r6 32r33 34r14 41r11
+. 73r5
+X 2 s-imguns.ads
+38K16*Img_Uns 1|60k9 2|60l12 60e19 3|34b21 73l12 73t19
+41U14*Image_Unsigned 42>7 43=7 44<7 45r19 3|40b14 50l8 50t22
+42m7 V{4|46M9} 3|41b7 49r27
+43a7 S{string} 3|42b7 45r22 47m7 49m30
+44i7 P{natural} 3|43b7 48m7 49m33
+50U14*Set_Image_Unsigned 51>7 52=7 53=7 3|49s7 56b14 63s10 71l8 71t26
+51m7 V{4|46M9} 3|57b7 62r10 63r30 65r40 69r39
+52a7 S{string} 3|58b7 63m38 65m10 69m10
+53i7 P{natural} 3|59b7 63m41 64m10 64r15 65r13 68m10 68r15 69r13
+X 4 s-unstyp.ads
+40K16*Unsigned_Types 2|36w13 42r18 51r18 3|32w13 32r40 41r18 4|233e26
+46M9*Unsigned 2|42r33 51r33 3|41r33 57r11
+

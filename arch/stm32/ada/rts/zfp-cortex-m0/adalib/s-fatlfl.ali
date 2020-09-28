@@ -1,0 +1,74 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_EXCEPTIONS
+RV NO_FLOATING_POINT
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.fat_lflt%s	s-fatlfl.ads		98dc61a4 NE OL PU PK
+W ada%s			ada.ads			ada.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+Z ada.unchecked_conversion%s
+W system%s		system.ads		system.ali
+W system.fat_gen%s
+Z system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-except.ads		20200819171408 5b5f0f2f ada.exceptions%s
+D a-except.adb		20200819171408 85a38458 ada.exceptions%b
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-fatgen.ads		20200819171408 49cbaf86 system.fat_gen%s
+D s-fatgen.adb		20200819171408 4520ef02 system.fat_gen%b
+D s-fatlfl.ads		20200819171408 378cba9f system.fat_lflt%s
+D s-unstyp.ads		20200819171408 5ecf7212 system.unsigned_types%s
+G a e
+G c Z s s [adjacent system__fat_lflt__attr_long_float 54 13 45_4]
+G c Z s s [ceiling system__fat_lflt__attr_long_float 56 13 45_4]
+G c Z s s [compose system__fat_lflt__attr_long_float 58 13 45_4]
+G c Z s s [copy_sign system__fat_lflt__attr_long_float 60 13 45_4]
+G c Z s s [exponent system__fat_lflt__attr_long_float 62 13 45_4]
+G c Z s s [floor system__fat_lflt__attr_long_float 64 13 45_4]
+G c Z s s [fraction system__fat_lflt__attr_long_float 66 13 45_4]
+G c Z s s [leading_part system__fat_lflt__attr_long_float 68 13 45_4]
+G c Z s s [machine system__fat_lflt__attr_long_float 70 13 45_4]
+G c Z s s [machine_rounding system__fat_lflt__attr_long_float 72 13 45_4]
+G c Z s s [model system__fat_lflt__attr_long_float 74 13 45_4]
+G c Z s s [pred system__fat_lflt__attr_long_float 76 13 45_4]
+G c Z s s [remainder system__fat_lflt__attr_long_float 78 13 45_4]
+G c Z s s [rounding system__fat_lflt__attr_long_float 80 13 45_4]
+G c Z s s [scaling system__fat_lflt__attr_long_float 82 13 45_4]
+G c Z s s [succ system__fat_lflt__attr_long_float 84 13 45_4]
+G c Z s s [truncation system__fat_lflt__attr_long_float 86 13 45_4]
+G c Z s s [unbiased_rounding system__fat_lflt__attr_long_float 88 13 45_4]
+G c Z s s [valid system__fat_lflt__attr_long_float 90 13 45_4]
+G c Z s s [decompose system__fat_lflt__attr_long_float 81 14 45_4]
+G c Z s s [gradual_scaling system__fat_lflt__attr_long_float 87 13 45_4]
+X 5 system.ads
+60K9*System 172e11 8|35r6 37r9 45r35 47r5
+X 6 s-fatgen.ads
+41k16*Fat_Gen 118e19 8|35w13 45r42
+X 8 s-fatlfl.ads
+37K16*Fat_LFlt 5|60k9 8|47l12 47e20
+45K12*Attr_Long_Float[6|41]
+

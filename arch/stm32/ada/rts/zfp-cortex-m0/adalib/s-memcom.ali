@@ -1,0 +1,67 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.memory_compare%b  s-memcom.adb		4ce19654 NE OL PK
+W system%s		system.ads		system.ali
+W system.memory_types%s	s-memtyp.ads		s-memtyp.ali
+
+U system.memory_compare%s  s-memcom.ads		228e5404 NE OL PR PK
+W system%s		system.ads		system.ali
+W system.memory_types%s	s-memtyp.ads		s-memtyp.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-memcom.ads		20200819171408 7885dee2 system.memory_compare%s
+D s-memcom.adb		20200819171408 88f4b6ed system.memory_compare%b
+D s-memtyp.ads		20200819171408 bc90fe5b system.memory_types%s
+G a e
+G c Z s b [memcmp system__memory_compare 38 13 none]
+X 3 system.ads
+60K9*System 172e11 4|32r6 34r9 47r5 5|32r6 32r31 34r14 78r5
+90M9*Address 4|39r12 40r12 5|40r26 40r40
+X 4 s-memcom.ads
+34K16*Memory_Compare 3|60k9 4|47l12 47e26 5|34b21 78l12 78t26
+38V13*memcmp{integer} 39>7 40>7 41>7 42i<c,memcmp>22 5|40b13 76l8 76t14
+39m7 S1{3|90M9} 5|40b21 41r28
+40m7 S2{3|90M9} 5|40b35 42r28
+41m7 N{6|38M9} 5|40b49 43r25
+X 5 s-memcom.adb
+41m7 S1_A{6|43M9} 50r12 52r36 53m13 53r21 62r29 70m10 70r18
+42m7 S2_A{6|43M9} 50r20 52r62 54m13 54r21 63r29 71m10 71r18
+43m7 C{6|38M9} 51r16 55m13 55r18 61r13 72m10 72r15
+44m7 V1{6|51M9} 62m10 64r13 66r16
+44m11 V2{6|51M9} 63m10 64r18 66r21
+X 6 s-memtyp.ads
+34K16*Memory_Types 4|32w13 41r12 5|32w13 32r38 6|77e24
+38M9*size_t 4|41r25 5|40r53 43r15
+43M9*IA 5|41r15 42r15
+46V13*To_IA[2|20]{43M9} 5|41s21 42s21
+51M9*Byte 5|44r16
+55P9*Byte_Ptr(51M9)
+58V13*To_Byte_Ptr[2|20]{55P9} 5|62s16 63s16
+61N4*Byte_Unit 5|70r25 71r25 72r19
+64M9*Word 5|50r31
+69P9*Word_Ptr(64M9)
+72V13*To_Word_Ptr[2|20]{69P9} 5|52s23 52s49
+75N4*Word_Unit 5|51r21 53r28 54r28 55r22
+

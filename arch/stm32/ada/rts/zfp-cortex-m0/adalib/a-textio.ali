@@ -1,0 +1,65 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_OBSOLESCENT_FEATURES
+
+U ada.text_io%b		a-textio.adb		88d3803c NE OL PK
+W ada%s			ada.ads			ada.ali
+W system%s		system.ads		system.ali
+W system.semihosting%s	s-semiho.adb		s-semiho.ali
+
+U ada.text_io%s		a-textio.ads		89b0d893 NE OL PK
+W ada%s			ada.ads			ada.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-textio.ads		20200819171408 ffc84532 ada.text_io%s
+D a-textio.adb		20200819171408 c9f9fcd2 ada.text_io%b
+D system.ads		20200819171408 e69b74bd system%s
+D s-semiho.ads		20200819171408 bee239dc system.semihosting%s
+G a e
+G c Z s b [get ada__text_io 37 14 none]
+G c Z s b [put ada__text_io 40 14 none]
+G c Z s b [put ada__text_io 43 14 none]
+G c Z s b [put_line ada__text_io 46 14 none]
+G c Z s b [new_line ada__text_io 49 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 2|36r9 52r5 3|37r14 79r5
+X 2 a-textio.ads
+36K13*Text_IO 1|16k9 2|52l9 52e16 3|37b18 79l9 79t16
+37U14*Get 37<19 3|43b14 46l8 46t11
+37e19 C{character} 3|43b19 45m31
+40U14*Put 40>19 3|61b14 64l8 64t11
+40e19 Item{character} 3|61b19 63r31
+43U14*Put 43>19 3|66b14 69l8 69t11
+43a19 Item{string} 3|66b19 68r31
+46U14*Put_Line 46>24 3|75b14 78l8 78t16
+46a24 Item{string} 3|75b24 77r31
+49U14*New_Line 3|52b14 55l8 55t16
+X 4 system.ads
+60K9*System 3|35r6 45r7 54r7 63r7 68r7 77r7 4|172e11
+X 5 s-semiho.ads
+37K16*Semihosting 3|35w13 45r14 54r14 63r14 68r14 77r14 5|50e23
+41U14*Put 3|63s26
+44U14*Put 3|54s26 68s26 77s26
+47U14*Get 3|45s26
+

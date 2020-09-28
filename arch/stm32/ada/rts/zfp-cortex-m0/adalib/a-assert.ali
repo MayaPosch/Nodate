@@ -1,0 +1,60 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_EXCEPTIONS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U ada.assertions%b	a-assert.adb		9094876d NE OL PK
+W ada%s			ada.ads			ada.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+
+U ada.assertions%s	a-assert.ads		1a0b0d2c NE OL PU PK
+W ada%s			ada.ads			ada.ali
+W system%s		system.ads		system.ali
+W system.assertions%s	s-assert.adb		s-assert.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-assert.ads		20200819171408 a1febc19 ada.assertions%s
+D a-assert.adb		20200819171408 316a3b74 ada.assertions%b
+D a-except.ads		20200819171408 5b5f0f2f ada.exceptions%s
+D a-except.adb		20200819171408 85a38458 ada.exceptions%b
+D system.ads		20200819171408 e69b74bd system%s
+D s-assert.ads		20200819171408 cd8d2c94 system.assertions%s
+G a e
+G c Z s b [assert ada__assertions 60 14 none]
+G c Z s b [assert ada__assertions 63 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 2|50r9 66r5 3|32r14 42r16 49r16 53r5
+X 2 a-assert.ads
+50K13*Assertions 1|16k9 2|53r17 66l9 66e19 3|32b18 42r20 49r20 53l9 53t19
+55X4*Assertion_Error 3|42r31 49r31
+60U14*Assert 60>22 3|39b14 44l8 44t14
+60b22 Check{boolean} 61r13 3|39b22 41r10
+63U14*Assert 63>22 63>39 3|46b14 51l8 51t14
+63b22 Check{boolean} 64r13 3|46b22 48r10
+63a39 Message{string} 3|46b39 49r52
+X 6 system.ads
+60K9*System 2|47r6 55r40 6|172e11
+X 7 s-assert.ads
+41K16*Assertions 2|47w13 55r47 7|50e22
+43X4*Assert_Failure 2|55r58
+

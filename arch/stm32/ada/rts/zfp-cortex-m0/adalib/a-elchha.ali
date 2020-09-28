@@ -1,0 +1,82 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_UNCHECKED_CONVERSION
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U ada.exceptions.last_chance_handler%b  a-elchha.adb  22161357 NE OL PR SU
+W ada%s			ada.ads			ada.ali
+W ada.exceptions%s	a-except.adb		a-except.ali
+W ada.unchecked_conversion%s
+W gnat%s		gnat.ads		gnat.ali
+W gnat.io%s		g-io.adb		g-io.ali
+W system%s		system.ads		system.ali
+W system.machine_reset%s  s-macres.adb		s-macres.ali
+
+U ada.exceptions.last_chance_handler%s  a-elchha.ads  1655f2fd NE OL SU
+W ada.exceptions%s	a-except.adb		a-except.ali
+W system%s		system.ads		system.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-except.ads		20200819171408 5b5f0f2f ada.exceptions%s
+D a-elchha.ads		20200819171408 ab91896f ada.exceptions.last_chance_handler%s
+D a-elchha.adb		20200819171408 578208bd ada.exceptions.last_chance_handler%b
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D gnat.ads		20200819171408 b5988c27 gnat%s
+D g-io.ads		20200819171408 33cc5d90 gnat.io%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-macres.ads		20200819171408 e352e87a system.machine_reset%s
+G a e
+G c Z s b [last_chance_handler ada__exceptions 36 26 none]
+X 1 ada.ads
+16K9*Ada 20e8 3|36r11 39r8 40r19 4|34r6 43r11 55r39 85r5
+X 2 a-except.ads
+42K13*Exceptions 71e19 3|36r15 39r12 40r23 4|43r15 85r9
+X 3 a-elchha.ads
+36U26*Last_Chance_Handler 2|42k13 3|37>4 37>26 39i<c,__gnat_last_chance_handler>23
+. 40r34 4|43b26 85l20 85t39
+37m4 Msg{8|90M9} 4|44b4 72r12 77r12
+37i26 Line{integer} 4|44b26 70r7 74r12
+X 4 a-elchha.adb
+46U14 Put 46>19 53b14 65l8 65t11 72s7 77s7
+46m19 Str{8|90M9} 53b19 58r59
+54P12 C_String_Ptr(string) 56r26 58r26
+55V16 To_C_String_Ptr[5|20]{54P12} 58s42
+58p7 Msg_Str{54P12} 61r16 62r20 63r15
+61i11 J{integer} 62r29 63r24
+X 5 a-unccon.ads
+20v14*Unchecked_Conversion 4|34w10 55r43
+X 6 gnat.ads
+34K9*GNAT 4|37r6 37r19 6|57e9
+X 7 g-io.ads
+43K14*IO 4|37w11 37r24 7|63e12
+46U14*Put 4|74s7
+50U14*Put 4|63s10 73s7
+53U14*Put 4|71s7 76s7
+56U14*Put_Line 4|68s4
+60U14*New_Line 4|80s4
+X 8 system.ads
+60K9*System 3|34w6 37r10 4|35r6 44r10 46r25 53r25 56r10 84r4 8|172e11
+90M9*Address 3|37r17 4|44r17 46r32 53r32 56r17
+X 9 s-macres.ads
+36K16*Machine_Reset 4|35w13 84r11 9|42e25
+39U14*Stop 4|84s25
+

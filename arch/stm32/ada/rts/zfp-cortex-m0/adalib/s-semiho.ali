@@ -1,0 +1,105 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_UNCHECKED_CONVERSION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_OBSOLESCENT_FEATURES
+
+U system.semihosting%b	s-semiho.adb		f94064f8 NE OL PK
+W ada%s			ada.ads			ada.ali
+W ada.unchecked_conversion%s
+W interfaces%s		interfac.ads		interfac.ali
+W system%s		system.ads		system.ali
+W system.machine_code%s	s-maccod.ads		s-maccod.ali
+
+U system.semihosting%s	s-semiho.ads		58794d61 NE OL PR PK
+W system%s		system.ads		system.ali
+
+D ada.ads		20200819171408 76789da1 ada%s
+D a-unccon.ads		20200819171408 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20200819171408 5ab55268 interfaces%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-maccod.ads		20200819171408 6d68a701 system.machine_code%s
+D s-semiho.ads		20200819171408 bee239dc system.semihosting%s
+D s-semiho.adb		20200819171408 7ee48f22 system.semihosting%b
+G a e
+G c Z s b [put system__semihosting 41 14 none]
+G c Z s b [put system__semihosting 44 14 none]
+G c Z s b [get system__semihosting 47 14 none]
+G c Z b b [to_sh_word system__semihosting 40 13 none]
+G c Z b b [generic_sh_call system__semihosting 43 13 none]
+G c Z b b [TbufferBIP system__semihosting 66 4 none]
+G c Z b b [flush system__semihosting 69 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 7|34r6 40r31
+X 2 a-unccon.ads
+17+9 Source 7|41r7
+18+9 Target 7|41r33
+20v14*Unchecked_Conversion 7|34w10 40r35
+X 3 interfac.ads
+38K9*Interfaces 184e15 7|32w6 32r36 38r24
+63M9*Unsigned_8 7|66r37
+74M9*Unsigned_32 7|38r35
+X 4 system.ads
+60K9*System 172e11 6|37r9 50r5 7|33r6 33r36 36r14 41r17 174r5
+90M9*Address 7|41r24
+X 5 s-maccod.ads
+36K16*Machine_Code 131e24 7|33w13 33r43
+44I9*Asm_Input_Operand<integer>
+45I9*Asm_Output_Operand<integer>
+52A9*Asm_Input_Operand_List(44I9)<integer>
+69U14*Asm 7|79s7
+71i6 Outputs{45I9} 7|83r12
+72a6 Inputs{52A9} 7|84r12
+73a6 Clobber{string} 7|87r12
+74b6 Volatile{boolean} 7|86r12
+X 6 s-semiho.ads
+37K16*Semihosting 4|60k9 6|50l12 50e23 7|36b21 174l12 174t23
+41U14*Put 41>19 7|115b14 150l8 150t11 159s10
+41e19 Item{character} 7|115b19 123r10 136r15 141r50 146r48
+44U14*Put 44>19 7|156b14 161l8 161t11
+44a19 Item{string} 7|156b19 158r20 159r15
+47U14*Get 47<19 7|167b14 172l8 172t11
+47e19 Item{character} 7|167b19 171m7
+X 7 s-semiho.adb
+38M9 SH_Word<3|74M9> 41r43 43r39 43r55 47r23 76r39 76r55 77r13 83r25 84r25
+. 85r25 96r15 116r15 168r13
+40V13 To_SH_Word[2|20]{38M9} 104s48 137s48
+43V13 Generic_SH_Call{38M9} 43>30 43>34 76b13 89l8 89t23 104s19 137s19 170s14
+43m30 R0{38M9} 76b30 84r49
+43m34 R1{38M9} 76b34 85r49
+47M12 Syscall{38M9} 49r26 50r26 51r26
+49m4 SYS_WRITEC{47M12} 137r36
+50m4 SYS_WRITE0{47M12} 104r36
+51m4 SYS_READC{47M12} 170r31
+64N4 Buffer_Size 65r36
+65I9 Buffer_Range<short_integer> 66r20 67r19 67r35
+66a4 Buffer(3|63M9) 99r26 101m10 104m60 104r60 107r26 141m10 146r28
+67i4 Buffer_Index{65I9} 99r10 101r18 107m10 141r18 142m10 142r26 146r13
+69U14 Flush 95b14 109l8 109t13 133s10 147s13
+77m7 Ret{38M9} 83m51 83r51 88r14
+96m7 Unref{38M9} 97r28 104m10
+116m7 Unref{38M9} 117r28 137m10
+119e7 C{character} 136m10 137m60 137r60
+158i11 Index{integer} 159r21
+168m7 Ret{38M9} 170m7 171r30
+

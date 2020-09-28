@@ -1,0 +1,33 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U unchecked_conversion%s  unchconv.ads		ca2f9e18 NE OL PU GE
+
+D system.ads		20200819171408 e69b74bd system%s
+D unchconv.ads		20200819171408 ca2f9e18 unchecked_conversion%s
+G a e
+X 2 unchconv.ads
+17+9 Source 20r36
+18+9 Target 20r51
+20v10*Unchecked_Conversion 20>32 21b27 22r14
+20*32 S{17+9}
+

@@ -1,0 +1,50 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -fno-inline
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U system.machine_reset%b  s-macres.adb		53a39c7a NE OL PK
+W interfaces%s		interfac.ads		interfac.ali
+Z system%s		system.ads		system.ali
+
+U system.machine_reset%s  s-macres.ads		05c99cc7 NE OL PK
+W system%s		system.ads		system.ali
+
+D interfac.ads		20200819171408 5ab55268 interfaces%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-macres.ads		20200819171408 e352e87a system.machine_reset%s
+D s-macres.adb		20200819171408 ea442668 system.machine_reset%b
+G a e
+G c Z s b [stop system__machine_reset 39 14 none]
+X 1 interfac.ads
+38K9*Interfaces 184e15 4|32w6 62r15
+74M9*Unsigned_32 4|62r26
+X 2 system.ads
+60K9*System 172e11 3|36r9 42r5 4|34r14 83r5
+X 3 s-macres.ads
+36K16*Machine_Reset 2|60k9 3|42l12 42e25 4|34b21 83l12 83t25
+39U14*Stop 40r22 4|79b14 82l8 82t12
+X 4 s-macres.adb
+35U14 Os_Exit 35>23 36r22 37r24 51s7 58b14 73l8 73t15 81s7
+35i23 Status{integer} 58b23 59r28
+40U14 Os_Abort 41r22 42r24 49b14 52l8 52t16
+62m7 AIRCR{1|74M9} 63m11 63r11 64m27 64r27 65r24 68m7
+

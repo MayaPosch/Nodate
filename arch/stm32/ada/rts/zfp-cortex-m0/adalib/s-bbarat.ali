@@ -1,0 +1,103 @@
+V "GNAT Lib v2020"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=D:\Dev\GNAT\2020-arm-elf\arm-eabi\lib\gnat\zfp-cortex-m0\
+A -mlittle-endian
+A -mthumb
+A -mfloat-abi=soft
+A -mcpu=cortex-m0
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv6s-m
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_OBSOLESCENT_FEATURES
+
+U system.bb.armv6m_atomic%b  s-bbarat.adb	284b991a NE OL PK
+W interfaces%s		interfac.ads		interfac.ali
+W system%s		system.ads		system.ali
+W system.bb%s		s-bb.ads		s-bb.ali
+W system.machine_code%s	s-maccod.ads		s-maccod.ali
+
+U system.bb.armv6m_atomic%s  s-bbarat.ads	b35d766f BN NE OL PK
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.ads			i-c.ali
+W system%s		system.ads		system.ali
+W system.bb%s		s-bb.ads		s-bb.ali
+
+D interfac.ads		20200819171408 5ab55268 interfaces%s
+D i-c.ads		20200819171408 ef84921c interfaces.c%s
+D system.ads		20200819171408 e69b74bd system%s
+D s-bb.ads		20200819171408 09e072ae system.bb%s
+D s-bbarat.ads		20200819171408 e917b008 system.bb.armv6m_atomic%s
+D s-bbarat.adb		20200819171408 f681dc7b system.bb.armv6m_atomic%b
+D s-maccod.ads		20200819171408 6d68a701 system.machine_code%s
+G a e
+G c Z s s [sync_lock_test_and_set_1R system__bb__armv6m_atomic__sync_lock_test_and_set_1GP2438 43 13 none]
+G c Z s s [sync_lock_test_and_set_1 system__bb__armv6m_atomic 43 13 none]
+G c Z s s [sync_bool_compare_and_swap_4R system__bb__armv6m_atomic__sync_bool_compare_and_swap_4GP2912 55 13 none]
+G c Z s s [sync_bool_compare_and_swap_4 system__bb__armv6m_atomic 55 13 none]
+G c Z s b [primask system__bb__armv6m_atomic 62 13 none]
+G c Z s b [interrupt_disabled system__bb__armv6m_atomic 65 13 none]
+G c Z s b [disable_interrupts system__bb__armv6m_atomic 68 14 none]
+G c Z s b [enable_interrupts system__bb__armv6m_atomic 71 14 none]
+X 1 interfac.ads
+38K9*Interfaces 184e15 5|31w6 32r6 44r35 53r47 56r39 62r28 6|29w6 29r31 117r47
+. 120r14 133r17 133r41 135r17
+63M9*Unsigned_8 5|44r46
+74M9*Unsigned_32 5|56r50 62r39 6|37r28 38r11 40r42
+X 2 i-c.ads
+39K20*C 103e17 5|32w17 53r58 6|117r58 120r25 133r28 133r52 135r28
+85E9*char<character> 5|53r60 6|117r60 120r27 133r30
+87e4*nul{85E9} 6|133r54 135r30
+X 3 system.ads
+60K9*System 172e11 5|33w6 35r9 39r45 50r53 74r5 6|28r6 28r31 31r14 82r45
+. 114r53 147r5
+90M9*Address 5|39r52 50r60 6|82r52 114r60
+X 4 s-bb.ads
+40K16*BB 3|60k9 4|95e14 5|35r16 74r12 6|31r21 147r12
+X 5 s-bbarat.ads
+35K19*Armv6m_Atomic 4|40k16 5|62E13 74l15 74e28 6|31b24 147l15 147t28
+38M12 T 40r45 41r43 6|83r45 84r43 86r14 87r14
+39v13*Sync_Lock_Test_And_Set 39>37 40>37 44r11 6|82b13 108l8 108t30
+39m37 Addr{3|90M9} 6|82b37 86r32
+40*37 Value{38M12} 6|83b37 99r15
+43V13*Sync_Lock_Test_And_Set_1[39]{1|63M9} 45i<c,sync_lock_test_and_set_1>22
+. 6|82b13
+49M12 T 51r53 52r53 6|115r53 116r53 119r14
+50v13*Sync_Bool_Compare_And_Swap 50>41 51>41 52>41 56r11 6|114b13 145l8 145t34
+50m41 Addr{3|90M9} 6|114b41 119r32
+51*41 Old_Value{49M12} 6|115b41 131r17
+52*41 New_Value{49M12} 6|116b41 132r18
+55V13*Sync_Bool_Compare_And_Swap_4[50]{2|85E9} 57i<c,sync_bool_compare_and_swap_4>22
+. 6|114b13
+62V13 PRIMASK{1|74M9} 6|37b13 43l8 43t15 50s9
+65V13 Interrupt_Disabled{boolean} 6|49b13 89s46 122s46
+68U14 Disable_Interrupts 6|56b14 63l8 63t26 95s10 128s10
+71U14 Enable_Interrupts 6|69b14 76l8 76t25 104s10 141s10
+X 6 s-bbarat.adb
+38m7 R{1|74M9} 40m72 40r72 42r14
+86*7 Data{5|38M12} 98r14 99m7
+87*7 Ret{5|38M12} 98m7 107r14
+89b7 Already_Disabled{boolean} 94r14 103r14
+119*7 Data{5|49M12} 131r10 132m10
+120e7 Ret{2|85E9} 133m10 135m10 144r14
+122b7 Already_Disabled{boolean} 127r14 140r14
+X 7 s-maccod.ads
+36K16*Machine_Code 6|28w13 28r38 7|131e24
+45I9*Asm_Output_Operand<integer>
+83U14*Asm 6|40s7 58s7 71s7
+85i6 Outputs{45I9} 6|40r31
+87a6 Clobber{string} 6|61r12 74r12
+88b6 Volatile{boolean} 6|41r12 62r12 75r12
+

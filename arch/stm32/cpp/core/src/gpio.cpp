@@ -15,23 +15,23 @@ std::vector<GPIO_instance>* GPIO_instances() {
 	GPIO_instance instance;
 	static std::vector<GPIO_instance>* instancesStatic = new std::vector<GPIO_instance>(12, instance);
 	
-#if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN
+#if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN || defined RCC_APB2ENR_IOPAEN
 	((*instancesStatic))[GPIO_PORT_A].regs = GPIOA;
 #endif
 
-#if defined RCC_AHBENR_GPIOBEN || defined RCC_AHB1ENR_GPIOBEN
+#if defined RCC_AHBENR_GPIOBEN || defined RCC_AHB1ENR_GPIOBEN || defined RCC_APB2ENR_IOPBEN
 	((*instancesStatic))[GPIO_PORT_B].regs = GPIOB;
 #endif
 
-#if defined RCC_AHBENR_GPIOCEN || defined RCC_AHB1ENR_GPIOCEN
+#if defined RCC_AHBENR_GPIOCEN || defined RCC_AHB1ENR_GPIOCEN || defined RCC_APB2ENR_IOPCEN
 	((*instancesStatic))[GPIO_PORT_C].regs = GPIOC;
 #endif
 
-#if defined RCC_AHBENR_GPIODEN || defined RCC_AHB1ENR_GPIODEN
+#if defined RCC_AHBENR_GPIODEN || defined RCC_AHB1ENR_GPIODEN || defined RCC_APB2ENR_IOPDEN
 	((*instancesStatic))[GPIO_PORT_D].regs = GPIOD;
 #endif
 
-#if defined RCC_AHBENR_GPIOEEN || defined RCC_AHB1ENR_GPIOEEN
+#if defined RCC_AHBENR_GPIOEEN || defined RCC_AHB1ENR_GPIOEEN || defined RCC_APB2ENR_IOPEEN
 	((*instancesStatic))[GPIO_PORT_E].regs = GPIOE;
 #endif
 
@@ -76,6 +76,45 @@ bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	}
 	
 	// Set parameters.
+#ifdef STM32F1
+	// Input/output registers are spread over two registers (CRL, CRH).
+	if (pin < 8) {
+		// Set CRL register (CNF 0x2 & MODE 0x0).
+		uint8_t pinmode = pin * 4;
+		uint8_t pincnf = pinmode + 2;
+		instance.regs->CRL &= ~(0xF << pinmode);
+		if (pupd == GPIO_FLOATING) {
+			instance.regs->CRL |= (0x1 << pincnf);
+		}
+		else {
+			instance.regs->CRL |= (0x2 << pincnf);
+			if (pupd == GPIO_PULL_UP) {
+				instance.regs->ODR |= (1 << pin);
+			}
+			else {
+				instance.regs->ODR &= ~(1 << pin);
+			}
+		}
+	}
+	else {
+		// Set CRH register.
+		uint8_t pinmode = (pin - 8) * 4;
+		uint8_t pincnf = pinmode + 2;
+		instance.regs->CRH &= ~(0xF << pinmode);
+		if (pupd == GPIO_FLOATING) {
+			instance.regs->CRH |= (0x1 << pincnf);
+		}
+		else {
+			instance.regs->CRH |= (0x2 << pincnf);
+			if (pupd == GPIO_PULL_UP) {
+				instance.regs->ODR |= (1 << (pin - 8));
+			}
+			else {
+				instance.regs->ODR &= ~(1 << (pin - 8));
+			}
+		}
+	}
+#else
 	// MODER is set to '00' for input mode.
 	uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);
@@ -86,6 +125,7 @@ bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	else {
 		instance.regs->PUPDR |= (0x2 << pin2);
 	}
+#endif
 
 	return true;
 }
@@ -110,6 +150,33 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 	}
 	
 	// Set parameters.
+#ifdef STM32F1
+	// Input/output registers are spread over two combined registers (CRL, CRH).
+	if (pin < 8) {
+		// Set CRL register (CNF & MODE).
+		uint8_t pinmode = pin * 4;
+		uint8_t pincnf = pinmode + 2;
+		
+		if (speed == GPIO_LOW) {		instance.regs->CRL |= (0x2 << pinmode); }
+		else if (speed == GPIO_MID) {	instance.regs->CRL |= (0x1 << pinmode);	}
+		else if (speed == GPIO_HIGH) {	instance.regs->CRL |= (0x3 << pinmode);	}
+	
+		if (type == GPIO_PUSH_PULL) {		instance.regs->CRL &= ~(0x1 << pincnf);	}
+		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRL |= (0x1 << pincnf);	}
+	}
+	else {
+		// Set CRH register.
+		uint8_t pinmode = (pin - 8) * 4;
+		uint8_t pincnf = pinmode + 2;
+		
+		if (speed == GPIO_LOW) {		instance.regs->CRH |= (0x2 << pinmode); }
+		else if (speed == GPIO_MID) {	instance.regs->CRH |= (0x1 << pinmode);	}
+		else if (speed == GPIO_HIGH) {	instance.regs->CRH |= (0x3 << pinmode);	}
+	
+		if (type == GPIO_PUSH_PULL) {		instance.regs->CRH &= ~(0x1 << pincnf);	}
+		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRH |= (0x1 << pincnf);	}
+	}
+#else
 	uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);
 	instance.regs->MODER |= (0x1 << pin2);
@@ -140,6 +207,7 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 		instance.regs->OSPEEDR &= ~(0x3 << pin2);
 		instance.regs->OSPEEDR |= (0x3 << pin2);
 	}
+#endif
 	
 	return true;
 }
@@ -161,6 +229,9 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	}
 	
 	// Set parameters.
+#ifdef STM32F1
+	//
+#else
 	uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);
 	instance.regs->MODER |= (0x2 << pin2);		// AF mode.
@@ -176,6 +247,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 		instance.regs->AFR[1] &= ~(0xF << pin4);
 		instance.regs->AFR[1] |= (af << pin4);
 	}
+#endif
 	
 	return true;
 }
@@ -193,7 +265,34 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 		if (!Rcc::enablePort((RccPort) port)) { return false; }
 		instance.active = true;
 	}
+
+#ifdef STM32F1
+	// Input/output registers are spread over two combined registers (CRL, CRH).
+	if (pin < 8) {
+		// Set CRL register (CNF & MODE).
+		uint8_t pinmode = pin * 4;
+		uint8_t pincnf = pinmode + 2;
+		
+		if (speed == GPIO_LOW) {		instance.regs->CRL |= (0x2 << pinmode); }
+		else if (speed == GPIO_MID) {	instance.regs->CRL |= (0x1 << pinmode);	}
+		else if (speed == GPIO_HIGH) {	instance.regs->CRL |= (0x3 << pinmode);	}
 	
+		if (type == GPIO_PUSH_PULL) {		instance.regs->CRL &= ~(0x1 << pincnf);	}
+		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRL |= (0x1 << pincnf);	}
+	}
+	else {
+		// Set CRH register.
+		uint8_t pinmode = (pin - 8) * 4;
+		uint8_t pincnf = pinmode + 2;
+		
+		if (speed == GPIO_LOW) {		instance.regs->CRH |= (0x2 << pinmode); }
+		else if (speed == GPIO_MID) {	instance.regs->CRH |= (0x1 << pinmode);	}
+		else if (speed == GPIO_HIGH) {	instance.regs->CRH |= (0x3 << pinmode);	}
+	
+		if (type == GPIO_PUSH_PULL) {		instance.regs->CRH &= ~(0x1 << pincnf);	}
+		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRH |= (0x1 << pincnf);	}
+	}
+#else
 	uint8_t pin2 = pin * 2;
 	
 	instance.regs->PUPDR &= ~(0x3 << pin2);
@@ -222,6 +321,7 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 		instance.regs->OSPEEDR &= ~(0x3 << pin2);
 		instance.regs->OSPEEDR |= (0x3 << pin2);
 	}
+#endif
 	
 	return true;
 }

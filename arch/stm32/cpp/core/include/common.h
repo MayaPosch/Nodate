@@ -8,10 +8,9 @@
 
 
 #ifdef __stm32f0
-
-
 #include "stm32f0/stm32f0xx.h"
-
+#elif defined __stm32f1
+#include "stm32f1/stm32f1xx.h"
 #endif
 
 #ifdef __stm32f4

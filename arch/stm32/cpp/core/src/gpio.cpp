@@ -230,7 +230,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	
 	// Set parameters.
 #ifdef STM32F1
-	//
+	// Ensure the AFIO peripheral is enabled.
 #else
 	uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);

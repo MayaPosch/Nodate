@@ -74,7 +74,10 @@ $(APPFOLDER)/bin/%.bin: $(APPFOLDER)/bin/%.elf
 	
 flash:
 	$(CD) $(APPFOLDER) && \
-	openocd -f board/$(PROGRAMMER) -d -c "program bin/$(OUTPUT).elf verify reset exit"
+	openocd -f $(PROGRAMMER) -c "program bin/$(OUTPUT).elf verify reset exit"
+	
+	
+	#openocd -f board/$(PROGRAMMER) -d -c "program bin/$(OUTPUT).elf verify reset exit"
 
 clean:
 	$(RM) $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*

@@ -181,7 +181,9 @@ bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger tri
 	src.trigger = trigger;
 	src.callback = callback;
 	src.priority = priority;
+#ifndef __stm32f1
 	SYSCFG->EXTICR[src.reg] |= (((uint32_t) port) << src.offset);
+#endif
 	
 	// In the EXTI peripheral:
 	// - set interrupt mask (IMR) for the pin.
@@ -277,8 +279,10 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	EXTI->FTSR &= ~(1 << src.pin);
 	EXTI->RTSR &= ~(1 << src.pin);
 	
+#ifndef __stm32f1
 	// Finally reset the SYSCFG registers.
 	SYSCFG->EXTICR[src.reg] &= ~(0xF << src.offset);
+#endif
 	
 	return true;
 }

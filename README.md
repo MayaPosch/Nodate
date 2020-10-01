@@ -14,6 +14,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 **Supported boards:**
 
 * Nucleo-F042K6 (STM32F042K6T)
+* 'Blue Pill' (STM32F103C8)
 * STM32F4-Discovery (STM32F407VGT)
 * Nucleo-F746ZG (STM32F746ZG)
 

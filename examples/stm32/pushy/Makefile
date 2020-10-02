@@ -10,8 +10,9 @@ LANGUAGE ?= cpp
 
 # One can use the board preset.
 #BOARD ?= nucleo-f042k6
+BOARD ?= blue_pill
 #BOARD ?= stm32f4-discovery
-BOARD ?= nucleo-f746zg
+#BOARD ?= nucleo-f746zg
 
 # Set the MCU and programmer types.
 #

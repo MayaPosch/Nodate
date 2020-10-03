@@ -42,7 +42,7 @@ class Interrupts {
 	static uint8_t exti0_1_pwr;
 	static uint8_t exti2_3_pwr;
 	static uint8_t exti4_15_pwr;
-#elif defined __stm32f4 || defined __stm32f7
+#elif defined __stm32f1 || defined __stm32f4 || defined __stm32f7
 	static uint8_t exti5_9_pwr;
 	static uint8_t exti10_15_pwr;
 #endif

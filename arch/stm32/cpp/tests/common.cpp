@@ -18,6 +18,11 @@ GPIO_TypeDef* GPIOE = &tGpioE;
 GPIO_TypeDef tGpioF;
 GPIO_TypeDef* GPIOF = &tGpioF;
 
+#if defined STM32F1
+AFIO_TypeDef tAfio;
+AFIO_TypeDef* AFIO = &tAfio;
+#endif
+
 RCC_TypeDef tRcc;
 RCC_TypeDef* RCC = &tRcc;
 
@@ -103,3 +108,5 @@ USART_TypeDef tUsart1;
 USART_TypeDef* USART1 = & tUsart1;
 USART_TypeDef tUsart2;
 USART_TypeDef* USART2 = & tUsart2;
+USART_TypeDef tUsart3;
+USART_TypeDef* USART3 = & tUsart3;

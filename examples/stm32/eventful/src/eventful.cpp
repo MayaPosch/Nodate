@@ -28,17 +28,23 @@ int main () {
 	GPIO gpio;
 	Interrupts itrs;
 	
-	// FIXME: Dynamically updated LED_BUILTIN value.
-	uint8_t LED_BUILTIN = 3;
+	//const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
+	//const GPIO_ports led_port = GPIO_PORT_B;
+	//const uint8_t led_pin = 13; // STM32F4-Discovery: Port D, pin 13 (orange)
+	//const GPIO_ports led_port = GPIO_PORT_D;
+	//const uint8_t led_pin = 7; // Nucleo-F746ZG: Port B, pin 7 (blue)
+	//const GPIO_ports led_port = GPIO_PORT_B;
+	const uint8_t led_pin = 13;	// Blue Pill: Port C, pin 13.
+	const GPIO_ports led_port = GPIO_PORT_C;
 	
-	// Set the pin mode on the built-in LED.
-	gpio.set_output(GPIO_PORT_B, LED_BUILTIN, GPIO_PULL_UP);
-	gpio.write(GPIO_PORT_B, LED_BUILTIN, GPIO_LEVEL_LOW);
+	// Set the pin mode on the target LED pin.
+	gpio.set_output(led_port, led_pin, GPIO_PULL_UP);
+	gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
 	
 	// Set the pin mode on the interrupt pins.
 	gpio.set_input(GPIO_PORT_B, 0, GPIO_PULL_UP);
 	gpio.set_input(GPIO_PORT_B, 1, GPIO_PULL_UP);
-	gpio.set_input(GPIO_PORT_B, 4, GPIO_PULL_UP);
+	gpio.set_input(GPIO_PORT_B, 10, GPIO_PULL_UP);
 	
 	// Set the interrupts for the rotary encoder.
 	// A: Port B, pin 0 (D3 on Nucleo-32).
@@ -47,14 +53,14 @@ int main () {
 	uint8_t handleA, handleB, handleC;
 	itrs.setInterrupt(0, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_A, 0, handleA);
 	itrs.setInterrupt(1, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_B, 0, handleB);
-	itrs.setInterrupt(4, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_button, 0, handleC);
+	itrs.setInterrupt(10, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_button, 0, handleC);
 	
 	while (1) {
 		if (led_on) {
-			gpio.write(GPIO_PORT_B, LED_BUILTIN, GPIO_LEVEL_HIGH);
+			gpio.write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		}
 		else {
-			gpio.write(GPIO_PORT_B, LED_BUILTIN, GPIO_LEVEL_LOW);
+			gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
 		}
 	}
 	

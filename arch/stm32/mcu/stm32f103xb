@@ -1,0 +1,15 @@
+# MCU definition file for the stm32f103c8 MCU.
+# Package: LQFP48.
+
+MCU_FAMILY := stm32f1
+MCU_GENUS := stm32f103xb
+MCU_GENUS_CAP := STM32F103xB
+
+MCU := stm32f103cb
+MCU_CORE := stm32f103
+MCU_RAM := 20480
+MCU_PACKAGE := lqfp48
+
+MCU_FLAGS := -mcpu=cortex-m3 -mthumb
+
+MCU_LD := stm32f103xb.ld

@@ -1,11 +1,11 @@
-# MCU definition file for the stm32f103c8 MCU.
+# MCU definition file for the stm32f103c6 MCU.
 # Package: LQFP32.
 
 MCU_FAMILY := stm32f1
 MCU_GENUS := stm32f103x6
 MCU_GENUS_CAP := STM32F103x6
 
-MCU := stm32f103c8
+MCU := stm32f103c6
 MCU_CORE := stm32f103
 MCU_RAM := 20480
 MCU_PACKAGE := lqfp32

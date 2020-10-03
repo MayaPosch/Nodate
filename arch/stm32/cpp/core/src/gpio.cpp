@@ -5,8 +5,6 @@
 
 #include "gpio.h"
 
-#include "rcc.h"
-
 #include <vector>
 
 
@@ -43,6 +41,8 @@ std::vector<GPIO_instance>* GPIO_instances() {
 }
 
 static std::vector<GPIO_instance>* instancesStatic = GPIO_instances();
+
+bool afio_enabled = false;
 
 
 
@@ -230,7 +230,9 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	
 	// Set parameters.
 #ifdef STM32F1
-	// Ensure the AFIO peripheral is enabled.
+	// For STM32F1, only two possible values are possible for AF: remapped (1) or not remapped (0).
+	return false;
+	
 #else
 	uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);
@@ -247,9 +249,54 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 		instance.regs->AFR[1] &= ~(0xF << pin4);
 		instance.regs->AFR[1] |= (af << pin4);
 	}
-#endif
 	
 	return true;
+#endif
+}
+
+
+// --- SET AF ---
+// Set alternate function mode on a pin.
+bool GPIO::set_af(RccPeripheral per, uint8_t af) {
+#ifdef STM32F1
+	// For STM32F1, only two possible values are possible for AF: remapped (1) or not remapped (0).
+	if (af > 1) { return false; }
+	
+	// Ensure the AFIO peripheral is enabled.
+	if (!afio_enabled) {
+		if (!Rcc::enable(RCC_AFIO)) {
+			// TODO: set error.
+			return false;
+		}
+		
+		afio_enabled = true;
+	}
+	
+	// Set correct value in AFIO_MAPR register.
+	uint8_t pos = 0;
+	if (per == RCC_SPI1) 		{ pos = AFIO_MAPR_SPI1_REMAP_Pos; }
+	else if (per == RCC_I2C1)	{ pos = AFIO_MAPR_I2C1_REMAP_Pos; }
+	else if (per == RCC_USART1)	{ pos = AFIO_MAPR_USART1_REMAP_Pos; }
+	else if (per == RCC_USART2)	{ pos = AFIO_MAPR_USART2_REMAP_Pos; }
+	//else if (per == RCC_USART3)	{ pos = AFIO_MAPR_USART3_REMAP_Pos; }
+	else if (per == RCC_TIM1)	{ pos = AFIO_MAPR_TIM1_REMAP_Pos; }
+	else if (per == RCC_TIM2)	{ pos = AFIO_MAPR_TIM2_REMAP_Pos; }
+	else if (per == RCC_TIM3)	{ pos = AFIO_MAPR_TIM3_REMAP_Pos; }
+	//else if (per == RCC_TIM4)	{ pos = AFIO_MAPR_TIM4_REMAP_Pos; }
+	else if (per == RCC_CAN)	{ pos = AFIO_MAPR_CAN_REMAP_Pos; }
+	else { return false; } // TODO: refactor.
+	
+	if (af == 1) {
+		AFIO->MAPR |= (1 << pos);
+	}
+	else {
+		AFIO->MAPR &= ~(1 << pos);
+	}
+	
+	return true;
+#else
+	return false;
+#endif
 }
 
 

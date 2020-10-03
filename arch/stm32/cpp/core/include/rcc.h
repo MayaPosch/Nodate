@@ -32,6 +32,7 @@ enum RccPeripheral {
 	RCC_TIM16,
 	RCC_TIM17,
 	RCC_DBGMCU,
+	RCC_AFIO,
 	RCC_TIM2,		// APB1 peripherals
 	RCC_TIM3,
 	RCC_TIM6,

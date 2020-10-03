@@ -10,6 +10,8 @@
 
 #include <common.h>
 
+#include "rcc.h"
+
 
 enum GPIO_mode {
 	GPIO_INPUT	= 0,
@@ -79,6 +81,7 @@ public:
 	bool set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
 	bool set_af(GPIO_ports port, uint8_t pin, uint8_t af);
+	bool set_af(RccPeripheral per, uint8_t af);
 	bool set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
 	//bool mode(uint32_t pin, GPIO_mode mode);

@@ -144,7 +144,7 @@ void USART8_IRQHandler(void) {
 	}
 }
 
-#elif defined __stm32f4
+#elif defined __stm32f1 || defined __stm32f4
 
 void USART1_IRQHandler(void) {
 	USART_device &instance = (*devicesStatic)[0];

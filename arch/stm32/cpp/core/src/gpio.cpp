@@ -230,7 +230,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	
 	// Set parameters.
 #ifdef STM32F1
-	// For STM32F1, only two possible values are possible for AF: remapped (1) or not remapped (0).
+	// For STM32F1, knowing the device position in MAPR is required.
 	return false;
 	
 #else
@@ -372,21 +372,6 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 	
 	return true;
 }
-
-
-/* bool GPIO::mode(uint32_t pin, GPIO_mode mode) {
-	if (mode == GPIO_MODE_INPUT) {
-		//
-	}
-	else if (mode == GPIO_MODE_OUTPUT) {
-		//
-	}
-	else {
-		return false;
-	}
-	
-	return true;
-} */
 
 
 // --- WRITE ---

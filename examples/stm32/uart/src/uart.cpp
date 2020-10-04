@@ -23,16 +23,20 @@ int main () {
 	// USART 2, (TX) PA2:1 [A7], (RX) PA3:1 [A2].
 	//USART::startUart(USART_2, GPIO_PORT_A, 2, 1, GPIO_PORT_A, 3, 1, 9600, uartCallback);
 	// USART 1, (TX) PA9:1 [D1], (RX) PA10:1 [D0].
-	USART::startUart(USART_1, GPIO_PORT_A, 9, 1, GPIO_PORT_A, 10, 1, 9600, uartCallback);
+	//USART::startUart(USART_1, GPIO_PORT_A, 9, 1, GPIO_PORT_A, 10, 1, 9600, uartCallback);
 	// USART 1, (TX) PB6:0 [D5], (RX) PB7:0 [D4].
 	//USART::startUart(USART_1, GPIO_PORT_B, 6, 0, GPIO_PORT_B, 7, 0, 9600, uartCallback);
+	// STM32F103: USART 1, PB6:0 (TX), PB7:0 (RX).
+	USART::startUart(USART_1, GPIO_PORT_B, 6, 0, GPIO_PORT_B, 7, 0, 9600, uartCallback);
 	
-	const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
-	const GPIO_ports led_port = GPIO_PORT_B;
+	//const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
+	//const GPIO_ports led_port = GPIO_PORT_B;
 	//const uint8_t led_pin = 13; // STM32F4-Discovery: Port D, pin 13 (orange)
 	//const GPIO_ports led_port = GPIO_PORT_D;
 	//const uint8_t led_pin = 7; // Nucleo-F746ZG: Port B, pin 7 (blue)
 	//const GPIO_ports led_port = GPIO_PORT_B;
+	const uint8_t led_pin = 13;	// Blue Pill: Port C, pin 13.
+	const GPIO_ports led_port = GPIO_PORT_C;
 	
 	GPIO gpio;
 	

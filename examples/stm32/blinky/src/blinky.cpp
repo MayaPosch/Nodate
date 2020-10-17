@@ -6,7 +6,6 @@
 
 int main () {
 	// Initialise.
-	GPIO gpio;
 	Timer timer;
 	
 	//const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
@@ -19,13 +18,13 @@ int main () {
 	const GPIO_ports led_port = GPIO_PORT_C;
 	
 	// Set the pin mode on the LED pin.
-	gpio.set_output(led_port, led_pin, GPIO_PULL_UP);
-	gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
+	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 	
 	while (1) {
-		gpio.write(led_port, led_pin, GPIO_LEVEL_HIGH);
+		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		timer.delay(1000);
-		gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+		GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 		timer.delay(1000);
 	}
 	

@@ -74,20 +74,17 @@ class GPIO {
 	//
 	
 public:
-	GPIO();
-	~GPIO();
-	
-	bool set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd);
-	bool set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
+	static bool set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd);
+	static bool set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
-	bool set_af(GPIO_ports port, uint8_t pin, uint8_t af);
-	bool set_af(RccPeripheral per, uint8_t af);
-	bool set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
+	static bool set_af(GPIO_ports port, uint8_t pin, uint8_t af);
+	static bool set_af(RccPeripheral per, uint8_t af);
+	static bool set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
-	bool write(GPIO_ports port, uint8_t pin, GPIO_level level);
-	bool write(GPIO_ports port, uint8_t pin, uint32_t level);
-	uint8_t read(GPIO_ports port, uint8_t pin);
-	uint32_t readAnalog(GPIO_ports port, uint8_t pin);
+	static bool write(GPIO_ports port, uint8_t pin, GPIO_level level);
+	static bool write(GPIO_ports port, uint8_t pin, uint32_t level);
+	static uint8_t read(GPIO_ports port, uint8_t pin);
+	static uint32_t readAnalog(GPIO_ports port, uint8_t pin);
 };
 
 #endif

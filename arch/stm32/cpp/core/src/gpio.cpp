@@ -45,19 +45,6 @@ static std::vector<GPIO_instance>* instancesStatic = GPIO_instances();
 bool afio_enabled = false;
 
 
-
-// --- CONSTRUCTOR ---
-GPIO::GPIO() {
-	//
-}
-
-
-// --- DESTRUCTOR ---
-GPIO::~GPIO() {
-	// 
-}
-
-
 // --- SET INPUT ---
 bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	// Validate port & pin.

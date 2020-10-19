@@ -25,7 +25,6 @@ void callBack_button() {
 
 int main () {
 	// Initialise.
-	GPIO gpio;
 	Interrupts itrs;
 	
 	//const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
@@ -38,13 +37,13 @@ int main () {
 	const GPIO_ports led_port = GPIO_PORT_C;
 	
 	// Set the pin mode on the target LED pin.
-	gpio.set_output(led_port, led_pin, GPIO_PULL_UP);
-	gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
+	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 	
 	// Set the pin mode on the interrupt pins.
-	gpio.set_input(GPIO_PORT_B, 0, GPIO_PULL_UP);
-	gpio.set_input(GPIO_PORT_B, 1, GPIO_PULL_UP);
-	gpio.set_input(GPIO_PORT_B, 10, GPIO_PULL_UP);
+	GPIO::set_input(GPIO_PORT_B, 0, GPIO_PULL_UP);
+	GPIO::set_input(GPIO_PORT_B, 1, GPIO_PULL_UP);
+	GPIO::set_input(GPIO_PORT_B, 10, GPIO_PULL_UP);
 	
 	// Set the interrupts for the rotary encoder.
 	// A: Port B, pin 0 (D3 on Nucleo-32).
@@ -57,10 +56,10 @@ int main () {
 	
 	while (1) {
 		if (led_on) {
-			gpio.write(led_port, led_pin, GPIO_LEVEL_HIGH);
+			GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		}
 		else {
-			gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+			GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 		}
 	}
 	

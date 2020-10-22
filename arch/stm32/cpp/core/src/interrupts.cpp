@@ -165,7 +165,7 @@ Interrupts::~Interrupts() {
 
 
 // --- SET INTERRUPTS ---
-bool Interrupts::setInterrupt(uint8_t pin, GPIO_ports port, InterruptTrigger trigger, 
+bool Interrupts::setInterrupt(GPIO_ports port, uint8_t pin, InterruptTrigger trigger, 
 								std::function<void()> callback, uint8_t priority, uint8_t &handle) {
 	handle = pin;
 	InterruptSource &src = (*sources)[handle];

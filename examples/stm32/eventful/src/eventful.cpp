@@ -40,19 +40,24 @@ int main () {
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
 	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 	
+	//const uint8_t button_pin = 1; // Nucleo-f042k6 (PB1)
+	//const GPIO_ports button_port = GPIO_PORT_B;
+	const uint8_t button_pin = 10; // Blue Pill
+	const GPIO_ports button_port = GPIO_PORT_B;
+	
 	// Set the pin mode on the interrupt pins.
 	GPIO::set_input(GPIO_PORT_B, 0, GPIO_PULL_UP);
-	GPIO::set_input(GPIO_PORT_B, 1, GPIO_PULL_UP);
-	GPIO::set_input(GPIO_PORT_B, 10, GPIO_PULL_UP);
+	GPIO::set_input(GPIO_PORT_B, 4, GPIO_PULL_UP);
+	GPIO::set_input(button_port, button_pin, GPIO_PULL_UP);
 	
 	// Set the interrupts for the rotary encoder.
 	// A: Port B, pin 0 (D3 on Nucleo-32).
-	// B: Port B, pin 1 (D6 on Nucleo-32).
-	// Button: Port B, pin 4 (D12 on Nucleo-32).
+	// B: Port B, pin 4 (D12 on Nucleo-32).
+	// Button: Port B, pin 6 (D6 on Nucleo-32).
 	uint8_t handleA, handleB, handleC;
-	itrs.setInterrupt(0, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_A, 0, handleA);
-	itrs.setInterrupt(1, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_B, 0, handleB);
-	itrs.setInterrupt(10, GPIO_PORT_B, INTERRUPT_TRIGGER_FALLING, callBack_button, 0, handleC);
+	itrs.setInterrupt(GPIO_PORT_B, 0, INTERRUPT_TRIGGER_FALLING, callBack_A, 0, handleA);
+	itrs.setInterrupt(GPIO_PORT_B, 4, INTERRUPT_TRIGGER_FALLING, callBack_B, 0, handleB);
+	itrs.setInterrupt(button_port, button_pin, INTERRUPT_TRIGGER_FALLING, callBack_button, 0, handleC);
 	
 	while (1) {
 		if (led_on) {

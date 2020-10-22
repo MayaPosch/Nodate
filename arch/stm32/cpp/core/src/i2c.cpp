@@ -40,8 +40,31 @@ I2C_device* I2C_list() {
 	return devices;
 }
 
-I2C_device* i2cList = I2C_list();
 
+// FIXME: hard-coding I2C timings isn't ideal. Neither is dynamically calculating them.
+uint32_t* i2c_timings_8[4];
+uint32_t* i2c_timings_16[4];
+uint32_t* i2c_timings_48[4];
+
+void I2C_timings() {
+#if defined STM32F0	
+	i2c_timings_8[0] = 0x1042C3C7;
+	i2c_timings_8[1] = 0x10420F13;
+	i2c_timings_8[2] = 0x00310309;
+	i2c_timings_8[3] = 0x00100306;
+	i2c_timings_16[0] = 0x3042C3C7;
+	i2c_timings_16[1] = 0x30420F13;
+	i2c_timings_16[2] = 0x10320309;
+	i2c_timings_16[3] = 0x00200204;
+	i2c_timings_48[0] = 0xB042C3C7;
+	i2c_timings_48[1] = 0xB0420F13;
+	i2c_timings_48[2] = 0x50330309;
+	i2c_timings_48[3] = 0x50100103;
+#endif
+}
+
+
+I2C_device* i2cList = I2C_list();
 
 // Static initialisations.
 GPIO I2C::gpio;
@@ -108,19 +131,30 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 
 // --- START MASTER ---
 // Start I2C master mode on the target I2C peripheral.
-static bool startMaster(I2C_devices device) {
+static bool startMaster(I2C_devices device, I2C_modes mode) {
 	I2C_device &instance = i2cList[device];
 	
 	// Check status. Set parameters.
 	if (instance.active) { return true; } // Already active.
 #if defined STM32F0
 	// Set timing register.
-	instance.regs->TIMINGR = (uint32_t) 0x00B01A4B;
+	//instance.regs->TIMINGR = (uint32_t) 0x00B01A4B;
+	if (SystemCoreClock == 8000000) {
+		instance.regs->TIMINGR = i2c_timings_8[mode];
+	}
+	else if (SystemCoreClock == 16000000) {
+		instance.regs->TIMINGR = i2c_timings_16[mode];
+	}
+	else if (SystemCoreClock == 48000000) {
+		instance.regs->TIMINGR = i2c_timings_48[mode];
+	}
+	else {
+		// Unavailable timing for this system clock.
+		return false;
+	}
 	
 	// Enable peripheral.
 	instance.regs->CR1 = I2C_CR1_PE;
-	
-	// 
 #endif
 	
 	return true;

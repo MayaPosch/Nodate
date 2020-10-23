@@ -28,13 +28,15 @@ enum I2C_modes {
 
 struct I2C_device {
 	bool active = false;
+	bool master = false;
+	uint8_t slaveTarget;
 	I2C_TypeDef* regs;
 	RccPeripheral per;
 };
 
 
 class I2C {
-	static GPIO gpio;
+	//
 	
 public:
 	static bool startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uint8_t scl_af,
@@ -42,8 +44,8 @@ public:
 	static bool startMaster(I2C_devices device, I2C_modes mode);
 	static bool setSlaveTarget(I2C_devices, uint8_t slave);
 	static bool startSlave(I2C_devices device, uint8_t address);
-	static bool sendI2C(I2C_devices device, uint8_t byte);
-	static bool sendI2C(I2C_devices device, char* data, uint32_t len);
+	static bool sendI2CSlave(I2C_devices device, uint8_t* data, uint8_t len);
+	static bool sendI2CMaster(I2C_devices device, uint8_t* data, uint8_t len);
 	static bool stopI2C(I2C_devices device);
 };
 

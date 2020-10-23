@@ -66,9 +66,6 @@ void I2C_timings() {
 
 I2C_device* i2cList = I2C_list();
 
-// Static initialisations.
-GPIO I2C::gpio;
-
 
 // --- START I2C ---
 // Perform basic initialisation of I2C peripheral. After this the device can be further configured
@@ -131,7 +128,7 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 
 // --- START MASTER ---
 // Start I2C master mode on the target I2C peripheral.
-static bool startMaster(I2C_devices device, I2C_modes mode) {
+bool I2C::startMaster(I2C_devices device, I2C_modes mode) {
 	I2C_device &instance = i2cList[device];
 	
 	// Check status. Set parameters.
@@ -154,14 +151,70 @@ static bool startMaster(I2C_devices device, I2C_modes mode) {
 	}
 	
 	// Enable peripheral.
-	instance.regs->CR1 = I2C_CR1_PE;
+	instance.regs->CR1 |= I2C_CR1_PE;
 #endif
+	
+	instance.master = true;
 	
 	return true;
 }
 	
+
+// --- SET SLAVE TARGET ---
+// Set the slave address to target (Master mode).
+// TODO: add support for 10-bit addresses.
+bool I2C::setSlaveTarget(I2C_devices, uint8_t slave) {
+	I2C_device &instance = i2cList[device];
+	instance.slaveTarget = slave;
 	
-	static bool setSlaveTarget(I2C_devices, uint8_t slave);
-	static bool startSlave(I2C_devices device, uint8_t address);
-	static bool sendI2C(I2C_devices, uint8_t byte);
-	static bool stopI2C(I2C_devices);
+	return true;
+}
+
+
+// --- START SLAVE ---
+// Start I2C device in Slave mode.
+bool I2C::startSlave(I2C_devices device, uint8_t address) {
+	//
+	
+	return true;
+}
+
+
+// --- SEND I2C SLAVE ---
+// Send length bytes on the I2C bus to the set Slave address.
+bool I2C::sendI2CSlave(I2C_devices, uint8_t* data, uint8_t len) {
+	I2C_device &instance = i2cList[device];
+	instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1);
+	
+	for (int i = 0; i < len; i++) {
+		// Check that the transmit data register (TXDR) is empty.
+		if ((instance.regs->ISR & I2C_ISR_TXE) == (I2C_ISR_TXE)) {
+			instance.regs->TXDR = data[i];
+			instance.regs->CR2 |= I2C_CR2_START; // Transmit.
+			
+			// TODO: handle transmit errors.
+		}
+	}
+	
+	return true;
+}
+
+
+// --- SEND I2C MASTER ---
+// Send data to the master on the I2C device.
+bool I2C::sendI2CMaster(I2C_devices device, uint8_t* data, uint8_t len) {
+	//
+	
+	return true;
+}
+
+
+// --- STOP I2C ---
+// Stop I2C device and reset in preparation for new initialisation.
+bool I2C::stopI2C(I2C_devices) {
+#if defined STM32F0
+	instance.regs->CR1 &= ~I2C_CR1_PE;
+#endif
+	
+	return true;
+}

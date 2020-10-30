@@ -32,6 +32,7 @@ struct I2C_device {
 	uint8_t slaveTarget;
 	I2C_TypeDef* regs;
 	RccPeripheral per;
+	IRQn_Type irqType;
 };
 
 
@@ -42,11 +43,13 @@ public:
 	static bool startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uint8_t scl_af,
 											GPIO_ports sda_port, uint8_t sda_pin, uint8_t sda_af);
 	static bool startMaster(I2C_devices device, I2C_modes mode);
-	static bool setSlaveTarget(I2C_devices, uint8_t slave);
+	static bool setSlaveTarget(I2C_devices device, uint8_t slave);
 	static bool startSlave(I2C_devices device, uint8_t address);
-	static bool sendI2CSlave(I2C_devices device, uint8_t* data, uint8_t len);
-	static bool sendI2CMaster(I2C_devices device, uint8_t* data, uint8_t len);
-	static bool stopI2C(I2C_devices device);
+	static bool sendToSlave(I2C_devices device, uint8_t* data, uint8_t len);
+	static bool sendToMaster(I2C_devices device, uint8_t* data, uint8_t len);
+	static bool receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer);
+	static bool receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer);
+	static bool stop(I2C_devices device);
 };
 
 #endif

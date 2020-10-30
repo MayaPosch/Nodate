@@ -31,10 +31,12 @@ I2C_device* I2C_list() {
 	
 #ifdef RCC_APB1ENR_I2C1EN
 	devices[I2C_1].regs = I2C1;
+	devices[I2C_1].irqType = I2C1_IRQn;
 #endif
 
 #ifdef RCC_APB1ENR_I2C2EN
 	devices[I2C_2].regs = I2C2;
+	devices[I2C_2].irqType = I2C2_IRQn;
 #endif
 	
 	return devices;
@@ -42,9 +44,9 @@ I2C_device* I2C_list() {
 
 
 // FIXME: hard-coding I2C timings isn't ideal. Neither is dynamically calculating them.
-uint32_t* i2c_timings_8[4];
-uint32_t* i2c_timings_16[4];
-uint32_t* i2c_timings_48[4];
+uint32_t i2c_timings_8[4];
+uint32_t i2c_timings_16[4];
+uint32_t i2c_timings_48[4];
 
 void I2C_timings() {
 #if defined STM32F0	
@@ -81,30 +83,30 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 	
 	// Configure SDA & SCL pins.
 #ifdef __stm32f1
-	if (!gpio.set_af(instance.per, scl_af)) {
+	if (!GPIO::set_af(instance.per, scl_af)) {
 		Rcc::disablePort((RccPort) scl_port);
 		return false;
 	}
 #else
-	if (!gpio.set_af(scl_port, scl_pin, scl_af)) {
+	if (!GPIO::set_af(scl_port, scl_pin, scl_af)) {
 		Rcc::disablePort((RccPort) scl_port);
 		return false;
 	}
 	
-	if (!gpio.set_af(sda_port, sda_pin, sda_af)) {
+	if (!GPIO::set_af(sda_port, sda_pin, sda_af)) {
 		Rcc::disablePort((RccPort) scl_port);
 		Rcc::disablePort((RccPort) sda_port);
 		return false;
 	}
 #endif
 	
-	if (!gpio.set_output_parameters(scl_port, scl_pin, GPIO_FLOATING, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
+	if (!GPIO::set_output_parameters(scl_port, scl_pin, GPIO_FLOATING, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) scl_port);
 		Rcc::disablePort((RccPort) sda_port);
 		return false;
 	}
 	
-	if (!gpio.set_output_parameters(sda_port, sda_pin, GPIO_FLOATING, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
+	if (!GPIO::set_output_parameters(sda_port, sda_pin, GPIO_FLOATING, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) scl_port);
 		Rcc::disablePort((RccPort) sda_port);
 		return false;
@@ -120,6 +122,10 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 		// TODO: set status.
 		return false; 
 	}
+	
+	// Register interrupt.
+	NVIC_SetPriority(instance.irqType, 0);
+	NVIC_EnableIRQ(instance.irqType); 
 	
 	instance.active = true;
 	return true;
@@ -163,7 +169,7 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode) {
 // --- SET SLAVE TARGET ---
 // Set the slave address to target (Master mode).
 // TODO: add support for 10-bit addresses.
-bool I2C::setSlaveTarget(I2C_devices, uint8_t slave) {
+bool I2C::setSlaveTarget(I2C_devices device, uint8_t slave) {
 	I2C_device &instance = i2cList[device];
 	instance.slaveTarget = slave;
 	
@@ -180,9 +186,9 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 }
 
 
-// --- SEND I2C SLAVE ---
+// --- SEND TO SLAVE ---
 // Send length bytes on the I2C bus to the set Slave address.
-bool I2C::sendI2CSlave(I2C_devices, uint8_t* data, uint8_t len) {
+bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
 	I2C_device &instance = i2cList[device];
 	instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1);
 	
@@ -200,9 +206,26 @@ bool I2C::sendI2CSlave(I2C_devices, uint8_t* data, uint8_t len) {
 }
 
 
-// --- SEND I2C MASTER ---
-// Send data to the master on the I2C device.
-bool I2C::sendI2CMaster(I2C_devices device, uint8_t* data, uint8_t len) {
+// --- SEND TO MASTER ---
+// Send data to the Master on the I2C device.
+bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
+	//
+	
+	return true;
+}
+
+
+// --- RECEIVE FROM SLAVE ---
+// Configure Master to receive data from a Slave device.
+bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) {
+	//
+	
+	return true;
+}
+
+
+// ---- RECEIVE FROM MASTER ---
+bool I2C::receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer) {
 	//
 	
 	return true;
@@ -211,10 +234,14 @@ bool I2C::sendI2CMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 
 // --- STOP I2C ---
 // Stop I2C device and reset in preparation for new initialisation.
-bool I2C::stopI2C(I2C_devices) {
+bool I2C::stop(I2C_devices device) {
+	I2C_device &instance = i2cList[device];
 #if defined STM32F0
 	instance.regs->CR1 &= ~I2C_CR1_PE;
 #endif
+
+	// Disable interrupt.
+	NVIC_DisableIRQ(instance.irqType);
 	
 	return true;
 }

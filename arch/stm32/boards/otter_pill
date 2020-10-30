@@ -1,0 +1,5 @@
+# Definition file for the STM32 'Otter Pill' STM32F072C8T development board.
+# https://github.com/Jan--Henrik/OtterPill
+
+MCU := stm32f072c8tx
+PROGRAMMER := interface/stlink-v2.cfg -f target/stm32f0x.cfg

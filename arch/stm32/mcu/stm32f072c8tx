@@ -1,0 +1,15 @@
+# MCU definition file for the stm32f072c8t MCU.
+# Package: LQFP48.
+
+MCU_FAMILY := stm32f0
+MCU_GENUS := stm32f072xb
+MCU_GENUS_CAP := STM32F072xB
+
+MCU := stm32f072c8t
+MCU_CORE := stm32f072
+MCU_RAM := 65536
+MCU_PACKAGE := lqfp48
+
+MCU_FLAGS := -mcpu=cortex-m0 -mthumb
+
+MCU_LD := stm32f072c8tx.ld

@@ -17,6 +17,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 * 'Blue Pill' (STM32F103C8)
 * STM32F4-Discovery (STM32F407VGT)
 * Nucleo-F746ZG (STM32F746ZG)
+* 'Otter Pill' (STM32F072C8Tx)
 
 **Usage**
 

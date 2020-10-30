@@ -10,8 +10,10 @@ int main () {
 	//const GPIO_ports led_port = GPIO_PORT_D;
 	//const uint8_t led_pin = 7; // Nucleo-F746ZG: Port B, pin 7 (blue)
 	//const GPIO_ports led_port = GPIO_PORT_B;
-	const uint8_t led_pin = 13;	// Blue Pill: Port C, pin 13.
-	const GPIO_ports led_port = GPIO_PORT_C;
+	//const uint8_t led_pin = 13;	// Blue Pill: Port C, pin 13.
+	//const GPIO_ports led_port = GPIO_PORT_C;
+	const uint8_t led_pin = 13;	// Otter Pill: Port B, pin 13.
+	const GPIO_ports led_port = GPIO_PORT_B;
 	
 	//const uint8_t button_pin = 1; // Nucleo-f042k6 (PB1)
 	//const GPIO_ports button_port = GPIO_PORT_B;
@@ -19,7 +21,7 @@ int main () {
 	//const GPIO_ports button_port = GPIO_PORT_A;
 	//const uint8_t button_pin = 13; // Nucleo-F746ZG (PC13)
 	//const GPIO_ports button_port = GPIO_PORT_C;
-	const uint8_t button_pin = 10; // Blue Pill
+	const uint8_t button_pin = 10; // Blue Pill / Otter Pill
 	const GPIO_ports button_port = GPIO_PORT_B;
 	
 	// Set the pin mode on the LED pin.

@@ -23,7 +23,7 @@ include $(TOP)/mcu/$(MCU)
 
 
 OUTPUT := $(OUTPUT).$(MCU)
-INCLUDE := -I $(TOP)/$(LANGUAGE)/core/include -I $(TOP)/$(LANGUAGE)/core/include/$(MCU_FAMILY)
+INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/include/$(MCU_FAMILY)
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
 FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections \
@@ -32,10 +32,10 @@ LIBS := -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,--p
 CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11 $(APP_C_FLAGS)
 CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions $(APP_CPP_FLAGS)
 
-CPPSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/*.cpp) \
+CPPSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.cpp) \
 				$(APP_CPP_FILES)
 			
-CSOURCES := $(wildcard arch/stm32/$(LANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
+CSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
 			$(APP_C_FILES)
 SSOURCES := arch/stm32/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
@@ -47,8 +47,8 @@ all: makedir $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).bin
 makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/asm/$(MCU_FAMILY)
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(LANGUAGE)/core/src
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(LANGUAGE)/core/src/$(MCU_FAMILY)
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/bin
 
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp

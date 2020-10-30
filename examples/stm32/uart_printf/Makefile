@@ -6,7 +6,7 @@
 ARCH ?= stm32
 
 # Target programming language (Ada, C++)
-LANGUAGE ?= cpp
+NDLANGUAGE ?= cpp
 
 # One can use the board preset.
 BOARD ?= nucleo-f042k6

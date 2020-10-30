@@ -25,13 +25,23 @@ std::vector<USART_device>* USART_list() {
 #endif
 
 #if defined RCC_APB1ENR_USART3EN
+#if defined __stm32f0
+	((*devicesStatic))[USART_3].regs = USART3;
+	((*devicesStatic))[USART_3].irqType = USART3_4_IRQn;
+#else
 	((*devicesStatic))[USART_3].regs = USART3;
 	((*devicesStatic))[USART_3].irqType = USART3_IRQn;
 #endif
+#endif
 
 #if defined RCC_APB1ENR_UART4EN
+#if defined __stm32f0
+	((*devicesStatic))[USART_4].regs = UART4;
+	((*devicesStatic))[USART_4].irqType = USART3_4_IRQn;
+#else
 	((*devicesStatic))[USART_4].regs = UART4;
 	((*devicesStatic))[USART_4].irqType = UART4_IRQn;
+#endif
 #endif
 
 #if defined RCC_APB1ENR_UART5EN
@@ -65,6 +75,7 @@ GPIO USART::gpio;
 
 // Callback handlers.
 // Overrides the default handlers and allows the use of custom callback functions.
+#if defined __stm32f1 || defined __stm32f4 || defined __stm32f7
 extern "C" {
 	void USART1_IRQHandler(void);
 	void USART2_IRQHandler(void);
@@ -75,10 +86,48 @@ extern "C" {
 	void USART7_IRQHandler(void);
 	void USART8_IRQHandler(void);
 }
+#elif defined __stm32f0
+extern "C" {
+	void USART1_IRQHandler(void);
+	void USART2_IRQHandler(void);
+	void USART3_4_IRQHandler(void);
+}
+#endif
 
 volatile char rxb = 'a';
 
-#if defined __stm32f0 || defined __stm32f7
+#if defined __stm32f0
+
+void USART1_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[0];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART2_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[1];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART3_4_IRQHandler(void) {
+	USART_device &instance = (*devicesStatic)[2];
+	USART_device &instance2 = (*devicesStatic)[3];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+	else if (instance2.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance2.regs->RDR;
+		instance2.callback(rxb);
+	}
+}
+
+#elif defined __stm32f7
 
 void USART1_IRQHandler(void) {
 	USART_device &instance = (*devicesStatic)[0];

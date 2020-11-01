@@ -1,0 +1,15 @@
+# MCU definition file for the stm32f051r8t MCU.
+# Package: LQFP64.
+
+MCU_FAMILY := stm32f0
+MCU_GENUS := stm32f051x8
+MCU_GENUS_CAP := STM32F051x8
+
+MCU := stm32f051r8t
+MCU_CORE := stm32f051
+MCU_RAM := 65536
+MCU_PACKAGE := lqfp64
+
+MCU_FLAGS := -mcpu=cortex-m0 -mthumb
+
+MCU_LD := stm32f051r8tx.ld

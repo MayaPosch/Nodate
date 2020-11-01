@@ -13,11 +13,29 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 
 **Supported boards:**
 
-* Nucleo-F042K6 (STM32F042K6T)
-* 'Blue Pill' (STM32F103C8)
-* STM32F4-Discovery (STM32F407VGT)
-* Nucleo-F746ZG (STM32F746ZG)
-* 'Otter Pill' (STM32F072C8Tx)
+F0 | Boards
+----|-------------
+STM32F042K6T | [Nucleo-F042K6](https://www.st.com/en/evaluation-tools/nucleo-f042k6.html)
+STM32F051R8T | [STM32F0-Discovery](https://www.st.com/en/evaluation-tools/stm32f0discovery.html)
+STM32F072C8Tx | ['Otter Pill'](https://github.com/Jan--Henrik/OtterPill)
+
+
+F1 | Boards 
+---|--------------
+STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html)
+
+
+
+F4 | Boards 
+---|--------------
+STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html)
+
+
+F7 | Boards
+---|--------------
+STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html)
+
+
 
 **Usage**
 
@@ -53,7 +71,7 @@ For Ada, use the STM32 toolchain from AdaCore.
 
 **Implemented features**
 
-At this point in time, the following functionality has been implemented on the C++ side:
+The following functionality has been implemented on the C++ side:
 
 * RCC.
 * GPIO (digital & AF).

@@ -94,10 +94,10 @@ bool Clock::enableMaxClock() {
 	
 	// Clear any old settings, set new settings.
 	RCC->CFGR &= ~(RCC_CFGR_PLLMUL | RCC_CFGR_PLLSRC);
-	RCC->CFGR |= (RCC_CFGR_PLLSRC_HSI_PREDIV | RCC_CFGR_PPRE_DIV1 | RCC_CFGR_PLLMUL6);
+	//RCC->CFGR |= (RCC_CFGR_PLLSRC_HSI_PREDIV | RCC_CFGR_PPRE_DIV1 | RCC_CFGR_PLLMUL6);
 	
 	// Turn PLL back on.
-	RCC_CR |= RCC_CR_PLLON;
+	RCC->CR |= RCC_CR_PLLON;
 	while (!(RCC->CR & RCC_CR_PLLRDY)) {}	// Wait for PLL to turn on.
 	
 	// Set PLL as sysclock source.

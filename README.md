@@ -37,7 +37,7 @@ Examples on how to use Nodate can be found in the `examples/stm32` folder. The b
 	ARCH ?= stm32
 	
 	# Target programming language (Ada, C++)
-	LANGUAGE ?= cpp
+	NDLANGUAGE ?= cpp
 	
 	# Board preset.
 	BOARD ?= nucleo-f042k6

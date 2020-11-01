@@ -13,27 +13,20 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 
 **Supported boards:**
 
-F0 | Boards
-----|-------------
-STM32F042K6T | [Nucleo-F042K6](https://www.st.com/en/evaluation-tools/nucleo-f042k6.html)
-STM32F051R8T | [STM32F0-Discovery](https://www.st.com/en/evaluation-tools/stm32f0discovery.html)
-STM32F072C8Tx | ['Otter Pill'](https://github.com/Jan--Henrik/OtterPill)
-
-
-F1 | Boards 
----|--------------
-STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html)
-
-
-
-F4 | Boards 
----|--------------
-STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html)
-
-
-F7 | Boards
----|--------------
-STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html)
+&nbsp; | MCU |Boards
+----|--------|-----
+**F0** | &nbsp; | &nbsp;
+&nbsp; | STM32F042K6T | [Nucleo-F042K6](https://www.st.com/en/evaluation-tools/nucleo-f042k6.html)
+&nbsp; | STM32F051R8T | [STM32F0-Discovery](https://www.st.com/en/evaluation-tools/stm32f0discovery.html)
+&nbsp; | STM32F072C8Tx | ['Otter Pill'](https://github.com/Jan--Henrik/OtterPill)
+&nbsp; | &nbsp; | &nbsp;
+**F1** | &nbsp; | &nbsp;
+&nbsp; | STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html)
+&nbsp; | &nbsp; | &nbsp;
+**F4** | &nbsp; | &nbsp;
+&nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html)
+**F7** | &nbsp; | &nbsp;
+&nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html)
 
 
 

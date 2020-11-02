@@ -31,7 +31,7 @@ I2C_device* I2C_list() {
 	
 #ifdef RCC_APB1ENR_I2C1EN
 	devices[I2C_1].regs = I2C1;
-#ifdef __stm32f4
+#if defined __stm32f4 || defined __stm32f1
 	devices[I2C_1].irqType = I2C1_EV_IRQn;
 #else
 	devices[I2C_1].irqType = I2C1_IRQn;
@@ -40,7 +40,7 @@ I2C_device* I2C_list() {
 
 #ifdef RCC_APB1ENR_I2C2EN
 	devices[I2C_2].regs = I2C2;
-#ifdef __stm32f4
+#if defined __stm32f4 || defined __stm32f1
 	devices[I2C_2].irqType = I2C2_EV_IRQn;
 #else
 	devices[I2C_2].irqType = I2C2_IRQn;
@@ -49,7 +49,7 @@ I2C_device* I2C_list() {
 
 #ifdef RCC_APB1ENR_I2C3EN
 	devices[I2C_3].regs = I2C3;
-#ifdef __stm32f4
+#if defined __stm32f4 || defined __stm32f1
 	devices[I2C_3].irqType = I2C3_EV_IRQn;
 #else
 	devices[I2C_3].irqType = I2C3_IRQn;

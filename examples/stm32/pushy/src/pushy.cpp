@@ -14,17 +14,21 @@ int main () {
 	//const GPIO_ports led_port = GPIO_PORT_C;
 	//const uint8_t led_pin = 13;	// Otter Pill: Port B, pin 13.
 	//const GPIO_ports led_port = GPIO_PORT_B;
-	const uint8_t led_pin = 9;	// STM32F0-Discovery (PC9, green).
-	const GPIO_ports led_port = GPIO_PORT_C;
+	//const uint8_t led_pin = 9;	// STM32F0-Discovery (PC9, green).
+	//const GPIO_ports led_port = GPIO_PORT_C;
+	const uint8_t led_pin = 1;	// Maple Mini
+	const GPIO_ports led_port = GPIO_PORT_B;
 	
 	//const uint8_t button_pin = 1; // Nucleo-f042k6 (PB1)
 	//const GPIO_ports button_port = GPIO_PORT_B;
-	const uint8_t button_pin = 0; // STM32F0-Discovery / STM32F4-Discovery (PA0)
-	const GPIO_ports button_port = GPIO_PORT_A;
+	//const uint8_t button_pin = 0; // STM32F0-Discovery / STM32F4-Discovery (PA0)
+	//const GPIO_ports button_port = GPIO_PORT_A;
 	//const uint8_t button_pin = 13; // Nucleo-F746ZG (PC13)
 	//const GPIO_ports button_port = GPIO_PORT_C;
 	//const uint8_t button_pin = 10; // Blue Pill / Otter Pill
 	//const GPIO_ports button_port = GPIO_PORT_B;
+	const uint8_t button_pin = 8;	// Maple Mini
+	const GPIO_ports button_port = GPIO_PORT_B;
 	
 	// Set the pin mode on the LED pin.
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);

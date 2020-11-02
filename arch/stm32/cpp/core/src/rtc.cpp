@@ -100,6 +100,7 @@ bool Rtc::enableRTC() {
 
 // --- SET TIME ---
 bool Rtc::setTime(uint32_t time) {
+#if defined __stm32f4
 	// Unlock RTC write protection.
 	RTC->WPR = 0xCA;
 	RTC->WPR = 0x53;
@@ -119,6 +120,7 @@ bool Rtc::setTime(uint32_t time) {
 	// Disable write access.
 	RTC->WPR = 0xFE;
 	RTC->WPR = 0x64; 
+#endif
 	
 	return true;
 }
@@ -126,6 +128,7 @@ bool Rtc::setTime(uint32_t time) {
 
 // --- GET TIME ---
 bool Rtc::getTime(RtcTime &time) {
+#if defined __stm32f4
 	uint32_t currentTime = RTC->TR;
 	time.hour_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 20) + 48);
 	time.hour_units = (uint8_t) (((currentTime & RTC_TR_HT) >> 16) + 48);
@@ -133,6 +136,7 @@ bool Rtc::getTime(RtcTime &time) {
 	time.minute_units = (uint8_t) (((currentTime & RTC_TR_HT) >> 8) + 48);
 	time.second_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 4) + 48);
 	time.second_units = (uint8_t) (((currentTime & RTC_TR_HT)) + 48);
+#endif
 	
 	return true;
 }
@@ -168,7 +172,9 @@ bool Rtc::getDate(char* date, uint8_t &len) {
 bool Rtc::disableRTC() {
 	if (!rtc_enabled) { return true; }
 	
+#if defined __stm32f4
 	RCC->BDCR &= ~(RCC_BDCR_RTCEN);
+#endif
 	
 	rtc_enabled = false;
 	

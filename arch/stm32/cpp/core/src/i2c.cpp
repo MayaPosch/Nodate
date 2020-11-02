@@ -19,7 +19,7 @@ void I2C1_IRQHandler(void) {
 }
 
 
-const int i2c_count = 2;
+const int i2c_count = 3;
 
 // --- I2C DEVICES ---
 I2C_device* I2C_list() {
@@ -31,12 +31,29 @@ I2C_device* I2C_list() {
 	
 #ifdef RCC_APB1ENR_I2C1EN
 	devices[I2C_1].regs = I2C1;
+#ifdef __stm32f4
+	devices[I2C_1].irqType = I2C1_EV_IRQn;
+#else
 	devices[I2C_1].irqType = I2C1_IRQn;
+#endif
 #endif
 
 #ifdef RCC_APB1ENR_I2C2EN
 	devices[I2C_2].regs = I2C2;
+#ifdef __stm32f4
+	devices[I2C_2].irqType = I2C2_EV_IRQn;
+#else
 	devices[I2C_2].irqType = I2C2_IRQn;
+#endif
+#endif
+
+#ifdef RCC_APB1ENR_I2C3EN
+	devices[I2C_3].regs = I2C3;
+#ifdef __stm32f4
+	devices[I2C_3].irqType = I2C3_EV_IRQn;
+#else
+	devices[I2C_3].irqType = I2C3_IRQn;
+#endif
 #endif
 	
 	return devices;
@@ -190,6 +207,7 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 // Send length bytes on the I2C bus to the set Slave address.
 bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
 	I2C_device &instance = i2cList[device];
+#if defined STM32F0
 	instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1);
 	
 	for (int i = 0; i < len; i++) {
@@ -201,6 +219,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
 			// TODO: handle transmit errors.
 		}
 	}
+#endif
 	
 	return true;
 }
@@ -238,10 +257,10 @@ bool I2C::stop(I2C_devices device) {
 	I2C_device &instance = i2cList[device];
 #if defined STM32F0
 	instance.regs->CR1 &= ~I2C_CR1_PE;
-#endif
 
 	// Disable interrupt.
 	NVIC_DisableIRQ(instance.irqType);
+#endif
 	
 	return true;
 }

@@ -14,7 +14,8 @@
 
 enum I2C_devices {
 	I2C_1,
-	I2C_2
+	I2C_2,
+	I2C_3
 };
 
 

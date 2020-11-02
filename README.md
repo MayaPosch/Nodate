@@ -21,6 +21,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 &nbsp; | STM32F072C8Tx | ['Otter Pill'](https://github.com/Jan--Henrik/OtterPill)
 **F1** | &nbsp; | &nbsp;
 &nbsp; | STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html)
+&nbsp; | STM32F103CB  | [Maple Mini](https://github.com/leaflabs/maple)
 **F4** | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html)
 **F7** | &nbsp; | &nbsp;

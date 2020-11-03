@@ -4,6 +4,8 @@
 #include <usart.h>
 #include <timer.h>
 #include <io.h>
+#include <rtc.h>
+
 
 extern "C" {
 #include "dhry.h"
@@ -107,12 +109,9 @@ int main () {
 	// Set up stdout.
 	IO::setStdOutTarget(USART_2);
 	
-	GPIO gpio;
-	Timer timer;
-	
 	// Set the pin mode on the LED pin.
-	gpio.set_output(led_port, led_pin, GPIO_PULL_UP);
-	gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
+	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 	
 	// Run the Dhrystone benchmark.
 	/*****/
@@ -175,6 +174,12 @@ int main () {
 	/***************/
 	/* Start timer */
 	/***************/
+	
+	// Ensure the RTC is running.
+	// Wait 100 ms to allow it to settle.
+	Rtc::enableRTC();
+	Timer timer;
+	timer.delay(100);
  
 #ifdef TIMES
 	times (&time_info);
@@ -328,9 +333,9 @@ int main () {
 		// The interrupt handler will handle things from here.
 		
 		// The LED is used to indicate reception of data.
-		gpio.write(led_port, led_pin, GPIO_LEVEL_HIGH);
+		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		timer.delay(1000);
-		gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);
+		GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 		timer.delay(1000);
 	}
 	

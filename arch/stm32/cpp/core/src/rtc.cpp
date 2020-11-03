@@ -72,8 +72,13 @@ bool Rtc::enableRTC() {
 	// Configure interrupts.
 	EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
 	EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
+#if defined __stm32f0
+	NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
+	NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
+#else
 	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
-	NVIC_EnableIRQ(RTC_Alarm_IRQn);	// Enable IRQ in NVIC. (Note: RTC_IRQn on F0).
+	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC.
+#endif
 	
 	// End configuration phase.
 	
@@ -126,16 +131,30 @@ bool Rtc::setTime(uint32_t time) {
 }
 
 
+
+/**
+  * @brief  Converts from 2 digit BCD to Binary.
+  * @param  Value BCD value to be converted
+  * @retval Converted word
+  */
+uint8_t bcd2ToByte(uint8_t value) {
+  uint32_t tmp = 0U;
+  tmp = ((uint8_t)(value & (uint8_t) 0xF0) >> (uint8_t) 0x4) * 10;
+  return (tmp + (value & (uint8_t) 0x0F));
+}
+
+
 // --- GET TIME ---
 bool Rtc::getTime(RtcTime &time) {
 #if defined __stm32f4
 	uint32_t currentTime = RTC->TR;
-	time.hour_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 20) + 48);
-	time.hour_units = (uint8_t) (((currentTime & RTC_TR_HT) >> 16) + 48);
-	time.minute_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 12) + 48);
-	time.minute_units = (uint8_t) (((currentTime & RTC_TR_HT) >> 8) + 48);
-	time.second_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 4) + 48);
-	time.second_units = (uint8_t) (((currentTime & RTC_TR_HT)) + 48);
+	//time.hour_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 20) + 48);
+	time.hour_tens = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_HT) >> 20));
+	time.hour_units = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_HU) >> 16));
+	time.minute_tens = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_MNT) >> 12));
+	time.minute_units = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_MNU) >> 8));
+	time.second_tens = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_ST) >> 4));
+	time.second_units = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_SU)));
 #endif
 	
 	return true;
@@ -160,9 +179,7 @@ bool Rtc::getDate() {
 
 // --- GET DATE ---
 bool Rtc::getDate(char* date, uint8_t &len) {
-	len = 20;
-	//char* stringtosend[20] = "\n00 : 00 : 00 ";
-	//date = char[20];
+	//
 	
 	return true;
 }
@@ -171,6 +188,12 @@ bool Rtc::getDate(char* date, uint8_t &len) {
 // --- DISABLE RTC ---
 bool Rtc::disableRTC() {
 	if (!rtc_enabled) { return true; }
+	
+#if defined __stm32f0
+	NVIC_DisableIRQ(RTC_IRQn);
+#else
+	NVIC_DisableIRQ(RTC_Alarm_IRQn);
+#endif
 	
 #if defined __stm32f4
 	RCC->BDCR &= ~(RCC_BDCR_RTCEN);

@@ -43,6 +43,9 @@ int main() {
 	// Start RTC
 	Rtc::enableRTC();
 	
+	// Wait 1 second to give the RTC time to start.
+	timer.delay(1000);
+	
 	// Get time.
 	RtcTime time;
 	Rtc::getTime(time);
@@ -51,8 +54,8 @@ int main() {
 	printf("Time: %d%d:%d%d:%d%d\n", time.hour_tens, time.hour_units, time.minute_tens, 
 									time.minute_units, time.second_tens, time.second_units);
 						
-	// Wait 1 second.
-	timer.delay(1000);
+	// Wait 10 seconds.
+	timer.delay(10000);
 	
 	// Check time again.
 	Rtc::getTime(time);

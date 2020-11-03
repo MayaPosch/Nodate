@@ -1,4 +1,4 @@
-# Definition file for the STM32 'Blue Pill' STM32F103CBT development board.
+# Definition file for the STM32 'Maple Mini' STM32F103CBT development board.
 
 MCU := stm32f103xb
 PROGRAMMER := interface/stlink-v2.cfg -f target/stm32f1x.cfg

@@ -28,9 +28,6 @@ uint8_t RTC_Bcd2ToByte(uint8_t Value) {
 }
 
 
-#define RTC_TR_RESERVED_MASK    0x007F7F7FU
-
-
 int _times(struct tms* buf) {
 #if defined RTC_TR_SU
 	if (!rtc_pwr_enabled) {
@@ -45,9 +42,9 @@ int _times(struct tms* buf) {
 	//		clock_t tms_cutime; /* user time of children */
 	//		clock_t tms_cstime; /* system time of children */
 	//	};
-	uint32_t tTR = (uint32_t) (RTC->TR & RTC_TR_RESERVED_MASK);
-	uint8_t bcd_ticks = (uint8_t) (tTR & (RTC_TR_ST | RTC_TR_SU));
-	uint32_t ticks = RTC_Bcd2ToByte(bcd_ticks) * SystemCoreClock;
+	uint32_t tTR = RTC->TR;
+	uint32_t ticks = (uint8_t) RTC_Bcd2ToByte(tTR & (RTC_TR_ST | RTC_TR_SU));
+	ticks = ticks * SystemCoreClock;
 	buf->tms_utime = ticks;
 	buf->tms_stime = ticks;
 	buf->tms_cutime = ticks;

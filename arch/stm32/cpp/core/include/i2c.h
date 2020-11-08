@@ -11,6 +11,8 @@
 #include <gpio.h>
 #include <rcc.h>
 
+#include <functional>
+
 
 enum I2C_devices {
 	I2C_1,
@@ -34,6 +36,7 @@ struct I2C_device {
 	I2C_TypeDef* regs;
 	RccPeripheral per;
 	IRQn_Type irqType;
+	std::function<void(uint8_t)> callback;
 };
 
 
@@ -43,7 +46,8 @@ class I2C {
 public:
 	static bool startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uint8_t scl_af,
 											GPIO_ports sda_port, uint8_t sda_pin, uint8_t sda_af);
-	static bool startMaster(I2C_devices device, I2C_modes mode);
+	static bool startMaster(I2C_devices device, I2C_modes mode, 
+											std::function<void(uint8_t)> callback);
 	static bool setSlaveTarget(I2C_devices device, uint8_t slave);
 	static bool startSlave(I2C_devices device, uint8_t address);
 	static bool sendToSlave(I2C_devices device, uint8_t* data, uint8_t len);

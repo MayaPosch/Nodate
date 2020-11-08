@@ -8,17 +8,6 @@
 #include <gpio.h>
 
 
-// Callback handlers.
-extern "C" {
-	void I2C1_IRQHandler(void);
-}
-
-
-void I2C1_IRQHandler(void) {
-	//
-}
-
-
 const int i2c_count = 3;
 
 // --- I2C DEVICES ---
@@ -86,6 +75,64 @@ void I2C_timings() {
 I2C_device* i2cList = I2C_list();
 
 
+// Callback handlers.
+volatile uint8_t i2c_rxb = 0;
+#if defined __stm32f0
+extern "C" {
+	void I2C1_IRQHandler(void);
+}
+
+
+void I2C1_IRQHandler(void) {
+	I2C_device &instance = i2cList[0];
+	
+	// Verify interrupt status.
+	if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+		// Read byte (which clears RXNE flag).
+		i2c_rxb = instance.regs->RXDR;
+		instance.callback(i2c_rxb);
+	}
+}
+
+#elif defined __stm32f4
+extern "C" {
+	void I2C1_EV_IRQHandler(void);
+	void I2C2_EV_IRQHandler(void);
+	void I2C3_EV_IRQHandler(void);
+}
+
+
+void I2C1_EV_IRQHandler(void) {
+	I2C_device &instance = i2cList[0];
+	
+	// Verify interrupt status.
+	if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+		// Read byte (which clears RXNE flag).
+		i2c_rxb = instance.regs->RXDR;
+		instance.callback(i2c_rxb);
+	}
+}
+
+
+void I2C2_EV_IRQHandler(void) {
+	I2C_device &instance = i2cList[1];
+	if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+		i2c_rxb = instance.regs->RXDR;
+		instance.callback(i2c_rxb);
+	}
+}
+
+
+void I2C3_EV_IRQHandler(void) {
+	I2C_device &instance = i2cList[2];
+	if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+		i2c_rxb = instance.regs->RXDR;
+		instance.callback(i2c_rxb);
+	}
+}
+#endif
+
+
 // --- START I2C ---
 // Perform basic initialisation of I2C peripheral. After this the device can be further configured
 // as Master or Slave device using the appropriate method.
@@ -144,14 +191,16 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 	NVIC_SetPriority(instance.irqType, 0);
 	NVIC_EnableIRQ(instance.irqType); 
 	
+	// Save parameters.	
 	instance.active = true;
+	
 	return true;
 }
 
 
 // --- START MASTER ---
 // Start I2C master mode on the target I2C peripheral.
-bool I2C::startMaster(I2C_devices device, I2C_modes mode) {
+bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uint8_t)> callback) {
 	I2C_device &instance = i2cList[device];
 	
 	// Check status. Set parameters.
@@ -173,10 +222,15 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode) {
 		return false;
 	}
 	
+	// Enable interrupts on peripheral.
+	instance.regs->CR1 |= I2C_CR1_RXIE;
+	
 	// Enable peripheral.
 	instance.regs->CR1 |= I2C_CR1_PE;
 #endif
 	
+	// Save parameters.
+	instance.callback = callback;
 	instance.master = true;
 	
 	return true;

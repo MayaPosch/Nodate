@@ -24,10 +24,25 @@ int main () {
 	// STM32F4-Discovery (STM32F407): USART2, (TX) PA2:7, (RX) PA3:7.
 	//USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
 	
+	const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
+	const GPIO_ports led_port = GPIO_PORT_B;
+	//const uint8_t led_pin = 13; // STM32F4-Discovery: Port D, pin 13 (orange)
+	//const GPIO_ports led_port = GPIO_PORT_D;
+	//const uint8_t led_pin = 7; // Nucleo-F746ZG: Port B, pin 7 (blue)
+	//const GPIO_ports led_port = GPIO_PORT_B;
+	//const uint8_t led_pin = 13;	// Blue Pill: Port C, pin 13.
+	//const GPIO_ports led_port = GPIO_PORT_C;
+	
+	// Set the pin mode on the LED pin.
+	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
+	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
+	
 	// Set up stdout.
 	IO::setStdOutTarget(USART_1);
 	
-	printf("Starting I2C BME280 example...\n");
+	//printf("Starting I2C BME280 example...\n");
+	char ch = 'c';
+	USART::sendUart(USART_1, ch);
 	
 	// Start i2c
 	// Nucleo-F042K6: I2C_1, SCL -> PA11:5, SDA -> PA12:5.
@@ -38,14 +53,18 @@ int main () {
 	
 	// Read and print out sensor ID.
 	uint8_t id = 0;
+	ch = 'f';
 	if (!sensor.readID(id)) {
-		printf("Error reading ID.\n");
+		//printf("Error reading ID.\n");
 	}
 	else {
-		printf("Sensor ID: %d\n", id);
+		ch = 't';
+		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
+		//printf("Sensor ID: %d\n", id);
 	}
 	
-	printf("Done.\n");
+	USART::sendUart(USART_1, ch);
+	//printf("Done.\n");
 	
 	while(1) {
 		//

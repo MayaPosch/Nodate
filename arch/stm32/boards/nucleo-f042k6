@@ -1,5 +1,4 @@
 # Definition file for the STM32 Nucleo-F042K6 development board.
 
 MCU := stm32f042k6t
-PROGRAMMER := st_nucleo_f0.cfg
-
+PROGRAMMER := board/st_nucleo_f0.cfg

@@ -46,7 +46,6 @@ int main () {
 	while (1) {
 		// The interrupt handler will handle things from here.
 		
-		// The LED is used to indicate reception of data.
 		gpio.write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		timer.delay(1000);
 		gpio.write(led_port, led_pin, GPIO_LEVEL_LOW);

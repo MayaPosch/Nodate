@@ -16,8 +16,14 @@
 class BME280 {
 	I2C_devices device;
 	uint8_t address;
+	bool ready;
 	
 public:
 	BME280(I2C_devices device, uint8_t address);
+	bool isReady();
 	bool readID(uint8_t &id);
+	
+	float GetTemperature();
+	float GetPressure();
+	float GetHumidity();
 };

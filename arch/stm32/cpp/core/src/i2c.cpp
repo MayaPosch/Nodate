@@ -55,7 +55,7 @@ uint32_t i2c_timings_16[4];
 uint32_t i2c_timings_48[4];
 
 void I2C_timings() {
-#if defined STM32F0	
+#if defined __stm32f0	
 	i2c_timings_8[0] = 0x1042C3C7;
 	i2c_timings_8[1] = 0x10420F13;
 	i2c_timings_8[2] = 0x00310309;
@@ -176,20 +176,22 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 		return false;
 	}
 	
+	// Start I2C device if needed.
+	if (!instance.active) {
+		if (!Rcc::enable(instance.per)) {
+			// TODO: set status.
+			return false;
+		}
+	}
+	
 	// Reset peripheral.
 	instance.regs->CR1 &= ~I2C_CR1_PE;	// Disable peripheral.
 	instance.regs->CR1 |= I2C_CR1_SWRST;
 	instance.regs->CR1 &= ~I2C_CR1_SWRST;
 	
-	// Start I2C device if needed.
-	if (!Rcc::enable(instance.per)) {
-		// TODO: set status.
-		return false; 
-	}
-	
 	// Register interrupt.
 	NVIC_SetPriority(instance.irqType, 0);
-	NVIC_EnableIRQ(instance.irqType); 
+	NVIC_EnableIRQ(instance.irqType);
 	
 	// Save parameters.	
 	instance.active = true;
@@ -204,7 +206,7 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uin
 	I2C_device &instance = i2cList[device];
 	
 	// Check status. Set parameters.
-	if (instance.active) { return true; } // Already active.
+	if (!instance.active) { return false; } // Interface isn't active yet.
 #if defined STM32F0
 	// Set timing register.
 	//instance.regs->TIMINGR = (uint32_t) 0x00B01A4B;

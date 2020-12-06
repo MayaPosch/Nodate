@@ -46,10 +46,25 @@ int main () {
 	
 	// Start i2c
 	// Nucleo-F042K6: I2C_1, SCL -> PA11:5, SDA -> PA12:5.
-	I2C::startI2C(I2C_1, GPIO_PORT_A, 11, 5, GPIO_PORT_A, 12, 5);
+	if (!I2C::startI2C(I2C_1, GPIO_PORT_A, 11, 5, GPIO_PORT_A, 12, 5)) {
+		ch = 'f';
+		USART::sendUart(USART_1, ch);
+		while (1) { }
+	}
+	
+	ch = 's';
+	USART::sendUart(USART_1, ch);
 	
 	// Create BME280 sensor instance, on the first I2C bus, slave address 0x76 (default).
 	BME280 sensor(I2C_1, 0x76);
+	if (!sensor.isReady()) {
+		ch = 'f';
+		USART::sendUart(USART_1, ch);
+		while (1) { }
+	}
+	
+	ch = 'r';
+	USART::sendUart(USART_1, ch);
 	
 	// Read and print out sensor ID.
 	uint8_t id = 0;
@@ -61,6 +76,10 @@ int main () {
 		ch = 't';
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		//printf("Sensor ID: %d\n", id);
+		
+		if (id == 0x76) {
+			ch = 'm';
+		}
 	}
 	
 	USART::sendUart(USART_1, ch);

@@ -24,6 +24,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 &nbsp; | STM32F103CB  | [Maple Mini](https://github.com/leaflabs/maple)
 **F4** | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html)
+&nbsp; | STM32F411CE | 'Black Pill'
 **F7** | &nbsp; | &nbsp;
 &nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html)
 

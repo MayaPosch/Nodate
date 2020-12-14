@@ -95,7 +95,7 @@ void I2C1_IRQHandler(void) {
 }
 
 #elif defined __stm32f4
-extern "C" {
+/* extern "C" {
 	void I2C1_EV_IRQHandler(void);
 	void I2C2_EV_IRQHandler(void);
 	void I2C3_EV_IRQHandler(void);
@@ -129,7 +129,7 @@ void I2C3_EV_IRQHandler(void) {
 		i2c_rxb = instance.regs->RXDR;
 		instance.callback(i2c_rxb);
 	}
-}
+} */
 #endif
 
 

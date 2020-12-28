@@ -32,6 +32,7 @@ INCLUDE = -I $(TOP)/arduino -I $(TOP)/arduino/variants/$(VARIANT) \
 
 FLAGS := $(INCLUDE) -D$(AVR_TYPE) -DF_CPU=$(F_CPU) -DARDUINO=3000 -mmcu=$(MCU) -D__OPTIMIZE__ -fno-exceptions -ffunction-sections -fdata-sections -MMD -Os -g -flto -fuse-linker-plugin -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections
 CFLAGS := $(FLAGS) -std=gnu11
+ASMFLAGS := $(CFLAGS) -x assembler-with-cpp -Wa,-gdwarf2
 CPPFLAGS := $(FLAGS) -std=gnu++11 -fpermissive -fno-threadsafe-statics
 CPPSOURCES := $(wildcard arch/avr/arduino/*.cpp) \
 			$(wildcard arch/avr/arduino/libraries/Wire/src/*.cpp) \
@@ -42,10 +43,12 @@ CPPSOURCES := $(wildcard arch/avr/arduino/*.cpp) \
 CSOURCES := $(wildcard arch/avr/arduino/*.c) \
 			$(wildcard arch/avr/arduino/libraries/Wire/src/utility/*.c) \
 			$(APP_C_FILES)
+ASMSOURCES := $(wildcard arch/avr/arduino/*.S)
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o)) 
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
+ASMOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(ASMSOURCES:.S=_asm.o))
 
-all: makedir $(CPPOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).hex
+all: makedir $(CPPOBJECTS) $(COBJECTS) $(ASMOBJECTS) $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).hex
 
 makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/avr
@@ -62,6 +65,9 @@ $(APPFOLDER)/obj/%.o: %.cpp
 $(APPFOLDER)/obj/%.o: %.c
 	$(GCC) -c -o $@ $< $(CFLAGS)
 
+$(APPFOLDER)/obj/%_asm.o: %.S
+	$(GCC) -c -o $@ $< $(ASMFLAGS)
+
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp
 	$(GPP) -c -o $@ $< $(CPPFLAGS)
 
@@ -69,7 +75,7 @@ $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.c
 	$(GCC) -c -o $@ $< $(CFLAGS)
 	
 $(APPFOLDER)/bin/$(OUTPUT).elf:
-	$(GPP) -o $@ $(CPPOBJECTS) $(COBJECTS) $(LIB) $(FLAGS)
+	$(GPP) -o $@ $(CPPOBJECTS) $(COBJECTS) $(ASMOBJECTS) $(LIB) $(FLAGS)
 	
 $(APPFOLDER)/bin/%.hex: $(APPFOLDER)/bin/%.elf
 	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
@@ -79,5 +85,5 @@ flash:
 	avrdude -v -p $(MCU) -c $(PROGRAMMER) -P $(COM_PORT) -b $(BAUD) -D -U flash:w:bin/$(OUTPUT).hex:i
 
 clean:
-	$(RM) $(COBJECTS) $(CPPOBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*
+	$(RM) $(COBJECTS) $(CPPOBJECTS) $(ASMOBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*
 	

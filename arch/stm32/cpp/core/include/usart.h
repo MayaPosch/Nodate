@@ -21,7 +21,9 @@ enum USART_devices {
 	USART_3,
 	USART_4,
 	USART_5,
-	USART_6
+	USART_6,
+	USART_7,
+	USART_8
 };
 
 

@@ -20,7 +20,7 @@ I2C_device* I2C_list() {
 	
 #ifdef RCC_APB1ENR_I2C1EN
 	devices[I2C_1].regs = I2C1;
-#if defined __stm32f4 || defined __stm32f1
+#if defined __stm32f4 || defined __stm32f1 || defined __stm32f7
 	devices[I2C_1].irqType = I2C1_EV_IRQn;
 #else
 	devices[I2C_1].irqType = I2C1_IRQn;
@@ -29,7 +29,7 @@ I2C_device* I2C_list() {
 
 #ifdef RCC_APB1ENR_I2C2EN
 	devices[I2C_2].regs = I2C2;
-#if defined __stm32f4 || defined __stm32f1
+#if defined __stm32f4 || defined __stm32f1 || defined __stm32f7
 	devices[I2C_2].irqType = I2C2_EV_IRQn;
 #else
 	devices[I2C_2].irqType = I2C2_IRQn;
@@ -38,7 +38,7 @@ I2C_device* I2C_list() {
 
 #ifdef RCC_APB1ENR_I2C3EN
 	devices[I2C_3].regs = I2C3;
-#if defined __stm32f4 || defined __stm32f1
+#if defined __stm32f4 || defined __stm32f1 || defined __stm32f7
 	devices[I2C_3].irqType = I2C3_EV_IRQn;
 #else
 	devices[I2C_3].irqType = I2C3_IRQn;
@@ -183,11 +183,15 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 			return false;
 		}
 	}
-	
+
+#ifdef __stm32f0	
 	// Reset peripheral.
 	instance.regs->CR1 &= ~I2C_CR1_PE;	// Disable peripheral.
 	instance.regs->CR1 |= I2C_CR1_SWRST;
 	instance.regs->CR1 &= ~I2C_CR1_SWRST;
+#else
+
+#endif
 	
 	// Register interrupt.
 	NVIC_SetPriority(instance.irqType, 0);

@@ -9,6 +9,8 @@
 	2020/10/23, Maya Posch
 */
 
+#ifndef LIB_BME280_H
+#define LIB_BME280_H
 
 #include <i2c.h>
 
@@ -27,3 +29,5 @@ public:
 	float GetPressure();
 	float GetHumidity();
 };
+
+#endif

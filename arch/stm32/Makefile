@@ -17,6 +17,8 @@ TOP := $(NODATE_HOME)/arch/$(ARCH)
 
 ifdef BOARD
 include $(TOP)/boards/$(BOARD)
+else
+BOARD := generic_board
 endif
 
 include $(TOP)/mcu/$(MCU)
@@ -24,7 +26,7 @@ include $(TOP)/mcu/$(MCU)
 
 OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/include/$(MCU_FAMILY) \
-			-I $(TOP)/$(NDLANGUAGE)/libs
+			-I $(TOP)/$(NDLANGUAGE)/libs -I $(TOP)/$(NDLANGUAGE)/boards/$(BOARD)
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
 FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections \
@@ -33,7 +35,8 @@ LIBS := -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,--p
 CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11 $(APP_C_FLAGS)
 CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions $(APP_CPP_FLAGS)
 
-CPPSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.cpp) \
+CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
+				$(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.cpp) \
 				$(wildcard arch/stm32/$(NDLANGUAGE)/libs/bme280/*.cpp) \
 				$(APP_CPP_FILES)
 			
@@ -49,7 +52,7 @@ all: makedir $(APPFOLDER)/bin/$(OUTPUT).elf $(APPFOLDER)/bin/$(OUTPUT).bin
 makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/src
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/asm/$(MCU_FAMILY)
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
 	$(MAKEDIR) $(APPFOLDER)/bin
@@ -78,9 +81,6 @@ $(APPFOLDER)/bin/%.bin: $(APPFOLDER)/bin/%.elf
 flash:
 	$(CD) $(APPFOLDER) && \
 	openocd -f $(PROGRAMMER) -c "program bin/$(OUTPUT).elf verify reset exit"
-	
-	
-	#openocd -f board/$(PROGRAMMER) -d -c "program bin/$(OUTPUT).elf verify reset exit"
 
 clean:
 	$(RM) $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS) $(APPFOLDER)/bin/$(OUTPUT).*

@@ -544,3 +544,89 @@ bool Rcc::disablePort(RccPort port) {
 	
 	return true;
 }
+
+
+// --- CONFIGURE SYSCLOCK ---
+// Configure the system clock.
+bool Rcc::configureSysClock(RccSysClockConfig cfg) {
+#ifdef __stm32f7
+	// Set AHB & APB dividers.
+	RCC->CFGR |= (cfg.AHB_prescale << RCC_CFGR_HPRE_Pos);
+	RCC->CFGR |= (cfg.APB1_prescale << RCC_CFGR_PPRE1_Pos);
+	RCC->CFGR |= (cfg.APB2_prescale << RCC_CFGR_PPRE2_Pos);
+	
+	if (cfg.source == (uint32_t) RCC_SYSCLOCK_SRC_HSE) {
+		// HSE oscillator is used with external crystal. 
+		// * Disable HSE bypass.
+		RCC->CR &= ~RCC_CR_HSEON;
+		RCC->CR &= ~RCC_CR_HSEBYP;
+		RCC->CR |= RCC_CR_HSEON;
+		
+		// Wait for HSE to stabilise.
+		while (!(RCC->CR & (uint32_t) RCC_CR_HSERDY)) { }
+	}
+	else if (cfg.source == (uint32_t) RCC_SYSCLOCK_SRC_HSI) {
+		// HSI oscillator is used.
+		// * Enable HSI.
+		RCC->CR |= RCC_CR_HSION;
+		
+		// Wait for HSI to stabilise.
+		while (!(RCC->CR & (uint32_t) RCC_CR_HSIRDY)) { }
+	}
+	else if (cfg.source == (uint32_t) RCC_SYSCLOCK_SRC_PLL) {
+		// Ensure HSEON & HSEBYP are set.
+		// * Turn HSE off.
+		// * Enable HSE bypass.
+		// * Turn HSE on.
+		RCC->CR &= ~RCC_CR_HSEON;
+		if (cfg.HSE_bypass) { RCC->CR |= RCC_CR_HSEBYP;	}
+		else 				{ RCC->CR &= ~RCC_CR_HSEBYP; }
+	}
+	else {
+		return false;
+	}
+	
+	// Configure PLL.
+	// * Set PLL source (HSE/HSI).
+	// * Set PLL M, N, Q (PLL48CLK) and P.
+	RCC->CR &= ~RCC_CR_PLLON;
+	RCC->PLLCFGR |= ((uint32_t) cfg.PLL_source << RCC_PLLCFGR_PLLSRC_Pos);
+	
+	if (cfg.PLLM > 63 || cfg.PLLM == 0 || cfg.PLLM == 1) { return false; }
+	RCC->PLLCFGR |= (cfg.PLLM << RCC_PLLCFGR_PLLM_Pos);
+	
+	if (cfg.PLLN > 432 || cfg.PLLN == 0 || cfg.PLLN == 1) { return false; }
+	RCC->PLLCFGR |= (cfg.PLLN << RCC_PLLCFGR_PLLN_Pos);
+	
+	if (cfg.PLLP != 2 || cfg.PLLP != 4 || cfg.PLLP != 6 || cfg.PLLP != 8) { return false; }
+	uint32_t new_pllp = (cfg.PLLP / 2) - 1;
+	RCC->PLLCFGR |= (new_pllp << RCC_PLLCFGR_PLLP_Pos);
+	
+	if (cfg.PLLQ > 15 || cfg.PLLM == 0 || cfg.PLLM == 1) { return false; }
+	RCC->PLLCFGR |= (cfg.PLLQ << RCC_PLLCFGR_PLLQ_Pos);
+	
+	// Enable PLL.
+	RCC->CR |= RCC_CR_PLLON;
+	
+	// Wait for PLL to stabilise.
+	while((RCC->CR & RCC_CR_PLLRDY) == 0) { }
+	
+	// Set CFGR register for the SysClock source (SW).
+	RCC->CFGR &= ~RCC_CFGR_SW;
+	RCC->CFGR |= (cfg.source << RCC_CFGR_SW_Pos);
+	
+	// Wait for the PLL source to stabilise.
+	while ((RCC->CFGR & (uint32_t) RCC_CFGR_SWS) != (uint32_t) RCC_CFGR_SWS_PLL) { }
+#endif
+	
+	return true;
+}
+
+
+// --- ENABLE LSE ---
+// Enable or disable the LSE.
+bool Rcc::enableLSE(bool on) {
+	//
+	
+	return true;
+}

@@ -86,6 +86,36 @@ struct RccPortHandle {
 };
 
 
+enum RccSysClockSrc {
+	RCC_SYSCLOCK_SRC_HSI = 0,
+	RCC_SYSCLOCK_SRC_HSE,
+	RCC_SYSCLOCK_SRC_PLL
+};
+
+
+enum RccPllClockSrc {
+	RCC_PLLCLOCK_SRC_HSI = 0,
+	RCC_PLLCLOCK_SRC_HSE
+};
+
+
+struct RccSysClockConfig {
+	RccSysClockSrc source;
+	bool HSE_bypass = false;
+	bool HSI_enabled = true;
+	bool PLL_enabled = false;
+	RccPllClockSrc PLL_source;
+	uint32_t PLLM;
+	uint32_t PLLN;
+	uint32_t PLLP;
+	uint32_t PLLQ;
+	uint32_t AHB_prescale;
+	uint32_t APB1_prescale;
+	uint32_t APB2_prescale;
+	uint8_t FLASH_latency;	// Wait states.
+};
+
+
 class Rcc {
 	//
 	
@@ -94,6 +124,9 @@ public:
 	static bool disable(RccPeripheral peripheral);
 	static bool enablePort(RccPort port);
 	static bool disablePort(RccPort port);
+	
+	static bool configureSysClock(RccSysClockConfig cfg);
+	static bool enableLSE(bool on);
 };
 
 

@@ -22,7 +22,7 @@ bool rtc_enabled = false;
 // --- ENABLE RTC ---
 bool Rtc::enableRTC() {
 	// TODO: instead of the LSI, the LSE should be available as optional RTC clock source.
-#if defined __stm32f4
+#if defined __stm32f4 || defined __stm32f7
 	if (rtc_enabled) { return true; }
 	
 	// Use LSI for the RTC. Ensure it's enabled.
@@ -35,7 +35,11 @@ bool Rtc::enableRTC() {
 	if (!Rcc::enable(RCC_PWR)) { return false; }
 	
 	// Enable PWR backup access.
+#if defined __stm32f7
+	PWR->CR1 |= PWR_CR1_DBP;
+#else
 	PWR->CR |= PWR_CR_DBP;
+#endif
 	
 	// Wait for DBP to be enabled.
 	/* while (!(PWR->CR & PWR_CR_DBP)) {
@@ -105,7 +109,7 @@ bool Rtc::enableRTC() {
 
 // --- SET TIME ---
 bool Rtc::setTime(uint32_t time) {
-#if defined __stm32f4
+#if defined __stm32f4 || defined __stm32f7
 	// Unlock RTC write protection.
 	RTC->WPR = 0xCA;
 	RTC->WPR = 0x53;

@@ -64,6 +64,29 @@ enum GPIO_ports {
 };
 
 
+struct GpioPinDef {
+	GPIO_ports port;
+	uint8_t pin;
+	uint8_t af;
+};
+
+
+struct GpioOutputDef {
+	GPIO_ports port;
+	uint8_t pin;
+	GPIO_pupd pupd			= GPIO_FLOATING;
+	GPIO_out_type type 		= GPIO_PUSH_PULL;
+	GPIO_out_speed speed 	= GPIO_LOW;
+};
+
+
+struct GpioInputDef {
+	GPIO_ports port;
+	uint8_t pin;
+	GPIO_pupd pupd;
+};
+
+
 struct GPIO_instance {
 	bool active = false;
 	GPIO_TypeDef* regs;

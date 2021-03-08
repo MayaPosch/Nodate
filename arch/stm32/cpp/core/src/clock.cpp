@@ -4,7 +4,10 @@
 
 
 #include <clock.h>
-#include <rtc.h>
+//#include <rcc.h>
+//#include <rtc.h>
+
+#include <nodate.h>
 
 #include <sys/times.h>
 
@@ -122,5 +125,27 @@ bool Clock::enableMaxClock() {
 	SystemCoreClock = 48000000;	// 48 MHz.
 #endif
 
+#if defined __stm32f7
+	// Adjust Flash latency as needed.
+	if (maxSysClockCfg.FLASH_latency > 15) { return false; }
+	FLASH->ACR = FLASH_ACR_PRFTEN | (uint32_t) (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY_Pos);
+#elif defined __stm32f0
+	if (maxSysClockCfg.FLASH_latency > 15) { return false; }
+	FLASH->ACR = FLASH_ACR_PRFTBE | (uint32_t) (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY_Pos);
+#endif
+	
+	// Configure system clock.	
+	Rcc::configureSysClock(maxSysClockCfg);
+
+	// Update SystemCoreClock variable.
+	SystemCoreClockUpdate();
+	
 	return true;
+}
+
+
+// --- ENABLE LSE ---
+// Switch from LSI to LSE if available.
+bool Clock::enableLSE() {
+	return Rcc::enableLSE(true);
 }

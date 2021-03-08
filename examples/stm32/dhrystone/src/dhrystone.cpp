@@ -1,10 +1,13 @@
 // Basic Dhrystone example for Nodate framework (STM32).
 
 
-#include <usart.h>
+/* #include <usart.h>
 #include <timer.h>
 #include <io.h>
 #include <rtc.h>
+#include <clock.h> */
+
+#include <nodate.h>
 
 
 extern "C" {
@@ -80,7 +83,8 @@ float           Microseconds,
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
-	USART::sendUart(USART_2, ch);
+	//USART::sendUart(USART_2, ch);
+	USART::sendUart(USART_3, ch);
 	//USART::sendUart(USART_1, ch);
 }
 
@@ -97,7 +101,11 @@ int main () {
 	
 	// STM32F4-Discovery (STM32F407).
 	// USART2, (TX) PA2:7, (RX) PA3:7.
-	USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
+	//USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
+	
+	// Nucleo-F746ZG
+	// USART3, PD8:7 (TX), PD9:7 (RX).
+	USART::startUart(USART_3, GPIO_PORT_D, 8, 7, GPIO_PORT_D, 9, 7, 9600, uartCallback);
 	
 	//const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
 	//const GPIO_ports led_port = GPIO_PORT_B;
@@ -112,6 +120,9 @@ int main () {
 	// Set the pin mode on the LED pin.
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
 	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
+	
+	// Set the maximum system clock speed profile.
+	Clock::enableMaxClock();
 	
 	// Run the Dhrystone benchmark.
 	/*****/

@@ -4,8 +4,8 @@
 */
 
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef CLOCK_H
+#define CLOCK_H
 
 
 #include "common.h"
@@ -14,11 +14,9 @@ class Clock {
 	//
 	
 public:
-	Clock();
-	~Clock();
-	
 	static bool enableMaxClock();
 	static uint32_t currentSysClock();
+	static bool enableLSE();
 };
 
 #endif

@@ -162,7 +162,7 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 	
 	// If auto-negotiation is enabled, wait for linked state. 
 	uint32_t phyreg = 0;
-	if (autonegotiate) {
+	if (ethDef.autonegotiate) {
 		do {
 			readPhyRegister(PHY_BSR, phyreg);
 		}
@@ -185,25 +185,25 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 		
 		// Set the negotiated duplex mode.
 		if ((phyreg & PHY_DUPLEX_STATUS) != (uint32_t) RESET) {
-			cfg.duplexMode = ETH_MODE_FULLDUPLEX;
+			ethDef.duplexMode = ETH_MODE_FULLDUPLEX;
 		}
 		else {
-			cfg.duplexMode = ETH_MODE_HALFDUPLEX;
+			ethDef.duplexMode = ETH_MODE_HALFDUPLEX;
 		}
 		
 		// Set the speed negotiated.
 		uint32_t speed = 0;
 		if ((phyreg & PHY_SPEED_STATUS) == PHY_SPEED_STATUS) {
-			cfg.speed = ETH_SPEED_10M;
+			ethDef.speed = ETH_SPEED_10M;
 		}
 		else {
-			cfg.speed = ETH_SPEED_100M;
+			ethDef.speed = ETH_SPEED_100M;
 		}
 	}
 	else {
 		// Auto-negotiation is disabled. Set parameters manually.
-		if (!writePhyRegister(PHY_BCR, ((uint16_t) (cfg.duplexMode >> 3) | 
-										(uint16_t) (cfg.speed >> 1)))) {
+		if (!writePhyRegister(PHY_BCR, ((uint16_t) (ethDef.duplexMode >> 3) | 
+										(uint16_t) (ethDef.speed >> 1)))) {
 			return false;
 		}
 		

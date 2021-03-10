@@ -29,6 +29,7 @@
 
 // --- WRITE PHY REGISTER ---
 bool writePhyRegister(uint16_t reg, uint32_t value) {
+#if defined __stm32f7
 	// TODO: check for busy status on ETH.
 	
 	uint32_t tmpreg = ETH->MACMIIAR;
@@ -52,13 +53,14 @@ bool writePhyRegister(uint16_t reg, uint32_t value) {
 	while((tmpreg & ETH_MACMIIAR_MB) == ETH_MACMIIAR_MB) { }
 	
 	// TODO: set state to ready.
-	
+#endif
 	return true;
 }
 
 
 // --- READ PHY REGISTER ---
 bool readPhyRegister(uint16_t reg, uint32_t &value) {
+#if defined __stm32f7
 	// TODO: check for busy status on ETH.
 	
 	uint32_t tmpreg = ETH->MACMIIAR;
@@ -79,7 +81,7 @@ bool readPhyRegister(uint16_t reg, uint32_t &value) {
 	while((tmpreg & ETH_MACMIIAR_MB) == ETH_MACMIIAR_MB) { }
 	
 	// TODO: set state to ready.
-	
+#endif
 	return true;
 }
 

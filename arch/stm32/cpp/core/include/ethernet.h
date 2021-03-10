@@ -18,6 +18,12 @@
 #include <common.h>
 #include <gpio.h>
 
+#define ETH_SPEED_10M        ((uint32_t)0x00000000U)
+#define ETH_SPEED_100M       ((uint32_t)0x00004000U)
+
+#define ETH_MODE_FULLDUPLEX       ((uint32_t)0x00000800U)
+#define ETH_MODE_HALFDUPLEX       ((uint32_t)0x00000000U)
+
 
 struct Ethernet_RMII {
 	GpioPinDef	REF_CLK;
@@ -30,6 +36,9 @@ struct Ethernet_RMII {
 	GpioPinDef	RX_ER;
 	GpioPinDef	MDIO;
 	GpioPinDef	MDC;
+	uint32_t autonegotiate = true;
+	uint32_t speed;
+	uint32_t duplexMode;
 };
 
 
@@ -52,6 +61,9 @@ struct Ethernet_MII {
 	GpioPinDef	COL;
 	GpioPinDef	MDIO;	// Management signal.
 	GpioPinDef	MDC;
+	uint32_t autonegotiate = true;
+	uint32_t speed;
+	uint32_t duplexMode;
 };
 
 
@@ -59,8 +71,8 @@ class Ethernet {
 	//
 	
 public:
-	static bool startEthernet(Ethernet_RMII ethDef);
-	static bool startEthernet(Ethernet_MII ethDef);
+	static bool startEthernet(Ethernet_MII &ethDef);
+	static bool startEthernet(Ethernet_RMII &ethDef);
 };
 
 #endif

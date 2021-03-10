@@ -29,7 +29,29 @@
 
 // --- WRITE PHY REGISTER ---
 bool writePhyRegister(uint16_t reg, uint32_t value) {
-	// TODO:
+	// TODO: check for busy status on ETH.
+	
+	uint32_t tmpreg = ETH->MACMIIAR;
+	
+	// Keep only the CSR Clock Range CR[2:0] bits value.
+	tmpreg &= ~ETH_MACMIIAR_CR;
+	
+	// Prepare the MII address register value.
+	tmpreg |= (((uint32_t) PHY_ADDRESS << 11) & ETH_MACMIIAR_PA);	// Set the PHY device address
+	tmpreg |= (((uint32_t) reg << 6 ) & ETH_MACMIIAR_MR);			// Set the PHY register address
+	tmpreg |= ETH_MACMIIAR_MW;										// Set the write mode
+	tmpreg |= ETH_MACMIIAR_MB;										// Set the MII Busy bit
+  
+	// Write the value into the MII Data Register.
+	ETH->MACMIIDR = (uint16_t) value;
+  
+	// Write the new value into the MII Address register.
+	ETH->MACMIIAR = tmpreg;
+	
+	// Check for the Busy flag.
+	while((tmpreg & ETH_MACMIIAR_MB) == ETH_MACMIIAR_MB) { }
+	
+	// TODO: set state to ready.
 	
 	return true;
 }
@@ -37,7 +59,33 @@ bool writePhyRegister(uint16_t reg, uint32_t value) {
 
 // --- READ PHY REGISTER ---
 bool readPhyRegister(uint16_t reg, uint32_t &value) {
-	// TODO:
+	// TODO: check for busy status on ETH.
+	
+	uint32_t tmpreg = ETH->MACMIIAR;
+	
+	// Keep only the CSR Clock Range CR[2:0] bits value.
+	tmpreg &= ~ETH_MACMIIAR_CR;
+	
+	// Prepare the MII address register value.
+	tmpreg |= (((uint32_t) PHY_ADDRESS << 11) & ETH_MACMIIAR_PA);	// Set the PHY device address
+	tmpreg |= (((uint32_t) reg << 6 ) & ETH_MACMIIAR_MR);			// Set the PHY register address
+	tmpreg &= ~ETH_MACMIIAR_MW;										// Set the read mode
+	tmpreg |= ETH_MACMIIAR_MB;										// Set the MII Busy bit
+  
+	// Write the new value into the MII Address register.
+	ETH->MACMIIAR = tmpreg;
+	
+	// Check for the Busy flag.
+	while((tmpreg & ETH_MACMIIAR_MB) == ETH_MACMIIAR_MB) { }
+	
+	// TODO: set state to ready.
+	
+	return true;
+}
+
+
+bool macDMAConfig() {
+	//
 	
 	return true;
 }
@@ -212,7 +260,7 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 	}
 	
 	// Configure the DMA for the MAC.
-	// TODO:
+	macDMAConfig();
 	
 #endif
 	

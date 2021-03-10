@@ -86,9 +86,9 @@ std::vector<RccPortHandle>* portHandles() {
 	(*portHandlesStatic)[RCC_PORT_E].enr = &(RCC->AHB1ENR);
 	(*portHandlesStatic)[RCC_PORT_E].enable = RCC_AHB1ENR_GPIOEEN_Pos;
 #elif defined RCC_APB2ENR_IOPEEN
-	(*portHandlesStatic)[RCC_PORT_D].exists = true;
-	(*portHandlesStatic)[RCC_PORT_D].enr = &(RCC->APB2ENR);
-	(*portHandlesStatic)[RCC_PORT_D].enable = RCC_APB2ENR_IOPEEN_Pos;
+	(*portHandlesStatic)[RCC_PORT_E].exists = true;
+	(*portHandlesStatic)[RCC_PORT_E].enr = &(RCC->APB2ENR);
+	(*portHandlesStatic)[RCC_PORT_E].enable = RCC_APB2ENR_IOPEEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOFEN
@@ -160,7 +160,7 @@ static std::vector<RccPortHandle>* portHandlesStatic = portHandles();
 // --- PERIPHERAL HANDLES ---
 std::vector<RccPeripheralHandle>* peripheralHandles() {
 	RccPeripheralHandle handle;
-	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(37, handle);
+	static std::vector<RccPeripheralHandle>* peripheralHandlesStatic = new std::vector<RccPeripheralHandle>(39, handle);
 	
 	// AHB
 	
@@ -202,6 +202,12 @@ std::vector<RccPeripheralHandle>* peripheralHandles() {
 	(*peripheralHandlesStatic)[RCC_DMA].exists = true;
 	(*peripheralHandlesStatic)[RCC_DMA].enr = &(RCC->AHBENR);
 	(*peripheralHandlesStatic)[RCC_DMA].enable = RCC_AHBENR_DMAEN_Pos;
+#endif
+
+#ifdef RCC_AHB1ENR_ETHMACEN
+	(*peripheralHandlesStatic)[RCC_ETH].exists = true;
+	(*peripheralHandlesStatic)[RCC_ETH].enr = &(RCC->AHB1ENR);
+	(*peripheralHandlesStatic)[RCC_ETH].enable = RCC_AHB1ENR_ETHMACEN_Pos;
 #endif
 
 	// APB2

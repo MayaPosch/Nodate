@@ -20,6 +20,7 @@ enum RccPeripheral {
 	RCC_SRAM,
 	RCC_DMA2,
 	RCC_DMA,
+	RCC_ETH,
 	RCC_SYSCFGCOMP,		// APB2 peripherals
 	RCC_USART6,
 	RCC_USART7,

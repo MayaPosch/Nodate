@@ -39,6 +39,9 @@ struct Ethernet_RMII {
 	uint32_t autonegotiate = true;
 	uint32_t speed;
 	uint32_t duplexMode;
+	bool hardwareChecksum = true;
+	bool interruptMode = true;
+	uint8_t macAddress[6];
 };
 
 
@@ -61,9 +64,12 @@ struct Ethernet_MII {
 	GpioPinDef	COL;
 	GpioPinDef	MDIO;	// Management signal.
 	GpioPinDef	MDC;
-	uint32_t autonegotiate = true;
+	bool autonegotiate = true;
 	uint32_t speed;
 	uint32_t duplexMode;
+	bool hardwareChecksum = true;
+	bool interruptMode = true;
+	uint8_t macAddress[6];
 };
 
 

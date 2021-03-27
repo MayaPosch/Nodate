@@ -60,7 +60,7 @@ struct Ethernet_MII {
 	GpioPinDef	RXD3;
 	GpioPinDef	RX_DV;
 	GpioPinDef	RX_ER;
-	GpioPinDef	CRS;
+	GpioPinDef	CRS_;
 	GpioPinDef	COL;
 	GpioPinDef	MDIO;	// Management signal.
 	GpioPinDef	MDC;

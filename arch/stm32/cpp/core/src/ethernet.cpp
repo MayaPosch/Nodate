@@ -15,185 +15,218 @@
 
 #include <ethernet.h>
 
-/* #include <rcc.h>
-#include <gpio.h> */
 #include <nodate.h>
 
-#define ETH_REG_WRITE_DELAY ((uint32_t)0x00000001U)
+// Preprocessor definitions for this implementation.
+#include <ethernet_def.h>
 
-#define ETH_RXPOLLING_MODE      ((uint32_t)0x00000000U)
-#define ETH_RXINTERRUPT_MODE    ((uint32_t)0x00000001U)
-
-#define ETH_CHECKSUM_BY_HARDWARE      ((uint32_t)0x00000000U)
-#define ETH_CHECKSUM_BY_SOFTWARE      ((uint32_t)0x00000001U)
-
-#define ETH_WATCHDOG_ENABLE       ((uint32_t)0x00000000U)
-#define ETH_WATCHDOG_DISABLE      ((uint32_t)0x00800000U)
-
-#define ETH_JABBER_ENABLE    ((uint32_t)0x00000000U)
-#define ETH_JABBER_DISABLE   ((uint32_t)0x00400000U)
-
-#define ETH_INTERFRAMEGAP_96BIT   ((uint32_t)0x00000000U)  /*!< minimum IFG between frames during transmission is 96Bit */
-#define ETH_INTERFRAMEGAP_88BIT   ((uint32_t)0x00020000U)  /*!< minimum IFG between frames during transmission is 88Bit */
-#define ETH_INTERFRAMEGAP_80BIT   ((uint32_t)0x00040000U)  /*!< minimum IFG between frames during transmission is 80Bit */
-#define ETH_INTERFRAMEGAP_72BIT   ((uint32_t)0x00060000U)  /*!< minimum IFG between frames during transmission is 72Bit */
-#define ETH_INTERFRAMEGAP_64BIT   ((uint32_t)0x00080000U)  /*!< minimum IFG between frames during transmission is 64Bit */
-#define ETH_INTERFRAMEGAP_56BIT   ((uint32_t)0x000A0000U)  /*!< minimum IFG between frames during transmission is 56Bit */
-#define ETH_INTERFRAMEGAP_48BIT   ((uint32_t)0x000C0000U)  /*!< minimum IFG between frames during transmission is 48Bit */
-#define ETH_INTERFRAMEGAP_40BIT   ((uint32_t)0x000E0000U)  /*!< minimum IFG between frames during transmission is 40Bit */
-
-#define ETH_CARRIERSENSE_ENABLE   ((uint32_t)0x00000000U)
-#define ETH_CARRIERSENSE_DISABLE  ((uint32_t)0x00010000U)
-
-#define ETH_RECEIVEOWN_ENABLE     ((uint32_t)0x00000000U)
-#define ETH_RECEIVEOWN_DISABLE    ((uint32_t)0x00002000U)
-
-#define ETH_LOOPBACKMODE_ENABLE        ((uint32_t)0x00001000U)
-#define ETH_LOOPBACKMODE_DISABLE       ((uint32_t)0x00000000U)
-
-#define ETH_CHECKSUMOFFLOAD_ENABLE     ((uint32_t)0x00000400U)
-#define ETH_CHECKSUMOFFLOAD_DISABLE    ((uint32_t)0x00000000U)
-
-#define ETH_RETRYTRANSMISSION_ENABLE   ((uint32_t)0x00000000U)
-#define ETH_RETRYTRANSMISSION_DISABLE  ((uint32_t)0x00000200U)
-
-#define ETH_AUTOMATICPADCRCSTRIP_ENABLE     ((uint32_t)0x00000080U)
-#define ETH_AUTOMATICPADCRCSTRIP_DISABLE    ((uint32_t)0x00000000U)
-
-#define ETH_BACKOFFLIMIT_10  ((uint32_t)0x00000000U)
-#define ETH_BACKOFFLIMIT_8   ((uint32_t)0x00000020U)
-#define ETH_BACKOFFLIMIT_4   ((uint32_t)0x00000040U)
-#define ETH_BACKOFFLIMIT_1   ((uint32_t)0x00000060U)
-
-#define ETH_DEFFERRALCHECK_ENABLE       ((uint32_t)0x00000010U)
-#define ETH_DEFFERRALCHECK_DISABLE      ((uint32_t)0x00000000U)
-
-#define ETH_RECEIVEALL_ENABLE     ((uint32_t)0x80000000U)
-#define ETH_RECEIVEAll_DISABLE    ((uint32_t)0x00000000U)
-
-#define ETH_SOURCEADDRFILTER_NORMAL_ENABLE       ((uint32_t)0x00000200U)
-#define ETH_SOURCEADDRFILTER_INVERSE_ENABLE      ((uint32_t)0x00000300U)
-#define ETH_SOURCEADDRFILTER_DISABLE             ((uint32_t)0x00000000U)
-
-#define ETH_PASSCONTROLFRAMES_BLOCKALL                ((uint32_t)0x00000040U)  /*!< MAC filters all control frames from reaching the application */
-#define ETH_PASSCONTROLFRAMES_FORWARDALL              ((uint32_t)0x00000080U)  /*!< MAC forwards all control frames to application even if they fail the Address Filter */
-#define ETH_PASSCONTROLFRAMES_FORWARDPASSEDADDRFILTER ((uint32_t)0x000000C0U)  /*!< MAC forwards control frames that pass the Address Filter. */ 
-
-#define ETH_BROADCASTFRAMESRECEPTION_ENABLE     ((uint32_t)0x00000000U)
-#define ETH_BROADCASTFRAMESRECEPTION_DISABLE    ((uint32_t)0x00000020U)
-
-#define ETH_DESTINATIONADDRFILTER_NORMAL    ((uint32_t)0x00000000U)
-#define ETH_DESTINATIONADDRFILTER_INVERSE   ((uint32_t)0x00000008U)
-
-#define ETH_PROMISCUOUS_MODE_ENABLE     ((uint32_t)0x00000001U)
-#define ETH_PROMISCUOUS_MODE_DISABLE    ((uint32_t)0x00000000U)
-
-#define ETH_MULTICASTFRAMESFILTER_PERFECTHASHTABLE    ((uint32_t)0x00000404U)
-#define ETH_MULTICASTFRAMESFILTER_HASHTABLE           ((uint32_t)0x00000004U)
-#define ETH_MULTICASTFRAMESFILTER_PERFECT             ((uint32_t)0x00000000U)
-#define ETH_MULTICASTFRAMESFILTER_NONE                ((uint32_t)0x00000010U)
-
-#define ETH_UNICASTFRAMESFILTER_PERFECTHASHTABLE ((uint32_t)0x00000402U)
-#define ETH_UNICASTFRAMESFILTER_HASHTABLE        ((uint32_t)0x00000002U)
-#define ETH_UNICASTFRAMESFILTER_PERFECT          ((uint32_t)0x00000000U)
-
-#define ETH_ZEROQUANTAPAUSE_ENABLE     ((uint32_t)0x00000000U)
-#define ETH_ZEROQUANTAPAUSE_DISABLE    ((uint32_t)0x00000080U)
-
-#define ETH_PAUSELOWTHRESHOLD_MINUS4        ((uint32_t)0x00000000U)  /*!< Pause time minus 4 slot times */
-#define ETH_PAUSELOWTHRESHOLD_MINUS28       ((uint32_t)0x00000010U)  /*!< Pause time minus 28 slot times */
-#define ETH_PAUSELOWTHRESHOLD_MINUS144      ((uint32_t)0x00000020U)  /*!< Pause time minus 144 slot times */
-#define ETH_PAUSELOWTHRESHOLD_MINUS256      ((uint32_t)0x00000030U)  /*!< Pause time minus 256 slot times */
-
-#define ETH_UNICASTPAUSEFRAMEDETECT_ENABLE  ((uint32_t)0x00000008U)
-#define ETH_UNICASTPAUSEFRAMEDETECT_DISABLE ((uint32_t)0x00000000U)
-
-#define ETH_RECEIVEFLOWCONTROL_ENABLE       ((uint32_t)0x00000004U)
-#define ETH_RECEIVEFLOWCONTROL_DISABLE      ((uint32_t)0x00000000U)
-
-#define ETH_TRANSMITFLOWCONTROL_ENABLE      ((uint32_t)0x00000002U)
-#define ETH_TRANSMITFLOWCONTROL_DISABLE     ((uint32_t)0x00000000U)
-
-#define ETH_VLANTAGCOMPARISON_12BIT    ((uint32_t)0x00010000U)
-#define ETH_VLANTAGCOMPARISON_16BIT    ((uint32_t)0x00000000U)
-
-#define ETH_DROPTCPIPCHECKSUMERRORFRAME_ENABLE   ((uint32_t)0x00000000U)
-#define ETH_DROPTCPIPCHECKSUMERRORFRAME_DISABLE  ((uint32_t)0x04000000U)
-
-#define ETH_RECEIVESTOREFORWARD_ENABLE      ((uint32_t)0x02000000U)
-#define ETH_RECEIVESTOREFORWARD_DISABLE     ((uint32_t)0x00000000U)
-
-#define ETH_FLUSHRECEIVEDFRAME_ENABLE       ((uint32_t)0x00000000U)
-#define ETH_FLUSHRECEIVEDFRAME_DISABLE      ((uint32_t)0x01000000U)
-
-#define ETH_TRANSMITSTOREFORWARD_ENABLE     ((uint32_t)0x00200000U)
-#define ETH_TRANSMITSTOREFORWARD_DISABLE    ((uint32_t)0x00000000U)
-
-#define ETH_TRANSMITTHRESHOLDCONTROL_64BYTES     ((uint32_t)0x00000000U)  /*!< threshold level of the MTL Transmit FIFO is 64 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_128BYTES    ((uint32_t)0x00004000U)  /*!< threshold level of the MTL Transmit FIFO is 128 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_192BYTES    ((uint32_t)0x00008000U)  /*!< threshold level of the MTL Transmit FIFO is 192 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_256BYTES    ((uint32_t)0x0000C000U)  /*!< threshold level of the MTL Transmit FIFO is 256 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_40BYTES     ((uint32_t)0x00010000U)  /*!< threshold level of the MTL Transmit FIFO is 40 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_32BYTES     ((uint32_t)0x00014000U)  /*!< threshold level of the MTL Transmit FIFO is 32 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_24BYTES     ((uint32_t)0x00018000U)  /*!< threshold level of the MTL Transmit FIFO is 24 Bytes */
-#define ETH_TRANSMITTHRESHOLDCONTROL_16BYTES     ((uint32_t)0x0001C000U)  /*!< threshold level of the MTL Transmit FIFO is 16 Bytes */
-
-#define ETH_FORWARDERRORFRAMES_ENABLE       ((uint32_t)0x00000080U)
-#define ETH_FORWARDERRORFRAMES_DISABLE      ((uint32_t)0x00000000U)
-
-#define ETH_FORWARDUNDERSIZEDGOODFRAMES_ENABLE   ((uint32_t)0x00000040U)
-#define ETH_FORWARDUNDERSIZEDGOODFRAMES_DISABLE  ((uint32_t)0x00000000U)   
-
-#define ETH_RECEIVEDTHRESHOLDCONTROL_64BYTES      ((uint32_t)0x00000000U)  /*!< threshold level of the MTL Receive FIFO is 64 Bytes */
-#define ETH_RECEIVEDTHRESHOLDCONTROL_32BYTES      ((uint32_t)0x00000008U)  /*!< threshold level of the MTL Receive FIFO is 32 Bytes */
-#define ETH_RECEIVEDTHRESHOLDCONTROL_96BYTES      ((uint32_t)0x00000010U)  /*!< threshold level of the MTL Receive FIFO is 96 Bytes */
-#define ETH_RECEIVEDTHRESHOLDCONTROL_128BYTES     ((uint32_t)0x00000018U)  /*!< threshold level of the MTL Receive FIFO is 128 Bytes */
-
-#define ETH_SECONDFRAMEOPERARTE_ENABLE       ((uint32_t)0x00000004U)
-#define ETH_SECONDFRAMEOPERARTE_DISABLE      ((uint32_t)0x00000000U)  
-
-#define ETH_ADDRESSALIGNEDBEATS_ENABLE      ((uint32_t)0x02000000U)
-#define ETH_ADDRESSALIGNEDBEATS_DISABLE     ((uint32_t)0x00000000U) 
-
-#define ETH_FIXEDBURST_ENABLE     ((uint32_t)0x00010000U)
-#define ETH_FIXEDBURST_DISABLE    ((uint32_t)0x00000000U) 
-
-#define ETH_RXDMABURSTLENGTH_1BEAT          ((uint32_t)0x00020000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 1 */
-#define ETH_RXDMABURSTLENGTH_2BEAT          ((uint32_t)0x00040000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 2 */
-#define ETH_RXDMABURSTLENGTH_4BEAT          ((uint32_t)0x00080000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 4 */
-#define ETH_RXDMABURSTLENGTH_8BEAT          ((uint32_t)0x00100000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 8 */
-#define ETH_RXDMABURSTLENGTH_16BEAT         ((uint32_t)0x00200000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 16 */
-#define ETH_RXDMABURSTLENGTH_32BEAT         ((uint32_t)0x00400000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 32 */                
-#define ETH_RXDMABURSTLENGTH_4XPBL_4BEAT    ((uint32_t)0x01020000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 4 */
-#define ETH_RXDMABURSTLENGTH_4XPBL_8BEAT    ((uint32_t)0x01040000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 8 */
-#define ETH_RXDMABURSTLENGTH_4XPBL_16BEAT   ((uint32_t)0x01080000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 16 */
-#define ETH_RXDMABURSTLENGTH_4XPBL_32BEAT   ((uint32_t)0x01100000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 32 */
-#define ETH_RXDMABURSTLENGTH_4XPBL_64BEAT   ((uint32_t)0x01200000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 64 */
-#define ETH_RXDMABURSTLENGTH_4XPBL_128BEAT  ((uint32_t)0x01400000U)  /*!< maximum number of beats to be transferred in one RxDMA transaction is 128 */
-
-#define ETH_TXDMABURSTLENGTH_1BEAT          ((uint32_t)0x00000100U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 1 */
-#define ETH_TXDMABURSTLENGTH_2BEAT          ((uint32_t)0x00000200U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 2 */
-#define ETH_TXDMABURSTLENGTH_4BEAT          ((uint32_t)0x00000400U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 4 */
-#define ETH_TXDMABURSTLENGTH_8BEAT          ((uint32_t)0x00000800U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 8 */
-#define ETH_TXDMABURSTLENGTH_16BEAT         ((uint32_t)0x00001000U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 16 */
-#define ETH_TXDMABURSTLENGTH_32BEAT         ((uint32_t)0x00002000U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 32 */                
-#define ETH_TXDMABURSTLENGTH_4XPBL_4BEAT    ((uint32_t)0x01000100U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 4 */
-#define ETH_TXDMABURSTLENGTH_4XPBL_8BEAT    ((uint32_t)0x01000200U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 8 */
-#define ETH_TXDMABURSTLENGTH_4XPBL_16BEAT   ((uint32_t)0x01000400U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 16 */
-#define ETH_TXDMABURSTLENGTH_4XPBL_32BEAT   ((uint32_t)0x01000800U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 32 */
-#define ETH_TXDMABURSTLENGTH_4XPBL_64BEAT   ((uint32_t)0x01001000U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 64 */
-#define ETH_TXDMABURSTLENGTH_4XPBL_128BEAT  ((uint32_t)0x01002000U)  /*!< maximum number of beats to be transferred in one TxDMA (or both) transaction is 128 */
-
-#define ETH_DMAENHANCEDDESCRIPTOR_ENABLE              ((uint32_t)0x00000080U)
-#define ETH_DMAENHANCEDDESCRIPTOR_DISABLE             ((uint32_t)0x00000000U)
-
-#define ETH_DMAARBITRATION_ROUNDROBIN_RXTX_1_1   ((uint32_t)0x00000000U)
-#define ETH_DMAARBITRATION_ROUNDROBIN_RXTX_2_1   ((uint32_t)0x00004000U)
-#define ETH_DMAARBITRATION_ROUNDROBIN_RXTX_3_1   ((uint32_t)0x00008000U)
-#define ETH_DMAARBITRATION_ROUNDROBIN_RXTX_4_1   ((uint32_t)0x0000C000U)
-#define ETH_DMAARBITRATION_RXPRIORTX             ((uint32_t)0x00000002U)
+#include <cstring>
 
 Timer timer;
+
+
+// TODO: ETH interrupt for RX.
+#ifdef __stm32f7
+extern "C" {
+	void ETH_IRQHandler();
+	void ETH_WKUP_IRQHandler();
+}
+
+// TODO: implement.
+void ETH_IRQHandler() {
+	// TODO:
+	/* Frame received */
+ /* if (__HAL_ETH_DMA_GET_FLAG(heth, ETH_DMA_FLAG_R)) 
+  {
+#if (USE_HAL_ETH_REGISTER_CALLBACKS == 1)*/
+    /*Call registered Receive complete callback*/
+    /*heth->RxCpltCallback(heth);
+#else*/
+    /* Receive complete callback */
+    /*HAL_ETH_RxCpltCallback(heth);
+#endif /* USE_HAL_ETH_REGISTER_CALLBACKS */
+    
+     /* Clear the Eth DMA Rx IT pending bits */
+    //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_IT_R);
+
+    // Set device state to Ready.
+
+  //}
+  /* Frame transmitted */
+  /*else if (__HAL_ETH_DMA_GET_FLAG(heth, ETH_DMA_FLAG_T)) 
+  {
+#if (USE_HAL_ETH_REGISTER_CALLBACKS == 1)*/
+    /*  Call resgistered Transfer complete callback*/
+    /*heth->TxCpltCallback(heth);
+#else*/
+    /* Transfer complete callback */
+   // HAL_ETH_TxCpltCallback(heth);
+//#endif /* USE_HAL_ETH_REGISTER_CALLBACKS */
+    
+    /* Clear the Eth DMA Tx IT pending bits */
+    //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_IT_T);
+
+    // Set device state to Ready.
+  //}
+  
+  /* Clear the interrupt flags */
+  //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_IT_NIS);
+  
+  /* ETH DMA Error */
+  /*if(__HAL_ETH_DMA_GET_FLAG(heth, ETH_DMA_FLAG_AIS))
+  {
+#if (USE_HAL_ETH_REGISTER_CALLBACKS == 1)
+    heth->DMAErrorCallback(heth);
+#else*/
+    /* Ethernet Error callback */
+   /* HAL_ETH_ErrorCallback(heth);
+#endif /* USE_HAL_ETH_REGISTER_CALLBACKS */
+
+    /* Clear the interrupt flags */
+    //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_FLAG_AIS);
+  
+    // Set device state to Ready.
+}
+
+
+void ETH_WKUP_IRQHandler() {
+	// TODO: Implement along with wake-up feature.
+}
+#endif
+
+
+// DMA Descriptors & TX/RX buffers.
+struct ETH_DMADescTypeDef {
+  __IO uint32_t   Status;           // DES 0 - Status
+  uint32_t   ControlBufferSize;     // DES 1 - Control and Buffer1, Buffer2 lengths
+  uint32_t   Buffer1Addr;           // DES 2 - Buffer1 address pointer
+  uint32_t   Buffer2NextDescAddr;   // DES 3 - Buffer2 or next descriptor address pointer
+  
+  // Enhanced Ethernet DMA PTP Descriptors
+  uint32_t   ExtendedStatus;        // DES 4 - Extended status for PTP receive descriptor
+  uint32_t   Reserved1;             // DES 5 - Reserved
+  uint32_t   TimeStampLow;          // DES 6 - Time Stamp Low value for transmit and receive
+  uint32_t   TimeStampHigh;         // DES 7 - Time Stamp High value for transmit and receive
+};
+
+// Configure each Ethernet driver receive buffer to fit the Max size Ethernet packet.
+#ifndef ETH_RX_BUF_SIZE
+ #define ETH_RX_BUF_SIZE         ETH_MAX_PACKET_SIZE 
+#endif
+
+// 5 Ethernet driver receive buffers are used in a chained linked list.
+#ifndef ETH_RXBUFNB
+ #define ETH_RXBUFNB             ((uint32_t)5U)     //  5 Rx buffers of size ETH_RX_BUF_SIZE
+#endif
+
+
+// Configure each Ethernet driver transmit buffer to fit the Max size Ethernet packet.
+#ifndef ETH_TX_BUF_SIZE 
+ #define ETH_TX_BUF_SIZE         ETH_MAX_PACKET_SIZE
+#endif
+
+// 5 Ethernet driver transmit buffers are used in a chained linked list.
+#ifndef ETH_TXBUFNB
+ #define ETH_TXBUFNB             ((uint32_t)5U)      // 5  Tx buffers of size ETH_TX_BUF_SIZE
+#endif
+
+
+#if defined __stm32f7
+ETH_DMADescTypeDef 	DMARxDscrTab 	= *((ETH_DMADescTypeDef*) SRAM2_BASE);
+ETH_DMADescTypeDef 	DMATxDscrTab 	= *((ETH_DMADescTypeDef*) SRAM2_BASE + 0x80);
+uint8_t 			Rx_Buff 		= *((uint8_t*) SRAM2_BASE + 0x100);
+uint8_t 			Tx_Buff 		= *((uint8_t*) SRAM2_BASE + 0x17D0);
+
+//*((ETH_DMADescTypeDef*) SRAM2_BASE) = ETH_DMADescTypeDef DMARxDscrTab[ETH_RXBUFNB];
+//*((ETH_DMADescTypeDef*) SRAM2_BASE + 0x80) = ETH_DMADescTypeDef DMATxDscrTab[ETH_TXBUFNB];
+//*((uint8_t*) SRAM2_BASE + 0x100) = uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE];
+//*((uint8_t*) SRAM2_BASE + 0x17D0) = uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE];
+#endif
+
+
+#if defined __stm32f7
+bool dmaRxDescListInit(bool interruptMode) {
+	// Set up new RX DMA descriptors and buffer.
+	ETH_DMADescTypeDef descDef[ETH_RXBUFNB];
+	uint8_t rxBuff[ETH_RXBUFNB][ETH_RX_BUF_SIZE];
+	
+	// Fill the RX DMA descriptors.
+	for (uint32_t i = 0; i < ETH_RXBUFNB; ++i) {
+		// Set up new descriptor.
+		ETH_DMADescTypeDef& dd = descDef[i];
+		dd.Status = ETH_DMARXDESC_OWN;
+		dd.ControlBufferSize = ETH_DMARXDESC_RCH | ETH_RX_BUF_SIZE;
+		dd.Buffer1Addr = (uint32_t) (&rxBuff[i * ETH_RX_BUF_SIZE]);
+		if (interruptMode) {
+			dd.ControlBufferSize &= ~ETH_DMARXDESC_DIC;
+		}
+		
+		// Initialize the next descriptor with the Next Descriptor Polling Enable.
+		if ((i + 1) < ETH_RXBUFNB) {
+			// Set next descriptor address register with next descriptor base address.
+			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[i + 1]);
+		}
+		else {
+			// Set next descriptor address register to beginning of descriptor list.
+			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[0]);
+		}
+	}
+	
+	memcpy(&DMARxDscrTab, &descDef, sizeof(descDef));
+	memcpy(&Rx_Buff, &rxBuff, sizeof(rxBuff));
+	
+	// Set Receive Descriptor List Address Register.
+	ETH->DMARDLAR = (uint32_t) &DMARxDscrTab;
+	
+	return true;
+}
+
+
+bool dmaTxDescListInit(bool interruptMode, bool hardwareChecksum) {
+	// TODO: Set the ETH peripheral state to BUSY.
+	
+	// Set up new RX DMA descriptors and buffer.
+	ETH_DMADescTypeDef descDef[ETH_TXBUFNB];
+	uint8_t txBuff[ETH_TXBUFNB][ETH_TX_BUF_SIZE];
+	
+	// Fill the RX DMA descriptors.
+	for (uint32_t i = 0; i < ETH_TXBUFNB; ++i) {
+		// Set up new descriptor.
+		ETH_DMADescTypeDef& dd = descDef[i];
+		dd.Status = ETH_DMATXDESC_TCH;
+		dd.Buffer1Addr = (uint32_t) (&txBuff[i * ETH_TX_BUF_SIZE]);
+		if (hardwareChecksum) {
+			dd.Status |= ETH_DMATXDESC_CIC_TCPUDPICMP_FULL;
+		}
+		
+		if ((i + 1) < ETH_TXBUFNB) {
+			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[i + 1]);
+		}
+		else {
+			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[0]);
+		}
+	}
+	
+	memcpy(&DMATxDscrTab, &descDef, sizeof(descDef));
+	memcpy(&Tx_Buff, &txBuff, sizeof(txBuff));
+
+	// Set Transmit Descriptor List Address Register.
+	ETH->DMATDLAR = (uint32_t) &DMATxDscrTab;
+
+	// TODO: Set ETH state to Ready.
+	
+	return true;
+}
+
+
+// --- SETUP MPU ---
+// Configure the memory protection for the TX/RX DMA descriptors and buffers.
+bool setupMPU() {
+	// TODO:
+	
+	return true;
+}
+#endif
 
 
 // --- WRITE PHY REGISTER ---
@@ -251,23 +284,6 @@ bool readPhyRegister(uint16_t reg, uint32_t &value) {
 #endif
 	return true;
 }
-
-
-/* void macAddressConfig(uint32_t MacAddr, uint8_t* addr) {
-#if defined __stm32f7
-	/* Calculate the selected MAC address high register */
-	/*uint32_t tmpreg = ((uint32_t) addr[5] << 8) | (uint32_t) addr[4];
-	
-	/* Load the selected MAC address high register */
-	/*(*(__IO uint32_t *)((uint32_t)(ETH_MAC_ADDR_HBASE + MacAddr))) = tmpreg;
-	
-	/* Calculate the selected MAC address low register */
-	//tmpreg = ((uint32_t)Addr[3] << 24) | ((uint32_t)Addr[2] << 16) | ((uint32_t)Addr[1] << 8) | Addr[0];
-  
-	/* Load the selected MAC address low register */
-	/*(*(__IO uint32_t *)((uint32_t)(ETH_MAC_ADDR_LBASE + MacAddr))) = tmpreg;
-#endif
-} */
 
 
 bool macDmaConfig(uint32_t speed, uint32_t duplexMode, bool hardwareChecksum, bool interruptMode,
@@ -400,6 +416,14 @@ bool macDmaConfig(uint32_t speed, uint32_t duplexMode, bool hardwareChecksum, bo
 						((uint32_t) macAddress[2] << 16) | 
 						((uint32_t) macAddress[1] << 8) | 
 						macAddress[0];
+						
+	// Set up DMA descriptors.
+	if (!dmaRxDescListInit(interruptMode)) { return false; }
+	if (!dmaTxDescListInit(interruptMode, hardwareChecksum)) { return false; }
+	
+	// Set up the memory protection.
+	if (!setupMPU()) { return false; }
+						
 	return true;
 #else
 	return false;
@@ -582,9 +606,45 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 	// Configure the DMA for the MAC.
 	macDmaConfig(ethDef.speed, ethDef.duplexMode, ethDef.hardwareChecksum, 
 					ethDef.interruptMode, ethDef.macAddress);
+				
+	// TODO: port code:
+	
+	/* Enable transmit state machine of the MAC for transmission on the MII */
+  //ETH_MACTransmissionEnable(heth);
+  
+  /* Enable receive state machine of the MAC for reception from the MII */
+  //ETH_MACReceptionEnable(heth);
+  
+  /* Flush Transmit FIFO */
+  //ETH_FlushTransmitFIFO(heth);
+  
+  /* Start DMA transmission */
+  //ETH_DMATransmissionEnable(heth);
+  
+  /* Start DMA reception */
+  //ETH_DMAReceptionEnable(heth);
 	
 #endif
 	
 	return true;
 }
 
+
+// --- DMA RX DESC LIST INIT ---
+bool Ethernet::dmaRxDescListInit() {
+#if defined __stm32f7
+	// TODO: Set device state to Busy.
+	
+	// 
+	
+	// TODO: Set device state to Ready.
+	
+#endif
+	return true;
+}
+
+
+// --- DMA TX DESC LIST INIT ---
+bool Ethernet::dmaTxDescListInit() {
+	//
+}

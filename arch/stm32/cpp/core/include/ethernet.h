@@ -79,6 +79,8 @@ class Ethernet {
 public:
 	static bool startEthernet(Ethernet_MII &ethDef);
 	static bool startEthernet(Ethernet_RMII &ethDef);
+	static bool dmaRxDescListInit();
+	static bool dmaTxDescListInit();
 };
 
 #endif

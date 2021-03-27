@@ -38,10 +38,15 @@ bool BME280::readID(uint8_t &id) {
 	uint8_t data = 0xd0;
 	I2C::sendToSlave(device, &data, 1);
 	I2C_wait = true;
+    
+    // Initiate the read sequence
+    if (!(I2C::receiveFromSlave(device,1))) {
+        return false;
+    }
 	
 	// Read the response once it comes in.
 	uint32_t to = 1000000;
-	while (I2C_wait || to < 1) {
+	while (I2C_wait && to > 1) {
 		// TODO: elegantly handle timeout.
 		to--;
 	}

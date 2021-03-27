@@ -56,7 +56,9 @@ int main () {
 	USART::sendUart(USART_1, ch);
 	
 	// Create BME280 sensor instance, on the first I2C bus, slave address 0x76 (default).
-	BME280 sensor(I2C_1, 0x76);
+    // Note that, depending on the design of the BME280 carrier board (if any), the
+    //      slave address may default to 0x76 or 0x77.
+	BME280 sensor(I2C_1, 0x77);
 	if (!sensor.isReady()) {
 		ch = 'f';
 		USART::sendUart(USART_1, ch);
@@ -76,8 +78,8 @@ int main () {
 		ch = 't';
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		//printf("Sensor ID: %d\n", id);
-		
-		if (id == 0x76) {
+
+		if (id == 0x60) {
 			ch = 'm';
 		}
 	}

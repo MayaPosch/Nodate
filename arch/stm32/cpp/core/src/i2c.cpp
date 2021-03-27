@@ -139,7 +139,10 @@ void I2C3_EV_IRQHandler(void) {
 bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uint8_t scl_af,
 											GPIO_ports sda_port, uint8_t sda_pin, uint8_t sda_af) {
 	I2C_device &instance = i2cList[device];
-	
+    
+    // Populate I2C timings (should be done in an initializer?)
+    I2C_timings();
+
 	// Check status. Set parameters.
 	if (instance.active) { return true; } // Already active.
 	if (device == I2C_1) 		{ instance.per = RCC_I2C1; }
@@ -268,15 +271,12 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
 	I2C_device &instance = i2cList[device];
 #if defined STM32F0
-	instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1);
+    instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
 	
 	for (int i = 0; i < len; i++) {
 		// Check that the transmit data register (TXDR) is empty.
 		if ((instance.regs->ISR & I2C_ISR_TXE) == (I2C_ISR_TXE)) {
 			instance.regs->TXDR = data[i];
-			instance.regs->CR2 |= I2C_CR2_START; // Transmit.
-			
-			// TODO: handle transmit errors.
 		}
 	}
 #endif
@@ -302,6 +302,27 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 	return true;
 }
 
+bool I2C::receiveFromSlave(I2C_devices device, uint8_t len) {
+    uint32_t timeOut = (uint32_t)0x1000;
+    I2C_device &instance = i2cList[device];
+#if defined STM32F0
+    while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
+        if((timeOut--) == 0) return false;
+    }
+    instance.regs->CR2 &= ~(I2C_CR2_SADD_Msk | I2C_CR2_RD_WRN_Msk | I2C_CR2_NBYTES_Msk | I2C_CR2_RELOAD | I2C_CR2_AUTOEND_Msk | \
+                            I2C_CR2_START_Msk | I2C_CR2_START | I2C_CR2_STOP);  // clear the CR2 fields
+    instance.regs->CR2 |= ((instance.slaveTarget << 1) << I2C_CR2_SADD_Pos);
+    instance.regs->CR2 |= I2C_CR2_RD_WRN;
+    instance.regs->CR2 |= (0x1UL << I2C_CR2_NBYTES_Pos);
+    instance.regs->CR2 |= I2C_CR2_AUTOEND;
+
+    instance.regs->CR2 |= I2C_CR2_START;  // Transmit
+    
+
+#endif
+    
+    return true;
+}
 
 // ---- RECEIVE FROM MASTER ---
 bool I2C::receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer) {

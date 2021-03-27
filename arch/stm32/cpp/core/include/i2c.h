@@ -53,6 +53,7 @@ public:
 	static bool sendToSlave(I2C_devices device, uint8_t* data, uint8_t len);
 	static bool sendToMaster(I2C_devices device, uint8_t* data, uint8_t len);
 	static bool receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer);
+    static bool receiveFromSlave(I2C_devices device, uint8_t len);
 	static bool receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer);
 	static bool stop(I2C_devices device);
 };

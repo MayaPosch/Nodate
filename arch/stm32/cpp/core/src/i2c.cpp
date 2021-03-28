@@ -54,7 +54,7 @@ uint32_t i2c_timings_8[4];
 uint32_t i2c_timings_16[4];
 uint32_t i2c_timings_48[4];
 
-void I2C_timings() {
+bool I2C_timings() {
 #if defined __stm32f0	
 	i2c_timings_8[0] = 0x1042C3C7;
 	i2c_timings_8[1] = 0x10420F13;
@@ -69,10 +69,15 @@ void I2C_timings() {
 	i2c_timings_48[2] = 0x50330309;
 	i2c_timings_48[3] = 0x50100103;
 #endif
+
+	return true;
 }
 
 
 I2C_device* i2cList = I2C_list();
+
+// Populate I2C timings.
+bool init = I2C_timings();
 
 
 // Callback handlers.
@@ -139,9 +144,6 @@ void I2C3_EV_IRQHandler(void) {
 bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uint8_t scl_af,
 											GPIO_ports sda_port, uint8_t sda_pin, uint8_t sda_af) {
 	I2C_device &instance = i2cList[device];
-    
-    // Populate I2C timings (should be done in an initializer?)
-    I2C_timings();
 
 	// Check status. Set parameters.
 	if (instance.active) { return true; } // Already active.
@@ -273,12 +275,23 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
 #if defined STM32F0
     instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
 	
-	for (int i = 0; i < len; i++) {
+	for (uint8_t i = 0; i < len; i++) {
+		// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag. 
+		
+		// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
+		
+		// 3. Write data into TXDR.
+		
 		// Check that the transmit data register (TXDR) is empty.
 		if ((instance.regs->ISR & I2C_ISR_TXE) == (I2C_ISR_TXE)) {
 			instance.regs->TXDR = data[i];
 		}
 	}
+		
+	// 4. If ISR_TC == 1, we're done. (Transfer Complete).
+	// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
+	// 		If true, start new transfer cycle.
+	
 #endif
 	
 	return true;
@@ -297,18 +310,39 @@ bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 // --- RECEIVE FROM SLAVE ---
 // Configure Master to receive data from a Slave device.
 bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) {
-	//
+	I2C_device &instance = i2cList[device];
+#if defined STM32F0
+    instance.regs->CR2 =  I2C_CR2_AUTOEND | (count << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
+	
+	for (uint8_t i = 0; i < count; ++i) {
+		// 1. Check ISR_RXNE == 1. (Receive data register Not Empty).
+		if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+			// 2. Read RXDR into buffer.
+			buffer[i] = (uint8_t) instance.regs->RXDR;
+		}
+	}
+	
+	// 3. If ISR_TC == 1, we're done. (Transfer Complete).
+	// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
+	// 		If true, start new transfer cycle.
+	if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+		// TODO: restart session.
+	}
+#endif
 	
 	return true;
 }
 
+
+// --- RECEIVE FROM SLAVE ---
 bool I2C::receiveFromSlave(I2C_devices device, uint8_t len) {
-    uint32_t timeOut = (uint32_t)0x1000;
+    uint32_t timeOut = (uint32_t) 0x1000;
     I2C_device &instance = i2cList[device];
 #if defined STM32F0
     while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
-        if((timeOut--) == 0) return false;
+        if ((timeOut--) == 0) { return false; }
     }
+	
     instance.regs->CR2 &= ~(I2C_CR2_SADD_Msk | I2C_CR2_RD_WRN_Msk | I2C_CR2_NBYTES_Msk | I2C_CR2_RELOAD | I2C_CR2_AUTOEND_Msk | \
                             I2C_CR2_START_Msk | I2C_CR2_START | I2C_CR2_STOP);  // clear the CR2 fields
     instance.regs->CR2 |= ((instance.slaveTarget << 1) << I2C_CR2_SADD_Pos);

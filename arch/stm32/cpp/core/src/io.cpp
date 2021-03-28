@@ -22,6 +22,7 @@ USART_devices IO::usart;
 
 extern "C" {
 	int _write(int handle, char* data, int size);
+	void _putchar(char character);
 }
 
 
@@ -35,6 +36,11 @@ int _write(int handle, char* data, int size) {
 	}
 	
 	return size;
+}
+
+
+void _putchar(char character) {
+	_write(0, &character, 1);
 }
 
 

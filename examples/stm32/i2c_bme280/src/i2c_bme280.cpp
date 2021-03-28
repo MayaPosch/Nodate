@@ -5,6 +5,8 @@
 #include <i2c.h>
 #include <bme280/bme280.h>
 
+#include "printf.h"
+
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
@@ -40,7 +42,7 @@ int main () {
 	// Set up stdout.
 	IO::setStdOutTarget(USART_1);
 	
-	//printf("Starting I2C BME280 example...\n");
+	printf("Starting I2C BME280 example...\n");
 	char ch = 'c';
 	USART::sendUart(USART_1, ch);
 	
@@ -83,6 +85,10 @@ int main () {
 			ch = 'm';
 		}
 	}
+	
+	// Read temperature.
+	float t = sensor.temperature();
+	printf("Temp: %f.\n", t);
 	
 	USART::sendUart(USART_1, ch);
 	//printf("Done.\n");

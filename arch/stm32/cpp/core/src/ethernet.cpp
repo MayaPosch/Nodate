@@ -607,26 +607,41 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 	macDmaConfig(ethDef.speed, ethDef.duplexMode, ethDef.hardwareChecksum, 
 					ethDef.interruptMode, ethDef.macAddress);
 				
-	// TODO: port code:
 	
-	/* Enable transmit state machine of the MAC for transmission on the MII */
-  //ETH_MACTransmissionEnable(heth);
+	// Enable transmit state machine of the MAC for transmission on the MII.
+	ETH->MACCR |= ETH_MACCR_TE;
+	  
+	__IO uint32_t tmpreg = 0;
+	tmpreg = ETH->MACCR;
+	timer.delay(ETH_REG_WRITE_DELAY);
+	ETH->MACCR = tmpreg;
   
-  /* Enable receive state machine of the MAC for reception from the MII */
-  //ETH_MACReceptionEnable(heth);
+	// Enable receive state machine of the MAC for reception from the MII.
+	ETH->MACCR |= ETH_MACCR_RE;
+
+	tmpreg = 0;
+	tmpreg = ETH->MACCR;
+	timer.delay(ETH_REG_WRITE_DELAY);
+	ETH->MACCR = tmpreg;
   
-  /* Flush Transmit FIFO */
-  //ETH_FlushTransmitFIFO(heth);
-  
-  /* Start DMA transmission */
-  //ETH_DMATransmissionEnable(heth);
-  
-  /* Start DMA reception */
-  //ETH_DMAReceptionEnable(heth);
+	// Flush Transmit FIFO.
+	ETH->DMAOMR |= ETH_DMAOMR_FTF;
 	
-#endif
+	tmpreg = 0;
+	tmpreg = ETH->DMAOMR;
+	timer.delay(ETH_REG_WRITE_DELAY);
+	ETH->DMAOMR = tmpreg;
+  
+	// Start DMA transmission.
+	ETH->DMAOMR |= ETH_DMAOMR_ST;
+  
+	// Start DMA reception.
+	ETH->DMAOMR |= ETH_DMAOMR_SR;
 	
 	return true;
+#endif
+	
+	return false;
 }
 
 

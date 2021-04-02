@@ -6,8 +6,8 @@
 	2021/02/24, Maya Posch
 */
 
-#ifndef BOARD_NUCLEO_F746ZG
-#define BOARD_NUCLEO_F746ZG
+#ifndef BOARD_DEFINITION
+#define BOARD_DEFINITION
 
 #include <vector>
 

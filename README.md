@@ -13,20 +13,20 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 
 **Supported boards:**
 
-&nbsp; | MCU |Boards
-----|--------|-----
-**F0** | &nbsp; | &nbsp;
-&nbsp; | STM32F042K6T | [Nucleo-F042K6](https://www.st.com/en/evaluation-tools/nucleo-f042k6.html)
-&nbsp; | STM32F051R8T | [STM32F0-Discovery](https://www.st.com/en/evaluation-tools/stm32f0discovery.html)
-&nbsp; | STM32F072C8Tx | ['Otter Pill'](https://github.com/Jan--Henrik/OtterPill)
-**F1** | &nbsp; | &nbsp;
-&nbsp; | STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html)
-&nbsp; | STM32F103CB  | [Maple Mini](https://github.com/leaflabs/maple)
-**F4** | &nbsp; | &nbsp;
-&nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html)
-&nbsp; | STM32F411CE | 'Black Pill'
-**F7** | &nbsp; | &nbsp;
-&nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html)
+&nbsp; | MCU |Boards | Board name
+----|--------|-----|---
+**F0** | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F042K6T | [Nucleo-F042K6](https://www.st.com/en/evaluation-tools/nucleo-f042k6.html) |nucleo-f042k6
+&nbsp; | STM32F051R8T | [STM32F0-Discovery](https://www.st.com/en/evaluation-tools/stm32f0discovery.html) | stm32f0-discovery
+&nbsp; | STM32F072C8Tx | ['Otter Pill'](https://github.com/Jan--Henrik/OtterPill) | otter_pill
+**F1** | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html) | blue_pill
+&nbsp; | STM32F103CB  | [Maple Mini](https://github.com/leaflabs/maple) | maple_mini
+**F4** | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html) | stm32f4-discovery
+&nbsp; | STM32F411CE | 'Black Pill' | black_pill_f411
+**F7** | &nbsp; | &nbsp; | &nbsp;
+&nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html) | nucleo-f746zg
 
 
 
@@ -50,6 +50,8 @@ Examples on how to use Nodate can be found in the `examples/stm32` folder. The b
 	# Add files to include for compilation to these variables.
 	APP_CPP_FILES = $(wildcard src/*.cpp)
 	APP_C_FILES = $(wildcard src/*.c)
+	
+In addition, each project needs to have a `nodate_config.h` file in its `src/` folder. This contains defines that toggle optional modules on. See e.g. the 'Pushy' example for an example of this file.
 
 When running `make` in the folder with the project Makefile, the project's `.map`, `.elf` and `.bin` files will be written to the `/bin/` sub-folder. Use `make clean` to remove any build files.
 

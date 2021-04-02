@@ -43,7 +43,7 @@ extern std::vector<BoardLED> boardLEDs;
 // Define the user-defined buttons on the board.
 extern std::vector<BoardButton> boardButtons;
 
-// UART
+// --- INCLUDES ---
 #include <lan8742a/phy_definition.h>
 
 #endif

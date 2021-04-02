@@ -12,7 +12,7 @@
 
 #include <rcc.h>
 
-#include "board_types.h"
+#include "../board_types.h"
 
 RccSysClockConfig maxSysClockCfg;
 std::vector<BoardLED> boardLEDs;

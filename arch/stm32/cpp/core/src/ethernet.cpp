@@ -32,60 +32,57 @@ extern "C" {
 	void ETH_WKUP_IRQHandler();
 }
 
-// TODO: implement.
+
+__weak void ETH_TxCpltCallback() {
+	// To be overridden by custom function.
+}
+
+
+__weak void ETH_RxCpltCallback() {
+	// To be overridden by custom function.
+}
+
+
+__weak void ETH_ErrorCallback() {
+	// To be overridden by custom function.
+}
+
+
 void ETH_IRQHandler() {
-	// TODO:
-	/* Frame received */
- /* if (__HAL_ETH_DMA_GET_FLAG(heth, ETH_DMA_FLAG_R)) 
-  {
-#if (USE_HAL_ETH_REGISTER_CALLBACKS == 1)*/
-    /*Call registered Receive complete callback*/
-    /*heth->RxCpltCallback(heth);
-#else*/
-    /* Receive complete callback */
-    /*HAL_ETH_RxCpltCallback(heth);
-#endif /* USE_HAL_ETH_REGISTER_CALLBACKS */
+	if ((ETH->DMASR & ETH_DMASR_RS) == ETH_DMASR_RS) {
+		// Frame received.
+		// Receive complete callback.
+		ETH_RxCpltCallback();
     
-     /* Clear the Eth DMA Rx IT pending bits */
-    //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_IT_R);
-
-    // Set device state to Ready.
-
-  //}
-  /* Frame transmitted */
-  /*else if (__HAL_ETH_DMA_GET_FLAG(heth, ETH_DMA_FLAG_T)) 
-  {
-#if (USE_HAL_ETH_REGISTER_CALLBACKS == 1)*/
-    /*  Call resgistered Transfer complete callback*/
-    /*heth->TxCpltCallback(heth);
-#else*/
-    /* Transfer complete callback */
-   // HAL_ETH_TxCpltCallback(heth);
-//#endif /* USE_HAL_ETH_REGISTER_CALLBACKS */
+		// Clear the Eth DMA Rx IT pending bits.
+		ETH->DMASR = ETH_DMASR_RS;
+		
+		// TODO: Set device state to Ready.
+	}
+	else if ((ETH->DMASR & ETH_DMASR_TS) == ETH_DMASR_TS) {
+		// Frame transmitted
+		// Transfer complete callback.
+		ETH_TxCpltCallback();
     
-    /* Clear the Eth DMA Tx IT pending bits */
-    //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_IT_T);
+		// Clear the Eth DMA Tx IT pending bits.
+		ETH->DMASR = ETH_DMASR_TS;
 
-    // Set device state to Ready.
-  //}
+		// TODO: Set device state to Ready.
+	}
   
-  /* Clear the interrupt flags */
-  //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_IT_NIS);
+	// Clear the interrupt flags.
+	ETH->DMASR = ETH_DMASR_NIS;
   
-  /* ETH DMA Error */
-  /*if(__HAL_ETH_DMA_GET_FLAG(heth, ETH_DMA_FLAG_AIS))
-  {
-#if (USE_HAL_ETH_REGISTER_CALLBACKS == 1)
-    heth->DMAErrorCallback(heth);
-#else*/
-    /* Ethernet Error callback */
-   /* HAL_ETH_ErrorCallback(heth);
-#endif /* USE_HAL_ETH_REGISTER_CALLBACKS */
+	// ETH DMA Error.
+	if ((ETH->DMASR & ETH_DMASR_AIS) == ETH_DMASR_AIS) {
+		// Ethernet Error callback.
+		ETH_ErrorCallback();
 
-    /* Clear the interrupt flags */
-    //__HAL_ETH_DMA_CLEAR_IT(heth, ETH_DMA_FLAG_AIS);
+		// Clear the interrupt flags.
+		ETH->DMASR = ETH_DMASR_AIS;
   
-    // Set device state to Ready.
+		// TODO: Set device state to Ready.
+	}
 }
 
 

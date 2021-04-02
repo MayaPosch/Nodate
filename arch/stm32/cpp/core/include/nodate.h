@@ -15,6 +15,17 @@
 #ifndef NODATE_H
 #define NODATE_H
 
+
+#if defined ( __GNUC__ ) && !defined (__CC_ARM) /* GNU Compiler */
+  #ifndef __weak
+    #define __weak   __attribute__((weak))
+  #endif /* __weak */
+  #ifndef __packed
+    #define __packed __attribute__((__packed__))
+  #endif /* __packed */
+#endif /* __GNUC__ */
+
+
 #include <board_definition.h>
 
 #include <clock.h>

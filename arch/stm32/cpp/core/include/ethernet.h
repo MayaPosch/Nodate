@@ -79,6 +79,10 @@ class Ethernet {
 public:
 	static bool startEthernet(Ethernet_MII &ethDef);
 	static bool startEthernet(Ethernet_RMII &ethDef);
+	
+	static bool receiveData(void* buffer);
+	static bool sendData(void* buffer, uint32_t len);
+	
 	static bool dmaRxDescListInit();
 	static bool dmaTxDescListInit();
 };

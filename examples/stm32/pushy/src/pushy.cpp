@@ -12,6 +12,8 @@ int main () {
 	//uint32_t 	led_count = boardLEDs.size();
 	if (boardLEDs_count > 0) {
 		led_iterate = true;
+		led_pin = boardLEDs[0].pin.pin;
+		led_port = boardLEDs[0].pin.port;
 	}
 	else {
 		//led_pin = 3; // Nucleo-f042k6: Port B, pin 3.

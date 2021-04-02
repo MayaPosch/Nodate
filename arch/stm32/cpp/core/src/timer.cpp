@@ -6,6 +6,9 @@
 #include "timer.h"
 
 
+#ifdef NODATE_TIMER_ENABLED
+
+
 // Delay counter
 static volatile uint32_t DelayCounter;
 
@@ -54,3 +57,5 @@ void Timer::delay(uint32_t ms) {
 	// Disable the SysTick timer
 	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
 }
+
+#endif

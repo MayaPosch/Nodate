@@ -5,6 +5,10 @@
 
 #include <i2c.h>
 
+
+#ifdef NODATE_I2C_ENABLED
+
+
 #include <gpio.h>
 
 
@@ -379,3 +383,6 @@ bool I2C::stop(I2C_devices device) {
 	
 	return true;
 }
+
+
+#endif

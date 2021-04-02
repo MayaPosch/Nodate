@@ -12,11 +12,14 @@
 
 #include "interrupts.h"
 
+
+#ifdef NODATE_INTERRUPTS_ENABLED
+
 #include "rcc.h"
 
 
 // Static initialisations.
-const int exti_lines = 16;
+const uint8_t exti_lines = 16;
 
 #ifdef __stm32f0
 uint8_t Interrupts::exti0_1_pwr = 0;
@@ -30,17 +33,20 @@ uint8_t Interrupts::exti10_15_pwr = 0;
 
 // --- INTERRUPT LIST ---
 // Creates and returns a list of the interrupt entries.
-std::vector<InterruptSource>* interruptList() {
+InterruptSource* interruptList() {
 	InterruptSource src;
-	static std::vector<InterruptSource>* itrSrcs = new std::vector<InterruptSource>(exti_lines, src);
+	static InterruptSource itrSrcs[exti_lines];
+	for (uint8_t i = 0; i < exti_lines; ++i) {
+		itrSrcs[i] = src;
+	}
 	
 	// Each interrupt sources list item refers to a single EXTI line, starting at EXTI0 ([0]).
 	const uint8_t exticrs = 4;
 	uint8_t crcnt = 0;
 	uint8_t crpos = 0;
 	for (int i = 0; i < exti_lines; ++i) {
-		(*itrSrcs)[i].reg = crcnt;
-		(*itrSrcs)[i].offset = crpos * 4;
+		itrSrcs[i].reg = crcnt;
+		itrSrcs[i].offset = crpos * 4;
 		if (++crpos >= 4) { crpos = 0; crcnt++; }
 		if (crcnt >= exticrs) {
 			// Error, somehow more EXTI lines were defined than there are EXTICR entries.
@@ -52,7 +58,7 @@ std::vector<InterruptSource>* interruptList() {
 	return itrSrcs;
 }
 
-static std::vector<InterruptSource>* sources = interruptList();
+static InterruptSource* sources = interruptList();
 
 
 // Callback handlers.
@@ -69,22 +75,22 @@ void EXTI0_1_IRQHandler(void) {
 	// Determine whether pin 0 or 1 was triggered.
 	if (EXTI->PR & (1 << 1)) {
 		EXTI->PR |= (1 << 1);	// Clear the EXTI status flag.
-		(*sources)[1].callback();	// Call the custom callback function.
+		sources[1].callback();	// Call the custom callback function.
 	}
 	else {
 		EXTI->PR |= 1;
-		(*sources)[0].callback();
+		sources[0].callback();
 	}
 }
 
 void EXTI2_3_IRQHandler(void) {
 	if (EXTI->PR & (1 << 2)) {
 		EXTI->PR |= (1 << 2);	// Clear the EXTI status flag.
-		(*sources)[2].callback();	// Call the custom callback function.
+		sources[2].callback();	// Call the custom callback function.
 	}
 	else {
 		EXTI->PR |= (1 << 3);
-		(*sources)[3].callback();
+		sources[3].callback();
 	}
 }
 
@@ -92,7 +98,7 @@ void EXTI4_15_IRQHandler(void) {
 	for (uint8_t i = 4; i < exti_lines; ++i) {
 		if (EXTI->PR & (1 << i)) {
 			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
-			(*sources)[i].callback();	// Call the custom callback function.
+			sources[i].callback();	// Call the custom callback function.
 		}
 	}
 }
@@ -108,30 +114,30 @@ extern "C" {
 }
 
 void EXTI0_IRQHandler(void) {
-	(*sources)[0].callback();
+	sources[0].callback();
 }
 
 void EXTI1_IRQHandler(void) {
-	(*sources)[1].callback();
+	sources[1].callback();
 }
 
 void EXTI2_IRQHandler(void) {
-	(*sources)[2].callback();
+	sources[2].callback();
 }
 
 void EXTI3_IRQHandler(void) {
-	(*sources)[3].callback();
+	sources[3].callback();
 }
 
 void EXTI4_IRQHandler(void) {
-	(*sources)[4].callback();
+	sources[4].callback();
 }
 
 void EXTI9_5_IRQHandler(void) {
 	for (uint8_t i = 5; i < 10; ++i) {
 		if (EXTI->PR & (1 << i)) {
 			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
-			(*sources)[i].callback();	// Call the custom callback function.
+			sources[i].callback();	// Call the custom callback function.
 		}
 	}
 }
@@ -140,7 +146,7 @@ void EXTI15_10_IRQHandler(void) {
 	for (uint8_t i = 10; i < 16; ++i) {
 		if (EXTI->PR & (1 << i)) {
 			EXTI->PR |= (1 << i);	// Clear the EXTI status flag.
-			(*sources)[i].callback();	// Call the custom callback function.
+			sources[i].callback();	// Call the custom callback function.
 		}
 	}
 }
@@ -168,7 +174,7 @@ Interrupts::~Interrupts() {
 bool Interrupts::setInterrupt(GPIO_ports port, uint8_t pin, InterruptTrigger trigger, 
 								std::function<void()> callback, uint8_t priority, uint8_t &handle) {
 	handle = pin;
-	InterruptSource &src = (*sources)[handle];
+	InterruptSource &src = sources[handle];
 	if (src.active) {
 		// Already active EXICRx entry. Possibly due to a pin on another port in use.
 		// TODO: set reason.
@@ -243,7 +249,7 @@ void Interrupts::triggerInterrupt() {
 // Use the provided handle to disable the interrupt.
 bool Interrupts::removeInterrupt(uint8_t handle) {
 	// Obtain and validate reference to interrupt source record.
-	InterruptSource &src = (*sources)[handle];
+	InterruptSource &src = sources[handle];
 	if (!src.active) {
 		// Set reason.
 		return false;
@@ -286,3 +292,5 @@ bool Interrupts::removeInterrupt(uint8_t handle) {
 	
 	return true;
 }
+
+#endif

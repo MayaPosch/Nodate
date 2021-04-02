@@ -6,68 +6,75 @@
 
 #include <usart.h>
 
-#include <vector>
+
+#ifdef NODATE_USART_ENABLED
+
+const uint8_t usartCount = 8;
 
 
 // --- USART DEVICES ---
-std::vector<USART_device>* USART_list() {
+USART_device* USART_list() {
 	USART_device device;
-	static std::vector<USART_device>* devicesStatic = new std::vector<USART_device>(12, device);
-	
+	static USART_device devicesStatic[usartCount];
+	for (int i = 0; i < usartCount; ++i) {
+		devicesStatic[i] = device;
+	}
+
 #if defined RCC_APB2ENR_USART1EN
-	((*devicesStatic))[USART_1].regs = USART1;
-	((*devicesStatic))[USART_1].irqType = USART1_IRQn;
+	devicesStatic[USART_1].regs = USART1;
+	devicesStatic[USART_1].irqType = USART1_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_USART2EN
-	((*devicesStatic))[USART_2].regs = USART2;
-	((*devicesStatic))[USART_2].irqType = USART2_IRQn;
+	devicesStatic[USART_2].regs = USART2;
+	devicesStatic[USART_2].irqType = USART2_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_USART3EN
 #if defined __stm32f0
-	((*devicesStatic))[USART_3].regs = USART3;
-	((*devicesStatic))[USART_3].irqType = USART3_4_IRQn;
+	devicesStatic[USART_3].regs = USART3;
+	devicesStatic[USART_3].irqType = USART3_4_IRQn;
 #else
-	((*devicesStatic))[USART_3].regs = USART3;
-	((*devicesStatic))[USART_3].irqType = USART3_IRQn;
+	devicesStatic[USART_3].regs = USART3;
+	devicesStatic[USART_3].irqType = USART3_IRQn;
 #endif
 #endif
 
 #if defined RCC_APB1ENR_UART4EN
 #if defined __stm32f0
-	((*devicesStatic))[USART_4].regs = UART4;
-	((*devicesStatic))[USART_4].irqType = USART3_4_IRQn;
+	devicesStatic[USART_4].regs = UART4;
+	devicesStatic[USART_4].irqType = USART3_4_IRQn;
 #else
-	((*devicesStatic))[USART_4].regs = UART4;
-	((*devicesStatic))[USART_4].irqType = UART4_IRQn;
+	devicesStatic[USART_4].regs = UART4;
+	devicesStatic[USART_4].irqType = UART4_IRQn;
 #endif
 #endif
 
 #if defined RCC_APB1ENR_UART5EN
-	((*devicesStatic))[USART_5].regs = UART5;
-	((*devicesStatic))[USART_5].irqType = UART5_IRQn;
+	devicesStatic[USART_5].regs = UART5;
+	devicesStatic[USART_5].irqType = UART5_IRQn;
 #endif
 
 #if defined RCC_APB2ENR_USART6EN
-	((*devicesStatic))[USART_6].regs = USART6;
-	((*devicesStatic))[USART_6].irqType = USART6_IRQn;
+	devicesStatic[USART_6].regs = USART6;
+	devicesStatic[USART_6].irqType = USART6_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART7EN
-	((*devicesStatic))[USART_7].regs = UART7;
-	((*devicesStatic))[USART_7].irqType = UART7_IRQn;
+	devicesStatic[USART_7].regs = UART7;
+	devicesStatic[USART_7].irqType = UART7_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART8EN
-	((*devicesStatic))[USART_8].regs = UART8;
-	((*devicesStatic))[USART_8].irqType = UART8_IRQn;
+	devicesStatic[USART_8].regs = UART8;
+	devicesStatic[USART_8].irqType = UART8_IRQn;
 #endif
 	
 	return devicesStatic;
 }
 
-static std::vector<USART_device>* devicesStatic = USART_list();
+
+static USART_device* devicesStatic = USART_list();
 
 
 GPIO USART::gpio;
@@ -99,7 +106,7 @@ volatile char rxb = 'a';
 #if defined __stm32f0
 
 void USART1_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[0];
+	USART_device &instance = devicesStatic[0];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -107,7 +114,7 @@ void USART1_IRQHandler(void) {
 }
 
 void USART2_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[1];
+	USART_device &instance = devicesStatic[1];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -115,8 +122,8 @@ void USART2_IRQHandler(void) {
 }
 
 void USART3_4_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[2];
-	USART_device &instance2 = (*devicesStatic)[3];
+	USART_device &instance = devicesStatic[2];
+	USART_device &instance2 = devicesStatic[3];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -130,7 +137,7 @@ void USART3_4_IRQHandler(void) {
 #elif defined __stm32f7
 
 void USART1_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[0];
+	USART_device &instance = devicesStatic[0];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -138,7 +145,7 @@ void USART1_IRQHandler(void) {
 }
 
 void USART2_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[1];
+	USART_device &instance = devicesStatic[1];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -146,7 +153,7 @@ void USART2_IRQHandler(void) {
 }
 
 void USART3_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[2];
+	USART_device &instance = devicesStatic[2];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -154,7 +161,7 @@ void USART3_IRQHandler(void) {
 }
 
 void USART4_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[3];
+	USART_device &instance = devicesStatic[3];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -162,7 +169,7 @@ void USART4_IRQHandler(void) {
 }
 
 void USART5_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[4];
+	USART_device &instance = devicesStatic[4];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -170,7 +177,7 @@ void USART5_IRQHandler(void) {
 }
 
 void USART6_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[5];
+	USART_device &instance = devicesStatic[5];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -178,7 +185,7 @@ void USART6_IRQHandler(void) {
 }
 
 void USART7_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[6];
+	USART_device &instance = devicesStatic[6];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -186,7 +193,7 @@ void USART7_IRQHandler(void) {
 }
 
 void USART8_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[7];
+	USART_device &instance = devicesStatic[7];
 	if (instance.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance.regs->RDR;
 		instance.callback(rxb);
@@ -196,7 +203,7 @@ void USART8_IRQHandler(void) {
 #elif defined __stm32f1 || defined __stm32f4
 
 void USART1_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[0];
+	USART_device &instance = devicesStatic[0];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -204,7 +211,7 @@ void USART1_IRQHandler(void) {
 }
 
 void USART2_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[1];
+	USART_device &instance = devicesStatic[1];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -212,7 +219,7 @@ void USART2_IRQHandler(void) {
 }
 
 void USART3_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[2];
+	USART_device &instance = devicesStatic[2];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -220,7 +227,7 @@ void USART3_IRQHandler(void) {
 }
 
 void USART4_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[3];
+	USART_device &instance = devicesStatic[3];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -228,7 +235,7 @@ void USART4_IRQHandler(void) {
 }
 
 void USART5_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[4];
+	USART_device &instance = devicesStatic[4];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -236,7 +243,7 @@ void USART5_IRQHandler(void) {
 }
 
 void USART6_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[5];
+	USART_device &instance = devicesStatic[5];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -244,7 +251,7 @@ void USART6_IRQHandler(void) {
 }
 
 void USART7_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[6];
+	USART_device &instance = devicesStatic[6];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -252,7 +259,7 @@ void USART7_IRQHandler(void) {
 }
 
 void USART8_IRQHandler(void) {
-	USART_device &instance = (*devicesStatic)[7];
+	USART_device &instance = devicesStatic[7];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
 		instance.callback(rxb);
@@ -272,7 +279,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	// Otherwise try to activate it.
 	if (tx_pin > 15 || rx_pin > 15) { return false;}
 	if (tx_af > 15 || rx_af > 15) { return false; }
-	USART_device &instance = (*devicesStatic)[device];
+	USART_device &instance = devicesStatic[device];
 	RccPeripheral per;
 	if (device == USART_1) 		{ per = RCC_USART1; }
 	else if (device == USART_2) { per = RCC_USART2; }
@@ -361,7 +368,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 
 // --- SEND UART ---
 bool USART::sendUart(USART_devices device, char &ch) {
-	USART_device &instance = (*devicesStatic)[device];
+	USART_device &instance = devicesStatic[device];
 	if (!instance.active) { return false; }
 	
 	// Copy bit to the device's transmission register.
@@ -379,7 +386,7 @@ bool USART::sendUart(USART_devices device, char &ch) {
 
 // --- STOP UART ---
 bool USART::stopUart(USART_devices device) {
-	USART_device &instance = (*devicesStatic)[device];
+	USART_device &instance = devicesStatic[device];
 	if (!instance.active) { return false; }
 	
 	// Disable interrupt.
@@ -395,3 +402,5 @@ bool USART::stopUart(USART_devices device) {
 	return true;
 }
 
+
+#endif

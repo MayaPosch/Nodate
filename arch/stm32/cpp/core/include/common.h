@@ -27,4 +27,6 @@
 #include <stdint.h>
 #endif
 
+#include <nodate_config.h>
+
 #endif

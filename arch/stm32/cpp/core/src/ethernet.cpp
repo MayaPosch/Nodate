@@ -15,6 +15,9 @@
 
 #include <ethernet.h>
 
+
+#ifdef NODATE_ETHERNET_ENABLED
+
 #include <nodate.h>
 
 // Preprocessor definitions for this implementation.
@@ -660,3 +663,5 @@ bool Ethernet::dmaRxDescListInit() {
 bool Ethernet::dmaTxDescListInit() {
 	//
 }
+
+#endif

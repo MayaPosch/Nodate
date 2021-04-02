@@ -10,8 +10,6 @@
 
 #include <common.h>
 
-#include <vector>
-
 
 enum RccPeripheral {
 	RCC_TSC = 0,	// AHB peripherals

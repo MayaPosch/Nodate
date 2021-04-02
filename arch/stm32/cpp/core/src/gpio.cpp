@@ -5,42 +5,48 @@
 
 #include "gpio.h"
 
-#include <vector>
+
+#ifdef NODATE_GPIO_ENABLED
+
+const int gpioCount = 12;
 
 
 // --- GPIO HANDLES ---
-std::vector<GPIO_instance>* GPIO_instances() {
+GPIO_instance* GPIO_instances() {
 	GPIO_instance instance;
-	static std::vector<GPIO_instance>* instancesStatic = new std::vector<GPIO_instance>(12, instance);
+	static GPIO_instance instancesStatic[gpioCount];
+	for (int i = 0; i < gpioCount; ++i) {
+		instancesStatic[i] = instance;
+	}
 	
 #if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN || defined RCC_APB2ENR_IOPAEN
-	((*instancesStatic))[GPIO_PORT_A].regs = GPIOA;
+	instancesStatic[GPIO_PORT_A].regs = GPIOA;
 #endif
 
 #if defined RCC_AHBENR_GPIOBEN || defined RCC_AHB1ENR_GPIOBEN || defined RCC_APB2ENR_IOPBEN
-	((*instancesStatic))[GPIO_PORT_B].regs = GPIOB;
+	instancesStatic[GPIO_PORT_B].regs = GPIOB;
 #endif
 
 #if defined RCC_AHBENR_GPIOCEN || defined RCC_AHB1ENR_GPIOCEN || defined RCC_APB2ENR_IOPCEN
-	((*instancesStatic))[GPIO_PORT_C].regs = GPIOC;
+	instancesStatic[GPIO_PORT_C].regs = GPIOC;
 #endif
 
 #if defined RCC_AHBENR_GPIODEN || defined RCC_AHB1ENR_GPIODEN || defined RCC_APB2ENR_IOPDEN
-	((*instancesStatic))[GPIO_PORT_D].regs = GPIOD;
+	instancesStatic[GPIO_PORT_D].regs = GPIOD;
 #endif
 
 #if defined RCC_AHBENR_GPIOEEN || defined RCC_AHB1ENR_GPIOEEN || defined RCC_APB2ENR_IOPEEN
-	((*instancesStatic))[GPIO_PORT_E].regs = GPIOE;
+	instancesStatic[GPIO_PORT_E].regs = GPIOE;
 #endif
 
 #if defined RCC_AHBENR_GPIOFEN || defined RCC_AHB1ENR_GPIOFEN
-	((*instancesStatic))[GPIO_PORT_F].regs = GPIOF;
+	instancesStatic[GPIO_PORT_F].regs = GPIOF;
 #endif
 	
 	return instancesStatic;
 }
 
-static std::vector<GPIO_instance>* instancesStatic = GPIO_instances();
+GPIO_instance* instancesStatic = GPIO_instances();
 
 bool afio_enabled = false;
 
@@ -50,7 +56,7 @@ bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	
-	GPIO_instance &instance = (*instancesStatic)[port];
+	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
@@ -124,7 +130,7 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	
-	GPIO_instance &instance = (*instancesStatic)[port];
+	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
@@ -207,7 +213,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	if (pin > 15) { return false; }
 	if (af > 15) { return false; }
 	
-	GPIO_instance &instance = (*instancesStatic)[port];
+	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
@@ -292,7 +298,7 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	
-	GPIO_instance &instance = (*instancesStatic)[port];
+	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
@@ -368,7 +374,7 @@ bool GPIO::write(GPIO_ports port, uint8_t pin, GPIO_level level) {
 	
 	if (pin > 15) { return false; }
 	
-	GPIO_instance &instance = (*instancesStatic)[port];
+	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
@@ -406,7 +412,7 @@ uint8_t  GPIO::read(GPIO_ports port, uint8_t pin) {
 	uint8_t out = 0;
 	if (pin > 15) { return false; }
 	
-	GPIO_instance &instance = (*instancesStatic)[port];
+	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
@@ -430,3 +436,6 @@ uint8_t  GPIO::read(GPIO_ports port, uint8_t pin) {
 uint32_t GPIO::readAnalog(GPIO_ports port, uint8_t pin) {
 	return 0; 
 }
+
+
+#endif

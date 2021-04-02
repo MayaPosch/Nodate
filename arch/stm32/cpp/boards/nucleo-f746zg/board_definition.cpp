@@ -10,13 +10,15 @@
 
 
 #include "../board_types.h"
-#include <vector>
 #include <rcc.h>
 
 
 RccSysClockConfig maxSysClockCfg;
-std::vector<BoardLED> boardLEDs;
-std::vector<BoardButton> boardButtons;
+BoardLED boardLEDs[3];
+BoardButton boardButtons[1];
+
+uint8_t boardLEDs_count = 3;
+uint8_t boardButtons_count = 1;
 
 bool init() {
 	maxSysClockCfg.source 		= RCC_SYSCLOCK_SRC_PLL;
@@ -40,21 +42,20 @@ bool init() {
 	bl.pin.type = GPIO_PUSH_PULL;
 	bl.pin.speed = GPIO_LOW;
 	bl.rgb = { 0, 0xff, 0 };
-	boardLEDs.push_back(bl);
+	boardLEDs[0] = bl;
 
 	bl.pin.pin = 7;
 	bl.rgb = { 0, 0, 0xff };
-	boardLEDs.push_back(bl);
+	boardLEDs[1] = bl;
 
 	bl.pin.pin = 14;
 	bl.rgb = { 0xff, 0, 0 };
-	boardLEDs.push_back(bl);
-	//uint8_t board_LED_count = boardLEDs.size();
+	boardLEDs[2] = bl;
 
 
 	BoardButton bb;
 	bb.pin = { GPIO_PORT_C, 13, GPIO_PULL_UP };
-	boardButtons.push_back(bb);
+	boardButtons[0] = bb;
 	
 	return true;
 }

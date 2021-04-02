@@ -9,8 +9,6 @@
 #ifndef BOARD_DEFINITION
 #define BOARD_DEFINITION
 
-#include <vector>
-
 #include <rcc.h>
 
 #include "../board_types.h"
@@ -29,18 +27,19 @@ extern RccSysClockConfig maxSysClockCfg;
 // --- UARTS ---
 
 // Define the number and features of the U(S)ARTs on the board.
-//std::vector<
 //uint8_t board_USART_count = 
 
 // --- LEDS ---
 
 // Define the number and features of the user-addressable LEDs on the board.
-extern std::vector<BoardLED> boardLEDs;
+extern uint8_t boardLEDs_count;
+extern BoardLED boardLEDs[2];
 
 
 // --- BUTTONS ---
 
 // Define the user-defined buttons on the board.
-extern std::vector<BoardButton> boardButtons;
+extern uint8_t boardButtons_count;
+extern BoardButton boardButtons[1];
 
 #endif

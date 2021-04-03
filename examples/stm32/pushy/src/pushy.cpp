@@ -9,11 +9,11 @@ int main () {
 	uint8_t 	led_pin;
 	GPIO_ports 	led_port;
 	bool 		led_iterate = false;
-	//uint32_t 	led_count = boardLEDs.size();
+	uint32_t 	led_idx = 0;
 	if (boardLEDs_count > 0) {
-		led_iterate = true;
-		led_pin = boardLEDs[0].pin.pin;
-		led_port = boardLEDs[0].pin.port;
+		if (boardLEDs_count > 1) { led_iterate = true; }
+		led_pin = boardLEDs[led_idx].pin.pin;
+		led_port = boardLEDs[led_idx].pin.port;
 	}
 	else {
 		//led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
@@ -68,6 +68,12 @@ int main () {
 		}
 		else {
 			GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
+		}
+		
+		if (led_iterate) {
+			if (++led_idx > boardLEDs_count) { led_idx = 0; }
+			led_pin = boardLEDs[led_idx].pin.pin;
+			led_port = boardLEDs[led_idx].pin.port;
 		}
 	}
 	

@@ -46,7 +46,7 @@ GPIO_instance* GPIO_instances() {
 	return instancesStatic;
 }
 
-GPIO_instance* instancesStatic = GPIO_instances();
+//GPIO_instance* instancesStatic = GPIO_instances();
 
 bool afio_enabled = false;
 
@@ -56,6 +56,7 @@ bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	
+	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
@@ -130,6 +131,7 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	
+	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
@@ -213,6 +215,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	if (pin > 15) { return false; }
 	if (af > 15) { return false; }
 	
+	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
@@ -298,6 +301,7 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	
+	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
@@ -374,6 +378,7 @@ bool GPIO::write(GPIO_ports port, uint8_t pin, GPIO_level level) {
 	
 	if (pin > 15) { return false; }
 	
+	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.
@@ -412,6 +417,7 @@ uint8_t  GPIO::read(GPIO_ports port, uint8_t pin) {
 	uint8_t out = 0;
 	if (pin > 15) { return false; }
 	
+	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
 	
 	// Check if port is active, if not, try to activate it.

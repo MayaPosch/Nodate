@@ -22,7 +22,7 @@ const int peripheralCount = 39;
 // --- PORT HANDLES ---
 RccPortHandle* portHandles() {
 	RccPortHandle handle;
-	RccPortHandle portHandlesStatic[portCount];
+	static RccPortHandle portHandlesStatic[portCount];
 	for (int i = 0; i < portCount; ++i) {
 		portHandlesStatic[i] = handle;
 	}
@@ -160,13 +160,13 @@ RccPortHandle* portHandles() {
 	return portHandlesStatic;
 }
 
-RccPortHandle* portHandlesStatic = portHandles();
+//RccPortHandle* portHandlesStatic = portHandles();
 
 
 // --- PERIPHERAL HANDLES ---
 RccPeripheralHandle* peripheralHandles() {
 	RccPeripheralHandle handle;
-	RccPeripheralHandle peripheralHandlesStatic[peripheralCount];
+	static RccPeripheralHandle peripheralHandlesStatic[peripheralCount];
 	for (int i = 0; i < peripheralCount; ++i) {
 		peripheralHandlesStatic[i] = handle;
 	}
@@ -434,7 +434,7 @@ RccPeripheralHandle* peripheralHandles() {
 	return peripheralHandlesStatic;
 }
 
-RccPeripheralHandle* perHandlesStatic = peripheralHandles();
+//RccPeripheralHandle* perHandlesStatic = peripheralHandles();
 
 
 // Public methods:
@@ -445,6 +445,7 @@ RccPeripheralHandle* perHandlesStatic = peripheralHandles();
 // Returns false if the peripheral could not be turned on. 
 bool Rcc::enable(RccPeripheral peripheral) {
 	uint8_t perNum = (uint8_t) peripheral;
+	RccPeripheralHandle* perHandlesStatic = peripheralHandles();
 	RccPeripheralHandle &ph = perHandlesStatic[perNum];
 	
 	if (ph.exists == false) {
@@ -480,6 +481,7 @@ bool Rcc::enable(RccPeripheral peripheral) {
 // Returns false if the request was rejected or disabling the peripheral failed.
 bool Rcc::disable(RccPeripheral peripheral) {
 	uint8_t perNum = (uint8_t) peripheral;
+	RccPeripheralHandle* perHandlesStatic = peripheralHandles();
 	RccPeripheralHandle &ph = perHandlesStatic[perNum];
 	
 	if (ph.exists == false) {
@@ -506,6 +508,7 @@ bool Rcc::disable(RccPeripheral peripheral) {
 // Returns false if the port could not be enabled.
 bool Rcc::enablePort(RccPort port) {
 	uint8_t portNum = (uint8_t) port;
+	RccPortHandle* portHandlesStatic = portHandles();
 	RccPortHandle &ph = portHandlesStatic[portNum];
 	
 	if (ph.exists == false) {
@@ -539,6 +542,7 @@ bool Rcc::enablePort(RccPort port) {
 // Returns false if the requested was rejected, or the port could not be disabled.
 bool Rcc::disablePort(RccPort port) {
 	uint8_t portNum = (uint8_t) port;
+	RccPortHandle* portHandlesStatic = portHandles();
 	RccPortHandle &ph = portHandlesStatic[portNum];
 	
 	if (ph.exists == false) {

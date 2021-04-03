@@ -74,7 +74,7 @@ USART_device* USART_list() {
 }
 
 
-static USART_device* devicesStatic = USART_list();
+USART_device* devicesStatic = USART_list();
 
 
 GPIO USART::gpio;

@@ -1,6 +1,6 @@
 # Definition file for the STM32F0-Discovery development board.
 
 MCU := stm32f051r8t
-PROGRAMMER := stm32f0discovery.cfg
+PROGRAMMER := board/stm32f0discovery.cfg
 
 

@@ -27,15 +27,16 @@ include $(TOP)/mcu/$(MCU)
 OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/include/$(MCU_FAMILY) \
 			-I $(TOP)/$(NDLANGUAGE)/libs -I $(TOP)/$(NDLANGUAGE)/boards/$(BOARD) \
-			-I $(TOP)/$(NDLANGUAGE)/libs -I $(TOP)/$(NDLANGUAGE)/peripherals \
+			-I $(TOP)/$(NDLANGUAGE)/peripherals \
 			-I $(APPFOLDER)/src
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
-FLAGS := $(INCLUDE) $(MCU_FLAGS) --specs=nosys.specs -ffunction-sections -fdata-sections \
-			-MMD -Os -g3 -T $(TOP)/linker/$(MCU_FAMILY)/$(MCU_LD) -lgcc $(APP_FLAGS)
-LIBS := -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref -Wl,--gc-sections -Wl,--print-memory-usage -lstdc++_nano
+FLAGS := $(INCLUDE) $(MCU_FLAGS) -ffunction-sections -fdata-sections -MMD -Os -g3 $(APP_FLAGS)
 CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11 $(APP_C_FLAGS)
-CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions $(APP_CPP_FLAGS)
+CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions -fno-use-cxa-atexit $(APP_CPP_FLAGS)
+LD_FLAGS := -T $(TOP)/linker/$(MCU_FAMILY)/$(MCU_LD) -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref \
+			 --specs=nano.specs --specs=nosys.specs -Wl,--gc-sections -Wl,--print-memory-usage
+LIBS :=  -lstdc++_nano -lgcc
 
 CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.cpp) \
@@ -75,7 +76,7 @@ $(APPFOLDER)/obj/%.o: %.c
 	$(GCC) -c -o $@ $< $(CFLAGS)
 	
 $(APPFOLDER)/bin/$(OUTPUT).elf: $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS)
-	$(GPP) -o $@ $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS) $(LIBS) $(FLAGS)
+	$(GPP) -o $@ $(CPPOBJECTS) $(SOBJECTS) $(COBJECTS) $(LIBS) $(LD_FLAGS)
 	
 $(APPFOLDER)/bin/%.bin: $(APPFOLDER)/bin/%.elf
 	$(OBJCOPY) -O $(FORMAT) $< $@

@@ -11,7 +11,7 @@ int main () {
 	bool 		led_iterate = false;
 	uint32_t 	led_idx = 0;
 	if (boardLEDs_count > 0) {
-		if (boardLEDs_count > 1) { led_iterate = true; }
+		if (boardLEDs_count > 1) { led_iterate = true; led_idx = 1; }
 		led_pin = boardLEDs[led_idx].pin.pin;
 		led_port = boardLEDs[led_idx].pin.port;
 	}
@@ -26,10 +26,10 @@ int main () {
 		//led_port = GPIO_PORT_C;
 		//led_pin = 13;	// Otter Pill: Port B, pin 13.
 		//led_port = GPIO_PORT_B;
-		//led_pin = 9;	// STM32F0-Discovery (PC9, green).
-		//led_port = GPIO_PORT_C;
-		led_pin = 1;	// Maple Mini
-		led_port = GPIO_PORT_B;
+		led_pin = 9;	// STM32F0-Discovery (PC9, green).
+		led_port = GPIO_PORT_C;
+		//led_pin = 1;	// Maple Mini
+		//led_port = GPIO_PORT_B;
 	}
 	
 	uint8_t 	button_pin;
@@ -41,14 +41,14 @@ int main () {
 	else {
 		//button_pin = 1; // Nucleo-f042k6 (PB1)
 		//button_port = GPIO_PORT_B;
-		//button_pin = 0; // STM32F0-Discovery / STM32F4-Discovery (PA0)
-		//button_port = GPIO_PORT_A;
+		button_pin = 0; // STM32F0-Discovery / STM32F4-Discovery (PA0)
+		button_port = GPIO_PORT_A;
 		//button_pin = 13; // Nucleo-F746ZG (PC13)
 		//button_port = GPIO_PORT_C;
 		//button_pin = 10; // Blue Pill / Otter Pill
 		//button_port = GPIO_PORT_B;
-		button_pin = 8;	// Maple Mini
-		button_port = GPIO_PORT_B;
+		//button_pin = 8;	// Maple Mini
+		//button_port = GPIO_PORT_B;
 	}
 	
 	// Set the pin mode on the LED pin.
@@ -65,15 +65,15 @@ int main () {
 		button_down = GPIO::read(button_port, button_pin);
 		if (button_down == 1) {
 			GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
+		/* 
+			if (led_iterate) {
+				if (++led_idx > boardLEDs_count) { led_idx = 0; }
+				led_pin = boardLEDs[led_idx].pin.pin;
+				led_port = boardLEDs[led_idx].pin.port;
+			} */
 		}
 		else {
 			GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
-		}
-		
-		if (led_iterate) {
-			if (++led_idx > boardLEDs_count) { led_idx = 0; }
-			led_pin = boardLEDs[led_idx].pin.pin;
-			led_port = boardLEDs[led_idx].pin.port;
 		}
 	}
 	

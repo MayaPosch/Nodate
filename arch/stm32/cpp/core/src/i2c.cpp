@@ -17,39 +17,39 @@ const int i2c_count = 3;
 // --- I2C DEVICES ---
 I2C_device* I2C_list() {
 	I2C_device item;
-	static I2C_device devices[i2c_count];
+	static I2C_device i2c_devices[i2c_count];
 	for (int i = 0; i < i2c_count; ++i) {
-		devices[i] = item;
+		i2c_devices[i] = item;
 	}
 	
 #ifdef RCC_APB1ENR_I2C1EN
-	devices[I2C_1].regs = I2C1;
+	i2c_devices[I2C_1].regs = I2C1;
 #if defined __stm32f4 || defined __stm32f1 || defined __stm32f7
-	devices[I2C_1].irqType = I2C1_EV_IRQn;
+	i2c_devices[I2C_1].irqType = I2C1_EV_IRQn;
 #else
-	devices[I2C_1].irqType = I2C1_IRQn;
+	i2c_devices[I2C_1].irqType = I2C1_IRQn;
 #endif
 #endif
 
 #ifdef RCC_APB1ENR_I2C2EN
-	devices[I2C_2].regs = I2C2;
+	i2c_devices[I2C_2].regs = I2C2;
 #if defined __stm32f4 || defined __stm32f1 || defined __stm32f7
-	devices[I2C_2].irqType = I2C2_EV_IRQn;
+	i2c_devices[I2C_2].irqType = I2C2_EV_IRQn;
 #else
-	devices[I2C_2].irqType = I2C2_IRQn;
+	i2c_devices[I2C_2].irqType = I2C2_IRQn;
 #endif
 #endif
 
 #ifdef RCC_APB1ENR_I2C3EN
-	devices[I2C_3].regs = I2C3;
+	i2c_devices[I2C_3].regs = I2C3;
 #if defined __stm32f4 || defined __stm32f1 || defined __stm32f7
-	devices[I2C_3].irqType = I2C3_EV_IRQn;
+	i2c_devices[I2C_3].irqType = I2C3_EV_IRQn;
 #else
-	devices[I2C_3].irqType = I2C3_IRQn;
+	i2c_devices[I2C_3].irqType = I2C3_IRQn;
 #endif
 #endif
 	
-	return devices;
+	return i2c_devices;
 }
 
 
@@ -81,7 +81,7 @@ bool I2C_timings() {
 I2C_device* i2cList = I2C_list();
 
 // Populate I2C timings.
-bool init = I2C_timings();
+bool i2c_init = I2C_timings();
 
 
 // Callback handlers.

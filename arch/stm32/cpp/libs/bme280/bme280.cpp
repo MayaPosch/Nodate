@@ -23,7 +23,7 @@ BME280::BME280(I2C_devices device, uint8_t address) {
 	I2C::setSlaveTarget(device, address);
 	
 	// Read calibration data from device and store it.
-	uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | BME280_OperationMode;
+	/* uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | BME280_OperationMode;
 	uint8_t ctrl_hum_reg  = osrs_h;
 
 	uint8_t config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en;
@@ -71,7 +71,7 @@ BME280::BME280(I2C_devices device, uint8_t address) {
     BME280_REGISTER_DIG_H4 = (buffer[0] << 4) | (buffer[1]&0x0F);
 	
     BME280_REGISTER_DIG_H5 = (buffer[2]<<4) | ((buffer[1] & 0xF0)>>4);
-	BME280_REGISTER_DIG_H6 = buffer[3];
+	BME280_REGISTER_DIG_H6 = buffer[3]; */
 }
 
 

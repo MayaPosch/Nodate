@@ -24,33 +24,33 @@ class BME280 {
 	uint8_t address;
 	bool ready;
 	
-	uint16_t BME280_REGISTER_DIG_T1;
-	int16_t BME280_REGISTER_DIG_T2;
-	int16_t BME280_REGISTER_DIG_T3;
+	uint16_t dig_T1;
+	int16_t dig_T2;
+	int16_t dig_T3;
 
-	uint16_t BME280_REGISTER_DIG_P1;
-	int16_t BME280_REGISTER_DIG_P2;
-	int16_t BME280_REGISTER_DIG_P3;
-	int16_t BME280_REGISTER_DIG_P4;
-	int16_t BME280_REGISTER_DIG_P5;
-	int16_t BME280_REGISTER_DIG_P6;
-	int16_t BME280_REGISTER_DIG_P7;
-	int16_t BME280_REGISTER_DIG_P8;
-	int16_t BME280_REGISTER_DIG_P9;
+	uint16_t dig_P1;
+	int16_t dig_P2;
+	int16_t dig_P3;
+	int16_t dig_P4;
+	int16_t dig_P5;
+	int16_t dig_P6;
+	int16_t dig_P7;
+	int16_t dig_P8;
+	int16_t dig_P9;
 
-	uint8_t BME280_REGISTER_DIG_H1;
-	int16_t BME280_REGISTER_DIG_H2;
-	int8_t BME280_REGISTER_DIG_H3;
-	int16_t BME280_REGISTER_DIG_H4;
-	int16_t BME280_REGISTER_DIG_H5;
-	int8_t BME280_REGISTER_DIG_H6;
+	uint8_t dig_H1;
+	int16_t dig_H2;
+	uint8_t dig_H3;
+	int16_t dig_H4;
+	int16_t dig_H5;
+	int8_t dig_H6;
 	
-	uint8_t BME280_REG_DIG_H1	= 0xA1;
-	uint8_t BME280_REG_DIG_H2   = 0xE1;
-	uint8_t BME280_REG_DIG_H3   = 0xE3;
-	uint8_t BME280_REG_DIG_H4   = 0xE4;
-	uint8_t BME280_REG_DIG_H5   = 0xE5;
-	uint8_t BME280_REG_DIG_H6   = 0xE7;
+	uint8_t reg_H1	= 0xA1;
+	uint8_t reg_H2   = 0xE1;
+	uint8_t reg_H3   = 0xE3;
+	uint8_t reg_H4   = 0xE4;
+	uint8_t reg_H5   = 0xE5;
+	uint8_t reg_H6   = 0xE7;
 	
 	uint8_t osrs_t = 1;             //Temperature oversampling x 1
 	uint8_t osrs_p = 1;             //Pressure oversampling x 1
@@ -71,11 +71,17 @@ class BME280 {
 	uint8_t reg_CalibrationPStart = 0x8E;
 	uint8_t reg_CalibrationPEnd = 0x9F;
 	
+	uint8_t reg_SoftReset = 0xE0;
+	uint8_t softResetInstruction = 0xB6;
+	
+	int32_t t_fine;
+	
 public:
 	BME280(I2C_devices device, uint8_t address);
 	bool isReady();
 	bool readID(uint8_t &id);
 	bool initialize();
+	bool softReset();
 	
 	float temperature();
 	float pressure();

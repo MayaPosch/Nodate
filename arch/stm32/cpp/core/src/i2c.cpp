@@ -281,21 +281,25 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
 	
 	for (uint8_t i = 0; i < len; i++) {
 		// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag. 
+		if ((instance.regs->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
+			return false;
+		}
 		
 		// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
+		while ((instance.regs->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
+			// TODO: handle timeout.
+		}
 		
 		// 3. Write data into TXDR.
-		
-		// Check that the transmit data register (TXDR) is empty.
-		if ((instance.regs->ISR & I2C_ISR_TXE) == (I2C_ISR_TXE)) {
-			instance.regs->TXDR = data[i];
-		}
+		instance.regs->TXDR = data[i];
 	}
 		
 	// 4. If ISR_TC == 1, we're done. (Transfer Complete).
 	// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
 	// 		If true, start new transfer cycle.
-	
+	if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+		// TODO: restart session.
+	}
 #endif
 	
 	return true;

@@ -21,16 +21,60 @@ BME280::BME280(I2C_devices device, uint8_t address) {
 	this->address = address;
 	
 	I2C::setSlaveTarget(device, address);
-	
-	// Read calibration data from device and store it.
-	/* uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | BME280_OperationMode;
-	uint8_t ctrl_hum_reg  = osrs_h;
+}
 
+
+// --- IS READY ---
+// Returns true if the sensor instance has been fully configured and is ready for read/write.
+bool BME280::isReady() {
+	return ready;
+}
+
+
+// --- READ ID ---
+// Reads the sensor's fixed ID.
+bool BME280::readID(uint8_t &id) {
+	// Send register to read to the device.
+	uint8_t data = 0xd0;
+	I2C::sendToSlave(device, &data, 1);
+	I2C_wait = true;
+    
+    // Initiate the read sequence
+    if (!(I2C::receiveFromSlave(device, 1))) {
+        return false;
+    }
+	
+	// Read the response once it comes in.
+	uint32_t to = 1000000;
+	while (I2C_wait && to > 1) {
+		// TODO: elegantly handle timeout.
+		to--;
+	}
+	
+	id = I2C_byte;
+	
+	return true;
+}
+
+
+bool BME280::initialize() {
+	// Read calibration data from device and store it.
+	uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | BME280_OperationMode;
+	uint8_t ctrl_hum_reg  = osrs_h;
 	uint8_t config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en;
 
-	I2C::sendToSlave(device, &controlHumidity, ctrl_hum_reg);
-	I2C::sendToSlave(device, &reg_Control, ctrl_meas_reg);
-	I2C::sendToSlave(device, &reg_Config, config_reg);
+	uint8_t data[2];
+	data[0] = controlHumidity;
+	data[1] = ctrl_hum_reg;
+	if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	
+	data[0] = reg_Control;
+	data[1] = ctrl_meas_reg;
+	if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	
+	data[0] = reg_Config;
+	data[1] = config_reg;
+	if (!I2C::sendToSlave(device, data, 2)) { return false; }
 
 	I2C::sendToSlave(device, &reg_CalibrationTStart, 1);
 	uint8_t buffer[64];
@@ -71,38 +115,7 @@ BME280::BME280(I2C_devices device, uint8_t address) {
     BME280_REGISTER_DIG_H4 = (buffer[0] << 4) | (buffer[1]&0x0F);
 	
     BME280_REGISTER_DIG_H5 = (buffer[2]<<4) | ((buffer[1] & 0xF0)>>4);
-	BME280_REGISTER_DIG_H6 = buffer[3]; */
-}
-
-
-// --- IS READY ---
-// Returns true if the sensor instance has been fully configured and is ready for read/write.
-bool BME280::isReady() {
-	return ready;
-}
-
-
-// --- READ ID ---
-// Reads the sensor's fixed ID.
-bool BME280::readID(uint8_t &id) {
-	// Send register to read to the device.
-	uint8_t data = 0xd0;
-	I2C::sendToSlave(device, &data, 1);
-	I2C_wait = true;
-    
-    // Initiate the read sequence
-    if (!(I2C::receiveFromSlave(device, 1))) {
-        return false;
-    }
-	
-	// Read the response once it comes in.
-	uint32_t to = 1000000;
-	while (I2C_wait && to > 1) {
-		// TODO: elegantly handle timeout.
-		to--;
-	}
-	
-	id = I2C_byte;
+	BME280_REGISTER_DIG_H6 = buffer[3];
 	
 	return true;
 }

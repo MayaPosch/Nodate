@@ -75,6 +75,7 @@ public:
 	BME280(I2C_devices device, uint8_t address);
 	bool isReady();
 	bool readID(uint8_t &id);
+	bool initialize();
 	
 	float temperature();
 	float pressure();

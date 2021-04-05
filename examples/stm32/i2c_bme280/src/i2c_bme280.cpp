@@ -3,6 +3,7 @@
 #include <usart.h>
 #include <io.h>
 #include <i2c.h>
+#include <timer.h>
 #include <bme280/bme280.h>
 
 #include "printf.h"
@@ -85,12 +86,20 @@ int main () {
 		printf("Matches BME280 ID.\n");
 	}
 	
+	// Soft reset sensor.
+	sensor.softReset();
+	
+	Timer timer;
+	timer.delay(100);
+	
 	// Initialize the sensor.
-	// This 
+	// This fetches the calibration factors from the sensor device.
 	if (!sensor.initialize()) {
 		printf("Sensor init failed!\n");
 		while (1) { }
 	}
+	
+	timer.delay(100);
 	
 	ch = 'c';
 	USART::sendUart(USART_2, ch);

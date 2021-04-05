@@ -43,7 +43,7 @@ int main () {
 	IO::setStdOutTarget(USART_2);
 	
 	printf("Starting I2C BME280 example...\n");
-	char ch = 'c';
+	char ch = 's';
 	USART::sendUart(USART_2, ch);
 	
 	// Start i2c
@@ -54,7 +54,7 @@ int main () {
 		while (1) { }
 	}
 	
-	ch = 's';
+	ch = 'r';
 	USART::sendUart(USART_2, ch);
 	
 	// Create BME280 sensor instance, on the first I2C bus, slave address 0x76 (default).
@@ -67,30 +67,38 @@ int main () {
 		while (1) { }
 	}
 	
-	ch = 'r';
+	ch = 'i';
 	USART::sendUart(USART_2, ch);
 	
 	// Read and print out sensor ID.
 	uint8_t id = 0;
-	ch = 'f';
 	if (!sensor.readID(id)) {
 		printf("Error reading ID.\n");
+		
+		while (1) { }
 	}
-	else {
-		ch = 't';
-		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
-		printf("Sensor ID: %d\n", id);
-
-		if (id == 0x60) {
-			ch = 'm';
-		}
+	
+	GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
+	printf("Sensor ID: %d\n", id);
+	
+	if (id == 0x60) {
+		printf("Matches BME280 ID.\n");
 	}
+	
+	// Initialize the sensor.
+	// This 
+	if (!sensor.initialize()) {
+		printf("Sensor init failed!\n");
+		while (1) { }
+	}
+	
+	ch = 'c';
+	USART::sendUart(USART_2, ch);
 	
 	// Read temperature.
 	float t = sensor.temperature();
 	printf("Temp: %f.\n", t);
 	
-	USART::sendUart(USART_2, ch);
 	//printf("Done.\n");
 	
 	while(1) {

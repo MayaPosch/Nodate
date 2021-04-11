@@ -24,10 +24,46 @@ endif
 include $(TOP)/mcu/$(MCU)
 
 
+# Define FreeRTOS port to use.
+ifeq ($(MCU_FAMILY), stm32f0)
+ARMA := ARM_CM0
+endif
+ifeq ($(MCU_FAMILY), stm32f1)
+ARMA := ARM_CM3
+endif
+ifeq ($(MCU_FAMILY), stm32f3)
+ARMA := ARM_CM3
+endif
+ifeq ($(MCU_FAMILY), stm32f4)
+ARMA := ARM_CM4_MPU
+endif
+ifeq ($(MCU_FAMILY), stm32f7)
+ARMA := ARM_CM7/r0p1
+endif
+
+
 OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/include/$(MCU_FAMILY) \
 			-I $(TOP)/$(NDLANGUAGE)/libs -I $(TOP)/$(NDLANGUAGE)/boards/$(BOARD) \
 			-I $(TOP)/$(NDLANGUAGE)/peripherals \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/netif/ppp \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/lwip \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/lwip/apps \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/lwip/priv \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/lwip/prot \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/netif \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix/arpa \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix/net \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix/sys \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/stdc \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA) \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/ \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/include \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/libscpi/inc \
+			# -I $(TOP)/$(NDLANGUAGE)/libs/libscpi/src \
 			-I $(APPFOLDER)/src
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
@@ -45,7 +81,25 @@ CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(APP_CPP_FILES)
 			
 CSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv4/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv6/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/mqtt/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http/*.c) \
+			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/system/OS/*.c) \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/MemMang/heap_4.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA)/port.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/queue.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/tasks.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/croutine.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/timers.c \
+			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/list.c \
 			$(APP_C_FILES)
+			
 SSOURCES := arch/stm32/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
@@ -59,6 +113,16 @@ makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv4
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv6
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/mqtt
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/system/OS
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/MemMang
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA)
+	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS
 	$(MAKEDIR) $(APPFOLDER)/bin
 
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp

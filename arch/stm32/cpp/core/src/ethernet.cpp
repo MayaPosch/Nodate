@@ -22,6 +22,7 @@
 
 // Preprocessor definitions for this implementation.
 #include <ethernet_def.h>
+#include <mpu_def.h>
 
 #include <cstring>
 
@@ -222,7 +223,51 @@ bool dmaTxDescListInit(bool interruptMode, bool hardwareChecksum) {
 // --- SETUP MPU ---
 // Configure the memory protection for the TX/RX DMA descriptors and buffers.
 bool setupMPU() {
-	// TODO:
+	// 1. Disable MPU.
+	// Make sure outstanding transfers are done.
+	__DMB();
+
+	// Disable fault exceptions.
+	SCB->SHCSR &= ~SCB_SHCSR_MEMFAULTENA_Msk;
+  
+	// Disable the MPU and clear the control register.
+	MPU->CTRL = 0;
+	
+	// 2. Configure the MPU.
+	// Set the Region number.
+	MPU->RNR = MPU_REGION_NUMBER0;
+	MPU->RBAR = SRAM2_BASE;
+    MPU->RASR = ((uint32_t) MPU_INSTRUCTION_ACCESS_ENABLE	<< MPU_RASR_XN_Pos)   |
+                ((uint32_t) MPU_REGION_FULL_ACCESS			<< MPU_RASR_AP_Pos)   |
+                ((uint32_t) MPU_TEX_LEVEL1					<< MPU_RASR_TEX_Pos)  |
+                ((uint32_t) MPU_ACCESS_SHAREABLE           	<< MPU_RASR_S_Pos)    |
+                ((uint32_t) MPU_ACCESS_NOT_CACHEABLE		<< MPU_RASR_C_Pos)    |
+                ((uint32_t) MPU_ACCESS_NOT_BUFFERABLE		<< MPU_RASR_B_Pos)    |
+                ((uint32_t) 0x00							<< MPU_RASR_SRD_Pos)  |
+                ((uint32_t) MPU_REGION_SIZE_16KB			<< MPU_RASR_SIZE_Pos) |
+                ((uint32_t) MPU_REGION_ENABLE				<< MPU_RASR_ENABLE_Pos);
+				
+	MPU->RNR = MPU_REGION_NUMBER1;
+	MPU->RBAR = SRAM2_BASE;
+    MPU->RASR = ((uint32_t) MPU_INSTRUCTION_ACCESS_ENABLE	<< MPU_RASR_XN_Pos)   |
+                ((uint32_t) MPU_REGION_FULL_ACCESS			<< MPU_RASR_AP_Pos)   |
+                ((uint32_t) MPU_TEX_LEVEL0					<< MPU_RASR_TEX_Pos)  |
+                ((uint32_t) MPU_ACCESS_SHAREABLE           	<< MPU_RASR_S_Pos)    |
+                ((uint32_t) MPU_ACCESS_NOT_CACHEABLE		<< MPU_RASR_C_Pos)    |
+                ((uint32_t) MPU_ACCESS_BUFFERABLE			<< MPU_RASR_B_Pos)    |
+                ((uint32_t) 0x00							<< MPU_RASR_SRD_Pos)  |
+                ((uint32_t) MPU_REGION_SIZE_256B			<< MPU_RASR_SIZE_Pos) |
+                ((uint32_t) MPU_REGION_ENABLE				<< MPU_RASR_ENABLE_Pos);
+	
+	// 3. Enable the MPU.
+	MPU->CTRL = MPU_Control | MPU_CTRL_ENABLE_Msk;
+  
+	// Enable fault exceptions.
+	SCB->SHCSR |= SCB_SHCSR_MEMFAULTENA_Msk;
+  
+	// Ensure MPU setting take effects.
+	__DSB();
+	__ISB();
 	
 	return true;
 }
@@ -642,6 +687,88 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 #endif
 	
 	return false;
+}
+
+
+
+	
+bool Ethernet::receiveData(void* buffer) {
+	//
+}
+
+
+bool Ethernet::sendData(void* buffer, uint32_t len) {
+	//
+	
+ /*  uint8_t *buffer = (uint8_t *)(EthHandle.TxDesc->Buffer1Addr);
+  __IO ETH_DMADescTypeDef *DmaTxDesc;
+  uint32_t framelength = 0;
+  uint32_t bufferoffset = 0;
+  uint32_t byteslefttocopy = 0;
+  uint32_t payloadoffset = 0;
+
+  DmaTxDesc = EthHandle.TxDesc;
+  bufferoffset = 0;
+    // Is this buffer available? If not, goto error
+    if ((DMATxDscrTab.Status & ETH_DMATXDESC_OWN) != (uint32_t) RESET)
+    {
+      errval = ERR_USE;
+      goto error;
+    }
+    
+    // Get bytes in current lwIP buffer
+    byteslefttocopy = q->len;
+    payloadoffset = 0;
+    
+    // Check if the length of data to copy is bigger than Tx buffer size
+    while( (byteslefttocopy + bufferoffset) > ETH_TX_BUF_SIZE )
+    {
+      // Copy data to Tx buffer
+      memcpy( (uint8_t*)((uint8_t*)buffer + bufferoffset), (uint8_t*)((uint8_t*)q->payload + payloadoffset), (ETH_TX_BUF_SIZE - bufferoffset) );
+      
+      // Point to next descriptor
+      DmaTxDesc = (ETH_DMADescTypeDef *)(DmaTxDesc->Buffer2NextDescAddr);
+      
+      // Check if the buffer is available 
+      if((DmaTxDesc->Status & ETH_DMATXDESC_OWN) != (uint32_t)RESET)
+      {
+        errval = ERR_USE;
+        goto error;
+      }
+      
+      buffer = (uint8_t *)(DmaTxDesc->Buffer1Addr);
+      
+      byteslefttocopy = byteslefttocopy - (ETH_TX_BUF_SIZE - bufferoffset);
+      payloadoffset = payloadoffset + (ETH_TX_BUF_SIZE - bufferoffset);
+      framelength = framelength + (ETH_TX_BUF_SIZE - bufferoffset);
+      bufferoffset = 0;
+    }
+    
+    // Copy the remaining bytes
+    memcpy( (uint8_t*)((uint8_t*)buffer + bufferoffset), (uint8_t*)((uint8_t*)q->payload + payloadoffset), byteslefttocopy );
+    bufferoffset = bufferoffset + byteslefttocopy;
+    framelength = framelength + byteslefttocopy;
+  }
+  
+  // Prepare transmit descriptors to give to DMA *
+  HAL_ETH_TransmitFrame(&EthHandle, framelength);
+  
+  errval = ERR_OK;
+  
+error:
+  
+  // When Transmit Underflow flag is set, clear it and issue a Transmit Poll Demand to resume transmission 
+  if ((EthHandle.Instance->DMASR & ETH_DMASR_TUS) != (uint32_t)RESET)
+  {
+    // Clear TUS ETHERNET DMA flag
+    EthHandle.Instance->DMASR = ETH_DMASR_TUS;
+    
+    // Resume DMA transmission
+    EthHandle.Instance->DMATPDR = 0;
+  }
+  return errval; */
+  
+	return true
 }
 
 

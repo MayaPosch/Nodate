@@ -83,6 +83,7 @@ OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/include/$(MCU_FAMILY) \
 			-I $(TOP)/$(NDLANGUAGE)/libs -I $(TOP)/$(NDLANGUAGE)/boards/$(BOARD) \
 			-I $(TOP)/$(NDLANGUAGE)/peripherals \
+			-I $(APPFOLDER)/src
 			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/netif/ppp \
 			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/lwip \
 			# -I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/lwip/apps \
@@ -101,7 +102,6 @@ INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/inc
 			# -I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/include \
 			# -I $(TOP)/$(NDLANGUAGE)/libs/libscpi/inc \
 			# -I $(TOP)/$(NDLANGUAGE)/libs/libscpi/src \
-			-I $(APPFOLDER)/src
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1 $(NODATE_MOD_ENABLE)
 FLAGS := $(INCLUDE) $(MCU_FLAGS) -ffunction-sections -fdata-sections -MMD -Os -g3 $(APP_FLAGS)
@@ -118,6 +118,7 @@ CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(APP_CPP_FILES)
 			
 CSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
+			$(APP_C_FILES)
 			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp/*.c) \
 			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/*.c) \
 			# $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api/*.c) \
@@ -135,7 +136,6 @@ CSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
 			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/croutine.c \
 			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/timers.c \
 			# $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/list.c \
-			$(APP_C_FILES)
 			
 SSOURCES := arch/stm32/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
@@ -150,6 +150,7 @@ makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
+	$(MAKEDIR) $(APPFOLDER)/bin
 	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp
 	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api
 	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv4
@@ -160,7 +161,6 @@ makedir:
 	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/MemMang
 	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA)
 	# $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS
-	$(MAKEDIR) $(APPFOLDER)/bin
 
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp
 	$(GPP) -c -o $@ $< $(CPPFLAGS)

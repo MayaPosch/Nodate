@@ -24,6 +24,43 @@ endif
 include $(TOP)/mcu/$(MCU)
 
 
+# Toggle Nodate core modules.
+ifneq (, $(findstring gpio, $(NODATE_MODULES)))
+	NODATE_GPIO = 1 
+	NODATE_MOD_ENABLE += -DNODATE_GPIO_ENABLED 
+endif
+
+ifneq (, $(findstring ethernet, $(NODATE_MODULES)))
+	NODATE_ETH = 1
+	NODATE_MOD_ENABLE += -DNODATE_ETHERNET_ENABLED
+endif
+
+ifneq (, $(findstring i2c, $(NODATE_MODULES)))
+	NODATE_I2C = 1
+	NODATE_MOD_ENABLE += -DNODATE_I2C_ENABLED
+endif
+
+ifneq (, $(findstring interrupts, $(NODATE_MODULES)))
+	NODATE_ISR = 1
+	NODATE_MOD_ENABLE += -DNODATE_INTERRUPTS_ENABLED
+endif
+
+ifneq (, $(findstring usart, $(NODATE_MODULES)))
+	NODATE_USART = 1
+	NODATE_MOD_ENABLE += -DNODATE_USART_ENABLED
+endif
+
+ifneq (, $(findstring timer, $(NODATE_MODULES)))
+	NODATE_TIMER = 1
+	NODATE_MOD_ENABLE += -DNODATE_TIMER_ENABLED
+endif
+
+# Toggle optional library modules.
+ifneq (, $(findstring freertos, $(NODATE_LIBRARIES)))
+	NODATE_FREERTOS = 1
+endif
+
+
 # Define FreeRTOS port to use.
 ifeq ($(MCU_FAMILY), stm32f0)
 ARMA := ARM_CM0
@@ -66,7 +103,7 @@ INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/inc
 			# -I $(TOP)/$(NDLANGUAGE)/libs/libscpi/src \
 			-I $(APPFOLDER)/src
 
-DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1
+DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1 $(NODATE_MOD_ENABLE)
 FLAGS := $(INCLUDE) $(MCU_FLAGS) -ffunction-sections -fdata-sections -MMD -Os -g3 $(APP_FLAGS)
 CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11 $(APP_C_FLAGS)
 CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions -fno-use-cxa-atexit $(APP_CPP_FLAGS)

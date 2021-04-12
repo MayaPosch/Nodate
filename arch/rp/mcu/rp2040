@@ -1,0 +1,15 @@
+# MCU definition file for the RP2040 MCU.
+# Package: QFN56.
+
+MCU_FAMILY := rp2040
+MCU_GENUS := rp2040
+MCU_GENUS_CAP := RP2040
+
+MCU := rp2040
+MCU_CORE := rp2040
+MCU_RAM := 270336
+MCU_PACKAGE := qfn56
+
+MCU_FLAGS := -mcpu=cortex-m0plus -mthumb
+
+MCU_LD := rp2040.ld

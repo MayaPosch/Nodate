@@ -29,6 +29,16 @@ APP_CPP_FILES = $(wildcard src/*.cpp)
 APP_C_FILES = $(wildcard src/*.c)
 
 
+# Set Nodate modules to enable.
+# Available modules:
+# ethernet, i2c, gpio, interrupts, timer, usart
+NODATE_MODULES = gpio timer i2c usart
+
+# Set library modules to enable.
+# library name matches the folder name in libs/. E.g. freertos, LwIP, libscpi, bme280
+NODATE_LIBRARIES = 
+
+
 #
 # --- End of user-editable variables --- #
 #

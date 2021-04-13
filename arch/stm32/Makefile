@@ -77,22 +77,24 @@ endif
 # Toggle optional library modules.
 ifneq (, $(findstring freertos, $(NODATE_LIBRARIES)))
 	NODATE_FREERTOS = 1
-	LIB_INCLUDES += -I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA) \
-			-I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/ \
-			-I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS \
-			-I $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/include
-	LIB_C_SRC += $(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/MemMang/heap_4.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA)/port.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/queue.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/tasks.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/croutine.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/timers.c \
-					$(TOP)/$(NDLANGUAGE)/libs/FreeRTOS/Source/list.c
+	LIB_INCLUDES += -I $(TOP)/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/portable/GCC/$(ARMA) \
+			-I $(TOP)/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/ \
+			-I $(TOP)/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/CMSIS_RTOS \
+			-I $(TOP)/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/include \
+			-I $(TOP)/$(NDLANGUAGE)/libs
+	LIB_CPP_SRC += arch/stm32/$(NDLANGUAGE)/libs/cmsis_rtos.cpp
+	LIB_C_SRC += arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/portable/MemMang/heap_4.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/portable/GCC/$(ARMA)/port.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/queue.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/tasks.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/croutine.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/timers.c \
+					arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/list.c
 					
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/MemMang
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/portable/GCC/$(ARMA)
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/FreeRTOS/Source/CMSIS_RTOS
+	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/portable/MemMang \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/portable/GCC/$(ARMA) \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/freertos/FreeRTOS/Source/CMSIS_RTOS
 	
 endif
 
@@ -109,7 +111,11 @@ ifneq (, $(findstring LwIP, $(NODATE_LIBRARIES)))
 		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix/arpa \
 		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix/net \
 		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/posix/sys \
-		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/stdc
+		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/src/include/compat/stdc \
+		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/system \
+		-I $(TOP)/$(NDLANGUAGE)/libs/LwIP/system/arch \
+		-I $(TOP)/$(NDLANGUAGE)/libs
+	LIB_CPP_SRC += arch/stm32/$(NDLANGUAGE)/libs/lwip.cpp
 	LIB_C_SRC += $(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp/*.c) \
 					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/*.c) \
 					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api/*.c) \
@@ -117,16 +123,18 @@ ifneq (, $(findstring LwIP, $(NODATE_LIBRARIES)))
 					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv6/*.c) \
 					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/*.c) \
 					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/mqtt/*.c) \
-					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http/*.c) \
-					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/system/OS/*.c)
+					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http/http*.c) \
+					arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http/fs.c \
+					arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http/altcp_proxyconnect.c \
+					$(wildcard arch/stm32/$(NDLANGUAGE)/libs/LwIP/system/OS/*.c)
 					
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv4
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv6
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/mqtt
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/system/OS
+	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/netif/ppp \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/api \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv4 \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/core/ipv6 \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/mqtt \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/src/apps/http \
+	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/LwIP/system/OS
 endif
 
 ifneq (, $(findstring libscpi, $(NODATE_LIBRARIES)))
@@ -135,7 +143,7 @@ ifneq (, $(findstring libscpi, $(NODATE_LIBRARIES)))
 			-I $(TOP)/$(NDLANGUAGE)/libs/libscpi/src
 	LIB_C_SRC += $(wildcard arch/stm32/$(NDLANGUAGE)/libs/libscpi/src/*.c)
 	
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/libscpi/src
+	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/libscpi/src
 endif
 
 
@@ -145,8 +153,8 @@ OUTPUT := $(OUTPUT).$(MCU)
 INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/include/$(MCU_FAMILY) \
 			-I $(TOP)/$(NDLANGUAGE)/libs -I $(TOP)/$(NDLANGUAGE)/boards/$(BOARD) \
 			-I $(TOP)/$(NDLANGUAGE)/peripherals \
-			-I $(APPFOLDER)/src \
-			$(LIB_INCLUDES)
+			$(LIB_INCLUDES) \
+			-I $(APPFOLDER)/src
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1 $(NODATE_MOD_ENABLE)
 FLAGS := $(INCLUDE) $(MCU_FLAGS) -ffunction-sections -fdata-sections -MMD -Os -g3 $(APP_FLAGS)
@@ -160,10 +168,11 @@ LIBS :=  -lstdc++_nano -lgcc
 CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.cpp) \
 				$(wildcard arch/stm32/$(NDLANGUAGE)/libs/bme280/*.cpp) \
-				$(APP_CPP_FILES) \
-				$(LIB_C_SRC)
+				$(LIB_CPP_SRC) \
+				$(APP_CPP_FILES)
 			
 CSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
+			$(LIB_C_SRC) \
 			$(APP_C_FILES)
 			
 SSOURCES := arch/stm32/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
@@ -180,6 +189,7 @@ makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
 	$(MAKEDIR) $(APPFOLDER)/bin
+	$(LIB_MKDIRS)
 
 $(APPFOLDER)/obj/%.o: $(APPFOLDER)/%.cpp
 	$(GPP) -c -o $@ $< $(CPPFLAGS)

@@ -260,7 +260,7 @@ bool setupMPU() {
                 ((uint32_t) MPU_REGION_ENABLE				<< MPU_RASR_ENABLE_Pos);
 	
 	// 3. Enable the MPU.
-	MPU->CTRL = MPU_Control | MPU_CTRL_ENABLE_Msk;
+	MPU->CTRL |= MPU_CTRL_ENABLE_Msk;
   
 	// Enable fault exceptions.
 	SCB->SHCSR |= SCB_SHCSR_MEMFAULTENA_Msk;
@@ -694,6 +694,8 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 	
 bool Ethernet::receiveData(void* buffer) {
 	//
+	
+	return true;
 }
 
 
@@ -768,7 +770,7 @@ error:
   }
   return errval; */
   
-	return true
+	return true;
 }
 
 
@@ -789,6 +791,8 @@ bool Ethernet::dmaRxDescListInit() {
 // --- DMA TX DESC LIST INIT ---
 bool Ethernet::dmaTxDescListInit() {
 	//
+	
+	return true;
 }
 
 #endif

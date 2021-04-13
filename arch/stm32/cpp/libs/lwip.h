@@ -46,10 +46,11 @@ class LwIP {
 	static bool initialized;
 	static struct netif gnetif;
 	static DHCP_state dhcp_state;
-	static const dhcp_max_tries;
+	static const uint8_t dhcp_max_tries;
 	static ip_addr_t ipv4;
 	static ip_addr_t netmask;
 	static ip_addr_t gateway;
+	static osSemaphoreId s_xSemaphore;
 	
 	static err_t ethernetif_init(struct netif* netif);
 	static void low_level_init(struct netif* netif);

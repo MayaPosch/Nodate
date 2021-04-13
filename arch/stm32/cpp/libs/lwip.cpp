@@ -11,15 +11,31 @@
 
 #include <cmsis_os.h>
 
+#include <lwip/dhcp.h>
+#include <lwip/err.h>
+#include <netif/ethernet.h>
+#include <netif/etharp.h>
+
 
 // Static initialisations.
 bool LwIP::initialized = false;
-struct LwIP::netif gnetif;
+struct netif LwIP::gnetif;
 DHCP_state LwIP::dhcp_state = DHCP_OFF;
-const LwIP::dhcp_max_tries = 5;
+const uint8_t LwIP::dhcp_max_tries = 5;
 ip_addr_t LwIP::ipv4;
 ip_addr_t LwIP::netmask;
 ip_addr_t LwIP::gateway;
+osSemaphoreId LwIP::s_xSemaphore = 0;
+
+
+// LwIP sys_now() implementation.
+extern "C" {
+uint32_t sys_now(void) {
+	
+	// TODO: Implement.
+	return 0;
+}
+}
 
 
 // --- INIT ---
@@ -97,50 +113,55 @@ void LwIP::dhcpThread(void const* argument) {
 	struct dhcp* dhcp;
 	while (1) {
 		switch (dhcp_state) {
-		case DHCP_START: {
-			ip_addr_set_zero_ip4(&gnetif.ip_addr);
-			ip_addr_set_zero_ip4(&gnetif.netmask);
-			ip_addr_set_zero_ip4(&gnetif.gw);       
-			dhcp_start(gnetif);
-			DHCP_state = DHCP_WAIT_ADDRESS;
-		}
-		break;
-		case DHCP_WAIT_ADDRESS: {                
-			if (dhcp_supplied_address(gnetif)) {
-				dhcp_state = DHCP_ADDRESS_ASSIGNED;
+			case DHCP_START: {
+				ip_addr_set_zero_ip4(&gnetif.ip_addr);
+				ip_addr_set_zero_ip4(&gnetif.netmask);
+				ip_addr_set_zero_ip4(&gnetif.gw);       
+				dhcp_start(&gnetif);
+				dhcp_state = DHCP_WAIT_ADDRESS;
 			}
-			else {
-				dhcp = (struct dhcp*) netif_get_client_data(gnetif, LWIP_NETIF_CLIENT_DATA_INDEX_DHCP);
-    
-				// DHCP time-out.
-				if (dhcp->tries > dhcp_max_tries) {
-					dhcp_state = DHCP_TIMEOUT;
-            
-					// Stop DHCP
-					dhcp_stop(gnetif);
-            
-					// Use the static address as fallback.
-					netif_set_addr(gnetif, ip_2_ip4(&ipv4), ip_2_ip4(&netmask), ip_2_ip4(&gateway));
+			break;
+			case DHCP_WAIT_ADDRESS: {                
+				if (dhcp_supplied_address(&gnetif)) {
+					dhcp_state = DHCP_ADDRESS_ASSIGNED;
 				}
 				else {
-					// No time-out.
+					dhcp = (struct dhcp*) netif_get_client_data(&gnetif, LWIP_NETIF_CLIENT_DATA_INDEX_DHCP);
+		
+					// DHCP time-out.
+					if (dhcp->tries > dhcp_max_tries) {
+						dhcp_state = DHCP_TIMEOUT;
+				
+						// Stop DHCP
+						dhcp_stop(&gnetif);
+				
+						// Use the static address as fallback.
+						netif_set_addr(&gnetif, ip_2_ip4(&ipv4), ip_2_ip4(&netmask), ip_2_ip4(&gateway));
+					}
+					else {
+						// No time-out.
+					}
 				}
 			}
+			
+			break;
+			case DHCP_LINK_DOWN: {
+				// Stop DHCP.
+				dhcp_stop(&gnetif);
+				dhcp_state = DHCP_OFF; 
+			}
+			break;
+			default: break;
 		}
-		
-		break;
-		case DHCP_LINK_DOWN: {
-			// Stop DHCP.
-			dhcp_stop(gnetif);
-			dhcp_state = DHCP_OFF; 
-		}
-		break;
-		default: break;
     }
     
     // wait 250 ms.
     osDelay(250);
 }
+
+
+#define IFNAME0 's'
+#define IFNAME1 't'
 
 
 err_t LwIP::ethernetif_init(struct netif* netif) {
@@ -168,6 +189,9 @@ err_t LwIP::ethernetif_init(struct netif* netif) {
 }
 
 
+/* Stack size of the interface thread */
+#define INTERFACE_THREAD_STACK_SIZE            ( 350 )
+
 
 /**
   * @brief In this function, the hardware should be initialized.
@@ -186,12 +210,11 @@ void LwIP::low_level_init(struct netif* netif) {
 	rmii.macAddress[5] = MAC_ADDR5;
 	rmii.autonegotiate 	= true;
 	rmii.speed 			= ETH_SPEED_100M;
-	rmii.duplexMode 	= ETH_MODE_FULLDUPLEX
+	rmii.duplexMode 	= ETH_MODE_FULLDUPLEX;
 	rmii.hardwareChecksum 	= true;
 	rmii.interruptMode 		= true;
   
 	// Configure Ethernet peripheral (GPIOs, clocks, MAC, DMA).
-	Ethernet::setupMPU();
 	if (!Ethernet::startEthernet(rmii)) {
 		// TODO: handle error.
 	}
@@ -245,9 +268,9 @@ err_t LwIP::low_level_output(struct netif* netif, struct pbuf* p) {
 	//err_t errval;
 	struct pbuf* q;
 	for (q = p; q != 0; q = q->next) {
-		if (!Ethernet::sendData(q->payload, )) {
+		/* if (!Ethernet::sendData(q->payload, )) {
 			return ERR_USE;
-		}
+		} */
 		
 		// 
 	}
@@ -414,6 +437,11 @@ struct pbuf* LwIP::low_level_input(struct netif* netif) {
   } */
   return p;
 }
+
+
+/* The time to block waiting for input. */
+#define TIME_WAITING_FOR_INPUT                 ( osWaitForever )
+
 
 /**
   * @brief This function is the ethernetif_input task, it is processed when a packet 

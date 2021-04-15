@@ -12,4 +12,4 @@ MCU_PACKAGE := qfn56
 
 MCU_FLAGS := -mcpu=cortex-m0plus -mthumb
 
-MCU_LD := memmap_default.ld
+MCU_LD := gcc_arm.ld

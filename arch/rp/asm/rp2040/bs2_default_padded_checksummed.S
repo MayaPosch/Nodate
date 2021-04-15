@@ -1,4 +1,3 @@
-// Padded and checksummed version of: E:/Projects/nodate/pico-sdk/blinky/build/pico-sdk/src/rp2_common/boot_stage2/bs2_default.bin
 
 .cpu cortex-m0plus
 .thumb

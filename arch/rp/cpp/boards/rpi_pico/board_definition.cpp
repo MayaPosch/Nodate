@@ -1,5 +1,5 @@
 
-#include "../board_definition.h"
+#include "../board_types.h"
 
 //RccSysClockConfig maxSysClockCfg;
 BoardLED boardLEDs[1];

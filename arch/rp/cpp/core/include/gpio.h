@@ -89,7 +89,7 @@ struct GpioInputDef {
 
 struct GPIO_instance {
 	bool active = false;
-	GPIO_TypeDef* regs;
+	IO_BANK0_Type* regs;
 };
 
 

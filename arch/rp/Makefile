@@ -39,7 +39,7 @@ LD_FLAGS := -T $(TOP)/linker/$(MCU_FAMILY)/$(MCU_LD) -Wl,-Map=$(APPFOLDER)/bin/$
 			  $(MCU_FLAGS)
 LIBS :=  -lstdc++_nano -lgcc
 
-CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
+CPPSOURCES := arch/rp/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(wildcard arch/rp/$(NDLANGUAGE)/core/src/*.cpp) \
 				$(APP_CPP_FILES)
 			

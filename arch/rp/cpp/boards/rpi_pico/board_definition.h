@@ -5,8 +5,8 @@
 	
 */
 
-#ifndef BOARD_GENERIC_H
-#define BOARD_GENERIC_H
+#ifndef BOARD_DEFINITION
+#define BOARD_DEFINITION
 
 //#include <rcc.h>
 

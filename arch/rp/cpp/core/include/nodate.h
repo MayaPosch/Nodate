@@ -40,8 +40,4 @@
 #include <timer.h>
 #include <usart.h> */
 
-// Include configuration file for enabling optional modules.
-// This file is expected to be present in each project.
-#include <nodate_config.h>
-
 #endif

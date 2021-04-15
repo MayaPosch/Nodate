@@ -8,7 +8,6 @@
 
 
 #ifdef __rp2040
-#include <core_cm0plus.h>
 #include "rp2040/RP2040.h"
 #endif
 
@@ -17,7 +16,5 @@
 #else
 #include <stdint.h>
 #endif
-
-#include <nodate_config.h>
 
 #endif

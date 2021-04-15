@@ -154,7 +154,7 @@ __NO_RETURN void Reset_Handler(void)
 /*----------------------------------------------------------------------------
   Hard Fault Handler
  *----------------------------------------------------------------------------*/
-__weak void HardFault_Handler(void)
+__WEAK void HardFault_Handler(void)
 {
     while (1)
         ;
@@ -163,7 +163,7 @@ __weak void HardFault_Handler(void)
 /*----------------------------------------------------------------------------
   Default Handler for Exceptions / Interrupts
  *----------------------------------------------------------------------------*/
-__weak void Default_Handler(void)
+__WEAK void Default_Handler(void)
 {
     while (1)
         ;

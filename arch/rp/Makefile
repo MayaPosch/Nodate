@@ -45,7 +45,7 @@ CPPSOURCES := arch/rp/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 			
 CSOURCES := $(wildcard arch/rp/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
 			$(APP_C_FILES)
-#SSOURCES := arch/rp/asm/$(MCU_FAMILY)/startup_$(MCU_GENUS).S
+SSOURCES := arch/rp/asm/$(MCU_FAMILY)/bs2_default_padded_checksummed.S
 CPPOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CPPSOURCES:.cpp=.o))
 COBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(CSOURCES:.c=.o))
 SOBJECTS := $(addprefix $(APPFOLDER)/obj/,$(notdir) $(SSOURCES:.S=.o))

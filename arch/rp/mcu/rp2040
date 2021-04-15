@@ -12,4 +12,4 @@ MCU_PACKAGE := qfn56
 
 MCU_FLAGS := -mcpu=cortex-m0plus -mthumb
 
-MCU_LD := rp2040.ld
+MCU_LD := memmap_default.ld

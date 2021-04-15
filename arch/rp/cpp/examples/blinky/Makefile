@@ -1,4 +1,4 @@
-# Makefile for 'Pushy' example Nodate project for RP2040.
+# Makefile for 'Blinky' example Nodate project for RP2040.
 #
 
 # Architecture must be set.
@@ -17,7 +17,7 @@ BOARD ?= rpi_pico
 #MCU ?= rp2040
 
 # Set the name of the output (ELF & Hex) file.
-OUTPUT := pushy
+OUTPUT := blinky
 
 
 # Add files to include for compilation to these variables.

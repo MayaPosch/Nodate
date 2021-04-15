@@ -27,10 +27,10 @@ RccPortHandle* portHandles() {
 		portHandlesStatic[i] = handle;
 	}
 	
-#ifdef RCC_AHBENR_GPIOAEN
+#ifdef IO_BANK0
 	portHandlesStatic[RCC_PORT_A].exists = true;
-	portHandlesStatic[RCC_PORT_A].enr = &(RCC->AHBENR);
-	portHandlesStatic[RCC_PORT_A].enable = RCC_AHBENR_GPIOAEN_Pos;
+	portHandlesStatic[RCC_PORT_A].enr = &(RESETS->RESET);
+	portHandlesStatic[RCC_PORT_A].enable = RESETS_RESET_pads_bank0_Pos;
 #elif defined RCC_AHB1ENR_GPIOAEN
 	portHandlesStatic[RCC_PORT_A].exists = true;
 	portHandlesStatic[RCC_PORT_A].enr = &(RCC->AHB1ENR);
@@ -465,9 +465,9 @@ bool Rcc::enable(RccPeripheral peripheral) {
 		ph.count++;
 	}
 	else {
-		// Activate the peripheral.
+		// Activate the peripheral. This removes the 'reset' condition.
 		ph.count = 1;
-		*(ph.enr) |= (1 << ph.enable);
+		*(ph.enr) &= ~(1 << ph.enable);
 	}
 	
 	return true;
@@ -494,9 +494,9 @@ bool Rcc::disable(RccPeripheral peripheral) {
 		ph.count--;
 	}
 	else {
-		// Deactivate the peripheral.
+		// Deactivate the peripheral. This sets the 'reset' condition.
 		ph.count = 0;
-		*(ph.enr) &= ~(1 << ph.enable);
+		*(ph.enr) |= (1 << ph.enable);
 	}
 	
 	return true;
@@ -528,9 +528,9 @@ bool Rcc::enablePort(RccPort port) {
 		ph.count++;
 	}
 	else {
-		// Activate the port.
+		// Activate the port. This removes the 'reset' condition.
 		ph.count = 1;
-		*(ph.enr) |= (1 << ph.enable);
+		*(ph.enr) &= ~(1 << ph.enable);
 	}
 	
 	return true;
@@ -556,9 +556,9 @@ bool Rcc::disablePort(RccPort port) {
 		ph.count--;
 	}
 	else {
-		// Deactivate the port.
+		// Deactivate the port. This sets the 'reset' condition.
 		ph.count = 0;
-		*(ph.enr) &= ~(1 << ph.enable);
+		*(ph.enr) |= (1 << ph.enable);
 	}
 	
 	return true;

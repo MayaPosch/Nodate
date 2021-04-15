@@ -177,7 +177,7 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 	}
 #else
 	// Set output mode on the requested pin.
-	(((uint32_t*) (instance.regs->CTRL)) + ((uint32_t) (2 * pin) |= (4 << IO_BANK0_GPIO0_CTRL_OEOVER_Pos);
+	*((uint32_t*) &(instance.regs->GPIO0_CTRL) + ((uint32_t) 2 * pin)) |= (4 << IO_BANK0_GPIO0_CTRL_OEOVER_Pos);
 
 	/* uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);
@@ -401,13 +401,13 @@ bool GPIO::write(GPIO_ports port, uint8_t pin, GPIO_level level) {
 	// Write to pin.
 	if (level == GPIO_LEVEL_LOW) {
 		//instance.regs->ODR &= ~(0x1 << pin);
-		(((uint32_t*) (instance.regs->CTRL)) + ((uint32_t) (2 * pin) &= ~(0x4 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
-		(((uint32_t*) (instance.regs->CTRL)) + ((uint32_t) (2 * pin) &= (0x2 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
+		*((uint32_t*) &(instance.regs->GPIO0_CTRL) + ((uint32_t) 2 * pin)) &= ~(0x4 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
+		*((uint32_t*) &(instance.regs->GPIO0_CTRL) + ((uint32_t) 2 * pin)) &= (0x2 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
 	}
 	else if (level == GPIO_LEVEL_HIGH) {
 		//instance.regs->ODR |= (0x1 << pin);
-		(((uint32_t*) (instance.regs->CTRL)) + ((uint32_t) (2 * pin) &= ~(0x4 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
-		(((uint32_t*) (instance.regs->CTRL)) + ((uint32_t) (2 * pin) |= (0x3 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
+		*((uint32_t*) &(instance.regs->GPIO0_CTRL) + ((uint32_t) 2 * pin)) &= ~(0x4 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
+		*((uint32_t*) &(instance.regs->GPIO0_CTRL) + ((uint32_t) 2 * pin)) |= (0x3 << IO_BANK0_GPIO0_CTRL_OUTOVER_Pos);
 	}
 	
 	return true;

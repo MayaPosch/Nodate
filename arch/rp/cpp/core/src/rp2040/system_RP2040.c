@@ -23,7 +23,7 @@
  * limitations under the License.
  */
 
-#include "RP20XX.h"
+#include "RP20xx.h"
 #include "system_RP2040.h"
 #include "cmsis_compiler.h"
 

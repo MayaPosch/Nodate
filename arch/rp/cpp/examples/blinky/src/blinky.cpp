@@ -15,7 +15,7 @@ int main () {
 	// Initialise.
 	//Timer timer;
 	
-	// Set LED & button.
+	// Set LED.
 	uint8_t 	led_pin;
 	GPIO_ports 	led_port;
 	if (boardLEDs_count > 0) {

@@ -1,4 +1,4 @@
 # Definition file for the RP2040 Raspberry Pi Pico development board.
 
 MCU := rp2040
-PROGRAMMER := board/st_nucleo_f0.cfg
+PROGRAMMER := interface/raspberrypi-swd.cfg -f target/rp2040.cfg

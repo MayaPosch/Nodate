@@ -4,7 +4,7 @@
 
 
 void delay(void) {
-    volatile uint32_t cnt_down = 1200000;
+    volatile uint32_t cnt_down = 120000;
     while (cnt_down--) {
         __NOP();
     }

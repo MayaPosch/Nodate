@@ -19,12 +19,12 @@ int main () {
 	
 	// Set the pin mode on the LED pin.
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
-	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
+	GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 	
 	while (1) {
-		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
-		timer.delay(1000);
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
+		timer.delay(1000);
+		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		timer.delay(1000);
 	}
 	

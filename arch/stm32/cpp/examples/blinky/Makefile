@@ -9,10 +9,10 @@ ARCH ?= stm32
 NDLANGUAGE ?= cpp
 
 # One can use the board preset.
-BOARD ?= nucleo-f042k6
+#BOARD ?= nucleo-f042k6
 #BOARD ?= blue_pill
 #BOARD ?= black_pill_f411
-#BOARD ?= blue_pill_wch
+BOARD ?= blue_pill_wch
 #BOARD ?= stm32f4-discovery
 #BOARD ?= nucleo-f746zg
 

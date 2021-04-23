@@ -146,6 +146,15 @@ ifneq (, $(findstring libscpi, $(NODATE_LIBRARIES)))
 	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/libscpi/src
 endif
 
+ifneq (, $(findstring ssd1306, $(NODATE_LIBRARIES)))
+	NODATE_SSD1306 = 1
+	LIB_INCLUDES += -I $(TOP)/$(NDLANGUAGE)/libs/ssd1306 \
+			-I $(TOP)/$(NDLANGUAGE)/libs/ssd1306
+	LIB_CPP_SRC += $(wildcard arch/stm32/$(NDLANGUAGE)/libs/ssd1306/*.cpp)
+	
+	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/ssd1306
+endif
+
 
 
 

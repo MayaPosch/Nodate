@@ -28,6 +28,7 @@
 
 #include <board_definition.h>
 
+#include <core.h>
 #include <clock.h>
 #include <common.h>
 #include <ethernet.h>

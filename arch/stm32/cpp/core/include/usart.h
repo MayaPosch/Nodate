@@ -43,6 +43,14 @@ struct USART_device {
 };
 
 
+struct USART_def {
+	USART_devices usart;
+	uint8_t configs;
+	GpioPinDef* tx;
+	GpioPinDef* rx;
+};
+
+
 class USART {
 	static GPIO gpio;
 	

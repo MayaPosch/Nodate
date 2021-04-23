@@ -52,12 +52,12 @@ Timer::~Timer() {
 
 // --- DELAY ---
 void Timer::delay(uint32_t ms) {
-	uint32_t now = McuCore::getSysTick();
-	uint32_t then = now + ms;
+	uint32_t start = McuCore::getSysTick();
+	uint32_t delay = ms;
 	
 	// TODO: if () { }
 	
-	while (McuCore::getSysTick() < then) { }
+	while ((McuCore::getSysTick() - start) < delay) { }
 	
 	// Enable the SysTick timer
 	//SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;

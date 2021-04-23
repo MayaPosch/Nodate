@@ -1,0 +1,4 @@
+# Definition file for the STM32 'Blue Pill' STM32F103C8 development board.
+
+MCU := stm32f103xb
+PROGRAMMER := interface/stlink.cfg -c "set CPUTAPID 0x2ba01477" -f target/stm32f1x.cfg

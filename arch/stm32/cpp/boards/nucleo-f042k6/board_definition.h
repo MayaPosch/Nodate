@@ -1,7 +1,7 @@
 /*
-	nucleo_f746zg.h - board definition file for the ST Nucleo-F746ZG board.
+	nucleo-f042k6.h - board definition file for the ST Nucleo-F042K6 board.
 	
-	MCU: STM32F746ZG
+	MCU: STM32F042K6
 	
 	2021/02/24, Maya Posch
 */
@@ -10,6 +10,7 @@
 #define BOARD_DEFINITION
 
 #include <rcc.h>
+#include <usart.h>
 
 #include "../board_types.h"
 
@@ -27,7 +28,8 @@ extern RccSysClockConfig maxSysClockCfg;
 // --- UARTS ---
 
 // Define the number and features of the U(S)ARTs on the board.
-//uint8_t board_USART_count = 
+extern uint8_t boardUSART_count;
+extern USART_def boardUSARTs[2];
 
 // --- LEDS ---
 

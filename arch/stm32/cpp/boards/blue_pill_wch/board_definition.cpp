@@ -48,7 +48,7 @@ bool init() {
 	bl.pin.pupd = GPIO_PULL_UP;
 	bl.pin.type = GPIO_PUSH_PULL;
 	bl.pin.speed = GPIO_LOW;
-	bl.rgb = { 0, 0xff, 0 };
+	bl.rgb = { 0xff, 0, 0 };
 	boardLEDs[0] = bl;
 
 	BoardButton bb;

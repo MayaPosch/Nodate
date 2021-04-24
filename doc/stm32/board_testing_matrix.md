@@ -5,11 +5,12 @@ Test status for each supported board.
 &nbsp; | MCU | Board name | GPIO | USART | Timer | Interrupts | I2C | SPI | I2S | Ethernet | ADC | DAC
 ----|--------|-----|---|---|---|---|---|---|---|---|---|---|
 **F0** | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp; | &nbsp;
-&nbsp; | STM32F042K6T  |nucleo-f042k6 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | &nbsp; | &nbsp; | n/a | &nbsp; | &nbsp;
+&nbsp; | STM32F042K6T  |nucleo-f042k6 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | &nbsp; | &nbsp; | n/a | :accept: | &nbsp;
 &nbsp; | STM32F051R8T  | stm32f0-discovery | :heavy_check_mark: | :question: | :question: | :question: | :question: | | | n/a
 &nbsp; | STM32F072C8Tx  | otter_pill| :question: | :question: | :question: | :question: | :question: | | | n/a
 **F1** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F103C8   | blue_pill | :heavy_check_mark: | | | | | | | n/a
+&nbsp; | CH32F103C8   | blue_pill_wch | :heavy_check_mark: | | | | | | | n/a
 &nbsp; | STM32F103CB  | maple_mini | :heavy_check_mark: | | | | | | | n/a
 **F4** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT  | stm32f4-discovery | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | | | | n/a

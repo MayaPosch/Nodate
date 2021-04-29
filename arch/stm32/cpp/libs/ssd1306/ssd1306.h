@@ -61,8 +61,9 @@ struct SSD1306_command {
 class SSD1306 {
 	I2C_devices i2c_bus;
 	uint8_t address;
-	uint8_t* buffer;
+	uint8_t* buffer = 0;
 	uint8_t rotation = 0;
+	bool ready;
 	
 	void send_command(SSD1306_commands cmd);
 	void send_data(uint8_t byte);
@@ -70,6 +71,7 @@ class SSD1306 {
 	
 public:
 	SSD1306(I2C_devices device, uint8_t slave_address);
+	bool isReady();
 	bool init();
 	bool display();
 	void clearDisplay();

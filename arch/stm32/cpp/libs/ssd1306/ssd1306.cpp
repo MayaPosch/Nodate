@@ -15,11 +15,29 @@ const uint8_t WIDTH = 82;
 
 #include <cstring>
 
+// Debug
+#include <printf.h>
+
+
+void ssd1306Callback(uint8_t byte) {
+	//
+}
+
 
 // --- CONSTRUCTOR ---
 SSD1306::SSD1306(I2C_devices device, uint8_t slave_address) {
+	// Try to set the target I2C peripheral in master mode.
+	ready = I2C::startMaster(device, I2C_MODE_FM, ssd1306Callback);
+	
 	i2c_bus = device;
 	address = slave_address;
+}
+
+
+// --- IS READY ---
+// Returns true if the display instance has been fully configured and is ready.
+bool SSD1306::isReady() {
+	return ready;
 }
 
 
@@ -28,6 +46,8 @@ bool SSD1306::init() {
 	if ((!buffer) && !(buffer = (uint8_t*) malloc(WIDTH * ((HEIGHT + 7) / 8)))) {
 		return false;
 	}
+	
+	printf("init: 0\n");
 
 	clearDisplay();
 	if (HEIGHT > 32) {
@@ -39,12 +59,20 @@ bool SSD1306::init() {
 				splash2_data, splash2_width, splash2_height, 1);
 	}
 	
-	// TODO: configure for 128x64 display here. Make configurable for 32 tall displays.
+	printf("init: 1\n");
+	
+	// TODO: configuring for 128x64 display here. Make configurable for 32 tall displays.
 	send_command(SSD1306_DISPLAY_OFF);
+	
+	printf("init: 2\n");
+	
 	send_command(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
 	send_data(0x80);
+	
+	printf("init: 3\n");
+	
 	send_command(SSD1306_SET_MULTIPLEX_RATIO);
-	send_data(0x3F);
+	send_data(HEIGHT - 1);
 	send_command(SSD1306_SET_DISPLAY_OFFSET);
 	send_data(0x0);
 	send_data((uint8_t) SSD1306_SET_START_LINE | 0x0);
@@ -64,6 +92,7 @@ bool SSD1306::init() {
 	send_data(0x40);
 	send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
 	send_command(SSD1306_NORMAL_DISPLAY);
+	send_command(SSD1306_DEACTIVATE_SCROLL);
 	send_command(SSD1306_DISPLAY_ON);
 	
 	return true;
@@ -144,14 +173,16 @@ bool SSD1306::display() {
 
 	uint16_t count = WIDTH * ((HEIGHT + 7) / 8);
 	
+	send_data(buffer, count);
+	
 	// Write buffer in lines, starting a new line at the beginning, writing the data for the line,
 	// then send a new line command before writing the data for that line, ad nauseam.
-	uint8_t* ptr = buffer;
+	/* uint8_t* ptr = buffer;
 	for (uint8_t i = 0; i < HEIGHT; ++i) {
 		send_command(SSD1306_SET_START_LINE);
 		send_data(ptr, WIDTH);
 		ptr += WIDTH;
-	}
+	} */
 	
 	return true;
 	

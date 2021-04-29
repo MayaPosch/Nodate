@@ -34,7 +34,7 @@ APP_CPP_FLAGS =
 # Set Nodate modules to enable.
 # Available modules:
 # ethernet, i2c, gpio, interrupts, timer, usart
-NODATE_MODULES = gpio i2c
+NODATE_MODULES = gpio i2c usart
 
 # Set library modules to enable.
 # library name matches the folder name in libs/. E.g. freertos, LwIP, libscpi, bme280

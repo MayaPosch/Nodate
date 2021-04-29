@@ -272,33 +272,72 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 }
 
 
+#include <printf.h>
+
+
 // --- SEND TO SLAVE ---
 // Send length bytes on the I2C bus to the set Slave address.
-bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint8_t len) {
+bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 	I2C_device &instance = i2cList[device];
 #if defined STM32F0
     instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
-	
-	for (uint8_t i = 0; i < len; i++) {
-		// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag. 
-		if ((instance.regs->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
-			return false;
-		}
-		
-		// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
-		while ((instance.regs->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
-			// TODO: handle timeout.
-		}
-		
-		// 3. Write data into TXDR.
-		instance.regs->TXDR = data[i];
+	if (len > 0xff) {
+		instance.regs->CR2 |= I2C_CR2_RELOAD;
 	}
+	
+	uint16_t bytesToWrite = len;
+	while (bytesToWrite > 0) {
+		uint8_t write = 0xff;
+		if (bytesToWrite < 256) { 
+			write = bytesToWrite; 
+			instance.regs->CR2 |= I2C_CR2_AUTOEND;
+		}
 		
-	// 4. If ISR_TC == 1, we're done. (Transfer Complete).
-	// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
-	// 		If true, start new transfer cycle.
-	if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
-		// TODO: restart session.
+		for (uint8_t i = 0; i < write; i++) {
+			// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag. 
+			if ((instance.regs->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
+				return false;
+			}
+			
+			// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
+			uint32_t ts = McuCore::getSysTick();
+			uint32_t timeout = 200; // TODO: make configurable.
+			while ((instance.regs->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
+				// Handle timeout.
+				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+					// TODO: set status.
+					return false;
+				}
+			}
+			
+			// 3. Write data into TXDR.
+			instance.regs->TXDR = data[i];
+		}
+		
+		bytesToWrite -= write;
+			
+		// 4. If ISR_TC == 1, we're done. (Transfer Complete).
+		// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
+		// 		If true, start new transfer cycle.
+		if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+			// Transfer complete.
+			break;
+		}
+		else {
+			// Restart session if data left.
+			if ((instance.regs->ISR & I2C_ISR_TCR) == I2C_ISR_TCR) {
+				if (bytesToWrite < 256) {
+					instance.regs->CR2 |= I2C_CR2_RELOAD;
+				}
+				else {
+					instance.regs->CR2 &= ~I2C_CR2_RELOAD;
+				}
+			}
+			else {
+				// Stop transmission.
+				break;
+			}
+		}
 	}
 #endif
 	

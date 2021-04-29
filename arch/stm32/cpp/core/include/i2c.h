@@ -8,8 +8,7 @@
 #define I2C_H
 
 #include <common.h>
-#include <gpio.h>
-#include <rcc.h>
+#include <nodate.h>
 
 #include <functional>
 
@@ -50,7 +49,7 @@ public:
 											std::function<void(uint8_t)> callback);
 	static bool setSlaveTarget(I2C_devices device, uint8_t slave);
 	static bool startSlave(I2C_devices device, uint8_t address);
-	static bool sendToSlave(I2C_devices device, uint8_t* data, uint8_t len);
+	static bool sendToSlave(I2C_devices device, uint8_t* data, uint16_t len);
 	static bool sendToMaster(I2C_devices device, uint8_t* data, uint8_t len);
 	static bool receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer);
     static bool receiveFromSlave(I2C_devices device, uint8_t len);

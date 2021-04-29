@@ -181,6 +181,7 @@ CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(APP_CPP_FILES)
 			
 CSOURCES := $(wildcard arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)/*.c) \
+				$(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.c) \
 			$(LIB_C_SRC) \
 			$(APP_C_FILES)
 			

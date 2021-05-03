@@ -20,6 +20,9 @@ int main() {
 	// Set up stdout.
 	IO::setStdOutTarget(USART_2);
 	
+	// Start SysTick.
+	McuCore::initSysTick();
+	
 	printf("Starting I2C SSD1306 OLED example...\n");
 	
 	// This example shows a demo sequence on an attached SSD1306-based OLED display.
@@ -72,21 +75,41 @@ int main() {
 		while (1) { }
 	}
 	
+	// Display the default splash screen.
+	//display.display();
+	
 	// Light up LED.
 	if (led_enable) {
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 	}
 	
-	// TODO: Display something useful.
-	// Display the default splash screen.
-	display.display();
-	//display.show_text("Hello Nodate!");
 	// Clear the buffer
 	display.clearDisplay();
+	
+	printf("Display on/off.\n");
+	
+	// Light up whole display.
+	display.displayFullOn();
+	Timer::delay(2000);
+	display.displayFullOn(false);
+	
+	printf("Pixel@20x20\n");
+
+	// Draw a single lit pixel at 10x10.
+	display.drawPixel(20, 20, 1);
+	display.display();
+	
+	/*printf("Pixel@10x10\n");
 
 	// Draw a single lit pixel at 10x10.
 	display.drawPixel(10, 10, 1);
-	display.display();
+	display.display(); */
+	
+	// Clear the buffer
+	//display.clearDisplay();
+	
+	// TODO: Display something useful.
+	//display.show_text("Hello Nodate!");
 	
 	while (1) {
 		//

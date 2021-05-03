@@ -280,18 +280,35 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 	I2C_device &instance = i2cList[device];
 #if defined STM32F0
-    instance.regs->CR2 =  I2C_CR2_AUTOEND | (len << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
+	uint32_t cr2_reg = 0;
+    cr2_reg |= (instance.slaveTarget << 1);
 	if (len > 0xff) {
-		instance.regs->CR2 |= I2C_CR2_RELOAD;
+		// Set RELOAD so that we can transmit more data after finishing a transfer cycle.
+		// Set NBYTES to the max value (0xff).
+		cr2_reg |= I2C_CR2_RELOAD;
+		cr2_reg |= (0xff << 16);
+		printf("Set reload.\n");
 	}
+	else {
+		// Set AUTOEND and the data byte size.
+		cr2_reg |= I2C_CR2_AUTOEND | (uint32_t) (len << 16);
+	}
+	
+	cr2_reg |= I2C_CR2_START;
+	instance.regs->CR2 = cr2_reg;
+	
+	printf("CR2: %d.\n", instance.regs->CR2);
 	
 	uint16_t bytesToWrite = len;
 	while (bytesToWrite > 0) {
 		uint8_t write = 0xff;
-		if (bytesToWrite < 256) { 
-			write = bytesToWrite; 
+		if (bytesToWrite < 256) {
+			// Prepare for final data transmission.
+			write = bytesToWrite;
 			instance.regs->CR2 |= I2C_CR2_AUTOEND;
 		}
+		
+		//printf("Writing: %d.\n", write);
 		
 		for (uint8_t i = 0; i < write; i++) {
 			// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag. 
@@ -301,11 +318,12 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 			
 			// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
 			uint32_t ts = McuCore::getSysTick();
-			uint32_t timeout = 200; // TODO: make configurable.
+			uint32_t timeout = 400; // TODO: make configurable.
 			while ((instance.regs->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
+					printf("I2C timeout.\n");
 					return false;
 				}
 			}
@@ -321,22 +339,30 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 		// 		If true, start new transfer cycle.
 		if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
 			// Transfer complete.
+			printf("TC true.\n");
 			break;
 		}
+		
+		// Restart session if data left. Transfer Complete Reload.
+		//if ((instance.regs->ISR & I2C_ISR_TCR) == I2C_ISR_TCR) {
+			//printf("TCR true.\n");
+			
+			// Remaining data fits in a single transfer. Disable reload.
+			if (bytesToWrite < 256 && bytesToWrite > 0) {
+				instance.regs->CR2 &= ~I2C_CR2_RELOAD;
+				//instance.regs->CR2 &= ~(0xff << 16);
+				instance.regs->CR2 |= I2C_CR2_AUTOEND | (uint32_t) (bytesToWrite << 16);
+				printf("Unset reload.\n");
+			}
+			else if (bytesToWrite > 256) {
+				// Set reload and NBYTES.
+				instance.regs->CR2 |= I2C_CR2_RELOAD | (0xff << 16);
+			}
+		//}
 		else {
-			// Restart session if data left.
-			if ((instance.regs->ISR & I2C_ISR_TCR) == I2C_ISR_TCR) {
-				if (bytesToWrite < 256) {
-					instance.regs->CR2 |= I2C_CR2_RELOAD;
-				}
-				else {
-					instance.regs->CR2 &= ~I2C_CR2_RELOAD;
-				}
-			}
-			else {
-				// Stop transmission.
-				break;
-			}
+			// Stop transmission.
+			printf("TX stop.\n");
+			break;
 		}
 	}
 #endif
@@ -345,12 +371,109 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 }
 
 
+// --- SEND TO SLAVE BEGIN ---
+bool I2C::sendToSlaveBegin(I2C_devices device) {
+	I2C_device &instance = i2cList[device];
+#if defined STM32F0
+    instance.regs->CR2 |= (instance.slaveTarget << 1);
+
+	return true;
+#endif
+	return false;
+}
+
+
+// -- SEND TO SLAVE BYTE ---
+bool sendToSlaveByte(I2C_devices device, uint8_t data) {
+	I2C_device &instance = i2cList[device];
+#if defined STM32F0
+	instance.regs->CR2 &= ~(0xff << 16);
+	instance.regs->CR2 |= (uint32_t) 1 << 16;
+	
+	// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag.
+	if ((instance.regs->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
+		return false;
+	}
+	
+	// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
+	uint32_t ts = McuCore::getSysTick();
+	uint32_t timeout = 400; // TODO: make configurable.
+	while ((instance.regs->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
+		// Handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			printf("I2C timeout.\n");
+			return false;
+		}
+	}
+	
+	// 3. Write data into TXDR.
+	instance.regs->TXDR = data;
+	
+	return true;
+#endif
+	return false;
+}
+
+
+// --- SEND TO SLAVE BYTES ---
+bool I2C::sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len) {
+	I2C_device &instance = i2cList[device];
+#if defined STM32F0
+	//instance.regs->CR2 &= ~(0xff << 16);
+	instance.regs->CR2 |= I2C_CR2_START | len << 16;
+	
+	for (uint8_t i = 0; i < len; i++) {
+		// 1. If ISR_NACKF == 1, abort. Not Acknowledge receive Flag.
+		if ((instance.regs->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
+			return false;
+		}
+		
+		// 2. Check that ISR_TXIS == 1. Transmit Interrupt Status.
+		uint32_t ts = McuCore::getSysTick();
+		uint32_t timeout = 400; // TODO: make configurable.
+		while ((instance.regs->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
+			// Handle timeout.
+			if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+				// TODO: set status.
+				printf("I2C timeout.\n");
+				return false;
+			}
+		}
+		
+		// 3. Write data into TXDR.
+		instance.regs->TXDR = data[i];
+	}
+	
+	return true;
+#endif
+	return false;
+}
+
+
+// --- SEND TO SLAVE END ---
+bool I2C::sendToSlaveEnd(I2C_devices device) {
+	I2C_device &instance = i2cList[device];
+#if defined STM32F0
+	instance.regs->CR2 |= I2C_CR2_STOP;
+	
+	return true;
+#endif
+	return false;
+}
+
+
+
 // --- SEND TO MASTER ---
 // Send data to the Master on the I2C device.
 bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
+	I2C_device &instance = i2cList[device];
+#if defined STM32F0
 	//
 	
 	return true;
+#endif
+	return false;
 }
 
 

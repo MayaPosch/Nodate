@@ -34,7 +34,7 @@ public:
 	Timer();
 	~Timer();
 
-	void delay(uint32_t ms);
+	static void delay(uint32_t ms);
 	//bool startPWM(TimerDevice device, 
 };
 

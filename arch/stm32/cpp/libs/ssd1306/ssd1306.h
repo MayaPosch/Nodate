@@ -66,6 +66,9 @@ class SSD1306 {
 	bool ready;
 	
 	void send_command(SSD1306_commands cmd);
+	void send_command(uint8_t cmd);
+	void send_command(SSD1306_commands cmd, uint8_t data);
+	void send_commands(uint8_t* data, uint8_t len);
 	void send_data(uint8_t byte);
 	void send_data(uint8_t* bytes, uint16_t len);
 	
@@ -75,6 +78,8 @@ public:
 	bool init();
 	bool display();
 	void clearDisplay();
+	
+	void displayFullOn(bool on = true);
 	
 	void drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
 												int16_t width, int16_t height, uint16_t color);

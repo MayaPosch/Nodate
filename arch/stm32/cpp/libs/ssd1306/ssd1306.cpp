@@ -24,10 +24,22 @@ void ssd1306Callback(uint8_t byte) {
 }
 
 
+// TYPES
+struct SSD1306_cmd_list {
+	uint8_t cmd = 0x0;
+	uint8_t* list;
+};
+
+struct SSD1306_data_list {
+	uint8_t d = 0x40;
+	uint8_t* data;
+};
+
+
 // --- CONSTRUCTOR ---
 SSD1306::SSD1306(I2C_devices device, uint8_t slave_address) {
 	// Try to set the target I2C peripheral in master mode.
-	ready = I2C::startMaster(device, I2C_MODE_FM, ssd1306Callback);
+	ready = I2C::startMaster(device, I2C_MODE_SM100, ssd1306Callback);
 	
 	i2c_bus = device;
 	address = slave_address;
@@ -67,32 +79,32 @@ bool SSD1306::init() {
 	printf("init: 2\n");
 	
 	send_command(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
-	send_data(0x80);
+	send_command(0x80);
 	
 	printf("init: 3\n");
 	
 	send_command(SSD1306_SET_MULTIPLEX_RATIO);
-	send_data(HEIGHT - 1);
+	send_command(HEIGHT - 1);
 	send_command(SSD1306_SET_DISPLAY_OFFSET);
-	send_data(0x0);
-	send_data((uint8_t) SSD1306_SET_START_LINE | 0x0);
+	send_command(0x0);
+	send_command((uint8_t) SSD1306_SET_START_LINE | 0x0);
 	send_command(SSD1306_CHARGE_PUMP);
-	send_data(0x14);
+	send_command(0x14);
 	send_command(SSD1306_MEMORY_ADDR_MODE);
-	send_data(0x00);
-	send_data((uint8_t) SSD1306_SET_SEGMENT_REMAP | 0x1);
+	send_command(0x00);
+	send_command((uint8_t) SSD1306_SET_SEGMENT_REMAP | 0x1);
 	send_command(SSD1306_COM_SCAN_DIR_DEC);
 	send_command(SSD1306_SET_COM_PINS);
-	send_data(0x12);
+	send_command(0x12);
 	send_command(SSD1306_SET_CONTRAST_CONTROL);
-	send_data(0xCF);
+	send_command(0xCF);
 	send_command(SSD1306_SET_PRECHARGE_PERIOD);
-	send_data(0xF1);
+	send_command(0xF1);
 	send_command(SSD1306_SET_VCOM_DESELECT);
-	send_data(0x40);
+	send_command(0x40);
+	send_command(SSD1306_DEACTIVATE_SCROLL);
 	send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
 	send_command(SSD1306_NORMAL_DISPLAY);
-	send_command(SSD1306_DEACTIVATE_SCROLL);
 	send_command(SSD1306_DISPLAY_ON);
 	
 	return true;
@@ -162,48 +174,25 @@ void SSD1306::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
 
 bool SSD1306::display() {
-	uint8_t dlist1[] = {
+	/* uint8_t dlist1[] = {
 		(uint8_t) SSD1306_SET_PAGE_ADDR,
 		0,                      // Page start address
 		0xFF,                   // Page end (not really, but works here)
 		(uint8_t) SSD1306_SET_COLUMN_ADDR, 0};		// Column start address
 		
-	send_data(dlist1, sizeof(dlist1));
-	send_data((uint8_t) WIDTH - 1); // Column end address
+	send_commands(dlist1, sizeof(dlist1)); */
+	send_command(SSD1306_SET_COLUMN_ADDR); 	// 0x21 COMMAND
+	send_command(0); 						// Column start address
+	send_command(WIDTH - 1); 				// Column end address
+	//send_command((uint8_t) WIDTH - 1); // Column end address
+	send_command(SSD1306_SET_PAGE_ADDR); 	// 0x22 COMMAND
+	send_command(0); 						// Start Page address
+	send_command((HEIGHT / 8 ) - 1);		// End Page address
 
 	uint16_t count = WIDTH * ((HEIGHT + 7) / 8);
-	
 	send_data(buffer, count);
 	
-	// Write buffer in lines, starting a new line at the beginning, writing the data for the line,
-	// then send a new line command before writing the data for that line, ad nauseam.
-	/* uint8_t* ptr = buffer;
-	for (uint8_t i = 0; i < HEIGHT; ++i) {
-		send_command(SSD1306_SET_START_LINE);
-		send_data(ptr, WIDTH);
-		ptr += WIDTH;
-	} */
-	
 	return true;
-	
-	/* 
-	uint8_t *ptr = buffer;
-	wire->beginTransmission(i2caddr);
-	WIRE_WRITE((uint8_t)0x40);
-	uint16_t bytesOut = 1;
-	while (count--) {
-		if (bytesOut >= WIRE_MAX) {
-			wire->endTransmission();
-			wire->beginTransmission(i2caddr);
-			WIRE_WRITE((uint8_t)0x40);
-			bytesOut = 1;
-		}
-	
-		WIRE_WRITE(*ptr++);
-		bytesOut++;
-	}
-	
-	wire->endTransmission(); */
 }
 
 
@@ -212,19 +201,55 @@ void SSD1306::clearDisplay() {
 }
 
 
+void SSD1306::displayFullOn(bool on) {
+	if (on) { 	send_command(SSD1306_DISPLAY_ALL_ON); }
+	else {		send_command(SSD1306_DISPLAY_ALL_ON_RESUME); }
+}
+
+
 void SSD1306::send_command(SSD1306_commands cmd) {
 	I2C::setSlaveTarget(i2c_bus, address);
-	I2C::sendToSlave(i2c_bus, ((uint8_t*) &cmd), 1);
+	uint8_t bytes[] = { 0x0, (uint8_t) cmd };
+	I2C::sendToSlave(i2c_bus, bytes, 2);
+}
+
+
+void SSD1306::send_command(uint8_t cmd) {
+	I2C::setSlaveTarget(i2c_bus, address);
+	uint8_t bytes[] = { 0x0, cmd };
+	I2C::sendToSlave(i2c_bus, bytes, 2);
+}
+
+
+void SSD1306::send_command(SSD1306_commands cmd, uint8_t data) {
+	I2C::setSlaveTarget(i2c_bus, address);
+	uint8_t bytes[] = { 0x0, (uint8_t) cmd, data };
+	I2C::sendToSlave(i2c_bus, bytes, 3);
+}
+
+
+void SSD1306::send_commands(uint8_t* data, uint8_t len) {
+	I2C::setSlaveTarget(i2c_bus, address);
+	I2C::sendToSlaveBegin(i2c_bus);
+	uint8_t byte = 0x00;
+	I2C::sendToSlaveBytes(i2c_bus, &byte, 1);
+	I2C::sendToSlaveBytes(i2c_bus, data, len);
+	I2C::sendToSlaveEnd(i2c_bus);
 }
 
 
 void SSD1306::send_data(uint8_t byte) {
 	I2C::setSlaveTarget(i2c_bus, address);
-	I2C::sendToSlave(i2c_bus, &(byte), 1);
+	uint8_t bytes[] = { 0x40, byte };
+	I2C::sendToSlave(i2c_bus, bytes, 2);
 }
 
 
 void SSD1306::send_data(uint8_t* bytes, uint16_t len) {
 	I2C::setSlaveTarget(i2c_bus, address);
-	I2C::sendToSlave(i2c_bus, bytes, len);
+	I2C::sendToSlaveBegin(i2c_bus);
+	uint8_t data = 0x40;
+	I2C::sendToSlaveBytes(i2c_bus, &data, 1);
+	I2C::sendToSlaveBytes(i2c_bus, bytes, len);
+	I2C::sendToSlaveEnd(i2c_bus);
 }

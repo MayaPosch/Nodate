@@ -99,7 +99,7 @@ int main () {
 		while (1) { }
 	}
 	
-	timer.delay(100);
+	timer.delay(2000);
 	
 	ch = 'c';
 	USART::sendUart(USART_2, ch);

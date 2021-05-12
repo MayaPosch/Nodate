@@ -274,8 +274,6 @@ void USART8_IRQHandler(void) {
 bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, uint8_t tx_af,
 											GPIO_ports rx_port, uint8_t rx_pin, uint8_t rx_af,
 											uint32_t baudrate, std::function<void(char)> callback) {
-    uint32_t usartClock;
-    uint32_t tmp;
 	// Check input parameters.
 	// If device is already active, return false.
 	// Otherwise try to activate it.
@@ -339,6 +337,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	//uint16_t uartdiv = SystemCoreClock / baudrate;
     
     // Retrieve the APBx clock prescaler divisor and determine the PCLKx frequency
+    uint32_t tmp;
 #if defined STM32F0
     tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
@@ -349,7 +348,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
         tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
     }
 #endif
-    usartClock = SystemCoreClock >> tmp;
+    uint32_t usartClock = SystemCoreClock >> tmp;
     uint16_t uartdiv = usartClock / baudrate;
     
 #if defined __stm32f0 || defined __stm32f7

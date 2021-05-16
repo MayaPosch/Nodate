@@ -77,26 +77,26 @@ bool BME280::initialize() {
 	if (!I2C::sendToSlave(device, data, 2)) { return false; }
 
 	I2C::sendToSlave(device, &reg_CalibrationTStart, 1);
-	uint8_t buffer[64];
+	uint8_t buffer[64] = {0};
 	I2C::receiveFromSlave(device, reg_CalibrationTEnd - reg_CalibrationTStart + 1, buffer);
 	
 	// This data is in Big Endian format from the BME280.
-    dig_T1 = (buffer[1] << 8) | buffer[0];
-    dig_T2 = (buffer[3] << 8) | buffer[2];
-    dig_T3 = (buffer[5] << 8) | buffer[4];
+    dig_T1 = ((uint16_t)buffer[1] << 8) | (uint16_t)buffer[0];
+    dig_T2 = (int16_t)(((uint16_t)buffer[3] << 8) | (uint16_t)buffer[2]);
+    dig_T3 = (int16_t)(((uint16_t)buffer[5] << 8) | (uint16_t)buffer[4]);
 
 	I2C::sendToSlave(device, &reg_CalibrationPStart, 1);
 	I2C::receiveFromSlave(device, reg_CalibrationPEnd - reg_CalibrationPStart + 1, buffer);
 
-    dig_P1 = (buffer[1] << 8) | buffer[0];
-    dig_P2 = (buffer[3] << 8) | buffer[2];
-    dig_P3 = (buffer[5] << 8) | buffer[4];
-    dig_P4 = (buffer[7] << 8) | buffer[6];
-    dig_P5 = (buffer[9] << 8) | buffer[8];
-    dig_P6 = (buffer[11] << 8) | buffer[10];
-    dig_P7 = (buffer[13] << 8) | buffer[12];
-    dig_P8 = (buffer[15] << 8) | buffer[14];
-	dig_P9 = (buffer[17] << 8) | buffer[16];
+    dig_P1 = ((uint16_t)buffer[1] << 8) | (uint16_t)buffer[0];
+    dig_P2 = (int16_t)(((uint16_t)buffer[3] << 8) | (uint16_t)buffer[2]);
+    dig_P3 = (int16_t)(((uint16_t)buffer[5] << 8) | (uint16_t)buffer[4]);
+    dig_P4 = (int16_t)(((uint16_t)buffer[7] << 8) | (uint16_t)buffer[6]);
+    dig_P5 = (int16_t)(((uint16_t)buffer[9] << 8) | (uint16_t)buffer[8]);
+    dig_P6 = (int16_t)(((uint16_t)buffer[11] << 8) | (uint16_t)buffer[10]);
+    dig_P7 = (int16_t)(((uint16_t)buffer[13] << 8) | (uint16_t)buffer[12]);
+    dig_P8 = (int16_t)(((uint16_t)buffer[15] << 8) | (uint16_t)buffer[14]);
+	dig_P9 = (int16_t)(((uint16_t)buffer[17] << 8) | (uint16_t)buffer[16]);
 
 	I2C::sendToSlave(device, &reg_H1, 1);
 	I2C::receiveFromSlave(device, 1, buffer);
@@ -104,7 +104,7 @@ bool BME280::initialize() {
 	
 	I2C::sendToSlave(device, &reg_H2, 1);
 	I2C::receiveFromSlave(device, 2, buffer);
-    dig_H2 = (buffer[1] << 8) | buffer[0];
+    dig_H2 = (int16_t) (((uint16_t)buffer[1] << 8) | (uint16_t)buffer[0]);
 	
 	I2C::sendToSlave(device, &reg_H3, 1);
 	I2C::receiveFromSlave(device, 1, buffer);
@@ -112,10 +112,10 @@ bool BME280::initialize() {
 	
 	I2C::sendToSlave(device, &reg_H4, 1);
 	I2C::receiveFromSlave(device, 4, buffer);
-    dig_H4 = (buffer[0] << 4) | (buffer[1]&0x0F);
+    dig_H4 = (int16_t) ((buffer[0] << 4) | (buffer[1]&0x0F));
 	
-    dig_H5 = (buffer[2]<<4) | ((buffer[1] & 0xF0)>>4);
-	dig_H6 = buffer[3];
+    dig_H5 = (int16_t) ((buffer[2]<<4) | ((buffer[1] & 0xF0)>>4));
+	dig_H6 = (int8_t) buffer[3];
 	
 	return true;
 }

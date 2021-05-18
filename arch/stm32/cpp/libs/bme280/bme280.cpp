@@ -77,7 +77,7 @@ bool BME280::initialize() {
 	if (!I2C::sendToSlave(device, data, 2)) { return false; }
 
 	I2C::sendToSlave(device, &reg_CalibrationTStart, 1);
-	uint8_t buffer[64] = {0};
+	uint8_t buffer[64];
 	I2C::receiveFromSlave(device, reg_CalibrationTEnd - reg_CalibrationTStart + 1, buffer);
 	
 	// This data is in Big Endian format from the BME280.

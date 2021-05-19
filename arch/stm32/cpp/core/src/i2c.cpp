@@ -483,10 +483,14 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 	I2C_device &instance = i2cList[device];
     uint32_t timeOut = (uint32_t) 0x1000;
 #if defined STM32F0 
-    /* Disable interrupt. An active interrupt handler that reads the RXDR register field will automatically
+    /* Disable interrupt if is enabled. An active interrupt handler that reads the RXDR register field will automatically
        reset the RXNE flag, preventing this routine from being notified that data is ready in the data register.
     */
-    NVIC_DisableIRQ(instance.irqType);
+    bool reEnableIRQ = false;
+    if (NVIC_GetEnableIRQ(instance.irqType) == 1) {
+        NVIC_DisableIRQ(instance.irqType);
+        reEnableIRQ = true;
+    }
     
     while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
         if ((timeOut--) == 0) { return false; }
@@ -514,7 +518,9 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 		// TODO: restart session.
 	}
     // Re-enable interrupt.
-    NVIC_EnableIRQ(instance.irqType);
+    if (reEnableIRQ) {
+        NVIC_EnableIRQ(instance.irqType);
+    }
 #endif
 	
 	return true;

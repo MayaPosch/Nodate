@@ -482,7 +482,7 @@ bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) {
 	I2C_device &instance = i2cList[device];
     uint32_t timeOut = (uint32_t) 0x1000;
-#if defined STM32F0 || defined STM32F7
+#if defined STM32F0 
     /* Disable interrupt. An active interrupt handler that reads the RXDR register field will automatically
        reset the RXNE flag, preventing this routine from being notified that data is ready in the data register.
     */

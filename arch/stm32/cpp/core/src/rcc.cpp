@@ -15,7 +15,7 @@ static const uint8_t handle_max = std::numeric_limits<uint8_t>::max();
 
 
 const int portCount = 11;
-const int peripheralCount = 39;
+const int peripheralCount = 41;
 
 // Private methods:
 
@@ -208,9 +208,13 @@ RccPeripheralHandle* peripheralHandles() {
 #endif
 
 #ifdef RCC_AHBENR_DMAEN
-	peripheralHandlesStatic[RCC_DMA].exists = true;
-	peripheralHandlesStatic[RCC_DMA].enr = &(RCC->AHBENR);
-	peripheralHandlesStatic[RCC_DMA].enable = RCC_AHBENR_DMAEN_Pos;
+	peripheralHandlesStatic[RCC_DMA1].exists = true;
+	peripheralHandlesStatic[RCC_DMA1].enr = &(RCC->AHBENR);
+	peripheralHandlesStatic[RCC_DMA1].enable = RCC_AHBENR_DMAEN_Pos;
+#elif defined RCC_AHB1ENR_DMA1EN
+	peripheralHandlesStatic[RCC_DMA1].exists = true;
+	peripheralHandlesStatic[RCC_DMA1].enr = &(RCC->AHB1ENR);
+	peripheralHandlesStatic[RCC_DMA1].enable = RCC_AHB1ENR_DMA1EN_Pos;
 #endif
 
 #ifdef RCC_AHB1ENR_ETHMACEN
@@ -249,10 +253,22 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_USART8].enable = RCC_APB2ENR_USART8EN_Pos;
 #endif
 
-#ifdef RCC_APB2ENR_ADCEN
-	peripheralHandlesStatic[RCC_ADC].exists = true;
-	peripheralHandlesStatic[RCC_ADC].enr = &(RCC->APB2ENR);
-	peripheralHandlesStatic[RCC_ADC].enable = RCC_APB2ENR_ADCEN_Pos;
+#ifdef RCC_APB2ENR_ADC1EN
+	peripheralHandlesStatic[RCC_ADC1].exists = true;
+	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->APB2ENR);
+	peripheralHandlesStatic[RCC_ADC1].enable = RCC_APB2ENR_ADC1EN_Pos;
+#endif
+
+#ifdef RCC_APB2ENR_ADC2EN
+	peripheralHandlesStatic[RCC_ADC2].exists = true;
+	peripheralHandlesStatic[RCC_ADC2].enr = &(RCC->APB2ENR);
+	peripheralHandlesStatic[RCC_ADC2].enable = RCC_APB2ENR_ADC2EN_Pos;
+#endif
+
+#ifdef RCC_APB2ENR_ADC1EN
+	peripheralHandlesStatic[RCC_ADC3].exists = true;
+	peripheralHandlesStatic[RCC_ADC3].enr = &(RCC->APB2ENR);
+	peripheralHandlesStatic[RCC_ADC3].enable = RCC_APB2ENR_ADC3EN_Pos;
 #endif
 
 #ifdef RCC_APB2ENR_TIM1EN

@@ -296,6 +296,33 @@ bool GPIO::set_af(RccPeripheral per, uint8_t af) {
 }
 
 
+// --- SET ANALOG ---
+// Set the specified pin to analogue mode.
+bool set_analog(GPIO_ports port, uint8_t pin) {
+	if (pin > 15) { return false; }
+	
+	GPIO_instance* instancesStatic = GPIO_instances();
+	GPIO_instance &instance = instancesStatic[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (!Rcc::enablePort((RccPort) port)) { return false; }
+		instance.active = true;
+	}
+
+	// Set parameters
+#ifdef STM32F1
+	// TODO: implement.
+	return false;
+	
+#else
+	uint8_t pin2 = pin * 2;
+	instance.regs->MODER |= (0x3 << pin2);		// analogue mode.
+	return true;
+#endif
+}
+
+
 bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, 
 							GPIO_out_type type, GPIO_out_speed speed) {
 	// Validate port & pin.

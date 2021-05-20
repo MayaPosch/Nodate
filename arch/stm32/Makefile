@@ -55,6 +55,16 @@ ifneq (, $(findstring timer, $(NODATE_MODULES)))
 	NODATE_MOD_ENABLE += -DNODATE_TIMER_ENABLED
 endif
 
+ifneq (, $(findstring adc, $(NODATE_MODULES)))
+	NODATE_ADC = 1
+	NODATE_MOD_ENABLE += -DNODATE_ADC_ENABLED
+endif
+
+ifneq (, $(findstring dma, $(NODATE_MODULES)))
+	NODATE_DMA = 1
+	NODATE_MOD_ENABLE += -DNODATE_DMA_ENABLED
+endif
+
 
 # Define FreeRTOS port to use.
 ifeq ($(MCU_FAMILY), stm32f0)

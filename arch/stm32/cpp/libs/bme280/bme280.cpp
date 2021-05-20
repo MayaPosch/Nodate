@@ -123,7 +123,7 @@ bool BME280::initialize() {
 
 bool BME280::softReset() {
 	uint8_t data[] = { reg_SoftReset, softResetInstruction };
-	I2C::sendToSlave(device, data, 1);
+	I2C::sendToSlave(device, data, 2);
 	
 	return true;
 }

@@ -481,15 +481,34 @@ bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 // Configure Master to receive data from a Slave device.
 bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
-    instance.regs->CR2 =  I2C_CR2_AUTOEND | (count << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
+    uint32_t timeOut = (uint32_t) 0x1000;
+#if defined STM32F0 
+    /* Disable interrupt if is enabled. An active interrupt handler that reads the RXDR register field will automatically
+       reset the RXNE flag, preventing this routine from being notified that data is ready in the data register.
+    */
+    bool reEnableIRQ = false;
+    if (NVIC_GetEnableIRQ(instance.irqType) == 1) {
+        NVIC_DisableIRQ(instance.irqType);
+        reEnableIRQ = true;
+    }
+    
+    while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
+        if ((timeOut--) == 0) { return false; }
+    }
+
+    instance.regs->CR2 =  I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | (count << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
 	
 	for (uint8_t i = 0; i < count; ++i) {
-		// 1. Check ISR_RXNE == 1. (Receive data register Not Empty).
-		if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
-			// 2. Read RXDR into buffer.
-			buffer[i] = (uint8_t) instance.regs->RXDR;
-		}
+        timeOut = (uint32_t) 0x1000;
+        // 1. Check ISR_RXNE == 1. (Receive data register Not Empty).
+        while ((instance.regs->ISR & I2C_ISR_RXNE) != I2C_ISR_RXNE) {
+            if ((timeOut--) == 0) { return false; }
+            if (((instance.regs->ISR & I2C_ISR_BERR) == I2C_ISR_BERR) || ((instance.regs->ISR & I2C_ISR_ARLO) == I2C_ISR_ARLO)) {
+                return false;  // dumpster fire has occurred
+            }
+        }
+        // 2. Read RXDR into buffer.
+		buffer[i] = (uint8_t) instance.regs->RXDR;
 	}
 	
 	// 3. If ISR_TC == 1, we're done. (Transfer Complete).
@@ -498,6 +517,10 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 	if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
 		// TODO: restart session.
 	}
+    // Re-enable interrupt.
+    if (reEnableIRQ) {
+        NVIC_EnableIRQ(instance.irqType);
+    }
 #endif
 	
 	return true;

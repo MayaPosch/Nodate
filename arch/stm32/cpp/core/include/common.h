@@ -21,6 +21,10 @@
 #include "stm32f7/stm32f7xx.h"
 #endif
 
+#ifdef __stm32l4
+#include "stm32l4/stm32l4xx.h"
+#endif
+
 #ifdef __cplusplus
 #include <cstdint>
 #else

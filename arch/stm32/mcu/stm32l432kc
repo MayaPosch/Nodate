@@ -1,0 +1,14 @@
+# MCU definition file for the stm32l432kc MCU.
+
+MCU_FAMILY := stm32l4
+MCU_GENUS := stm32l432xx
+MCU_GENUS_CAP := STM32L432xx
+
+MCU := stm32l432kc
+MCU_CORE := stm32l432
+MCU_RAM := 65536
+MCU_FLASH_KB := 256
+
+MCU_FLAGS := -mcpu=cortex-m4 -mthumb
+
+MCU_LD := stm32l432kcux.ld

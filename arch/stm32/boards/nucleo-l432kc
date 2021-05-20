@@ -1,0 +1,4 @@
+# Definition file for the STM32 Nucleo-L432KC development board.
+
+MCU := stm32l432kc
+PROGRAMMER := board/st_nucleo_l4.cfg

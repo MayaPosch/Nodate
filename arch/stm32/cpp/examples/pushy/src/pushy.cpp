@@ -65,12 +65,6 @@ int main () {
 		button_down = GPIO::read(button_port, button_pin);
 		if (button_down == 1) {
 			GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
-		/* 
-			if (led_iterate) {
-				if (++led_idx > boardLEDs_count) { led_idx = 0; }
-				led_pin = boardLEDs[led_idx].pin.pin;
-				led_port = boardLEDs[led_idx].pin.port;
-			} */
 		}
 		else {
 			GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);

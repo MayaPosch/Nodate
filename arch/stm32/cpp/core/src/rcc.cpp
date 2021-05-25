@@ -629,6 +629,9 @@ bool Rcc::configureSysClock(RccSysClockConfig cfg) {
 		RCC->CR &= ~RCC_CR_HSEON;
 		if (cfg.HSE_bypass) { RCC->CR |= RCC_CR_HSEBYP;	}
 		else 				{ RCC->CR &= ~RCC_CR_HSEBYP; }
+        RCC->CR |= RCC_CR_HSEON;
+        // Wait for HSE to stabilise.
+        while (!(RCC->CR & (uint32_t) RCC_CR_HSERDY)) { }
 	}
 	else {
 		return false;
@@ -641,16 +644,20 @@ bool Rcc::configureSysClock(RccSysClockConfig cfg) {
 	RCC->PLLCFGR |= ((uint32_t) cfg.PLL_source << RCC_PLLCFGR_PLLSRC_Pos);
 	
 	if (cfg.PLLM > 63 || cfg.PLLM == 0 || cfg.PLLM == 1) { return false; }
+    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLM;
 	RCC->PLLCFGR |= (cfg.PLLM << RCC_PLLCFGR_PLLM_Pos);
 	
 	if (cfg.PLLN > 432 || cfg.PLLN == 0 || cfg.PLLN == 1) { return false; }
+    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN;
 	RCC->PLLCFGR |= (cfg.PLLN << RCC_PLLCFGR_PLLN_Pos);
 	
 	if (cfg.PLLP != 2 && cfg.PLLP != 4 && cfg.PLLP != 6 && cfg.PLLP != 8) { return false; }
 	uint32_t new_pllp = (cfg.PLLP / 2) - 1;
+    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLP;
 	RCC->PLLCFGR |= (new_pllp << RCC_PLLCFGR_PLLP_Pos);
 	
-	if (cfg.PLLQ > 15 || cfg.PLLM == 0 || cfg.PLLM == 1) { return false; }
+	if (cfg.PLLQ > 15 || cfg.PLLQ == 0 || cfg.PLLQ == 1) { return false; }
+    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLQ;
 	RCC->PLLCFGR |= (cfg.PLLQ << RCC_PLLCFGR_PLLQ_Pos);
 	
 	// Enable PLL.

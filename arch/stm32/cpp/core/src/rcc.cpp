@@ -646,7 +646,7 @@ bool Rcc::configureSysClock(RccSysClockConfig cfg) {
 	if (cfg.PLLN > 432 || cfg.PLLN == 0 || cfg.PLLN == 1) { return false; }
 	RCC->PLLCFGR |= (cfg.PLLN << RCC_PLLCFGR_PLLN_Pos);
 	
-	if (cfg.PLLP != 2 || cfg.PLLP != 4 || cfg.PLLP != 6 || cfg.PLLP != 8) { return false; }
+	if (cfg.PLLP != 2 && cfg.PLLP != 4 && cfg.PLLP != 6 && cfg.PLLP != 8) { return false; }
 	uint32_t new_pllp = (cfg.PLLP / 2) - 1;
 	RCC->PLLCFGR |= (new_pllp << RCC_PLLCFGR_PLLP_Pos);
 	

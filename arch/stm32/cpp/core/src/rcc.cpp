@@ -253,7 +253,11 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_USART8].enable = RCC_APB2ENR_USART8EN_Pos;
 #endif
 
-#ifdef RCC_APB2ENR_ADC1EN
+#ifdef RCC_APB2ENR_ADCEN
+	peripheralHandlesStatic[RCC_ADC1].exists = true;
+	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->APB2ENR);
+	peripheralHandlesStatic[RCC_ADC1].enable = RCC_APB2ENR_ADCEN_Pos;
+#elif defined RCC_APB2ENR_ADC1EN
 	peripheralHandlesStatic[RCC_ADC1].exists = true;
 	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->APB2ENR);
 	peripheralHandlesStatic[RCC_ADC1].enable = RCC_APB2ENR_ADC1EN_Pos;
@@ -265,7 +269,7 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_ADC2].enable = RCC_APB2ENR_ADC2EN_Pos;
 #endif
 
-#ifdef RCC_APB2ENR_ADC1EN
+#ifdef RCC_APB2ENR_ADC3EN
 	peripheralHandlesStatic[RCC_ADC3].exists = true;
 	peripheralHandlesStatic[RCC_ADC3].enr = &(RCC->APB2ENR);
 	peripheralHandlesStatic[RCC_ADC3].enable = RCC_APB2ENR_ADC3EN_Pos;

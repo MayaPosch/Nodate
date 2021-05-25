@@ -493,7 +493,13 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
     }
     
     while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
-        if ((timeOut--) == 0) { return false; }
+        if ((timeOut--) == 0) {
+			if (reEnableIRQ) {
+				NVIC_EnableIRQ(instance.irqType);
+			}
+			
+			return false; 
+		}
     }
 
     instance.regs->CR2 =  I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | (count << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
@@ -504,6 +510,9 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
         while ((instance.regs->ISR & I2C_ISR_RXNE) != I2C_ISR_RXNE) {
             if ((timeOut--) == 0) { return false; }
             if (((instance.regs->ISR & I2C_ISR_BERR) == I2C_ISR_BERR) || ((instance.regs->ISR & I2C_ISR_ARLO) == I2C_ISR_ARLO)) {
+				if (reEnableIRQ) {
+					NVIC_EnableIRQ(instance.irqType);
+				}
                 return false;  // dumpster fire has occurred
             }
         }

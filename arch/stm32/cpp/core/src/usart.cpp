@@ -341,7 +341,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 #if defined STM32F0
     tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
-    if ((instance.regs == USART1) || (instance.regs == USART6)) {
+    if ((device == USART_1) || (device == USART_6)) {
         tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
     }
     else {

@@ -723,30 +723,49 @@ bool getAHBprescaler(uint32_t divisor, uint32_t &AHBfield) {
 }
 
 bool getAPB1prescaler(uint32_t divisor, uint32_t &APB1field) {
+#if defined __stm32f0
+    uint32_t bitFields[5] = {
+        RCC_CFGR_PPRE_DIV1,
+        RCC_CFGR_PPRE_DIV2,
+        RCC_CFGR_PPRE_DIV4,
+        RCC_CFGR_PPRE_DIV8,
+        RCC_CFGR_PPRE_DIV16 };
+#else
+    uint32_t bitFields[5] = {
+        RCC_CFGR_PPRE1_DIV1,
+        RCC_CFGR_PPRE1_DIV2,
+        RCC_CFGR_PPRE1_DIV4,
+        RCC_CFGR_PPRE1_DIV8,
+        RCC_CFGR_PPRE1_DIV16 };
+#endif
     switch(divisor) {
         case 1:
-            APB1field = RCC_CFGR_PPRE1_DIV1;
+            APB1field = bitFields[0];
             break;
         case 2:
-            APB1field = RCC_CFGR_PPRE1_DIV2;
+            APB1field = bitFields[1];
             break;
         case 4:
-            APB1field = RCC_CFGR_PPRE1_DIV4;
+            APB1field = bitFields[2];
             break;
         case 8:
-            APB1field = RCC_CFGR_PPRE1_DIV8;
+            APB1field = bitFields[3];
             break;
         case 16:
-            APB1field = RCC_CFGR_PPRE1_DIV16;
+            APB1field = bitFields[4];
             break;
         default:
-            APB1field = RCC_CFGR_PPRE1_DIV1;
+            APB1field = bitFields[1];
             return false;
     }
     return true;
 }
 
 bool getAPB2prescaler(uint32_t divisor, uint32_t &APB2field) {
+#if defined __stm32f0
+    APB2field = 0;  //APB2 doesn't exist for STM32F0
+    return false;
+#else
     switch(divisor) {
         case 1:
             APB2field = RCC_CFGR_PPRE2_DIV1;
@@ -767,6 +786,7 @@ bool getAPB2prescaler(uint32_t divisor, uint32_t &APB2field) {
             APB2field = RCC_CFGR_PPRE2_DIV1;
             return false;
     }
+#endif
     return true;
 }
 

@@ -593,15 +593,15 @@ bool Rcc::disablePort(RccPort port) {
 bool Rcc::configureSysClock(RccSysClockConfig cfg) {
 #ifdef __stm32f7
 	// Set AHB & APB dividers.
-    uint32_t bitField;
-    if (!getAHBprescaler(cfg.AHB_prescale, bitField)) {return false;}
-    RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_HPRE) | bitField;
-    
-    if (!getAPB1prescaler(cfg.APB1_prescale, bitField)) {return false;}
-    RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_PPRE1) | bitField;
-    
-    if (!getAPB2prescaler(cfg.APB2_prescale, bitField)) {return false;}
-    RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_PPRE2) | bitField;
+	uint32_t bitField;
+	if (!getAHBprescaler(cfg.AHB_prescale, bitField)) {return false;}
+	RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_HPRE) | bitField;
+	
+	if (!getAPB1prescaler(cfg.APB1_prescale, bitField)) {return false;}
+	RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_PPRE1) | bitField;
+	
+	if (!getAPB2prescaler(cfg.APB2_prescale, bitField)) {return false;}
+	RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_PPRE2) | bitField;
 	
 	if (cfg.source == (uint32_t) RCC_SYSCLOCK_SRC_HSE) {
 		// HSE oscillator is used with external crystal. 
@@ -629,9 +629,9 @@ bool Rcc::configureSysClock(RccSysClockConfig cfg) {
 		RCC->CR &= ~RCC_CR_HSEON;
 		if (cfg.HSE_bypass) { RCC->CR |= RCC_CR_HSEBYP;	}
 		else 				{ RCC->CR &= ~RCC_CR_HSEBYP; }
-        RCC->CR |= RCC_CR_HSEON;
-        // Wait for HSE to stabilise.
-        while (!(RCC->CR & (uint32_t) RCC_CR_HSERDY)) { }
+		RCC->CR |= RCC_CR_HSEON;
+		// Wait for HSE to stabilise.
+		while (!(RCC->CR & (uint32_t) RCC_CR_HSERDY)) { }
 	}
 	else {
 		return false;
@@ -644,20 +644,20 @@ bool Rcc::configureSysClock(RccSysClockConfig cfg) {
 	RCC->PLLCFGR |= ((uint32_t) cfg.PLL_source << RCC_PLLCFGR_PLLSRC_Pos);
 	
 	if (cfg.PLLM > 63 || cfg.PLLM == 0 || cfg.PLLM == 1) { return false; }
-    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLM;
+	RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLM;
 	RCC->PLLCFGR |= (cfg.PLLM << RCC_PLLCFGR_PLLM_Pos);
 	
 	if (cfg.PLLN > 432 || cfg.PLLN == 0 || cfg.PLLN == 1) { return false; }
-    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN;
+	RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN;
 	RCC->PLLCFGR |= (cfg.PLLN << RCC_PLLCFGR_PLLN_Pos);
 	
 	if (cfg.PLLP != 2 && cfg.PLLP != 4 && cfg.PLLP != 6 && cfg.PLLP != 8) { return false; }
 	uint32_t new_pllp = (cfg.PLLP / 2) - 1;
-    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLP;
+	RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLP;
 	RCC->PLLCFGR |= (new_pllp << RCC_PLLCFGR_PLLP_Pos);
 	
 	if (cfg.PLLQ > 15 || cfg.PLLQ == 0 || cfg.PLLQ == 1) { return false; }
-    RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLQ;
+	RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLQ;
 	RCC->PLLCFGR |= (cfg.PLLQ << RCC_PLLCFGR_PLLQ_Pos);
 	
 	// Enable PLL.
@@ -687,106 +687,106 @@ bool Rcc::enableLSE(bool on) {
 }
 
 bool getAHBprescaler(uint32_t divisor, uint32_t &AHBfield) {
-    switch(divisor) {
-        case 1:
-            AHBfield = RCC_CFGR_HPRE_DIV1;
-            break;
-        case 2:
-            AHBfield = RCC_CFGR_HPRE_DIV2;
-            break;
-        case 4:
-            AHBfield = RCC_CFGR_HPRE_DIV4;
-            break;
-        case 8:
-            AHBfield = RCC_CFGR_HPRE_DIV8;
-            break;
-        case 16:
-            AHBfield = RCC_CFGR_HPRE_DIV16;
-            break;
-        case 64:
-            AHBfield = RCC_CFGR_HPRE_DIV64;
-            break;
-        case 128:
-            AHBfield = RCC_CFGR_HPRE_DIV128;
-            break;
-        case 256:
-            AHBfield = RCC_CFGR_HPRE_DIV256;
-            break;
-        case 512:
-            AHBfield = RCC_CFGR_HPRE_DIV512;
-            break;
-        default:
-            AHBfield = RCC_CFGR_HPRE_DIV1;
-            return false;
-    }
-    return true;
+	switch(divisor) {
+		case 1:
+			AHBfield = RCC_CFGR_HPRE_DIV1;
+			break;
+		case 2:
+			AHBfield = RCC_CFGR_HPRE_DIV2;
+			break;
+		case 4:
+			AHBfield = RCC_CFGR_HPRE_DIV4;
+			break;
+		case 8:
+			AHBfield = RCC_CFGR_HPRE_DIV8;
+			break;
+		case 16:
+			AHBfield = RCC_CFGR_HPRE_DIV16;
+			break;
+		case 64:
+			AHBfield = RCC_CFGR_HPRE_DIV64;
+			break;
+		case 128:
+			AHBfield = RCC_CFGR_HPRE_DIV128;
+			break;
+		case 256:
+			AHBfield = RCC_CFGR_HPRE_DIV256;
+			break;
+		case 512:
+			AHBfield = RCC_CFGR_HPRE_DIV512;
+			break;
+		default:
+			AHBfield = RCC_CFGR_HPRE_DIV1;
+			return false;
+	}
+	return true;
 }
 
 bool getAPB1prescaler(uint32_t divisor, uint32_t &APB1field) {
 #if defined __stm32f0
-    uint32_t bitFields[5] = {
-        RCC_CFGR_PPRE_DIV1,
-        RCC_CFGR_PPRE_DIV2,
-        RCC_CFGR_PPRE_DIV4,
-        RCC_CFGR_PPRE_DIV8,
-        RCC_CFGR_PPRE_DIV16 };
+	uint32_t bitFields[5] = {
+		RCC_CFGR_PPRE_DIV1,
+		RCC_CFGR_PPRE_DIV2,
+		RCC_CFGR_PPRE_DIV4,
+		RCC_CFGR_PPRE_DIV8,
+		RCC_CFGR_PPRE_DIV16 };
 #else
-    uint32_t bitFields[5] = {
-        RCC_CFGR_PPRE1_DIV1,
-        RCC_CFGR_PPRE1_DIV2,
-        RCC_CFGR_PPRE1_DIV4,
-        RCC_CFGR_PPRE1_DIV8,
-        RCC_CFGR_PPRE1_DIV16 };
+	uint32_t bitFields[5] = {
+		RCC_CFGR_PPRE1_DIV1,
+		RCC_CFGR_PPRE1_DIV2,
+		RCC_CFGR_PPRE1_DIV4,
+		RCC_CFGR_PPRE1_DIV8,
+		RCC_CFGR_PPRE1_DIV16 };
 #endif
-    switch(divisor) {
-        case 1:
-            APB1field = bitFields[0];
-            break;
-        case 2:
-            APB1field = bitFields[1];
-            break;
-        case 4:
-            APB1field = bitFields[2];
-            break;
-        case 8:
-            APB1field = bitFields[3];
-            break;
-        case 16:
-            APB1field = bitFields[4];
-            break;
-        default:
-            APB1field = bitFields[1];
-            return false;
-    }
-    return true;
+	switch(divisor) {
+		case 1:
+			APB1field = bitFields[0];
+			break;
+		case 2:
+			APB1field = bitFields[1];
+			break;
+		case 4:
+			APB1field = bitFields[2];
+			break;
+		case 8:
+			APB1field = bitFields[3];
+			break;
+		case 16:
+			APB1field = bitFields[4];
+			break;
+		default:
+			APB1field = bitFields[1];
+			return false;
+	}
+	return true;
 }
 
 bool getAPB2prescaler(uint32_t divisor, uint32_t &APB2field) {
 #if defined __stm32f0
-    APB2field = 0;  //APB2 doesn't exist for STM32F0
-    return false;
+	APB2field = 0;  //APB2 doesn't exist for STM32F0
+	return false;
 #else
-    switch(divisor) {
-        case 1:
-            APB2field = RCC_CFGR_PPRE2_DIV1;
-            break;
-        case 2:
-            APB2field = RCC_CFGR_PPRE2_DIV2;
-            break;
-        case 4:
-            APB2field = RCC_CFGR_PPRE2_DIV4;
-            break;
-        case 8:
-            APB2field = RCC_CFGR_PPRE2_DIV8;
-            break;
-        case 16:
-            APB2field = RCC_CFGR_PPRE2_DIV16;
-            break;
-        default:
-            APB2field = RCC_CFGR_PPRE2_DIV1;
-            return false;
-    }
+	switch(divisor) {
+		case 1:
+			APB2field = RCC_CFGR_PPRE2_DIV1;
+			break;
+		case 2:
+			APB2field = RCC_CFGR_PPRE2_DIV2;
+			break;
+		case 4:
+			APB2field = RCC_CFGR_PPRE2_DIV4;
+			break;
+		case 8:
+			APB2field = RCC_CFGR_PPRE2_DIV8;
+			break;
+		case 16:
+			APB2field = RCC_CFGR_PPRE2_DIV16;
+			break;
+		default:
+			APB2field = RCC_CFGR_PPRE2_DIV1;
+			return false;
+	}
 #endif
-    return true;
+	return true;
 }
 

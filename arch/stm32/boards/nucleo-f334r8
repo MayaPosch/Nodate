@@ -1,0 +1,4 @@
+# Definition file for the STM32 Nucleo-F334R8 development board.
+
+MCU := stm32f334r8t
+PROGRAMMER := board/st_nucleo_f3.cfg

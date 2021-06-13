@@ -1,0 +1,14 @@
+# MCU definition file for the stm32f334x8t MCU.
+
+MCU_FAMILY := stm32f3
+MCU_GENUS := stm32f334x8
+MCU_GENUS_CAP := STM32F334x8
+
+MCU := stm32f433r8t
+MCU_CORE := stm32F433
+MCU_RAM := 16384
+MCU_FLASH_KB := 64
+
+MCU_FLAGS := -mcpu=cortex-m4 -mthumb
+
+MCU_LD := stm32f334r8tx.ld

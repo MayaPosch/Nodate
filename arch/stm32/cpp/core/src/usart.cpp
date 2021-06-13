@@ -335,22 +335,22 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	// TODO: adjust for STM32F1.
 	//instance.regs->BRR = SystemCoreClock / baudrate;
 	//uint16_t uartdiv = SystemCoreClock / baudrate;
-    
-    // Retrieve the APBx clock prescaler divisor and determine the PCLKx frequency
-    uint32_t tmp;
+	
+	// Retrieve the APBx clock prescaler divisor and determine the PCLKx frequency
+	uint32_t tmp;
 #if defined STM32F0
-    tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
+	tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
-    if ((instance.regs == USART1) || (instance.regs == USART6)) {
-        tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
-    }
-    else {
-        tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
-    }
+	if ((device == USART_1) || (device == USART_6)) {
+		tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
+	}
+	else {
+		tmp = APBPrescTable[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
+	}
 #endif
-    uint32_t usartClock = SystemCoreClock >> tmp;
-    uint16_t uartdiv = usartClock / baudrate;
-    
+	uint32_t usartClock = SystemCoreClock >> tmp;
+	uint16_t uartdiv = usartClock / baudrate;
+	
 #if defined __stm32f0 || defined __stm32f7
 	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_MANTISSA_Pos) |
 							((uartdiv % 16) << USART_BRR_DIV_FRACTION_Pos));

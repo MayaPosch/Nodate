@@ -24,7 +24,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 &nbsp; | STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html) | blue_pill
 &nbsp; | STM32F103CB  | [Maple Mini](https://github.com/leaflabs/maple) | maple_mini
 **F3** | 
-&nbsp; | STM32F334R8 | []Nucleo-F334R8](https://www.st.com/en/evaluation-tools/nucleo-f334r8.html) | nucleo-f334r8
+&nbsp; | STM32F334R8 | [Nucleo-F334R8](https://www.st.com/en/evaluation-tools/nucleo-f334r8.html) | nucleo-f334r8
 **F4** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html) | stm32f4-discovery
 &nbsp; | STM32F411CE | 'Black Pill' | black_pill_f411

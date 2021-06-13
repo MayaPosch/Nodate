@@ -308,7 +308,7 @@ RccPeripheralHandle* peripheralHandles() {
 #ifdef RCC_APB2ENR_TIM17EN
 	peripheralHandlesStatic[RCC_TIM17].exists = true;
 	peripheralHandlesStatic[RCC_TIM17].enr = &(RCC->APB2ENR);
-	peripheralHandlesStatic[RCC_TIM17].enable = RCC_APB2ENR_SYSCFGCOMPEN_Pos;
+	peripheralHandlesStatic[RCC_TIM17].enable = RCC_APB2ENR_TIM17EN_Pos;
 #endif
 
 #ifdef RCC_APB2ENR_DBGMCUEN

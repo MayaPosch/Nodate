@@ -6,6 +6,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 
 * The STM32 branch is currently under heavy development, aiming to support all major STM32 MCUs and features.
 * The SAM branch is considered a future development target once the STM32 branch stabilises.
+* The RP branch is considered an experimental addition.
 * The AVR branch is still a modified Arduino AVR core, supporting C++ and compatible with Arduino libraries. The future of this branch is currently undecided.
 * The ESP8266 branch is experimental and may be removed in the future.
 
@@ -22,11 +23,15 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 **F1** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F103C8  | ['Blue Pill'](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html) | blue_pill
 &nbsp; | STM32F103CB  | [Maple Mini](https://github.com/leaflabs/maple) | maple_mini
+**F3** | 
+&nbsp; | STM32F334R8 | []Nucleo-F334R8](https://www.st.com/en/evaluation-tools/nucleo-f334r8.html) | nucleo-f334r8
 **F4** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html) | stm32f4-discovery
 &nbsp; | STM32F411CE | 'Black Pill' | black_pill_f411
 **F7** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html) | nucleo-f746zg
+**L4** | 
+&nbsp; | STM32L432KC | [Nucleo-L432KC](https://www.st.com/en/evaluation-tools/nucleo-l432kc.html) | nucleo-l432kc
 
 
 
@@ -34,24 +39,34 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 
 Nodate can be installed in any location, with the only requirement being that the environment variable `NODATE_HOME` is set to the root of this location.
 
-Examples on how to use Nodate can be found in the `examples/stm32` folder. The basic structure of a Nodate project consists out of a Makefile and a source folder. This Makefile defines the project properties and target architecture, board or processor. E.g. the user-editable part of the 'Pushy' example's Makefile'
+Examples on how to use Nodate can be found in the `examples/stm32` folder. The basic structure of a Nodate project consists out of a Makefile and a source folder. This Makefile defines the project properties and target architecture, board or processor. E.g. the user-editable part of the 'Blinky' example's Makefile'
 
-	ARCH ?= stm32
+```
+ARCH ?= stm32
+
+# Target programming language (Ada, C++)
+NDLANGUAGE ?= cpp
+
+# Board preset.
+BOARD ?= nucleo-f042k6
+
+# Set the name of the output (ELF & Hex) file.
+OUTPUT := blinky	
+
+# Add files to include for compilation to these variables.
+APP_CPP_FILES = $(wildcard src/*.cpp)
+APP_C_FILES = $(wildcard src/*.c)
+
+# Set Nodate modules to enable.
+# Available modules:
+# ethernet, i2c, gpio, interrupts, timer, usart
+NODATE_MODULES = gpio timer
+
+# Set library modules to enable.
+# library name matches the folder name in libs/. E.g. freertos, LwIP, libscpi, bme280
+NODATE_LIBRARIES = 
+```
 	
-	# Target programming language (Ada, C++)
-	NDLANGUAGE ?= cpp
-	
-	# Board preset.
-	BOARD ?= nucleo-f042k6
-	
-	# Set the name of the output (ELF & Hex) file.
-	OUTPUT := pushy	
-	
-	# Add files to include for compilation to these variables.
-	APP_CPP_FILES = $(wildcard src/*.cpp)
-	APP_C_FILES = $(wildcard src/*.c)
-	
-In addition, each project needs to have a `nodate_config.h` file in its `src/` folder. This contains defines that toggle optional modules on. See e.g. the 'Pushy' example for an example of this file.
 
 When running `make` in the folder with the project Makefile, the project's `.map`, `.elf` and `.bin` files will be written to the `/bin/` sub-folder. Use `make clean` to remove any build files.
 

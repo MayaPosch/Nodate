@@ -40,7 +40,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 
 Nodate can be installed in any location, with the only requirement being that the environment variable `NODATE_HOME` is set to the root of this location.
 
-Examples on how to use Nodate can be found in the `examples/stm32` folder. The basic structure of a Nodate project consists out of a Makefile and a source folder. This Makefile defines the project properties and target architecture, board or processor. E.g. the user-editable part of the 'Blinky' example's Makefile'
+Examples on how to use Nodate can be found in the `arch/stm32/cpp/examples` folder. The basic structure of a Nodate project consists out of a Makefile and a source folder. This Makefile defines the project properties and target architecture, board or processor. E.g. the user-editable part of the 'Blinky' example's Makefile'
 
 ```
 ARCH ?= stm32

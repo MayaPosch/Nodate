@@ -10,7 +10,7 @@ MCU_CORE := stm32f411
 MCU_RAM := 131072
 MCU_PACKAGE := lqfp48
 
-MCU_FLAGS := -mcpu=cortex-m0 -mthumb
+MCU_FLAGS := -mcpu=cortex-m4 -mthumb
 # -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 
 MCU_LD := stm32f411retx.ld

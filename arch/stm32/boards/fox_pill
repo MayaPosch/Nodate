@@ -1,0 +1,4 @@
+# Definition file for the STM32 'Fox Pill' STM32L433CCT development board.
+
+MCU := stm32l433cct
+PROGRAMMER := interface/stlink-v2.cfg -f target/stm32l4x.cfg

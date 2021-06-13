@@ -27,7 +27,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 &nbsp; | STM32F334R8 | [Nucleo-F334R8](https://www.st.com/en/evaluation-tools/nucleo-f334r8.html) | nucleo-f334r8
 **F4** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT | [STM32F4-Discovery](https://www.st.com/en/evaluation-tools/stm32f4discovery.html) | stm32f4-discovery
-&nbsp; | STM32F411CE | 'Black Pill' | black_pill_f411
+&nbsp; | STM32F411CE | [WeAct MiniF4 ('Black Pill')](https://github.com/WeActTC/MiniSTM32F4x1) | black_pill_f411
 **F7** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html) | nucleo-f746zg
 **L4** | 

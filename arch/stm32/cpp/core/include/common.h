@@ -13,6 +13,10 @@
 #include "stm32f1/stm32f1xx.h"
 #endif
 
+#ifdef __stm32f3
+#include "stm32f3/stm32f3xx.h"
+#endif
+
 #ifdef __stm32f4
 #include "stm32f4/stm32f4xx.h"
 #endif

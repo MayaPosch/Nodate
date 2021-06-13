@@ -32,6 +32,7 @@ A light-weight framework for STM32 and other architectures written in C++ and Ad
 &nbsp; | STM32F746ZG | [Nucleo-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html) | nucleo-f746zg
 **L4** | 
 &nbsp; | STM32L432KC | [Nucleo-L432KC](https://www.st.com/en/evaluation-tools/nucleo-l432kc.html) | nucleo-l432kc
+&nbsp; | STM32L433CCT | [Fox Pill](https://github.com/MisterHW/FoxPill) | fox_pill
 
 
 

@@ -226,9 +226,21 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	
 	// Set parameters.
 #ifdef STM32F1
-	// For STM32F1, knowing the device position in MAPR is required.
-	return false;
-	
+	// STM32F1 Details:
+	// Input/output registers are spread over two combined registers (CRL, CRH).
+	// A call to GPIO::set_af(RccPeripheral per, uint8_t af) is also required
+	// to fully enable an Alternate Function
+	if (pin < 8) {
+		// Set CRL register (CNF).
+		uint8_t pincnf = (pin * 4) + 3;
+		instance.regs->CRL |= (0x1 << pincnf);
+	}
+	else {
+		// Set CRH register (CNF).
+		uint8_t pincnf = ((pin - 8) * 4) + 3;
+		instance.regs->CRH |= (0x1 << pincnf);
+	}
+
 #else
 	uint8_t pin2 = pin * 2;
 	instance.regs->MODER &= ~(0x3 << pin2);
@@ -245,9 +257,8 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 		instance.regs->AFR[1] &= ~(0xF << pin4);
 		instance.regs->AFR[1] |= (af << pin4);
 	}
-	
-	return true;
 #endif
+	return true;
 }
 
 

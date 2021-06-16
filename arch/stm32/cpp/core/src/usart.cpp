@@ -298,12 +298,15 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	
 	// Set AF mode on the specified pins.
 #ifdef __stm32f1
+	// STM32F1 requires setting AF mode in the peripheral register
+	// as well as setting the MODEx1 pin in the CRL or CRH
+	// register, as appropriate
 	if (!gpio.set_af(per, tx_af)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
-#else
+#endif
 	if (!gpio.set_af(tx_port, tx_pin, tx_af)) {
 		Rcc::disablePort((RccPort) tx_port);
 		return false;
@@ -314,7 +317,6 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
-#endif
 		
 	if (!gpio.set_output_parameters(rx_port, rx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) tx_port);
@@ -391,7 +393,7 @@ bool USART::sendUart(USART_devices device, char &ch) {
 #if defined __stm32f0 || defined __stm32f7
 	while (!(instance.regs->ISR & USART_ISR_TXE)) {};
 	instance.regs->TDR = (uint8_t) ch;
-#elif defined __stm32f4
+#elif defined __stm32f4 || defined __stm32f1
 	while (!(instance.regs->SR & USART_SR_TXE)) {};
 	instance.regs->DR = (uint8_t) ch;
 #endif

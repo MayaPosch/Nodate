@@ -9,6 +9,8 @@
 
 #include <nodate.h>
 
+#include <cstring>
+
 #include <cmsis_os.h>
 
 #include <lwip/dhcp.h>
@@ -25,14 +27,14 @@ const uint8_t LwIP::dhcp_max_tries = 5;
 ip_addr_t LwIP::ipv4;
 ip_addr_t LwIP::netmask;
 ip_addr_t LwIP::gateway;
-osSemaphoreId LwIP::s_xSemaphore = 0;
+osSemaphoreId LwIP::rxSemaphore = 0;
 
 
 // LwIP sys_now() implementation.
 extern "C" {
 uint32_t sys_now(void) {
+	McuCore::getSysTick();
 	
-	// TODO: Implement.
 	return 0;
 }
 }
@@ -67,6 +69,8 @@ bool LwIP::init() {
 	}
 	
 	initialized = true;
+	
+	return true;
 }
 
 
@@ -98,6 +102,8 @@ bool LwIP::init(ipv4_address ipv4, ipv4_address netmask, ipv4_address gateway) {
 	}
 	
 	initialized = true;
+	
+	return true;
 }
 
 
@@ -192,6 +198,12 @@ err_t LwIP::ethernetif_init(struct netif* netif) {
 /* Stack size of the interface thread */
 #define INTERFACE_THREAD_STACK_SIZE            ( 350 )
 
+extern "C" {
+void ETH_RxCompleteCallback() {
+	osSemaphoreRelease(LwIP::rxSemaphore);
+}
+}
+
 
 /**
   * @brief In this function, the hardware should be initialized.
@@ -241,11 +253,11 @@ void LwIP::low_level_init(struct netif* netif) {
 
 	// create a binary semaphore used for informing ethernetif of frame reception */
 	osSemaphoreDef(SEM);
-	s_xSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
+	rxSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
 
 	// Create the task which handles the ETH_MAC.
-	osThreadDef(EthIf, LwIP::ethernetif_input, osPriorityRealtime, 0, INTERFACE_THREAD_STACK_SIZE);
-	osThreadCreate (osThread(EthIf), netif);
+	osThreadDef(EthIf, &LwIP::ethernetif_input, osPriorityRealtime, 0, INTERFACE_THREAD_STACK_SIZE);
+	osThreadCreate(osThread(EthIf), netif);
 }
 
 
@@ -264,91 +276,33 @@ void LwIP::low_level_init(struct netif* netif) {
   *       to become available since the stack doesn't retry to send a packet
   *       dropped because of memory failure (except for the TCP timers).
   */
-err_t LwIP::low_level_output(struct netif* netif, struct pbuf* p) {
+err_t LwIP::low_level_output(struct netif* netif, struct pbuf* pbuf_start) {
 	//err_t errval;
-	struct pbuf* q;
-	for (q = p; q != 0; q = q->next) {
-		/* if (!Ethernet::sendData(q->payload, )) {
-			return ERR_USE;
-		} */
-		
-		// 
+	
+	// Allocate a new buffer to copy the pbuf buffer data into.
+	uint8_t* buffer = (uint8_t*) malloc(pbuf_start->tot_len);
+	if (buffer == 0) {
+		// TODO: report error.
+		return ERR_USE;
+	}
+	
+	// Fill buffer.
+	pbuf* pbuf_idx;
+	uint32_t offset = 0;
+	for (pbuf_idx = pbuf_start; pbuf_idx != 0; pbuf_idx = pbuf_idx->next) {
+		memcpy(buffer + offset, pbuf_idx->payload, pbuf_idx->len);
+		offset += pbuf_idx->len;
 	}
 		
-  
-  /*struct pbuf *q;
-  uint8_t *buffer = (uint8_t *)(EthHandle.TxDesc->Buffer1Addr);
-  __IO ETH_DMADescTypeDef *DmaTxDesc;
-  uint32_t framelength = 0;
-  uint32_t bufferoffset = 0;
-  uint32_t byteslefttocopy = 0;
-  uint32_t payloadoffset = 0;
-
-  DmaTxDesc = EthHandle.TxDesc;
-  bufferoffset = 0;
-  
-  // copy frame from pbufs to driver buffers
-  for(q = p; q != NULL; q = q->next)
-  {
-    // Is this buffer available? If not, goto error
-    if ((DMATxDscrTab.Status & ETH_DMATXDESC_OWN) != (uint32_t) RESET)
-    {
-      errval = ERR_USE;
-      goto error;
-    }
-    
-    // Get bytes in current lwIP buffer
-    byteslefttocopy = q->len;
-    payloadoffset = 0;
-    
-    // Check if the length of data to copy is bigger than Tx buffer size
-    while( (byteslefttocopy + bufferoffset) > ETH_TX_BUF_SIZE )
-    {
-      // Copy data to Tx buffer
-      memcpy( (uint8_t*)((uint8_t*)buffer + bufferoffset), (uint8_t*)((uint8_t*)q->payload + payloadoffset), (ETH_TX_BUF_SIZE - bufferoffset) );
-      
-      // Point to next descriptor
-      DmaTxDesc = (ETH_DMADescTypeDef *)(DmaTxDesc->Buffer2NextDescAddr);
-      
-      // Check if the buffer is available 
-      if((DmaTxDesc->Status & ETH_DMATXDESC_OWN) != (uint32_t)RESET)
-      {
-        errval = ERR_USE;
-        goto error;
-      }
-      
-      buffer = (uint8_t *)(DmaTxDesc->Buffer1Addr);
-      
-      byteslefttocopy = byteslefttocopy - (ETH_TX_BUF_SIZE - bufferoffset);
-      payloadoffset = payloadoffset + (ETH_TX_BUF_SIZE - bufferoffset);
-      framelength = framelength + (ETH_TX_BUF_SIZE - bufferoffset);
-      bufferoffset = 0;
-    }
-    
-    // Copy the remaining bytes
-    memcpy( (uint8_t*)((uint8_t*)buffer + bufferoffset), (uint8_t*)((uint8_t*)q->payload + payloadoffset), byteslefttocopy );
-    bufferoffset = bufferoffset + byteslefttocopy;
-    framelength = framelength + byteslefttocopy;
-  }
-  
-  // Prepare transmit descriptors to give to DMA *
-  HAL_ETH_TransmitFrame(&EthHandle, framelength);
-  
-  errval = ERR_OK;
-  
-error:
-  
-  // When Transmit Underflow flag is set, clear it and issue a Transmit Poll Demand to resume transmission 
-  if ((EthHandle.Instance->DMASR & ETH_DMASR_TUS) != (uint32_t)RESET)
-  {
-    // Clear TUS ETHERNET DMA flag
-    EthHandle.Instance->DMASR = ETH_DMASR_TUS;
-    
-    // Resume DMA transmission
-    EthHandle.Instance->DMATPDR = 0;
-  }
-  return errval; */
-  return ERR_OK;
+	// Send buffer data.
+	if (!Ethernet::sendData(buffer, pbuf_start->tot_len)) {
+		return ERR_USE;
+	}
+	
+	// Delete buffer.
+	free(buffer);
+	
+	return ERR_OK;
 }
 
 /**
@@ -360,82 +314,45 @@ error:
   *         NULL on memory error
   */
 struct pbuf* LwIP::low_level_input(struct netif* netif) {
-  struct pbuf *p = NULL, *q = NULL;
-  uint16_t len = 0;
-  uint8_t *buffer;
-  /* __IO ETH_DMADescTypeDef *dmarxdesc;
-  uint32_t bufferoffset = 0;
-  uint32_t payloadoffset = 0;
-  uint32_t byteslefttocopy = 0;
-  uint32_t i=0;
+	uint32_t len = 0;
+	uint8_t* buffer;
+	if (!Ethernet::receiveData(buffer, len)) {
+		// TODO: report error.
+		return 0;
+	}
+	
+	// Allocate pbuf instances.
+	pbuf* pbuf_start = 0, *pbuf_idx = 0;
+	if (len > 0) {
+		// We allocate a pbuf chain of pbufs from the Lwip buffer pool 
+		pbuf_start = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
+	}
+	
+	if (!pbuf_start) {
+		// TODO: report error.
+		return 0;
+	}
+	
+	// Copy the buffer data into pbuf instances.
+	uint32_t bytesLeft = len;
+	uint32_t offset = 0;
+	for (pbuf_idx = pbuf_start; pbuf_idx != 0; pbuf_idx = pbuf_idx->next) {
+		if (bytesLeft > ETH_RX_BUF_SIZE) {
+			memcpy(pbuf_idx->payload, buffer + offset, ETH_RX_BUF_SIZE);
+			bytesLeft -= ETH_RX_BUF_SIZE;
+			offset += ETH_RX_BUF_SIZE;
+		}
+		else {
+			memcpy(pbuf_idx->payload, buffer + offset, bytesLeft);
+			offset += bytesLeft;
+			bytesLeft = 0;
+		}
+	}
   
-  // get received frame 
-  if(HAL_ETH_GetReceivedFrame_IT(&EthHandle) != HAL_OK)
-    return NULL;
-  
-  // Obtain the size of the packet and put it into the "len" variable. 
-  len = EthHandle.RxFrameInfos.length;
-  buffer = (uint8_t *)EthHandle.RxFrameInfos.buffer;
-  
-  if (len > 0)
-  {
-    // We allocate a pbuf chain of pbufs from the Lwip buffer pool 
-    p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
-  }
-  
-  if (p != NULL)
-  {
-    dmarxdesc = EthHandle.RxFrameInfos.FSRxDesc;
-    bufferoffset = 0;
-    
-    for(q = p; q != NULL; q = q->next)
-    {
-      byteslefttocopy = q->len;
-      payloadoffset = 0;
-      
-      // Check if the length of bytes to copy in current pbuf is bigger than Rx buffer size 
-      while( (byteslefttocopy + bufferoffset) > ETH_RX_BUF_SIZE )
-      {
-        // Copy data to pbuf 
-        memcpy( (uint8_t*)((uint8_t*)q->payload + payloadoffset), (uint8_t*)((uint8_t*)buffer + bufferoffset), (ETH_RX_BUF_SIZE - bufferoffset));
-        
-        // Point to next descriptor 
-        dmarxdesc = (ETH_DMADescTypeDef *)(dmarxdesc->Buffer2NextDescAddr);
-        buffer = (uint8_t *)(dmarxdesc->Buffer1Addr);
-        
-        byteslefttocopy = byteslefttocopy - (ETH_RX_BUF_SIZE - bufferoffset);
-        payloadoffset = payloadoffset + (ETH_RX_BUF_SIZE - bufferoffset);
-        bufferoffset = 0;
-      }
-      
-      // Copy remaining data in pbuf 
-      memcpy( (uint8_t*)((uint8_t*)q->payload + payloadoffset), (uint8_t*)((uint8_t*)buffer + bufferoffset), byteslefttocopy);
-      bufferoffset = bufferoffset + byteslefttocopy;
-    }
-  }
-    
-  // Release descriptors to DMA 
-  // Point to first descriptor 
-  dmarxdesc = EthHandle.RxFrameInfos.FSRxDesc;
-  // Set Own bit in Rx descriptors: gives the buffers back to DMA 
-  for (i=0; i< EthHandle.RxFrameInfos.SegCount; i++)
-  {  
-    dmarxdesc->Status |= ETH_DMARXDESC_OWN;
-    dmarxdesc = (ETH_DMADescTypeDef *)(dmarxdesc->Buffer2NextDescAddr);
-  }
-    
-  // Clear Segment_Count 
-  EthHandle.RxFrameInfos.SegCount =0;
-  
-  // When Rx Buffer unavailable flag is set: clear it and resume reception 
-  if ((EthHandle.Instance->DMASR & ETH_DMASR_RBUS) != (uint32_t)RESET)  
-  {
-    // Clear RBUS ETHERNET DMA flag 
-    EthHandle.Instance->DMASR = ETH_DMASR_RBUS;
-    // Resume DMA reception
-    EthHandle.Instance->DMARPDR = 0;
-  } */
-  return p;
+	// Free the buffer.
+	free(buffer);
+	
+	return pbuf_start;
 }
 
 
@@ -453,28 +370,23 @@ struct pbuf* LwIP::low_level_input(struct netif* netif) {
   * @param netif the lwip network interface structure for this ethernetif
   */
 void LwIP::ethernetif_input(void const* argument) {
-	struct pbuf *p;
-	struct netif *netif = (struct netif *) argument;
+	struct pbuf* p;
+	struct netif* netif = (struct netif*) argument;
   
-	for ( ;; ) {
-    /*if (osSemaphoreWait( s_xSemaphore, TIME_WAITING_FOR_INPUT)==osOK)
-    {
-      do
-      {
-        LOCK_TCPIP_CORE();
+	while (1) {
+		if (osSemaphoreWait(rxSemaphore, TIME_WAITING_FOR_INPUT) == osOK) {
+			do {
+				LOCK_TCPIP_CORE();
+				p = low_level_input(netif);
+				if (p != 0) {
+					if (netif->input(p, netif) != ERR_OK) {
+						pbuf_free(p);
+					}
+				}
 
-        p = low_level_input( netif );
-        if (p != NULL)
-        {
-          if (netif->input( p, netif) != ERR_OK )
-          {
-            pbuf_free(p);
-          }
-        }
-
-        UNLOCK_TCPIP_CORE();
-
-      }while(p!=NULL);
-    }*/
+				UNLOCK_TCPIP_CORE();
+			}
+			while(p != 0);
+		}
 	}
 }

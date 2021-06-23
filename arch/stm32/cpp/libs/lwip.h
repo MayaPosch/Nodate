@@ -50,7 +50,6 @@ class LwIP {
 	static ip_addr_t ipv4;
 	static ip_addr_t netmask;
 	static ip_addr_t gateway;
-	static osSemaphoreId s_xSemaphore;
 	
 	static err_t ethernetif_init(struct netif* netif);
 	static void low_level_init(struct netif* netif);
@@ -59,6 +58,8 @@ class LwIP {
 	static struct pbuf* low_level_input(struct netif* netif);
 	
 public:
+	static osSemaphoreId rxSemaphore;
+	
 	static bool init();
 	static bool init(ipv4_address ipv4, ipv4_address netmask, ipv4_address gateway);
 	static void setStaticAddress(ipv4_address ipv4, ipv4_address netmask, ipv4_address gateway);

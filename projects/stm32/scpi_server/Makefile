@@ -1,4 +1,4 @@
-# Makefile for Nodate music player project for STM32.
+# Makefile for Nodate SCPI server project for STM32.
 #
 
 # Architecture must be set.

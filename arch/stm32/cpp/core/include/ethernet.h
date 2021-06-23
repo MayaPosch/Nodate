@@ -25,6 +25,30 @@
 #define ETH_MODE_HALFDUPLEX       ((uint32_t)0x00000000U)
 
 
+#include <ethernet_def.h>
+
+// Configure each Ethernet driver receive buffer to fit the Max size Ethernet packet.
+#ifndef ETH_RX_BUF_SIZE
+ #define ETH_RX_BUF_SIZE         ETH_MAX_PACKET_SIZE 
+#endif
+
+// 5 Ethernet driver receive buffers are used in a chained linked list.
+#ifndef ETH_RXBUFNB
+ #define ETH_RXBUFNB             ((uint32_t)5U)     //  5 Rx buffers of size ETH_RX_BUF_SIZE
+#endif
+
+
+// Configure each Ethernet driver transmit buffer to fit the Max size Ethernet packet.
+#ifndef ETH_TX_BUF_SIZE 
+ #define ETH_TX_BUF_SIZE         ETH_MAX_PACKET_SIZE
+#endif
+
+// 5 Ethernet driver transmit buffers are used in a chained linked list.
+#ifndef ETH_TXBUFNB
+ #define ETH_TXBUFNB             ((uint32_t)5U)      // 5  Tx buffers of size ETH_TX_BUF_SIZE
+#endif
+
+
 struct Ethernet_RMII {
 	GpioPinDef	REF_CLK;
 	GpioPinDef	TXD0;
@@ -80,8 +104,8 @@ public:
 	static bool startEthernet(Ethernet_MII &ethDef);
 	static bool startEthernet(Ethernet_RMII &ethDef);
 	
-	static bool receiveData(void* buffer);
-	static bool sendData(void* buffer, uint32_t len);
+	static bool receiveData(uint8_t* buffer, uint32_t &length);
+	static bool sendData(uint8_t* buffer, uint32_t len);
 	
 	static bool dmaRxDescListInit();
 	static bool dmaTxDescListInit();

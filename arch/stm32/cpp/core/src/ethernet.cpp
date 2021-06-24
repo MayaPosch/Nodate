@@ -111,31 +111,33 @@ struct ETH_DMADescTypeDef {
 
 
 #if defined __stm32f7
-ETH_DMADescTypeDef 	DMARxDscrTab 	= *((ETH_DMADescTypeDef*) SRAM2_BASE);
-ETH_DMADescTypeDef 	DMATxDscrTab 	= *((ETH_DMADescTypeDef*) SRAM2_BASE + 0x80);
-uint8_t 			Rx_Buff 		= *((uint8_t*) SRAM2_BASE + 0x100);
-uint8_t 			Tx_Buff 		= *((uint8_t*) SRAM2_BASE + 0x17D0);
+/* ETH_DMADescTypeDef*		DMARxDscrTab 	= (ETH_DMADescTypeDef*) SRAM2_BASE;
+ETH_DMADescTypeDef* 	DMATxDscrTab 	= (ETH_DMADescTypeDef*) SRAM2_BASE + 0x80;
+uint8_t* 				Rx_Buff 		= (uint8_t*) SRAM2_BASE + 0x100;
+uint8_t* 				Tx_Buff 		= (uint8_t*) SRAM2_BASE + 0x17D0; */
 
-//ETH_DMADescTypeDef  DMARxDscrTab[ETH_RXBUFNB] __attribute__((section(".RxDescSection")));/* Ethernet Rx DMA Descriptors */
-//ETH_DMADescTypeDef  DMATxDscrTab[ETH_TXBUFNB] __attribute__((section(".TxDescSection")));/* Ethernet Tx DMA Descriptors */
-//uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE] __attribute__((section(".RxArraySection"))); /* Ethernet Receive Buffers */
-//uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE] __attribute__((section(".TxArraySection"))); /* Ethernet Transmit Buffers */
+ETH_DMADescTypeDef  DMARxDscrTab[ETH_RXBUFNB] __attribute__((section(".RxDescSection")));/* Ethernet Rx DMA Descriptors */
+ETH_DMADescTypeDef  DMATxDscrTab[ETH_TXBUFNB] __attribute__((section(".TxDescSection")));/* Ethernet Tx DMA Descriptors */
+uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE] __attribute__((section(".RxArraySection"))); /* Ethernet Receive Buffers */
+uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE] __attribute__((section(".TxArraySection"))); /* Ethernet Transmit Buffers */
 #endif
 
 
 #if defined __stm32f7
 bool dmaRxDescListInit(bool interruptMode) {
 	// Set up new RX DMA descriptors and buffer.
-	ETH_DMADescTypeDef descDef[ETH_RXBUFNB];
-	uint8_t rxBuff[ETH_RXBUFNB][ETH_RX_BUF_SIZE];
+	//ETH_DMADescTypeDef descDef[ETH_RXBUFNB];
+	//uint8_t rxBuff[ETH_RXBUFNB][ETH_RX_BUF_SIZE];
 	
 	// Fill the RX DMA descriptors.
 	for (uint32_t i = 0; i < ETH_RXBUFNB; ++i) {
 		// Set up new descriptor.
-		ETH_DMADescTypeDef& dd = descDef[i];
+		//ETH_DMADescTypeDef& dd = descDef[i];
+		ETH_DMADescTypeDef& dd = DMARxDscrTab[i];
 		dd.Status = ETH_DMARXDESC_OWN;
 		dd.ControlBufferSize = ETH_DMARXDESC_RCH | ETH_RX_BUF_SIZE;
-		dd.Buffer1Addr = (uint32_t) (&rxBuff[i * ETH_RX_BUF_SIZE]);
+		//dd.Buffer1Addr = (uint32_t) (&rxBuff[i * ETH_RX_BUF_SIZE]);
+		dd.Buffer1Addr = (uint32_t) (&Rx_Buff[i * ETH_RX_BUF_SIZE]);
 		if (interruptMode) {
 			dd.ControlBufferSize &= ~ETH_DMARXDESC_DIC;
 		}
@@ -143,19 +145,21 @@ bool dmaRxDescListInit(bool interruptMode) {
 		// Initialize the next descriptor with the Next Descriptor Polling Enable.
 		if ((i + 1) < ETH_RXBUFNB) {
 			// Set next descriptor address register with next descriptor base address.
-			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[i + 1]);
+			//dd.Buffer2NextDescAddr = (uint32_t) &(descDef[i + 1]);
+			dd.Buffer2NextDescAddr = (uint32_t) &(DMARxDscrTab[i + 1]);
 		}
 		else {
 			// Set next descriptor address register to beginning of descriptor list.
-			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[0]);
+			//dd.Buffer2NextDescAddr = (uint32_t) &(descDef[0]);
+			dd.Buffer2NextDescAddr = (uint32_t) &(DMARxDscrTab[0]);
 		}
 	}
 	
-	memcpy(&DMARxDscrTab, &descDef, sizeof(descDef));
-	memcpy(&Rx_Buff, &rxBuff, sizeof(rxBuff));
+	//memcpy(DMARxDscrTab, &descDef, sizeof(descDef));
+	//memcpy(Rx_Buff, &rxBuff, sizeof(rxBuff));
 	
 	// Set Receive Descriptor List Address Register.
-	ETH->DMARDLAR = (uint32_t) &DMARxDscrTab;
+	ETH->DMARDLAR = (uint32_t) DMARxDscrTab;
 	
 	return true;
 }
@@ -165,29 +169,32 @@ bool dmaTxDescListInit(bool interruptMode, bool hardwareChecksum) {
 	// TODO: Set the ETH peripheral state to BUSY.
 	
 	// Set up new RX DMA descriptors and buffer.
-	ETH_DMADescTypeDef descDef[ETH_TXBUFNB];
-	uint8_t txBuff[ETH_TXBUFNB][ETH_TX_BUF_SIZE];
+	//ETH_DMADescTypeDef descDef[ETH_TXBUFNB];
+	//uint8_t txBuff[ETH_TXBUFNB][ETH_TX_BUF_SIZE];
 	
 	// Fill the RX DMA descriptors.
 	for (uint32_t i = 0; i < ETH_TXBUFNB; ++i) {
 		// Set up new descriptor.
-		ETH_DMADescTypeDef& dd = descDef[i];
+		ETH_DMADescTypeDef& dd = DMATxDscrTab[i];
 		dd.Status = ETH_DMATXDESC_TCH;
-		dd.Buffer1Addr = (uint32_t) (&txBuff[i * ETH_TX_BUF_SIZE]);
+		//dd.Buffer1Addr = (uint32_t) (&txBuff[i * ETH_TX_BUF_SIZE]);
+		dd.Buffer1Addr = (uint32_t) (&Tx_Buff[i * ETH_TX_BUF_SIZE]);
 		if (hardwareChecksum) {
 			dd.Status |= ETH_DMATXDESC_CIC_TCPUDPICMP_FULL;
 		}
 		
 		if ((i + 1) < ETH_TXBUFNB) {
-			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[i + 1]);
+			//dd.Buffer2NextDescAddr = (uint32_t) &(descDef[i + 1]);
+			dd.Buffer2NextDescAddr = (uint32_t) &(DMATxDscrTab[i + 1]);
 		}
 		else {
-			dd.Buffer2NextDescAddr = (uint32_t) &(descDef[0]);
+			//dd.Buffer2NextDescAddr = (uint32_t) &(descDef[0]);
+			dd.Buffer2NextDescAddr = (uint32_t) &(DMATxDscrTab[0]);
 		}
 	}
 	
-	memcpy(&DMATxDscrTab, &descDef, sizeof(descDef));
-	memcpy(&Tx_Buff, &txBuff, sizeof(txBuff));
+	//memcpy(&DMATxDscrTab, &descDef, sizeof(descDef));
+	//memcpy(&Tx_Buff, &txBuff, sizeof(txBuff));
 
 	// Set Transmit Descriptor List Address Register.
 	ETH->DMATDLAR = (uint32_t) &DMATxDscrTab;
@@ -679,7 +686,7 @@ bool Ethernet::receiveData(uint8_t* buffer, uint32_t &length) {
 	// We wish to 
 	uint32_t descriptorscancounter = 0;
 	uint32_t segcount = 0;
-	ETH_DMADescTypeDef* indexDesc = &DMARxDscrTab;
+	ETH_DMADescTypeDef* indexDesc = DMARxDscrTab;
 	ETH_DMADescTypeDef* startDesc = 0;
 	ETH_DMADescTypeDef* lastDesc = 0;
 	while (((indexDesc->Status & ETH_DMARXDESC_OWN) == (uint32_t) RESET) && 
@@ -788,7 +795,7 @@ bool Ethernet::receiveData(uint8_t* buffer, uint32_t &length) {
 bool Ethernet::sendData(uint8_t* buffer, uint32_t len) {
 #if defined __stm32f7
 	// Copy the data from the buffer into available DMA descriptors.
-	ETH_DMADescTypeDef* indexDesc = &DMATxDscrTab;
+	ETH_DMADescTypeDef* indexDesc = DMATxDscrTab;
 	
 	uint32_t bytesLeft = len;
 	uint32_t offset = 0;

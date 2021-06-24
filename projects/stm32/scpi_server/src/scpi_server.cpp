@@ -94,7 +94,10 @@ int main() {
 	eth.RX_ER 	= { GPIO_PORT_G, 2, 11 };
 	eth.MDIO 	= { GPIO_PORT_A, 2, 11 };
 	eth.MDC 	= { GPIO_PORT_C, 1, 11 };
-	Ethernet::startEthernet(eth);
+	if (!Ethernet::startEthernet(eth)) {
+		printf("Starting Ethernet failed...\n");
+		while (1) { }
+	}
 	
 	printf("Start LwIP and RTOS...\n");
 	

@@ -165,6 +165,15 @@ ifneq (, $(findstring ssd1306, $(NODATE_LIBRARIES)))
 	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/ssd1306
 endif
 
+ifneq (, $(findstring bme280, $(NODATE_LIBRARIES)))
+	NODATE_SSD1306 = 1
+	LIB_INCLUDES += -I $(TOP)/$(NDLANGUAGE)/libs/bme280 \
+			-I $(TOP)/$(NDLANGUAGE)/libs/bme280
+	LIB_CPP_SRC += $(wildcard arch/stm32/$(NDLANGUAGE)/libs/bme280/*.cpp)
+	
+	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
+endif
+
 
 
 
@@ -176,7 +185,7 @@ INCLUDE := -I $(TOP)/$(NDLANGUAGE)/core/include -I $(TOP)/$(NDLANGUAGE)/core/inc
 			-I $(APPFOLDER)/src
 
 DEFINES := -D__$(MCU_FAMILY)=1 -D__$(MCU_GENUS)=1 -D$(MCU_GENUS_CAP)=1 $(NODATE_MOD_ENABLE)
-FLAGS := $(INCLUDE) $(MCU_FLAGS) -ffunction-sections -fdata-sections -MMD -Os -g3 $(APP_FLAGS)
+FLAGS := $(INCLUDE) $(MCU_FLAGS) -ffunction-sections -fdata-sections -MMD -Og -g3 $(APP_FLAGS)
 CFLAGS := $(FLAGS) $(DEFINES) -std=gnu11 $(APP_C_FLAGS)
 CPPFLAGS := $(FLAGS) $(DEFINES) -std=gnu++11 -fno-threadsafe-statics -fno-rtti -fno-exceptions -fno-use-cxa-atexit $(APP_CPP_FLAGS)
 LD_FLAGS := -T $(TOP)/linker/$(MCU_FAMILY)/$(MCU_LD) -Wl,-Map=$(APPFOLDER)/bin/$(OUTPUT).map,--cref \
@@ -186,7 +195,6 @@ LIBS :=  -lstdc++_nano -lgcc
 
 CPPSOURCES := arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)/board_definition.cpp \
 				$(wildcard arch/stm32/$(NDLANGUAGE)/core/src/*.cpp) \
-				$(wildcard arch/stm32/$(NDLANGUAGE)/libs/bme280/*.cpp) \
 				$(LIB_CPP_SRC) \
 				$(APP_CPP_FILES)
 			
@@ -207,7 +215,6 @@ makedir:
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/asm/$(MCU_FAMILY)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/boards/$(BOARD)
 	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/core/src/$(MCU_FAMILY)
-	$(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
 	$(MAKEDIR) $(APPFOLDER)/bin
 	$(LIB_MKDIRS)
 

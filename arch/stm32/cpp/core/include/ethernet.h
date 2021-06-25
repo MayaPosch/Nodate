@@ -98,7 +98,13 @@ struct Ethernet_MII {
 
 
 class Ethernet {
-	//
+	static void dmaRxDescListInit(bool interruptMode);
+	static void dmaTxDescListInit(bool interruptMode, bool hardwareChecksum);
+	static bool setupMPU();
+	static bool writePhyRegister(uint16_t reg, uint32_t value);
+	static bool readPhyRegister(uint16_t reg, uint32_t &value);
+	static bool macDmaConfig(uint32_t speed, uint32_t duplexMode, bool hardwareChecksum, 
+								bool interruptMode, uint8_t macAddress[6]);
 	
 public:
 	static bool startEthernet(Ethernet_MII &ethDef);
@@ -106,9 +112,6 @@ public:
 	
 	static bool receiveData(uint8_t* buffer, uint32_t &length);
 	static bool sendData(uint8_t* buffer, uint32_t len);
-	
-	static bool dmaRxDescListInit();
-	static bool dmaTxDescListInit();
 };
 
 #endif

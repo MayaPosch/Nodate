@@ -115,16 +115,17 @@ struct ETH_DMADescTypeDef {
 ETH_DMADescTypeDef* 	DMATxDscrTab 	= (ETH_DMADescTypeDef*) SRAM2_BASE + 0x80;
 uint8_t* 				Rx_Buff 		= (uint8_t*) SRAM2_BASE + 0x100;
 uint8_t* 				Tx_Buff 		= (uint8_t*) SRAM2_BASE + 0x17D0; */
-
+extern "C" {
 ETH_DMADescTypeDef  DMARxDscrTab[ETH_RXBUFNB] __attribute__((section(".RxDescSection")));/* Ethernet Rx DMA Descriptors */
 ETH_DMADescTypeDef  DMATxDscrTab[ETH_TXBUFNB] __attribute__((section(".TxDescSection")));/* Ethernet Tx DMA Descriptors */
-uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE] __attribute__((section(".RxArraySection"))); /* Ethernet Receive Buffers */
-uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE] __attribute__((section(".TxArraySection"))); /* Ethernet Transmit Buffers */
+static uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE] __attribute__((used)) __attribute__((section(".RxArraySection")));
+static uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE] __attribute__((used)) __attribute__((section(".TxArraySection")));
+}
 #endif
 
-
+// -D__stm32f7=1
+__attribute__((used)) void Ethernet::dmaRxDescListInit(bool interruptMode) {
 #if defined __stm32f7
-bool dmaRxDescListInit(bool interruptMode) {
 	// Set up new RX DMA descriptors and buffer.
 	//ETH_DMADescTypeDef descDef[ETH_RXBUFNB];
 	//uint8_t rxBuff[ETH_RXBUFNB][ETH_RX_BUF_SIZE];
@@ -137,7 +138,7 @@ bool dmaRxDescListInit(bool interruptMode) {
 		dd.Status = ETH_DMARXDESC_OWN;
 		dd.ControlBufferSize = ETH_DMARXDESC_RCH | ETH_RX_BUF_SIZE;
 		//dd.Buffer1Addr = (uint32_t) (&rxBuff[i * ETH_RX_BUF_SIZE]);
-		dd.Buffer1Addr = (uint32_t) (&Rx_Buff[i * ETH_RX_BUF_SIZE]);
+		dd.Buffer1Addr = (uint32_t) &((&Rx_Buff[0][0])[i * ETH_RX_BUF_SIZE]);
 		if (interruptMode) {
 			dd.ControlBufferSize &= ~ETH_DMARXDESC_DIC;
 		}
@@ -160,12 +161,11 @@ bool dmaRxDescListInit(bool interruptMode) {
 	
 	// Set Receive Descriptor List Address Register.
 	ETH->DMARDLAR = (uint32_t) DMARxDscrTab;
-	
-	return true;
+#endif
 }
 
-
-bool dmaTxDescListInit(bool interruptMode, bool hardwareChecksum) {
+__attribute__((used)) void Ethernet::dmaTxDescListInit(bool interruptMode, bool hardwareChecksum) {
+#if defined __stm32f7
 	// TODO: Set the ETH peripheral state to BUSY.
 	
 	// Set up new RX DMA descriptors and buffer.
@@ -200,14 +200,14 @@ bool dmaTxDescListInit(bool interruptMode, bool hardwareChecksum) {
 	ETH->DMATDLAR = (uint32_t) &DMATxDscrTab;
 
 	// TODO: Set ETH state to Ready.
-	
-	return true;
+#endif
 }
 
 
 // --- SETUP MPU ---
 // Configure the memory protection for the TX/RX DMA descriptors and buffers.
-bool setupMPU() {
+bool Ethernet::setupMPU() {
+#if defined __stm32f7
 	// 1. Disable MPU.
 	// Make sure outstanding transfers are done.
 	__DMB();
@@ -253,14 +253,16 @@ bool setupMPU() {
 	// Ensure MPU setting take effects.
 	__DSB();
 	__ISB();
-	
+						
 	return true;
-}
+#else
+	return false;
 #endif
+}
 
 
 // --- WRITE PHY REGISTER ---
-bool writePhyRegister(uint16_t reg, uint32_t value) {
+bool Ethernet::writePhyRegister(uint16_t reg, uint32_t value) {
 #if defined __stm32f7
 	// TODO: check for busy status on ETH.
 	
@@ -284,13 +286,16 @@ bool writePhyRegister(uint16_t reg, uint32_t value) {
 	while((tmpreg & ETH_MACMIIAR_MB) == ETH_MACMIIAR_MB) { }
 	
 	// TODO: set state to ready.
-#endif
+						
 	return true;
+#else
+	return false;
+#endif
 }
 
 
 // --- READ PHY REGISTER ---
-bool readPhyRegister(uint16_t reg, uint32_t &value) {
+bool Ethernet::readPhyRegister(uint16_t reg, uint32_t &value) {
 #if defined __stm32f7
 	// TODO: check for busy status on ETH.
 	
@@ -311,12 +316,15 @@ bool readPhyRegister(uint16_t reg, uint32_t &value) {
 	while((tmpreg & ETH_MACMIIAR_MB) == ETH_MACMIIAR_MB) { }
 	
 	// TODO: set state to ready.
-#endif
+						
 	return true;
+#else
+	return false;
+#endif
 }
 
 
-bool macDmaConfig(uint32_t speed, uint32_t duplexMode, bool hardwareChecksum, bool interruptMode,
+bool Ethernet::macDmaConfig(uint32_t speed, uint32_t duplexMode, bool hardwareChecksum, bool interruptMode,
 																		uint8_t macAddress[6]) {
 #if defined __stm32f7
 	// TODO: check for busy status on ETH.
@@ -448,8 +456,8 @@ bool macDmaConfig(uint32_t speed, uint32_t duplexMode, bool hardwareChecksum, bo
 						macAddress[0];
 						
 	// Set up DMA descriptors.
-	if (!dmaRxDescListInit(interruptMode)) { return false; }
-	if (!dmaTxDescListInit(interruptMode, hardwareChecksum)) { return false; }
+	dmaRxDescListInit(interruptMode);
+	dmaTxDescListInit(interruptMode, hardwareChecksum);
 	
 	// Set up the memory protection.
 	if (!setupMPU()) { return false; }
@@ -669,9 +677,10 @@ bool Ethernet::startEthernet(Ethernet_RMII &ethDef) {
 	ETH->DMAOMR |= ETH_DMAOMR_SR;
 	
 	return true;
-#endif
+#else
 	
 	return false;
+#endif
 }
 
 
@@ -786,9 +795,10 @@ bool Ethernet::receiveData(uint8_t* buffer, uint32_t &length) {
 	}
 	
 	return true;
-#endif
+#else
 	
 	return false;
+#endif
 }
 
 
@@ -857,37 +867,10 @@ bool Ethernet::sendData(uint8_t* buffer, uint32_t len) {
 	}
   
 	return true;
-#endif
+#else
 	
 	return false;
-}
-
-
-// --- DMA RX DESC LIST INIT ---
-bool Ethernet::dmaRxDescListInit() {
-#if defined __stm32f7
-	// TODO: Set device state to Busy.
-	
-	// 
-	
-	// TODO: Set device state to Ready.
-	
-	return true;
 #endif
-	
-	return false;
-}
-
-
-// --- DMA TX DESC LIST INIT ---
-bool Ethernet::dmaTxDescListInit() {
-#if defined __stm32f7
-	//
-	
-	return true;
-#endif
-	
-	return false;
 }
 
 #endif

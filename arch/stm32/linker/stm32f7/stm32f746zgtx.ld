@@ -33,7 +33,7 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20050000;    /* end of RAM */
+_estack = 0x2004C000;    /* end of RAM */
 /* Generate a link error if heap and stack don't fit into RAM */
 _Min_Heap_Size = 0x800;      /* required amount of heap  */
 _Min_Stack_Size = 0x1000; /* required amount of stack */
@@ -41,12 +41,12 @@ _Min_Stack_Size = 0x1000; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 320K
+RAM (xrw)        : ORIGIN = 0x20000000, LENGTH = 304K
 FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 1024K
-Memory_B1(xrw)   : ORIGIN = 0x2004C000, LENGTH = 0x80
-Memory_B2(xrw)   : ORIGIN = 0x2004C080, LENGTH = 0x80
-Memory_B3(xrw)   : ORIGIN = 0x2004C100, LENGTH = 0x17d0 
-Memory_B4(xrw)   : ORIGIN = 0x2004D8D0, LENGTH = 0x17d0 
+Memory_B1(rw)   : ORIGIN = 0x2004C000, LENGTH = 0x80
+Memory_B2(rw)   : ORIGIN = 0x2004C080, LENGTH = 0x80
+Memory_B3(rw)   : ORIGIN = 0x2004C100, LENGTH = 0x17d0 
+Memory_B4(rw)   : ORIGIN = 0x2004D8D0, LENGTH = 0x17d0 
 }
 
 /* Define output sections */
@@ -168,10 +168,16 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
-  .RxDescSection : { *(.RxDescSection) } >Memory_B1
-  .TxDescSection : { *(.TxDescSection) } >Memory_B2
-  .RxArraySection : { *(.RxArraySection) } >Memory_B3
-  .TxArraySection : { *(.TxArraySection) } >Memory_B4 
+  .RxDescSection (NOLOAD) : { *(.RxDescSection) } >Memory_B1
+  .TxDescSection (NOLOAD) : { *(.TxDescSection) } >Memory_B2
+	.RxArraySection (NOLOAD) : { 
+		*(.RxArraySection) 
+		KEEP(*(.RxArraySection))
+	} >Memory_B3
+	.TxArraySection (NOLOAD) : { 
+		*(.TxArraySection) 
+		KEEP(*(.TxArraySection))
+	} >Memory_B4 
 }
 
 

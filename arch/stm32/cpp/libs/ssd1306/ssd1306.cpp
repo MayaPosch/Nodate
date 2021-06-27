@@ -7,10 +7,6 @@
 
 #include "ssd1306.h"
 
-// TODO: replace with external configuration option.
-// This is just used for the splash image right now.
-const uint8_t HEIGHT = 64;
-const uint8_t WIDTH = 82;
 #include "splash.h"
 
 #include <cstring>
@@ -54,57 +50,54 @@ bool SSD1306::isReady() {
 
 
 // --- INIT ---
-bool SSD1306::init() {
-	if ((!buffer) && !(buffer = (uint8_t*) malloc(WIDTH * ((HEIGHT + 7) / 8)))) {
+bool SSD1306::init(uint32_t width, uint32_t height) {
+	this->width = width;
+	this->height = height;
+	if ((!buffer) && !(buffer = (uint8_t*) malloc(width * (height / 8)))) {
 		return false;
 	}
-	
-	printf("init: 0\n");
 
 	clearDisplay();
-	if (HEIGHT > 32) {
-		drawBitmap((WIDTH - splash1_width) / 2, (HEIGHT - splash1_height) / 2,
-				splash1_data, splash1_width, splash1_height, 1);
+	if (height > 32) {
+		drawBitmap((width - splash1_width) / 2, (height - splash1_height) / 2,
+				splash1_data, splash1_width, splash1_height, white);
 	} 
 	else {
-		drawBitmap((WIDTH - splash2_width) / 2, (HEIGHT - splash2_height) / 2,
-				splash2_data, splash2_width, splash2_height, 1);
+		drawBitmap((width - splash2_width) / 2, (height - splash2_height) / 2,
+				splash2_data, splash2_width, splash2_height, white);
 	}
 	
-	printf("init: 1\n");
-	
-	// TODO: configuring for 128x64 display here. Make configurable for 32 tall displays.
 	send_command(SSD1306_DISPLAY_OFF);
-	
-	printf("init: 2\n");
-	
-	send_command(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
-	send_command(0x80);
-	
-	printf("init: 3\n");
-	
-	send_command(SSD1306_SET_MULTIPLEX_RATIO);
-	send_command(HEIGHT - 1);
-	send_command(SSD1306_SET_DISPLAY_OFFSET);
-	send_command(0x0);
-	send_command((uint8_t) SSD1306_SET_START_LINE | 0x0);
-	send_command(SSD1306_CHARGE_PUMP);
-	send_command(0x14);
 	send_command(SSD1306_MEMORY_ADDR_MODE);
-	send_command(0x00);
-	send_command((uint8_t) SSD1306_SET_SEGMENT_REMAP | 0x1);
+	send_command(0x10);		// Page addressing mode.
+	send_command(SSD1306_SET_PAGE_START_ADDDR);	// 0xB0, first page.
 	send_command(SSD1306_COM_SCAN_DIR_DEC);
-	send_command(SSD1306_SET_COM_PINS);
-	send_command(0x12);
+	send_command(SSD1306_SET_LOWER_COLUMN);
+	send_command(SSD1306_SET_HIGHER_COLUMN);
+	send_command(SSD1306_SET_START_LINE);
 	send_command(SSD1306_SET_CONTRAST_CONTROL);
 	send_command(0xCF);
+	send_command(SSD1306_SET_SEGMENT_REMAP_INV);
+	send_command(SSD1306_NORMAL_DISPLAY);
+	
+	send_command(SSD1306_SET_MULTIPLEX_RATIO);
+	send_command(height - 1);
+	
+	send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
+	send_command(SSD1306_SET_DISPLAY_OFFSET);
+	send_command(0x0);
+	send_command(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
+	send_command(0x80);
 	send_command(SSD1306_SET_PRECHARGE_PERIOD);
 	send_command(0xF1);
+	
+	send_command(SSD1306_SET_COM_PINS);
+	send_command(0x12);
 	send_command(SSD1306_SET_VCOM_DESELECT);
 	send_command(0x40);
+	send_command(SSD1306_CHARGE_PUMP);
+	send_command(0x14);
 	send_command(SSD1306_DEACTIVATE_SCROLL);
-	send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
-	send_command(SSD1306_NORMAL_DISPLAY);
 	send_command(SSD1306_DISPLAY_ON);
 	
 	return true;
@@ -112,7 +105,7 @@ bool SSD1306::init() {
 
 
 void SSD1306::drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
-                              int16_t width, int16_t height, uint16_t color) {
+                              int16_t width, int16_t height, SSD1306_colors color) {
 	int16_t byteWidth = (width + 7) / 8; // Bitmap scanline pad = whole byte
 	uint8_t byte = 0;
 
@@ -129,75 +122,115 @@ void SSD1306::drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
 }
 
 
-#define SSD1306_BLACK 0   ///< Draw 'off' pixels
-#define SSD1306_WHITE 1   ///< Draw 'on' pixels
-#define SSD1306_INVERSE 2 ///< Invert pixels
-
 #define ssd1306_swap(a, b)                                                     \
   (((a) ^= (b)), ((b) ^= (a)), ((a) ^= (b))) ///< No-temp-var swap operation
 
 
-void SSD1306::drawPixel(int16_t x, int16_t y, uint16_t color) {
-	// FIXME: shouldn't be hardcoded.
-	uint8_t width = 128;
-	uint8_t height = 64;
-	if ((x >= 0) && (x < width) && (y >= 0) && (y < height)) {
-		// Pixel is in-bounds. Rotate coordinates if needed.
-		switch (rotation) {
-			case 1:
-				ssd1306_swap(x, y);
-				x = WIDTH - x - 1;
-				break;
-			case 2:
-				x = WIDTH - x - 1;
-				y = HEIGHT - y - 1;
-				break;
-			case 3:
-				ssd1306_swap(x, y);
-				y = HEIGHT - y - 1;
-				break;
-		}
-		
-		switch (color) {
-			case SSD1306_WHITE:
-				buffer[x + (y / 8) * WIDTH] |= (1 << (y & 7));
-				break;
-			case SSD1306_BLACK:
-				buffer[x + (y / 8) * WIDTH] &= ~(1 << (y & 7));
-				break;
-			case SSD1306_INVERSE:
-				buffer[x + (y / 8) * WIDTH] ^= (1 << (y & 7));
-				break;
-		}
-	}	
+void SSD1306::drawPixel(int16_t x, int16_t y, SSD1306_colors color) {
+	if (x >= width || y >= height) {
+		// Outside bounds.
+		return;
+	}
+	
+	// Check if pixel should be inverted
+    if (inverted) {
+        color = (SSD1306_colors) !color;
+    }
+
+    // Draw in the correct color
+    if (color == white) {
+        buffer[x + (y / 8) * width] |= 1 << (y % 8);
+    }
+    else {
+        buffer[x + (y / 8) * width] &= ~(1 << (y % 8));
+    }	
+}
+
+
+// --- WRITE CHAR ---
+//  Draw 1 char to the screen buffer
+//  ch      => Character to write
+//  Font    => Font to use
+//  color   => black or white
+char SSD1306::writeChar(char ch, FontDef Font, SSD1306_colors color) {
+    uint32_t i, b, j;
+
+    // Check remaining space on current line
+    if (width <= (currentX + Font.FontWidth) ||
+        height <= (currentY + Font.FontHeight)) {
+        // Not enough space on current line
+        return 0;
+    }
+
+    // Translate font to screenbuffer
+    for (i = 0; i < Font.FontHeight; i++) {
+        b = Font.data[(ch - 32) * Font.FontHeight + i];
+        for (j = 0; j < Font.FontWidth; j++) {
+            if ((b << j) & 0x8000) {
+                drawPixel(currentX + j, (currentY + i), (SSD1306_colors) color);
+            }
+            else {
+                drawPixel(currentX + j, (currentY + i), (SSD1306_colors)!color);
+            }
+        }
+    }
+
+    // The current space is now taken
+    currentX += Font.FontWidth;
+
+    // Return written char for validation
+    return ch;
+}
+
+
+// --- WRITE STRING ---
+//  Write full string to buffer
+uint32_t SSD1306::writeString(char* str, FontDef Font, SSD1306_colors color) {
+    // Write until null-byte
+	uint32_t count = 0;
+    while (*str) {
+        if (writeChar(*str, Font, color) != *str) {
+            // Char could not be written.
+            return count;
+        }
+
+        // Next char
+        str++;
+		count++;
+    }
+
+    // Everything ok
+    return count;
+}
+
+
+// --- SET CURSOR --
+void SSD1306::setCursor(uint8_t x, uint8_t y) {
+    currentX = x;
+    currentY = y;
 }
 
 
 bool SSD1306::display() {
-	/* uint8_t dlist1[] = {
-		(uint8_t) SSD1306_SET_PAGE_ADDR,
-		0,                      // Page start address
-		0xFF,                   // Page end (not really, but works here)
-		(uint8_t) SSD1306_SET_COLUMN_ADDR, 0};		// Column start address
-		
-	send_commands(dlist1, sizeof(dlist1)); */
-	send_command(SSD1306_SET_COLUMN_ADDR); 	// 0x21 COMMAND
-	send_command(0); 						// Column start address
-	send_command(WIDTH - 1); 				// Column end address
-	//send_command((uint8_t) WIDTH - 1); // Column end address
-	send_command(SSD1306_SET_PAGE_ADDR); 	// 0x22 COMMAND
-	send_command(0); 						// Start Page address
-	send_command((HEIGHT / 8 ) - 1);		// End Page address
+	for (uint8_t i = 0; i < 8; i++) {
+		send_command(SSD1306_SET_PAGE_START_ADDDR + 1);
+		send_command(0x00);
+		send_command(0x10);
 
-	uint16_t count = WIDTH * ((HEIGHT + 7) / 8);
-	send_data(buffer, count);
+		send_data(&(buffer[width * i]), width);
+	}
 	
 	return true;
 }
 
 
 void SSD1306::clearDisplay() {
-	memset(buffer, 0, WIDTH * ((HEIGHT + 7) / 8));
+	memset(buffer, 0, width * (height / 8));
+}
+
+
+void SSD1306::invertColors() {
+	inverted = !inverted;
 }
 
 

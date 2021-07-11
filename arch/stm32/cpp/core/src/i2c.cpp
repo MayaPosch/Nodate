@@ -435,8 +435,6 @@ bool I2C::sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len) {
 		instance.regs->TXDR = data[i];
 	}
 	
-	printf("Return true...\n");
-	
 	return true;
 #endif
 	return false;

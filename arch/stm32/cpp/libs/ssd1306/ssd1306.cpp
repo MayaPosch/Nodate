@@ -11,25 +11,10 @@
 
 #include <cstring>
 
-// Debug
-#include <printf.h>
-
 
 void ssd1306Callback(uint8_t byte) {
 	//
 }
-
-
-// TYPES
-struct SSD1306_cmd_list {
-	uint8_t cmd = 0x0;
-	uint8_t* list;
-};
-
-struct SSD1306_data_list {
-	uint8_t d = 0x40;
-	uint8_t* data;
-};
 
 
 // --- CONSTRUCTOR ---
@@ -68,37 +53,49 @@ bool SSD1306::init(uint32_t width, uint32_t height) {
 	}
 	
 	send_command(SSD1306_DISPLAY_OFF);
-	send_command(SSD1306_MEMORY_ADDR_MODE);
-	send_command(0x10);		// Page addressing mode.
-	send_command(SSD1306_SET_PAGE_START_ADDDR);	// 0xB0, first page.
-	send_command(SSD1306_COM_SCAN_DIR_DEC);
-	send_command(SSD1306_SET_LOWER_COLUMN);
-	send_command(SSD1306_SET_HIGHER_COLUMN);
-	send_command(SSD1306_SET_START_LINE);
-	send_command(SSD1306_SET_CONTRAST_CONTROL);
-	send_command(0xCF);
-	send_command(SSD1306_SET_SEGMENT_REMAP_INV);
-	send_command(SSD1306_NORMAL_DISPLAY);
 	
-	send_command(SSD1306_SET_MULTIPLEX_RATIO);
-	send_command(height - 1);
-	
-	send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
-	send_command(SSD1306_SET_DISPLAY_OFFSET);
-	send_command(0x0);
+	// Timing and driving.
 	send_command(SSD1306_SET_DISPLAY_CLOCK_DIV_RATIO);
 	send_command(0x80);
 	send_command(SSD1306_SET_PRECHARGE_PERIOD);
-	send_command(0xF1);
-	
-	send_command(SSD1306_SET_COM_PINS);
-	send_command(0x12);
+	send_command(0x22);
 	send_command(SSD1306_SET_VCOM_DESELECT);
 	send_command(0x40);
+	
+	send_command(SSD1306_SET_CONTRAST_CONTROL);
+	send_command(0x7F);
+	
+	send_command(SSD1306_SET_DISPLAY_OFFSET);
+	send_command(0x0);
+	
+	// Scrolling
+	send_command(SSD1306_DEACTIVATE_SCROLL);
+	
+	// Addressing
+	send_command(SSD1306_MEMORY_ADDR_MODE);
+	send_command(0x10);		// Page addressing mode.
+	send_command(SSD1306_SET_START_LINE);
+	
+	// Hardware config
+	send_command(SSD1306_SET_SEGMENT_REMAP_INV);
+	send_command(SSD1306_SET_MULTIPLEX_RATIO);
+	send_command(height - 1);
+	send_command(SSD1306_COM_SCAN_DIR_DEC);
+	send_command(SSD1306_SET_COM_PINS);
+	send_command(0x12);
+	
+	// Charge pump.
 	send_command(SSD1306_CHARGE_PUMP);
 	send_command(0x14);
-	send_command(SSD1306_DEACTIVATE_SCROLL);
+	
+	// Display back on.
+	send_command(SSD1306_DISPLAY_ALL_ON_RESUME);
+	send_command(SSD1306_NORMAL_DISPLAY);
 	send_command(SSD1306_DISPLAY_ON);
+	
+	//send_command(SSD1306_SET_PAGE_START_ADDDR);	// 0xB0, first page.
+	//send_command(SSD1306_SET_LOWER_COLUMN);
+	//send_command(SSD1306_SET_HIGHER_COLUMN);
 	
 	return true;
 }
@@ -212,12 +209,15 @@ void SSD1306::setCursor(uint8_t x, uint8_t y) {
 
 
 bool SSD1306::display() {
+	uint8_t cmd = 0xB0; // Page address.
 	for (uint8_t i = 0; i < 8; i++) {
-		send_command(SSD1306_SET_PAGE_START_ADDDR + 1);
+		send_command(cmd++);
 		send_command(0x00);
 		send_command(0x10);
 
-		send_data(&(buffer[width * i]), width);
+		if (!send_data(&(buffer[width * i]), width)) {
+			return false;
+		}
 	}
 	
 	return true;
@@ -263,7 +263,7 @@ void SSD1306::send_command(SSD1306_commands cmd, uint8_t data) {
 
 void SSD1306::send_commands(uint8_t* data, uint8_t len) {
 	I2C::setSlaveTarget(i2c_bus, address);
-	I2C::sendToSlaveBegin(i2c_bus);
+	I2C::sendToSlaveBegin(i2c_bus, len + 1);
 	uint8_t byte = 0x00;
 	I2C::sendToSlaveBytes(i2c_bus, &byte, 1);
 	I2C::sendToSlaveBytes(i2c_bus, data, len);
@@ -278,11 +278,21 @@ void SSD1306::send_data(uint8_t byte) {
 }
 
 
-void SSD1306::send_data(uint8_t* bytes, uint16_t len) {
+bool SSD1306::send_data(uint8_t* bytes, uint16_t len) {
 	I2C::setSlaveTarget(i2c_bus, address);
-	I2C::sendToSlaveBegin(i2c_bus);
+	I2C::sendToSlaveBegin(i2c_bus, len + 1);
 	uint8_t data = 0x40;
-	I2C::sendToSlaveBytes(i2c_bus, &data, 1);
-	I2C::sendToSlaveBytes(i2c_bus, bytes, len);
+	if (!I2C::sendToSlaveBytes(i2c_bus, &data, 1)) {
+		I2C::sendToSlaveEnd(i2c_bus);
+		return false;
+	}
+	
+	if (!I2C::sendToSlaveBytes(i2c_bus, bytes, len)) {
+		I2C::sendToSlaveEnd(i2c_bus);
+		return false;
+	}
+	
 	I2C::sendToSlaveEnd(i2c_bus);
+	
+	return true;
 }

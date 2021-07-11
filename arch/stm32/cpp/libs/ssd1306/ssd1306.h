@@ -85,7 +85,7 @@ class SSD1306 {
 	void send_command(SSD1306_commands cmd, uint8_t data);
 	void send_commands(uint8_t* data, uint8_t len);
 	void send_data(uint8_t byte);
-	void send_data(uint8_t* bytes, uint16_t len);
+	bool send_data(uint8_t* bytes, uint16_t len);
 	
 public:
 	SSD1306(I2C_devices device, uint8_t slave_address);

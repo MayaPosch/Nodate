@@ -77,7 +77,10 @@ int main() {
 	}
 	
 	// Display the default splash screen.
-	display.display();
+	if (!display.display()) {
+		printf("Displaying image failed.\n");
+		while (1) { }
+	}
 	
 	// Light up LED.
 	if (led_enable) {
@@ -85,7 +88,7 @@ int main() {
 	}
 	
 	// Clear the buffer
-	display.clearDisplay();
+	//display.clearDisplay();
 	
 	//printf("Display on/off.\n");
 	
@@ -94,30 +97,30 @@ int main() {
 	//Timer::delay(2000);
 	//display.displayFullOn(false);
 	
-	Timer::delay(1000);
+	//Timer::delay(1000);
 	
-	printf("Pixel@20x20\n");
+	//printf("Pixel@20x20\n");
 
 	// Draw a single lit pixel at 10x10.
-	display.drawPixel(20, 20, white);
-	display.display();
+	//display.drawPixel(20, 20, white);
+	//display.display();
 	
-	Timer::delay(1000);
+	//Timer::delay(1000);
 	
-	printf("Pixel@10x10\n");
+	//printf("Pixel@10x10\n");
 
 	// Draw a single lit pixel at 10x10.
-	display.drawPixel(10, 10, white);
-	display.display();
+	//display.drawPixel(10, 10, white);
+	//display.display();
 	
-	Timer::delay(1000);
+	//Timer::delay(1000);
 	
 	// Clear the buffer
-	display.clearDisplay();
+	//display.clearDisplay();
 	
 	// Display something useful.
-	char* hello = "Hello Nodate!";
-	display.writeString(hello, Font_11x18, white);
+	//char* hello = "Hello Nodate!";
+	//display.writeString(hello, Font_11x18, white);
 	
 	while (1) {
 		//

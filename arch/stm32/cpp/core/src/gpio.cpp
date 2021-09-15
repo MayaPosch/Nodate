@@ -278,6 +278,9 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
  *
  * Configures an mcu peripheral for alternate function mode.  Applies only to STM32F1.
  * Acceptable values of the af parameter is dependent on the peripheral selected.
+ * Returns true if peripheral is set to alternate function mode or if peripheral has
+ * no alternate function option available.  Returns false if if improper alternate
+ * function mode value is requested or if mcu is not in the STM32F1 line.
  * See the mcu documentation for additional details.
  *
  * \param[in]   per: peripheral
@@ -306,14 +309,19 @@ bool GPIO::set_af(RccPeripheral per, uint8_t af) {
 	}
 	
 	// Set correct value in AFIO_MAPR register.
+	// Not all peripherals are available on all mcu's
+	// Not all peripherals available on an mcu have remappable alternate functions
+	// spi1 and i2c1 are not bracketed by an #if define because they always exist
+	// and are remappable
 	uint8_t pos = 0;
 	if (per == RCC_SPI1) 		{ pos = AFIO_MAPR_SPI1_REMAP_Pos; }
 	else if (per == RCC_I2C1)	{ pos = AFIO_MAPR_I2C1_REMAP_Pos; }
-#if defined AFIO_MAPR_I2C2_REMAP_Pos
-	else if (per == RCC_I2C2)	{ pos = AFIO_MAPR_I2C2_REMAP_Pos; }
-#endif
+#if defined AFIO_MAPR_USART1_REMAP_Pos
 	else if (per == RCC_USART1)	{ pos = AFIO_MAPR_USART1_REMAP_Pos; }
+#endif
+#if defined AFIO_MAPR_USART2_REMAP_Pos
 	else if (per == RCC_USART2)	{ pos = AFIO_MAPR_USART2_REMAP_Pos; }
+#endif
 #if defined AFIO_MAPR_USART3_REMAP_Pos
 	else if (per == RCC_USART3)	{ pos = AFIO_MAPR_USART3_REMAP_Pos; }
 #endif
@@ -326,14 +334,19 @@ bool GPIO::set_af(RccPeripheral per, uint8_t af) {
 #if defined AFIO_MAPR_CAN_REMAP_Pos
 	else if (per == RCC_CAN)	{ pos = AFIO_MAPR_CAN_REMAP_Pos; }
 #endif
-	else { return false; }
+	else {
+		// per is not a remappable peripheral; return true as there
+		// is no work to be done
+		return true;
+		
+	}
 
 	// clear and set the appropriate field
 	AFIO->MAPR &= ~(field_mask << pos);
 	AFIO->MAPR |= (af << pos);
 	return true;
 #else
-	// default for anything other than STM32F1 or unavailable peripherals
+	// default for mcu's other than STM32F1 series
 	return false;
 #endif
 }

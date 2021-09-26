@@ -47,10 +47,13 @@ bool BME280::readID(uint8_t &id) {
 	// Read the response once it comes in.
 	uint32_t to = 1000000;
 	while (I2C_wait && to > 1) {
-		// TODO: elegantly handle timeout.
 		to--;
 	}
-	
+	if (to == 1) {
+		// we reached this via a time-out
+		return false;
+	}
+
 	id = I2C_byte;
 	
 	return true;

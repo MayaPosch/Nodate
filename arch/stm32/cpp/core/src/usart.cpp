@@ -28,6 +28,9 @@ USART_device* USART_list() {
 #if defined RCC_APB1ENR_USART2EN
 	devicesStatic[USART_2].regs = USART2;
 	devicesStatic[USART_2].irqType = USART2_IRQn;
+#elif defined RCC_APB1ENR1_USART2EN
+	devicesStatic[USART_2].regs = USART2;
+	devicesStatic[USART_2].irqType = USART2_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_USART3EN
@@ -38,6 +41,9 @@ USART_device* USART_list() {
 	devicesStatic[USART_3].regs = USART3;
 	devicesStatic[USART_3].irqType = USART3_IRQn;
 #endif
+#elif defined RCC_APB1ENR1_USART3EN
+	devicesStatic[USART_2].regs = USART3;
+	devicesStatic[USART_2].irqType = USART3_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART4EN
@@ -48,6 +54,9 @@ USART_device* USART_list() {
 	devicesStatic[USART_4].regs = UART4;
 	devicesStatic[USART_4].irqType = UART4_IRQn;
 #endif
+#elif defined RCC_APB1ENR1_UART4EN
+	devicesStatic[USART_2].regs = UART4;
+	devicesStatic[USART_2].irqType = UART4_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART5EN
@@ -82,7 +91,13 @@ GPIO USART::gpio;
 
 // Callback handlers.
 // Overrides the default handlers and allows the use of custom callback functions.
-#if defined __stm32f1 || defined __stm32f4 || defined __stm32f7
+#if defined __stm32f0
+extern "C" {
+	void USART1_IRQHandler(void);
+	void USART2_IRQHandler(void);
+	void USART3_4_IRQHandler(void);
+}
+#else
 extern "C" {
 	void USART1_IRQHandler(void);
 	void USART2_IRQHandler(void);
@@ -92,12 +107,6 @@ extern "C" {
 	void USART6_IRQHandler(void);
 	void USART7_IRQHandler(void);
 	void USART8_IRQHandler(void);
-}
-#elif defined __stm32f0
-extern "C" {
-	void USART1_IRQHandler(void);
-	void USART2_IRQHandler(void);
-	void USART3_4_IRQHandler(void);
 }
 #endif
 
@@ -131,72 +140,6 @@ void USART3_4_IRQHandler(void) {
 	else if (instance2.regs->ISR & USART_ISR_RXNE) {
 		rxb = instance2.regs->RDR;
 		instance2.callback(rxb);
-	}
-}
-
-#elif defined __stm32f7
-
-void USART1_IRQHandler(void) {
-	USART_device &instance = devicesStatic[0];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART2_IRQHandler(void) {
-	USART_device &instance = devicesStatic[1];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART3_IRQHandler(void) {
-	USART_device &instance = devicesStatic[2];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART4_IRQHandler(void) {
-	USART_device &instance = devicesStatic[3];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART5_IRQHandler(void) {
-	USART_device &instance = devicesStatic[4];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART6_IRQHandler(void) {
-	USART_device &instance = devicesStatic[5];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART7_IRQHandler(void) {
-	USART_device &instance = devicesStatic[6];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
-	}
-}
-
-void USART8_IRQHandler(void) {
-	USART_device &instance = devicesStatic[7];
-	if (instance.regs->ISR & USART_ISR_RXNE) {
-		rxb = instance.regs->RDR;
-		instance.callback(rxb);
 	}
 }
 
@@ -262,6 +205,73 @@ void USART8_IRQHandler(void) {
 	USART_device &instance = devicesStatic[7];
 	if (instance.regs->SR & USART_SR_RXNE) {
 		rxb = instance.regs->DR;
+		instance.callback(rxb);
+	}
+}
+
+
+#else
+
+void USART1_IRQHandler(void) {
+	USART_device &instance = devicesStatic[0];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART2_IRQHandler(void) {
+	USART_device &instance = devicesStatic[1];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART3_IRQHandler(void) {
+	USART_device &instance = devicesStatic[2];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART4_IRQHandler(void) {
+	USART_device &instance = devicesStatic[3];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART5_IRQHandler(void) {
+	USART_device &instance = devicesStatic[4];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART6_IRQHandler(void) {
+	USART_device &instance = devicesStatic[5];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART7_IRQHandler(void) {
+	USART_device &instance = devicesStatic[6];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
+		instance.callback(rxb);
+	}
+}
+
+void USART8_IRQHandler(void) {
+	USART_device &instance = devicesStatic[7];
+	if (instance.regs->ISR & USART_ISR_RXNE) {
+		rxb = instance.regs->RDR;
 		instance.callback(rxb);
 	}
 }
@@ -351,7 +361,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	uint32_t usartClock = SystemCoreClock >> tmp;
 	uint16_t uartdiv = usartClock / baudrate;
 	
-#if defined __stm32f0 || defined __stm32f7
+#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
 	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_MANTISSA_Pos) |
 							((uartdiv % 16) << USART_BRR_DIV_FRACTION_Pos));
 #elif defined __stm32f4 || defined __stm32f1
@@ -388,7 +398,7 @@ bool USART::sendUart(USART_devices device, char &ch) {
 	if (!instance.active) { return false; }
 	
 	// Copy bit to the device's transmission register.
-#if defined __stm32f0 || defined __stm32f7
+#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
 	while (!(instance.regs->ISR & USART_ISR_TXE)) {};
 	instance.regs->TDR = (uint8_t) ch;
 #elif defined __stm32f4

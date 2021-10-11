@@ -42,6 +42,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_A].exists = true;
 	portHandlesStatic[RCC_PORT_A].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_A].enable = RCC_APB2ENR_IOPAEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOAEN
+	portHandlesStatic[RCC_PORT_A].exists = true;
+	portHandlesStatic[RCC_PORT_A].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_A].enable = RCC_AHB2ENR_GPIOAEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOBEN
@@ -56,6 +60,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_B].exists = true;
 	portHandlesStatic[RCC_PORT_B].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_B].enable = RCC_APB2ENR_IOPBEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOBEN
+	portHandlesStatic[RCC_PORT_B].exists = true;
+	portHandlesStatic[RCC_PORT_B].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_B].enable = RCC_AHB2ENR_GPIOBEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOCEN
@@ -70,6 +78,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_C].exists = true;
 	portHandlesStatic[RCC_PORT_C].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_C].enable = RCC_APB2ENR_IOPCEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOCEN
+	portHandlesStatic[RCC_PORT_C].exists = true;
+	portHandlesStatic[RCC_PORT_C].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_C].enable = RCC_AHB2ENR_GPIOCEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIODEN
@@ -84,6 +96,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_D].exists = true;
 	portHandlesStatic[RCC_PORT_D].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_D].enable = RCC_APB2ENR_IOPDEN_Pos;
+#elif defined RCC_AHB2ENR_GPIODEN
+	portHandlesStatic[RCC_PORT_D].exists = true;
+	portHandlesStatic[RCC_PORT_D].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_D].enable = RCC_AHB2ENR_GPIODEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOEEN
@@ -98,6 +114,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_E].exists = true;
 	portHandlesStatic[RCC_PORT_E].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_E].enable = RCC_APB2ENR_IOPEEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOeEN
+	portHandlesStatic[RCC_PORT_E].exists = true;
+	portHandlesStatic[RCC_PORT_E].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_E].enable = RCC_AHB2ENR_GPIOEEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOFEN
@@ -108,6 +128,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_F].exists = true;
 	portHandlesStatic[RCC_PORT_F].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_F].enable = RCC_AHB1ENR_GPIOFEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOFEN
+	portHandlesStatic[RCC_PORT_F].exists = true;
+	portHandlesStatic[RCC_PORT_F].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_F].enable = RCC_AHB2ENR_GPIOFEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOGEN
@@ -118,6 +142,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_G].exists = true;
 	portHandlesStatic[RCC_PORT_G].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_G].enable = RCC_AHB1ENR_GPIOGEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOGEN
+	portHandlesStatic[RCC_PORT_G].exists = true;
+	portHandlesStatic[RCC_PORT_G].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_G].enable = RCC_AHB2ENR_GPIOGEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOHEN
@@ -128,6 +156,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_H].exists = true;
 	portHandlesStatic[RCC_PORT_H].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_H].enable = RCC_AHB1ENR_GPIOHEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOHEN
+	portHandlesStatic[RCC_PORT_H].exists = true;
+	portHandlesStatic[RCC_PORT_H].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_H].enable = RCC_AHB2ENR_GPIOHEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOIEN
@@ -138,6 +170,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_I].exists = true;
 	portHandlesStatic[RCC_PORT_I].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_I].enable = RCC_AHB1ENR_GPIOIEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOIEN
+	portHandlesStatic[RCC_PORT_I].exists = true;
+	portHandlesStatic[RCC_PORT_I].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_I].enable = RCC_AHB2ENR_GPIOIEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOJEN
@@ -148,6 +184,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_J].exists = true;
 	portHandlesStatic[RCC_PORT_J].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_J].enable = RCC_AHB1ENR_GPIOJEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOJEN
+	portHandlesStatic[RCC_PORT_J].exists = true;
+	portHandlesStatic[RCC_PORT_J].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_J].enable = RCC_AHB2ENR_GPIOJEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOKEN
@@ -158,6 +198,10 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_K].exists = true;
 	portHandlesStatic[RCC_PORT_K].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_K].enable = RCC_AHB1ENR_GPIOKEN_Pos;
+#elif defined RCC_AHB2ENR_GPIOKEN
+	portHandlesStatic[RCC_PORT_K].exists = true;
+	portHandlesStatic[RCC_PORT_K].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_K].enable = RCC_AHB2ENR_GPIOKEN_Pos;
 #endif
 	
 	return portHandlesStatic;
@@ -208,6 +252,10 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_DMA2].exists = true;
 	peripheralHandlesStatic[RCC_DMA2].enr = &(RCC->AHBENR);
 	peripheralHandlesStatic[RCC_DMA2].enable = RCC_AHBENR_DMA2EN_Pos;
+#elif defined RCC_AHB1ENR_DMA2EN
+	peripheralHandlesStatic[RCC_DMA2].exists = true;
+	peripheralHandlesStatic[RCC_DMA2].enr = &(RCC->AHB1ENR);
+	peripheralHandlesStatic[RCC_DMA2].enable = RCC_AHB1ENR_DMA2EN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_DMAEN
@@ -264,6 +312,10 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_ADC1].exists = true;
 	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->APB2ENR);
 	peripheralHandlesStatic[RCC_ADC1].enable = RCC_APB2ENR_ADC1EN_Pos;
+#elif defined RCC_AHB2ENR_ADCEN
+	peripheralHandlesStatic[RCC_ADC1].exists = true;
+	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->AHB2ENR);
+	peripheralHandlesStatic[RCC_ADC1].enable = RCC_AHB2ENR_ADCEN_Pos;
 #endif
 
 #ifdef RCC_APB2ENR_ADC2EN
@@ -332,24 +384,40 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_TIM2].exists = true;
 	peripheralHandlesStatic[RCC_TIM2].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_TIM2].enable = RCC_APB1ENR_TIM2EN_Pos;
+#elif defined RCC_APB1ENR1_TIM2EN
+	peripheralHandlesStatic[RCC_TIM2].exists = true;
+	peripheralHandlesStatic[RCC_TIM2].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_TIM2].enable = RCC_APB1ENR1_TIM2EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_TIM3EN
 	peripheralHandlesStatic[RCC_TIM3].exists = true;
 	peripheralHandlesStatic[RCC_TIM3].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_TIM3].enable = RCC_APB1ENR_TIM3EN_Pos;
+#elif defined RCC_APB1ENR1_TIM3EN
+	peripheralHandlesStatic[RCC_TIM3].exists = true;
+	peripheralHandlesStatic[RCC_TIM3].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_TIM3].enable = RCC_APB1ENR1_TIM3EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_TIM6EN
 	peripheralHandlesStatic[RCC_TIM6].exists = true;
 	peripheralHandlesStatic[RCC_TIM6].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_TIM6].enable = RCC_APB1ENR_TIM6EN_Pos;
+#elif defined RCC_APB1ENR1_TIM6EN
+	peripheralHandlesStatic[RCC_TIM6].exists = true;
+	peripheralHandlesStatic[RCC_TIM6].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_TIM6].enable = RCC_APB1ENR1_TIM6EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_TIM7EN
 	peripheralHandlesStatic[RCC_TIM7].exists = true;
 	peripheralHandlesStatic[RCC_TIM7].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_TIM7].enable = RCC_APB1ENR_TIM7EN_Pos;
+#elif defined RCC_APB1ENR1_TIM7EN
+	peripheralHandlesStatic[RCC_TIM7].exists = true;
+	peripheralHandlesStatic[RCC_TIM7].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_TIM7].enable = RCC_APB1ENR1_TIM7EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_TIM14EN
@@ -374,18 +442,30 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_USART2].exists = true;
 	peripheralHandlesStatic[RCC_USART2].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_USART2].enable = RCC_APB1ENR_USART2EN_Pos;
+#elif defined RCC_APB1ENR1_USART2EN
+	peripheralHandlesStatic[RCC_USART2].exists = true;
+	peripheralHandlesStatic[RCC_USART2].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_USART2].enable = RCC_APB1ENR1_USART2EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_USART3EN
 	peripheralHandlesStatic[RCC_USART3].exists = true;
 	peripheralHandlesStatic[RCC_USART3].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_USART3].enable = RCC_APB1ENR_USART3EN_Pos;
+#elif defined RCC_APB1ENR1_USART3EN
+	peripheralHandlesStatic[RCC_USART3].exists = true;
+	peripheralHandlesStatic[RCC_USART3].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_USART3].enable = RCC_APB1ENR1_USART3EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_USART4EN
 	peripheralHandlesStatic[RCC_USART4].exists = true;
 	peripheralHandlesStatic[RCC_USART4].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_USART4].enable = RCC_APB1ENR_USART4EN_Pos;
+#elif defined RCC_APB1ENR1_USART4EN
+	peripheralHandlesStatic[RCC_USART4].exists = true;
+	peripheralHandlesStatic[RCC_USART4].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_USART4].enable = RCC_APB1ENR1_USART4EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_USART5EN
@@ -410,42 +490,70 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_I2C1].exists = true;
 	peripheralHandlesStatic[RCC_I2C1].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_I2C1].enable = RCC_APB1ENR_I2C1EN_Pos;
+#elif defined RCC_APB1ENR1_I2C1EN
+	peripheralHandlesStatic[RCC_I2C1].exists = true;
+	peripheralHandlesStatic[RCC_I2C1].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_I2C1].enable = RCC_APB1ENR1_I2C1EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_I2C2EN
 	peripheralHandlesStatic[RCC_I2C2].exists = true;
 	peripheralHandlesStatic[RCC_I2C2].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_I2C2].enable = RCC_APB1ENR_I2C2EN_Pos;
+#elif defined RCC_APB1ENR1_I2C2EN
+	peripheralHandlesStatic[RCC_I2C2].exists = true;
+	peripheralHandlesStatic[RCC_I2C2].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_I2C2].enable = RCC_APB1ENR1_I2C2EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_USBEN
 	peripheralHandlesStatic[RCC_USB].exists = true;
 	peripheralHandlesStatic[RCC_USB].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_USB].enable = RCC_APB1ENR_USBEN_Pos;
+#elif defined RCC_APB1ENR1_USBFSEN
+	peripheralHandlesStatic[RCC_USB].exists = true;
+	peripheralHandlesStatic[RCC_USB].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_USB].enable = RCC_APB1ENR1_USBFSEN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_CANEN
 	peripheralHandlesStatic[RCC_CAN].exists = true;
 	peripheralHandlesStatic[RCC_CAN].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_CAN].enable = RCC_APB1ENR_CANEN_Pos;
+#elif defined RCC_APB1ENR1_CAN1EN
+	peripheralHandlesStatic[RCC_CAN].exists = true;
+	peripheralHandlesStatic[RCC_CAN].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_CAN].enable = RCC_APB1ENR1_CAN1EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_CRSEN
 	peripheralHandlesStatic[RCC_CRS].exists = true;
 	peripheralHandlesStatic[RCC_CRS].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_CRS].enable = RCC_APB1ENR_CRSEN_Pos;
+#elif defined RCC_APB1ENR1_CRSEN
+	peripheralHandlesStatic[RCC_CRS].exists = true;
+	peripheralHandlesStatic[RCC_CRS].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_CRS].enable = RCC_APB1ENR1_CRSEN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_PWREN
 	peripheralHandlesStatic[RCC_PWR].exists = true;
 	peripheralHandlesStatic[RCC_PWR].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_PWR].enable = RCC_APB1ENR_PWREN_Pos;
+#elif defined RCC_APB1ENR1_PWREN
+	peripheralHandlesStatic[RCC_PWR].exists = true;
+	peripheralHandlesStatic[RCC_PWR].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_PWR].enable = RCC_APB1ENR1_PWREN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_DACEN
 	peripheralHandlesStatic[RCC_DAC].exists = true;
 	peripheralHandlesStatic[RCC_DAC].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_DAC].enable = RCC_APB1ENR_DACEN_Pos;
+#elif defined RCC_APB1ENR1_DAC1EN
+	peripheralHandlesStatic[RCC_DAC].exists = true;
+	peripheralHandlesStatic[RCC_DAC].enr = &(RCC->APB1ENR1);
+	peripheralHandlesStatic[RCC_DAC].enable = RCC_APB1ENR1_DAC1EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_CECEN

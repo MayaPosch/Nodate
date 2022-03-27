@@ -774,7 +774,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 		if (bytesToWrite < 256) {
 			// Prepare for final data transmission.
 			write = bytesToWrite;
-			instance.regs->CR2 |= I2C_CR2_AUTOEND;
+			//instance.regs->CR2 |= I2C_CR2_AUTOEND;
 		}
 		
 		for (uint8_t i = 0; i < write; i++) {
@@ -805,7 +805,20 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 		// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
 		// 		If true, start new transfer cycle.
 		if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
-			// Transfer complete.
+			// 5. Transfer complete. Wait for STOP flag & clear it.
+			uint32_t timeout = 400; // TODO: make configurable.
+			uint32_t ts = McuCore::getSysTick();
+			while ((instance.regs->ISR & I2C_ISR_STOPF) != I2C_ISR_STOPF) {
+				// Handle timeout.
+				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+					// TODO: set status.
+					printf("I2C timeout.\n");
+					return false;
+				}
+			}
+			
+			instance.regs->ISR &= ~I2C_ISR_STOPF;
+			
 			break;
 		}
 		

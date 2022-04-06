@@ -4,6 +4,8 @@
 #include <printf.h>
 #include <ssd1306/ssd1306.h>
 
+#include <ssd1306/splash.h>	// Demo logo data (splash screen).
+
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
@@ -70,11 +72,18 @@ int main() {
 	}
 	
 	// Initialise display, target a 128x64 display.
-	if (!display.init(128, 64)) {
+	uint32_t width = 128;
+	uint32_t height = 64;
+	if (!display.init(width, height)) {
 		// Handle error.
 		printf("Display init error.\n");
 		while (1) { }
 	}
+	
+	// Set splash screen for the demo.
+	display.clearDisplay();
+	display.drawBitmap((width - splash1_width) / 2, (height - splash1_height) / 2,
+				splash1_data, splash1_width, splash1_height, white);
 	
 	// Display the default splash screen.
 	if (!display.display()) {

@@ -7,8 +7,6 @@
 
 #include "ssd1306.h"
 
-#include "splash.h"
-
 #include <cstring>
 
 
@@ -43,14 +41,14 @@ bool SSD1306::init(uint32_t width, uint32_t height) {
 	}
 
 	clearDisplay();
-	if (height > 32) {
+	/* if (height > 32) {
 		drawBitmap((width - splash1_width) / 2, (height - splash1_height) / 2,
 				splash1_data, splash1_width, splash1_height, white);
 	} 
 	else {
 		drawBitmap((width - splash2_width) / 2, (height - splash2_height) / 2,
 				splash2_data, splash2_width, splash2_height, white);
-	}
+	} */
 	
 	send_command(SSD1306_DISPLAY_OFF);
 	

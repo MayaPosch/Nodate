@@ -790,7 +790,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
-					printf("I2C timeout.\n");
+					printf("I2C TXIS timeout.\n");
 					return false;
 				}
 			}
@@ -812,12 +812,13 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
-					printf("I2C timeout.\n");
+					printf("I2C TC timeout.\n");
 					return false;
 				}
 			}
 			
-			instance.regs->ISR &= ~I2C_ISR_STOPF;
+			instance.regs->ICR |= I2C_ICR_STOPCF;
+			instance.regs->CR2 = 0x0; // Reset CR2 register.
 			
 			break;
 		}
@@ -840,6 +841,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 		//}
 		else {
 			// Stop transmission.
+			instance.regs->CR2 = 0x0; // Reset CR2 register.
 			break;
 		}
 	}
@@ -935,7 +937,33 @@ bool I2C::sendToSlaveEnd(I2C_devices device) {
 #if defined STM32F1 || defined STM32F4
 	instance.regs->CR1 |= I2C_CR1_STOP;
 #else
+	// If ISR_TC == 1, we're done. (Transfer Complete).
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->ISR & I2C_ISR_TC) != I2C_ISR_TC) {
+		// Handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			printf("I2C TC timeout.\n");
+			return false;
+		}
+	}
+	
+	// Transfer complete. Set STOP flag, wait for it to be set & clear it.
 	instance.regs->CR2 |= I2C_CR2_STOP;
+
+	ts = McuCore::getSysTick();
+	while ((instance.regs->ISR & I2C_ISR_STOPF) != I2C_ISR_STOPF) {
+		// Handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			printf("I2C timeout.\n");
+			return false;
+		}
+	}
+	
+	instance.regs->ICR |= I2C_ICR_STOPCF;
+	instance.regs->CR2 = 0x0;
 #endif
 	return true;
 }

@@ -207,14 +207,19 @@ void SSD1306::setCursor(uint8_t x, uint8_t y) {
     currentY = y;
 }
 
+#include <printf.h>
 
 bool SSD1306::display() {
-	uint8_t cmd = 0xB0; // Page address.
+	uint8_t cnt = 0; // Initial page address.
 	for (uint8_t i = 0; i < 8; i++) {
-		send_command(cmd++);
+		uint8_t cmd = 0xB0 + cnt;
+		printf("cmd: %d, %d\n", cmd, cnt);
+		send_command(cmd);
 		send_command(0x00);
 		send_command(0x10);
-
+		
+		cnt++;	// Increase page address.
+		
 		if (!send_data(&(buffer[width * i]), width)) {
 			return false;
 		}
@@ -247,17 +252,17 @@ void SSD1306::send_command(SSD1306_commands cmd) {
 }
 
 
-void SSD1306::send_command(uint8_t cmd) {
+bool SSD1306::send_command(uint8_t cmd) {
 	I2C::setSlaveTarget(i2c_bus, address);
 	uint8_t bytes[] = { 0x0, cmd };
-	I2C::sendToSlave(i2c_bus, bytes, 2);
+	return I2C::sendToSlave(i2c_bus, bytes, 2);
 }
 
 
-void SSD1306::send_command(SSD1306_commands cmd, uint8_t data) {
+bool SSD1306::send_command(SSD1306_commands cmd, uint8_t data) {
 	I2C::setSlaveTarget(i2c_bus, address);
 	uint8_t bytes[] = { 0x0, (uint8_t) cmd, data };
-	I2C::sendToSlave(i2c_bus, bytes, 3);
+	return I2C::sendToSlave(i2c_bus, bytes, 3);
 }
 
 
@@ -280,7 +285,10 @@ void SSD1306::send_data(uint8_t byte) {
 
 bool SSD1306::send_data(uint8_t* bytes, uint16_t len) {
 	I2C::setSlaveTarget(i2c_bus, address);
-	I2C::sendToSlaveBegin(i2c_bus, len + 1);
+	if (!I2C::sendToSlaveBegin(i2c_bus, len + 1)) {
+		return false;
+	}
+	
 	uint8_t data = 0x40;
 	if (!I2C::sendToSlaveBytes(i2c_bus, &data, 1)) {
 		I2C::sendToSlaveEnd(i2c_bus);

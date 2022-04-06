@@ -81,8 +81,8 @@ class SSD1306 {
 	uint16_t currentY;
 	
 	void send_command(SSD1306_commands cmd);
-	void send_command(uint8_t cmd);
-	void send_command(SSD1306_commands cmd, uint8_t data);
+	bool send_command(uint8_t cmd);
+	bool send_command(SSD1306_commands cmd, uint8_t data);
 	void send_commands(uint8_t* data, uint8_t len);
 	void send_data(uint8_t byte);
 	bool send_data(uint8_t* bytes, uint16_t len);

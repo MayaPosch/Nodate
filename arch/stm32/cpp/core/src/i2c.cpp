@@ -675,7 +675,7 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 }
 
 
-#include <printf.h>
+//#include <printf.h>
 
 
 // --- SEND TO SLAVE ---
@@ -758,7 +758,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 		// Set NBYTES to the max value (0xff).
 		cr2_reg |= I2C_CR2_RELOAD;
 		cr2_reg |= (0xff << 16);
-		printf("Set reload.\n");
+		//printf("Set reload.\n");
 	}
 	else {
 		// Set AUTOEND and the data byte size.
@@ -790,7 +790,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
-					printf("I2C TXIS timeout.\n");
+					//printf("I2C TXIS timeout.\n");
 					return false;
 				}
 			}
@@ -804,15 +804,27 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 		// 4. If ISR_TC == 1, we're done. (Transfer Complete).
 		// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
 		// 		If true, start new transfer cycle.
-		if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
-			// 5. Transfer complete. Wait for STOP flag & clear it.
+		if (bytesToWrite == 0) {
+			// Wait for the ISR TC flag to be set to indicate completion of the last transfer.
+			// If ISR_TC == 1, we're done. (Transfer Complete).
 			uint32_t timeout = 400; // TODO: make configurable.
 			uint32_t ts = McuCore::getSysTick();
+			while ((instance.regs->ISR & I2C_ISR_TC) != I2C_ISR_TC) {
+				// Handle timeout.
+				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+					// TODO: set status.
+					//printf("I2C TC timeout.\n");
+					return false;
+				}
+			}
+			
+			// 5. Transfer complete. Wait for STOP flag & clear it.
+			ts = McuCore::getSysTick();
 			while ((instance.regs->ISR & I2C_ISR_STOPF) != I2C_ISR_STOPF) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
-					printf("I2C TC timeout.\n");
+					//printf("I2C STOPF timeout.\n");
 					return false;
 				}
 			}
@@ -822,27 +834,21 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 			
 			break;
 		}
-		
-		// Restart session if data left. Transfer Complete Reload.
-		//if ((instance.regs->ISR & I2C_ISR_TCR) == I2C_ISR_TCR) {
-			//printf("TCR true.\n");
+		else {
+			// Restart session since data is left. Transfer Complete Reload.
+			//if ((instance.regs->ISR & I2C_ISR_TCR) == I2C_ISR_TCR) {
 			
 			// Remaining data fits in a single transfer. Disable reload.
 			if (bytesToWrite < 256 && bytesToWrite > 0) {
 				instance.regs->CR2 &= ~I2C_CR2_RELOAD;
 				instance.regs->CR2 &= ~(0xff << 16);
 				instance.regs->CR2 |= I2C_CR2_AUTOEND | (uint32_t) (bytesToWrite << 16);
-				printf("Unset reload.\n");
+				//printf("Unset reload.\n");
 			}
 			else if (bytesToWrite > 256) {
 				// Set reload and NBYTES.
 				instance.regs->CR2 |= I2C_CR2_RELOAD | (0xff << 16);
-			}
-		//}
-		else {
-			// Stop transmission.
-			instance.regs->CR2 = 0x0; // Reset CR2 register.
-			break;
+			}	
 		}
 	}
 #endif
@@ -883,7 +889,7 @@ bool sendToSlaveByte(I2C_devices device, uint8_t data) {
 		// Handle timeout.
 		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 			// TODO: set status.
-			printf("I2C timeout.\n");
+			//printf("I2C timeout.\n");
 			return false;
 		}
 	}
@@ -916,7 +922,7 @@ bool I2C::sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len) {
 			// Handle timeout.
 			if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 				// TODO: set status.
-				printf("I2C timeout. Return false.\n");
+				//printf("I2C timeout. Return false.\n");
 				return false;
 			}
 		}
@@ -944,7 +950,7 @@ bool I2C::sendToSlaveEnd(I2C_devices device) {
 		// Handle timeout.
 		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 			// TODO: set status.
-			printf("I2C TC timeout.\n");
+			//printf("I2C TC timeout.\n");
 			return false;
 		}
 	}
@@ -957,7 +963,7 @@ bool I2C::sendToSlaveEnd(I2C_devices device) {
 		// Handle timeout.
 		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 			// TODO: set status.
-			printf("I2C timeout.\n");
+			//printf("I2C timeout.\n");
 			return false;
 		}
 	}

@@ -790,7 +790,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
-					printf("I2C TXIS timeout.\n");
+					//printf("I2C TXIS timeout.\n");
 					return false;
 				}
 			}
@@ -812,7 +812,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 				// Handle timeout.
 				if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 					// TODO: set status.
-					printf("I2C STOPF timeout.\n");
+					//printf("I2C STOPF timeout.\n");
 					return false;
 				}
 			}
@@ -1217,9 +1217,11 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 				if (reEnableIRQ) {
 					NVIC_EnableIRQ(instance.irqType);
 				}
+				
                 return false;  // dumpster fire has occurred
             }
         }
+		
         // 2. Read RXDR into buffer.
 		buffer[i] = (uint8_t) instance.regs->RXDR;
 	}
@@ -1227,9 +1229,25 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 	// 3. If ISR_TC == 1, we're done. (Transfer Complete).
 	// 		Else check if ISR_TCR == 1. (Transfer Complete Reload).
 	// 		If true, start new transfer cycle.
-	if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+	/* if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
 		// TODO: restart session.
+	} */
+	
+	// Wait for the STOP condition to be generated and flag set.
+	uint32_t timeout = 400;
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->ISR & I2C_ISR_STOPF) != I2C_ISR_STOPF) {
+		// Handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			printf("I2C STOPF timeout.\n");
+			return false;
+		}
 	}
+	
+	// Clear STOP flag and clear CR2 register.
+	instance.regs->ICR |= I2C_ICR_STOPCF;
+	instance.regs->CR2 = 0x0;
 #endif
 	
 	// Re-enable interrupt.

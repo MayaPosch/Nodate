@@ -83,11 +83,11 @@ public:
 	bool initialize();
 	bool softReset();
 	
-	float temperature();
+	bool temperature(float &t);
 	float pressure();
 	float humidity();
 	
-	int32_t rawTemperature();
+	bool rawTemperature(int32_t &t);
 	
 	float compensateTemperature(int32_t rawTemp);
 };

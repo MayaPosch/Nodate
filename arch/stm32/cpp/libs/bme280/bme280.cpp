@@ -132,8 +132,11 @@ bool BME280::softReset() {
 }
 
 
-float BME280::temperature() {
-	return compensateTemperature(rawTemperature());
+bool BME280::temperature(float &t) {
+	int32_t temp;
+	if (!rawTemperature(temp)) { return false; }
+	t = compensateTemperature(temp);
+	return true;
 }
 
 
@@ -151,7 +154,7 @@ float BME280::humidity() {
 }
 
 
-int32_t BME280::rawTemperature() {
+bool BME280::rawTemperature(int32_t &t) {
 	// Send register to read to the device.
 	uint8_t data = 0xFA;
 	I2C::sendToSlave(device, &data, 1);
@@ -162,9 +165,9 @@ int32_t BME280::rawTemperature() {
         return false;
     }
 	
- 	int32_t value = ((buffer[0] << 12) | (buffer[1] << 4) | (buffer[2] >> 4));
+ 	t = ((buffer[0] << 12) | (buffer[1] << 4) | (buffer[2] >> 4));
 
-    return value;
+    return true;
 }
 
 

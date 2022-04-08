@@ -104,8 +104,22 @@ int main () {
 	ch = 'c';
 	USART::sendUart(USART_2, ch);
 	
+	// Get raw temperature.
+	int32_t raw;
+	if (!sensor.rawTemperature(raw)) {
+		printf("Reading raw temperature failed.\n");
+		while (1) { }
+	}
+	
+	printf("Raw temp: %d.\n", raw);
+	
 	// Read temperature.
-	float t = sensor.temperature();
+	float t;
+	if (!sensor.temperature(t)) {
+		printf("Reading temperature failed.\n");
+		while (1) { }
+	}
+	
 	printf("Temp: %f.\n", t);
 	
 	//printf("Done.\n");

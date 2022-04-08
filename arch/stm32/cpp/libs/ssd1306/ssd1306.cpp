@@ -211,7 +211,7 @@ bool SSD1306::display() {
 	uint8_t cnt = 0; // Initial page address.
 	for (uint8_t i = 0; i < 8; i++) {
 		uint8_t cmd = 0xB0 + cnt;
-		printf("cmd: %d, %d\n", cmd, cnt);
+		//printf("cmd: %d, %d\n", cmd, cnt);
 		send_command(cmd);
 		send_command(0x00);
 		send_command(0x10);

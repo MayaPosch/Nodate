@@ -87,10 +87,12 @@ int main () {
 	}
 	
 	// Soft reset sensor.
-	sensor.softReset();
+	// Note: enabling this results in the calibration data from the sensor to be zero.
+	// 			May take a longer delay after reset?
+	//sensor.softReset();
 	
 	Timer timer;
-	timer.delay(100);
+	timer.delay(1000);
 	
 	// Initialize the sensor.
 	// This fetches the calibration factors from the sensor device.

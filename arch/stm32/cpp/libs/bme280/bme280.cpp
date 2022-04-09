@@ -4,23 +4,11 @@
 #include "bme280.h"
 
 
-volatile bool I2C_wait = false;
-volatile uint8_t I2C_byte = 0;
-
-void bmeCallback(uint8_t byte) {
-	I2C_byte = byte;
-	I2C_wait = false;
-}
-
-
 // --- CONSTRUCTOR ---
 BME280::BME280(I2C_devices device, uint8_t address) {
-	// Try to set the target I2C peripheral in master mode.
-	ready = I2C::startMaster(device, I2C_MODE_FM, bmeCallback);
+	ready = true;
 	this->device = device;
 	this->address = address;
-	
-	I2C::setSlaveTarget(device, address);
 }
 
 
@@ -36,27 +24,11 @@ bool BME280::isReady() {
 bool BME280::readID(uint8_t &id) {
 	// Send register to read to the device.
 	uint8_t data = 0xd0;
+	I2C::setSlaveTarget(device, address);
 	I2C::sendToSlave(device, &data, 1);
-	I2C_wait = true;
     
     // Initiate the read sequence
-    if (!(I2C::receiveFromSlave(device, 1))) {
-        return false;
-    }
-	
-	// Read the response once it comes in.
-	uint32_t to = 1000000;
-	while (I2C_wait && to > 1) {
-		to--;
-	}
-	if (to == 1) {
-		// we reached this via a time-out
-		return false;
-	}
-
-	id = I2C_byte;
-	
-	return true;
+	return I2C::receiveFromSlave(device, 1, &id);
 }
 
 
@@ -65,6 +37,8 @@ bool BME280::initialize() {
 	uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | BME280_OperationMode;
 	uint8_t ctrl_hum_reg  = osrs_h;
 	uint8_t config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en;
+	
+	I2C::setSlaveTarget(device, address);
 
 	uint8_t data[2];
 	data[0] = controlHumidity;
@@ -126,6 +100,7 @@ bool BME280::initialize() {
 
 bool BME280::softReset() {
 	uint8_t data[] = { reg_SoftReset, softResetInstruction };
+	I2C::setSlaveTarget(device, address);
 	I2C::sendToSlave(device, data, 2);
 	
 	return true;
@@ -157,6 +132,7 @@ float BME280::humidity() {
 bool BME280::rawTemperature(int32_t &t) {
 	// Send register to read to the device.
 	uint8_t data = 0xFA;
+	I2C::setSlaveTarget(device, address);
 	I2C::sendToSlave(device, &data, 1);
     
     // Initiate the read sequence

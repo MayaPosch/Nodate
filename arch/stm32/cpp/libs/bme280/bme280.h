@@ -1,12 +1,13 @@
 /*
 	bme280.h - BME 280 module declaration.
 	
-	Revision 0
+	Revision 1
 	
 	Notes:
 			- 
 			
 	2020/10/23, Maya Posch
+	2022/04/09, Maya Posch
 */
 
 #ifndef LIB_BME280_H

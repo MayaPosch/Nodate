@@ -675,7 +675,7 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 }
 
 
-#include <printf.h>
+//#include <printf.h>
 
 
 // --- SEND TO SLAVE ---
@@ -1240,7 +1240,7 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 		// Handle timeout.
 		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 			// TODO: set status.
-			printf("I2C STOPF timeout.\n");
+			//printf("I2C STOPF timeout.\n");
 			return false;
 		}
 	}

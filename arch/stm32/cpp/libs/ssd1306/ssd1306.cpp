@@ -10,15 +10,9 @@
 #include <cstring>
 
 
-void ssd1306Callback(uint8_t byte) {
-	//
-}
-
-
 // --- CONSTRUCTOR ---
 SSD1306::SSD1306(I2C_devices device, uint8_t slave_address) {
-	// Try to set the target I2C peripheral in master mode.
-	ready = I2C::startMaster(device, I2C_MODE_SM100, ssd1306Callback);
+	ready = true;
 	
 	i2c_bus = device;
 	address = slave_address;
@@ -41,14 +35,6 @@ bool SSD1306::init(uint32_t width, uint32_t height) {
 	}
 
 	clearDisplay();
-	/* if (height > 32) {
-		drawBitmap((width - splash1_width) / 2, (height - splash1_height) / 2,
-				splash1_data, splash1_width, splash1_height, white);
-	} 
-	else {
-		drawBitmap((width - splash2_width) / 2, (height - splash2_height) / 2,
-				splash2_data, splash2_width, splash2_height, white);
-	} */
 	
 	send_command(SSD1306_DISPLAY_OFF);
 	
@@ -211,7 +197,6 @@ bool SSD1306::display() {
 	uint8_t cnt = 0; // Initial page address.
 	for (uint8_t i = 0; i < 8; i++) {
 		uint8_t cmd = 0xB0 + cnt;
-		//printf("cmd: %d, %d\n", cmd, cnt);
 		send_command(cmd);
 		send_command(0x00);
 		send_command(0x10);

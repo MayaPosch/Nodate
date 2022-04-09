@@ -16,6 +16,11 @@ void uartCallback(char ch) {
 }
 
 
+void i2cCallback(uint8_t byte) {
+	// Unused.
+}
+
+
 int main () {
 	// Initialise UART.
 	// Nucleo-F042K6 (STM32F042): USART2 (TX: PA2 (AF1), RX: PA15 (AF1)).
@@ -47,10 +52,18 @@ int main () {
 	char ch = 's';
 	USART::sendUart(USART_2, ch);
 	
-	// Start i2c
+	// Start I2C.
 	// Nucleo-F042K6: I2C_1, SCL -> PA11:5, SDA -> PA12:5.
 	if (!I2C::startI2C(I2C_1, GPIO_PORT_A, 11, 5, GPIO_PORT_A, 12, 5)) {
 		ch = 'f';
+		USART::sendUart(USART_2, ch);
+		while (1) { }
+	}
+	
+	// Start I2C in master mode.
+	// Use Fast Mode. The BME280 sensor supports this and slower speeds.
+	if (!I2C::startMaster(I2C_1, I2C_MODE_FM, i2cCallback)) {
+		ch = 'g';
 		USART::sendUart(USART_2, ch);
 		while (1) { }
 	}

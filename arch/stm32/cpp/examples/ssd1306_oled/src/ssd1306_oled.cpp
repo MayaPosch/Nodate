@@ -13,6 +13,11 @@ void uartCallback(char ch) {
 }
 
 
+void i2cCallback(uint8_t byte) {
+	// Unused.
+}
+
+
 int main() {
 	// Initialise UART.
 	// Nucleo-F042K6 (STM32F042): USART2 (TX: PA2 (AF1), RX: PA15 (AF1)).
@@ -54,6 +59,13 @@ int main() {
 	if (!I2C::startI2C(I2C_1, GPIO_PORT_A, 11, 5, GPIO_PORT_A, 12, 5)) {
 		// Handle error.
 		printf("I2C init error.\n");
+		while (1) { }
+	}
+	
+	// Start I2C in master mode.
+	// Use Fast Mode. The SSD1306 supports this and slower speeds.
+	if (!I2C::startMaster(I2C_1, I2C_MODE_FM, i2cCallback)) {
+		printf("I2C master start error.\n");
 		while (1) { }
 	}
 	

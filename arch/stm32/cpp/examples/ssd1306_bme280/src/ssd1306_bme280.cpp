@@ -12,6 +12,11 @@ void uartCallback(char ch) {
 }
 
 
+void i2cCallback(uint8_t byte) {
+	// Unused.
+}
+
+
 int main() {
 	// Initialise UART.
 	// Nucleo-F042K6 (STM32F042): USART2 (TX: PA2 (AF1), RX: PA15 (AF1)).
@@ -56,7 +61,14 @@ int main() {
 		while (1) { }
 	}
 	
-	// 3. Set up SSD1306 library instance.
+	// 3. Start I2C in master mode.
+	// Use Fast Mode. The SSD1306 & BME280 both support this and slower speeds.
+	if (!I2C::startMaster(I2C_1, I2C_MODE_FM, i2cCallback)) {
+		printf("I2C master start error.\n");
+		while (1) { }
+	}
+	
+	// 4. Set up SSD1306 library instance.
 	// SSD1306 has two possible addresses:
 	// * 0x3C (0x78 after left-shift).
 	// * 0x3D (0x7A after left-shift).
@@ -77,7 +89,7 @@ int main() {
 		while (1) { }
 	}
 	
-	// 4. Set up BME280 instance.
+	// 5. Set up BME280 instance.
 	// Create BME280 sensor instance, on the first I2C bus, slave address 0x76 (default).
     // Note that, depending on the design of the BME280 carrier board (if any), the
     //      slave address may default to 0x76 or 0x77.
@@ -95,7 +107,7 @@ int main() {
 	}
 	
 	// Soft reset sensor.
-	sensor.softReset();
+	//sensor.softReset();
 	
 	Timer timer;
 	timer.delay(100);
@@ -108,9 +120,14 @@ int main() {
 	}
 	
 	char* display_str = (char*) malloc(15);
+	float t;
 	while (1) {
 		// Read out sensor readings.
-		float t = sensor.temperature();
+		if (!sensor.temperature(t)) {
+			printf("Reading temperature failed.\n");
+			while (1) { }
+		}
+		
 		printf("Temp: %f.\n", t);
 		
 		// Display the readings on the display.

@@ -1,7 +1,7 @@
 /*
-	nucleo_f746zg.h - board definition file for the ST Nucleo-F746ZG board.
+	board_definition.h - board definition file for the ST Nucleo-F042K6 board.
 	
-	MCU: STM32F746ZG
+	MCU: STM32F042K6
 	
 	2021/02/24, Maya Posch
 */

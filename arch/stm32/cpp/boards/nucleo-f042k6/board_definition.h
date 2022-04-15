@@ -1,5 +1,5 @@
 /*
-	nucleo-f042k6.h - board definition file for the ST Nucleo-F042K6 board.
+	board_definition.h - board definition file for the ST Nucleo-F042K6 board.
 	
 	MCU: STM32F042K6
 	

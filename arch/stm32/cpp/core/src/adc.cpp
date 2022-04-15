@@ -1,7 +1,7 @@
 /*
 	adc.cpp - Implementation of the ADC module.
 	
-	20201/04/26, Maya Posch
+	2021/04/26, Maya Posch
 */
 
 
@@ -81,7 +81,9 @@ bool ADC::calibrate(ADC_devices device) {
 bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	ADC_device &instance = adcList[device];
 	if (instance.active) { return true; } // Already active.
-	if (!instance.calibrated) { calibrate(); }
+	if (!instance.calibrated) { 
+		if (!calibrate()) { return false; }
+	}
 	
 #ifdef __stm32f0
 	// Check status. Set parameters.
@@ -131,6 +133,51 @@ bool ADC::channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t 
 	
 	// Select the channel as active.
 	instance.regs->CHSELR |= (1 << pin);
+	
+	// Set the sampling time. On F0 this is the same for all channels.
+	if (time > 7) { return false; } // three bits value.
+	instance.regs->SMPR = time;
+	
+	return true;
+#else
+	return false;
+#endif
+}
+
+
+// --- CHANNEL ---
+// Configure a specific channel, targeting the internal channels (Vsense, Vrefint).
+bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
+	ADC_device &instance = adcList[device];
+	if (instance.sampling) { return false; } // Can't change channels while sampling.
+	
+#ifdef __stm32f0
+	// Ensure the relevant device is enabled.
+	if (channel == ADC_VSENSE) {
+		// Enable TSEN in ADC_CCR.
+		instance.regs->CCR |= ADC_CCR_TSEN;
+		
+		// Use ADC channel 16.
+		instance.regs->CHSELR |= (1 << 16);
+	}
+	else if (channel == ADC_VREFINT) {
+		// Enable VREFEN in ADC_CCR.
+		instance.regs->CCR |= ADC_CCR_VREFEN;
+		
+		// Use ADC channel 17.
+		instance.regs->CHSELR |= (1 << 17);
+	}
+	else if (channel == ADC_VBAT) {
+		// Enable VBATEN.
+		instance.regs->CCR |= ADC_CCR_VBATEN;
+		
+		// Use channel 18.
+		instance.regs->CHSELR |= (1 << 18);
+	}
+	else {
+		// The universe broke. Again.
+		return false;
+	}
 	
 	// Set the sampling time. On F0 this is the same for all channels.
 	if (time > 7) { return false; } // three bits value.
@@ -213,8 +260,10 @@ bool ADC::stop(ADC_devices device) {
 }
 
 
-// ---
-bool configureDMA(ADC_devices device, uint16_t buffer[], uint16_t count) {
+#ifdef NODATE_DMA_ENABLED
+
+// --- CONFIGURE DMA ---
+bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb) {
 	ADC_device &instance = adcList[device];
 	if (!instance.active) { return false; }
 	if (!instance.calibrated) { return false; }
@@ -223,14 +272,28 @@ bool configureDMA(ADC_devices device, uint16_t buffer[], uint16_t count) {
 	// Enable DMA transfer on ADC and circular mode.
 	instance.regs->CFGR1 |= ADC_CFGR1_DMAEN | ADC_CFGR1_DMACFG;
 	
+	DMA_config cfg;
+	cfg.channel = 1;
+	cfg.source = &(instance.regs->DR);
+	cfg.target = buffer;
+	cfg.prio = DMA_PRIO_MEDIUM;
+	cfg.count = count;
+	cfg.src_size = 2;
+	cfg.des_size = 2;
+	cfg.circular = true;
+	cfg.src_incr = false;
+	cfg.des_incr = false;
+	DMA::configureChannel(DMA_1, cfg, cb);
+	
 	DMA::start(DMA_1);
-	DMA::configureChannel(DMA_1, 1, &(instance.regs->DR), &buffer, count);
 	
 	return true;
 #else
 	return false;
 #endif
 }
+
+#endif
 
 
 #endif

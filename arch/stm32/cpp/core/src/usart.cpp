@@ -393,6 +393,77 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	return true;
 }
 
+#ifdef NODATE_DMA_ENABLED
+// --- CONFIGURE DMA T ---
+// Configure DMA for transmitting.
+bool USART::configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count) {
+	USART_device &instance = devicesStatic[device];
+	if (!instance.active) { return false; }
+#if defined __stm32f0
+	// Disable transmission/reception.
+	instance.regs->CR1 &= ~(USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
+	
+	// Enable DMA on USART. Enable for TX.
+	instance.regs->CR3 |= USART_CR3_DMAT;
+	
+	// Re-enable transmission/reception.
+	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
+	
+	DMA::start(DMA_1);
+	if (device == USART_1) {
+		DMA::configureChannel(DMA_1, 2, &(instance.regs->DR), buffer, count);
+	}
+	else if (device == USART_2) {
+		DMA::configureChannel(DMA_1, 4, &(instance.regs->DR), buffer, count);
+	}
+	else {
+		return false; // TODO: define other USARTs.
+	}
+	
+	DMA::start(DMA_1);
+	return true;
+#else
+	
+	return false;
+#endif
+}
+
+
+// --- CONFIGURE DMA R ---
+// Configure DMA for reception.
+bool USART::configureDMAR(USART_devices device, uint32_t* buffer, uint16_t count) {
+	USART_device &instance = devicesStatic[device];
+	if (!instance.active) { return false; }
+#if defined __stm32f0
+	// Disable transmission/reception.
+	instance.regs->CR1 &= ~(USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
+	
+	// Enable DMA on USART. Enable for RX.
+	instance.regs->CR3 |= USART_CR3_DMAR;
+	
+	// Re-enable transmission/reception.
+	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
+	
+	DMA::start(DMA_1);
+	if (device == USART_1) {
+		DMA::configureChannel(DMA_1, 3, &(instance.regs->DR), buffer, count);
+	}
+	else if (device == USART_2) {
+		DMA::configureChannel(DMA_1, 5, &(instance.regs->DR), buffer, count);
+	}
+	else {
+		return false; // TODO: define other USARTS.
+	}
+	
+	DMA::start(DMA_1);
+	return true;
+#else
+	
+	return false;
+#endif
+}
+#endif
+
 
 // --- SEND UART ---
 bool USART::sendUart(USART_devices device, char &ch) {

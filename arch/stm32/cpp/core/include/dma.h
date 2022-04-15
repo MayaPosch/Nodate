@@ -18,9 +18,43 @@ enum DMA_devices {
 };
 
 
+enum DMA_priority {
+	DMA_PRIO_LOW = 0,
+	DMA_PRIO_MEDIUM,
+	DMA_PRIO_HIGH,
+	DMA_PRIO_VERY_HIGH
+};
+
+
+struct DMA_config {
+	uint8_t channel;
+	uint32_t* source;
+	uint32_t* target;
+	DMA_priority prio;	// Channel priority.
+	uint16_t count;		// Number of elements to transfer.
+	uint8_t src_size;	// Single source element size in bytes.
+	uint8_t des_size;	// Single destination element size in bytes.
+	bool circular;		// Enable circular mode.
+	bool src_incr;		// Source pointer increment.
+	bool des_incr;		// Destination pointer increment.
+};
+
+
+typedef void (*DMA_cb)();
+
+
+struct DMA_callbacks {
+	DMA_cb half;
+	DMA_cb filled;
+	DMA_cb error;
+};
+
+
 struct DMA_channel {
 	DMA_Channel_TypeDef* regs;
 	IRQn_Type irqType;
+	DMA_config config;
+	DMA_callbacks cb;
 };
 
 
@@ -39,8 +73,7 @@ class DMA {
 	
 public:
 	static bool start(DMA_devices device);
-	static bool configureChannel(DMA_devices device, uint8_t channel, uint32_t source, 
-									uint32_t target, uint16_t count);
+	static bool configureChannel(DMA_devices device, DMA_config config, DMA_callbacks cb);
 };
 
 

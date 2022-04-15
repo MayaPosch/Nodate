@@ -41,6 +41,13 @@ enum ADC_modes {
 };
 
 
+enum ADC_internal {
+	ADC_VSENSE,
+	ADC_VREFINT,
+	ADC_VBAT
+};
+
+
 struct ADC_channel {
 	//
 };
@@ -63,9 +70,12 @@ class ADC {
 	
 public:
 	static bool configure(ADC_devices device, ADC_modes mode);
-	static bool channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t pin, uint8_t time);
+	static bool channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t pin, uint8_t time = 0);
+	static bool channel(ADC_devices device, ADC_internal channel, uint8_t time = 0);
 	static bool enableInterrupt(ADC_devices device, bool enable = true);
-	static bool configureDMA(ADC_devices device, uint16_t buffer[], uint16_t count);
+#ifdef NODATE_DMA_ENABLED
+	static bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb);
+#endif
 	static bool start(ADC_devices device);
 	static bool stop(ADC_devices device);
 };

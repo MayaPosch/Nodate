@@ -11,6 +11,7 @@
 #include <common.h>
 #include <gpio.h>
 #include <rcc.h>
+#include <dma.h>
 
 #include <functional>
 
@@ -59,8 +60,8 @@ public:
 											GPIO_ports rx_port, uint8_t rx_pin, uint8_t rx_af,
 											uint32_t baudrate, std::function<void(char)> callback);
 #ifdef NODATE_DMA_ENABLED
-	static bool configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count);
-	static bool configureDMAR(USART_devices device, uint32_t* buffer, uint16_t count);
+	static bool configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb);
+	static bool configureDMAR(USART_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb);
 #endif
 	static bool sendUart(USART_devices device, char &ch);
 	static bool stopUart(USART_devices device);

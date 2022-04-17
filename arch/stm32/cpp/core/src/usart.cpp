@@ -396,7 +396,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 #ifdef NODATE_DMA_ENABLED
 // --- CONFIGURE DMA T ---
 // Configure DMA for transmitting.
-bool USART::configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count) {
+bool USART::configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb) {
 	USART_device &instance = devicesStatic[device];
 	if (!instance.active) { return false; }
 #if defined __stm32f0
@@ -408,13 +408,24 @@ bool USART::configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count
 	
 	// Re-enable transmission/reception.
 	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
-	
-	DMA::start(DMA_1);
+
+	DMA_config cfg;
+	cfg.source = buffer;
+	cfg.target = (uint32_t*) &(instance.regs->TDR);
+	cfg.prio = DMA_PRIO_MEDIUM;
+	cfg.count = count;
+	cfg.src_size = 1;
+	cfg.des_size = 1;
+	cfg.circular = false;
+	cfg.src_incr = true;
+	cfg.des_incr = false;
 	if (device == USART_1) {
-		DMA::configureChannel(DMA_1, 2, &(instance.regs->DR), buffer, count);
+		cfg.channel = 2;
+		DMA::configureChannel(DMA_1, cfg, cb);
 	}
 	else if (device == USART_2) {
-		DMA::configureChannel(DMA_1, 4, &(instance.regs->DR), buffer, count);
+		cfg.channel = 4;
+		DMA::configureChannel(DMA_1, cfg, cb);
 	}
 	else {
 		return false; // TODO: define other USARTs.
@@ -431,7 +442,7 @@ bool USART::configureDMAT(USART_devices device, uint32_t* buffer, uint16_t count
 
 // --- CONFIGURE DMA R ---
 // Configure DMA for reception.
-bool USART::configureDMAR(USART_devices device, uint32_t* buffer, uint16_t count) {
+bool USART::configureDMAR(USART_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb) {
 	USART_device &instance = devicesStatic[device];
 	if (!instance.active) { return false; }
 #if defined __stm32f0
@@ -444,12 +455,23 @@ bool USART::configureDMAR(USART_devices device, uint32_t* buffer, uint16_t count
 	// Re-enable transmission/reception.
 	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
 	
-	DMA::start(DMA_1);
+	DMA_config cfg;
+	cfg.source = (uint32_t*) &(instance.regs->RDR);
+	cfg.target = buffer;
+	cfg.prio = DMA_PRIO_MEDIUM;
+	cfg.count = count;
+	cfg.src_size = 1;
+	cfg.des_size = 1;
+	cfg.circular = false;
+	cfg.src_incr = false;
+	cfg.des_incr = true;
 	if (device == USART_1) {
-		DMA::configureChannel(DMA_1, 3, &(instance.regs->DR), buffer, count);
+		cfg.channel = 3;
+		DMA::configureChannel(DMA_1, cfg, cb);
 	}
 	else if (device == USART_2) {
-		DMA::configureChannel(DMA_1, 5, &(instance.regs->DR), buffer, count);
+		cfg.channel = 5;
+		DMA::configureChannel(DMA_1, cfg, cb);
 	}
 	else {
 		return false; // TODO: define other USARTS.

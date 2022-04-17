@@ -362,7 +362,7 @@ bool GPIO::set_af(RccPeripheral per, uint8_t af) {
 
 // --- SET ANALOG ---
 // Set the specified pin to analogue mode.
-bool set_analog(GPIO_ports port, uint8_t pin) {
+bool GPIO::set_analog(GPIO_ports port, uint8_t pin) {
 	if (pin > 15) { return false; }
 	
 	GPIO_instance* instancesStatic = GPIO_instances();

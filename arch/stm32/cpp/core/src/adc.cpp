@@ -7,6 +7,8 @@
 
 #ifdef NODATE_ADC_ENABLED
 
+#include <adc.h>
+
 const int adc_count = 3;
 
 // --- ADC DEVICES ---
@@ -82,7 +84,7 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	ADC_device &instance = adcList[device];
 	if (instance.active) { return true; } // Already active.
 	if (!instance.calibrated) { 
-		if (!calibrate()) { return false; }
+		if (!calibrate(device)) { return false; }
 	}
 	
 #ifdef __stm32f0
@@ -129,7 +131,7 @@ bool ADC::channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t 
 	if (pin > 18) { return false; } // Only 19 channels available.
 	
 	// Set the target pin to analogue mode.
-	GPIO::set_analog(device, port, pin);
+	GPIO::set_analog(port, pin);
 	
 	// Select the channel as active.
 	instance.regs->CHSELR |= (1 << pin);
@@ -155,21 +157,24 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	// Ensure the relevant device is enabled.
 	if (channel == ADC_VSENSE) {
 		// Enable TSEN in ADC_CCR.
-		instance.regs->CCR |= ADC_CCR_TSEN;
+		//instance.regs->CCR |= ADC_CCR_TSEN;
+		ADC1_COMMON->CCR |= ADC_CCR_TSEN;
 		
 		// Use ADC channel 16.
 		instance.regs->CHSELR |= (1 << 16);
 	}
 	else if (channel == ADC_VREFINT) {
 		// Enable VREFEN in ADC_CCR.
-		instance.regs->CCR |= ADC_CCR_VREFEN;
+		//instance.regs->CCR |= ADC_CCR_VREFEN;
+		ADC1_COMMON->CCR |= ADC_CCR_VREFEN;
 		
 		// Use ADC channel 17.
 		instance.regs->CHSELR |= (1 << 17);
 	}
 	else if (channel == ADC_VBAT) {
 		// Enable VBATEN.
-		instance.regs->CCR |= ADC_CCR_VBATEN;
+		//instance.regs->CCR |= ADC_CCR_VBATEN;
+		ADC1_COMMON->CCR |= ADC_CCR_VBATEN;
 		
 		// Use channel 18.
 		instance.regs->CHSELR |= (1 << 18);
@@ -263,7 +268,7 @@ bool ADC::stop(ADC_devices device) {
 #ifdef NODATE_DMA_ENABLED
 
 // --- CONFIGURE DMA ---
-bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb) {
+bool ADC::configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb) {
 	ADC_device &instance = adcList[device];
 	if (!instance.active) { return false; }
 	if (!instance.calibrated) { return false; }
@@ -274,7 +279,7 @@ bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_call
 	
 	DMA_config cfg;
 	cfg.channel = 1;
-	cfg.source = &(instance.regs->DR);
+	cfg.source = (uint32_t*) &(instance.regs->DR);
 	cfg.target = buffer;
 	cfg.prio = DMA_PRIO_MEDIUM;
 	cfg.count = count;

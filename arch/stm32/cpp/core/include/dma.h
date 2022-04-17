@@ -10,6 +10,7 @@
 
 
 #include <common.h>
+#include <rcc.h>
 
 
 enum DMA_devices {
@@ -44,9 +45,9 @@ typedef void (*DMA_cb)();
 
 
 struct DMA_callbacks {
-	DMA_cb half;
-	DMA_cb filled;
-	DMA_cb error;
+	DMA_cb half = 0;
+	DMA_cb filled = 0;
+	DMA_cb error = 0;
 };
 
 

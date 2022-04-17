@@ -26,8 +26,6 @@
 #endif /* __GNUC__ */
 
 
-#include <board_definition.h>
-
 #include <core.h>
 #include <clock.h>
 #include <common.h>
@@ -39,6 +37,10 @@
 #include <rcc.h>
 #include <rtc.h>
 #include <timer.h>
+#include <dma.h>
 #include <usart.h>
+#include <adc.h>
+
+#include <board_definition.h>
 
 #endif

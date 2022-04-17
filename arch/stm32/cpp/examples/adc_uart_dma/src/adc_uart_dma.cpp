@@ -21,19 +21,24 @@ void uartCallback(char ch) {
 
 
 // ADC sample buffer for two channels.
-uint32_t buf_len = 2048;
+const uint32_t buf_len = 1024;
+const uint32_t half_buf = 512;
 uint16_t ADC_array[buf_len];
+
+USART_def& ud = boardUSARTs[1];
 
 
 void buffer_half_filled_cb() {
 	// Copy first half of the buffer to the USART with DMA.
-	
+	DMA_callbacks cbs;
+	USART::configureDMAT(ud.usart, (uint32_t*) (&ADC_array), half_buf, cbs);
 }
 
 
 void buffer_end_filled_cb() {
 	// Copy second half of the buffer to the USART with DMA.
-	
+	DMA_callbacks cbs;
+	USART::configureDMAT(ud.usart, (uint32_t*) (&ADC_array) + half_buf, half_buf, cbs);
 }
 
 
@@ -45,11 +50,9 @@ void buffer_error_cb() {
 
 int main() {
 	// 1. Set up UART
-	USART_def& ud = boardUSARTs[1];
 	usartTarget = ud.usart;
 	USART::startUart(ud.usart, ud.tx[0].port, ud.tx[0].pin, ud.tx[0].af, 
-								ud.rx[0].port, ud.rx[0].pin, ud.rx[0].af, 9600, uartCallback);
-	USART::configureDMAT(ud.usart, &ADC_buffer, 2);
+								ud.rx[0].port, ud.rx[0].pin, ud.rx[0].af, 115200, uartCallback);
 								
 	//IO::setStdOutTarget(ud.usart);
 	
@@ -69,7 +72,7 @@ int main() {
 	cbs.half = &buffer_half_filled_cb;
 	cbs.filled = &buffer_end_filled_cb;
 	cbs.error = &buffer_error_cb;
-	ADC::configureDMA(ADC_1, &ADC_array, buf_len);
+	ADC::configureDMA(ADC_1, (uint32_t*) &ADC_array, buf_len, cbs);
 	
 	
 	// 4. Start sampling.

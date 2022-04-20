@@ -57,17 +57,31 @@ bool ADC::calibrate(ADC_devices device) {
 #ifdef __stm32f0
 	// Ensure that the ADC is disabled.
 	if ((instance.regs->CR & ADC_CR_ADEN) != 0) {
-		instance.regs->CR &= (uint32_t)(~ADC_CR_ADEN);
+		instance.regs->CR |= ADC_CR_ADDIS; // Disable ADC.
 	}
+	
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->CR & ADC_CR_ADEN) != 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
+	
+	// Clear DMAEN.
+	instance.regs->CFGR1 &= ~ADC_CFGR1_DMAEN;
 	
 	// Enable ADCAL to start the calibration.
-	// The hardware will toggle the bit to off once it is complete.
+	// The hardware will toggle the bit to 0 once calibration is complete.
 	instance.regs->CR |= ADC_CR_ADCAL;
+	ts = McuCore::getSysTick();
 	while ((instance.regs->CR & ADC_CR_ADCAL) != 0) {
-		/* For robust implementation, add here time-out management */
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
 	}
-	
-	__NOP();__NOP();   // 2 NOPs ensure 2 ADC Cycles before setting ADEN bit
 						
 	instance.calibrated = true;
 	
@@ -102,7 +116,20 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	}
 	
 	// Select PCLK/2 by writing 01 in CKMODE.
-	instance.regs->CFGR2 |= ADC_CFGR2_CKMODE_0;
+	//instance.regs->CFGR2 |= ADC_CFGR2_CKMODE_0;
+	// Select asynchronous clock source (CLKMODE 00).
+	// This requires that the 14 MHz clock is configured in the RCC.
+	// TODO: Make clock source configurable.
+	instance.regs->CFGR2 &= ~ADC_CFGR2_CKMODE;
+	RCC->CR2 |= RCC_CR2_HSI14ON;
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((RCC->CR2 & RCC_CR2_HSI14RDY) == 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
 	
 	// Select the continuous or single mode.
 	if (mode == ADC_MODE_SINGLE) {
@@ -232,9 +259,20 @@ bool ADC::start(ADC_devices device) {
 	if (!instance.calibrated) { return false; }
 	
 #ifdef __stm32f0
+	// Ensure that ADRDY is 0.
+	if ((instance.regs->ISR & ADC_ISR_ADRDY) != 0) {
+		instance.regs->ISR |= ADC_ISR_ADRDY;
+	}
+	
+	// Enable the AD device.
 	instance.regs->CR |= ADC_CR_ADEN;
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
 	while ((instance.regs->ISR & ADC_ISR_ADRDY) == 0) {
-		// TODO: handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
 	}
 	
 	// Start sampling.
@@ -256,7 +294,23 @@ bool ADC::stop(ADC_devices device) {
 	
 #ifdef __stm32f0
 	instance.regs->CR |= ADC_CR_ADSTP;
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->CR & ADC_CR_ADSTP) != 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
+	
 	instance.regs->CR |= ADC_CR_ADDIS;
+	ts = McuCore::getSysTick();
+	while ((instance.regs->CR & ADC_CR_ADEN) != 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
 	
 	return true;
 #else

@@ -39,15 +39,18 @@ int main() {
 	ADC::configure(ADC_1, ADC_MODE_SINGLE);
 	ADC::channel(ADC_1, ADC_VSENSE);	// Sample Vsense temperature sensor. Default sampling time.
 	
+	// 3. Start the ADC.
+	if (!ADC::start(ADC_1)) {
+		printf("ADC start fail.\n");
+		while (1) { }
+	}
+	
 	Timer timer;
 	while (1) {
 		timer.delay(5000);
-		
-		// 3. Get a temperature sample.
-		if (!ADC::start(ADC_1)) {
-			printf("ADC start fail.\n");
-			while (1) { }
-		}
+	
+		// 4. Start sampling.
+		ADC::startSampling(ADC_1);
 		
 		// 4. Get the sampled value.
 		uint16_t raw;
@@ -59,15 +62,19 @@ int main() {
 		// 5. Format and send to UART.
 		printf("Raw: %d.\n", raw);
 		
+		// Debug
+		printf("C30: %d.\n", (int32_t) *TEMP30_CAL_ADDR);
+		printf("C110: %d.\n", (int32_t) *TEMP110_CAL_ADDR);
+		
 		// 6. Calculate Celsius value.
 		// Ref.: RM0091, A.7.16. Adapt for other MCUs.
 		int32_t temperature;
 		//temperature = (((int32_t) raw * VDD_APPLI / VDD_CALIB) - (int32_t) *TEMP30_CAL_ADDR);
-		/* temperature = (((int32_t) raw) - (int32_t) *TEMP30_CAL_ADDR);
+		temperature = (((int32_t) raw) - (int32_t) *TEMP30_CAL_ADDR);
 		temperature = temperature * (int32_t)(110 - 30);
 		temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
-		temperature = temperature + 30; */
-		temperature = (((110 - 30) * (raw - (int32_t) *TEMP30_CAL_ADDR)) / ((int32_t) *TEMP110_CAL_ADDR - (int32_t) *TEMP30_CAL_ADDR)) + 30;
+		temperature = temperature + 30;
+		//temperature = (((110 - 30) * ((int32_t) raw - (int32_t) *TEMP30_CAL_ADDR)) / ((int32_t) *TEMP110_CAL_ADDR - (int32_t) *TEMP30_CAL_ADDR)) + 30;
 		
 		// 7. Print out value.
 		printf("Temp: %d °C.\n", temperature);

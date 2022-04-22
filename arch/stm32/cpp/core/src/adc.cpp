@@ -276,6 +276,20 @@ bool ADC::start(ADC_devices device) {
 		}
 	}
 	
+	return true;
+#else
+	return false;
+#endif
+}
+	
+	
+// --- START SAMPLING ---
+bool ADC::startSampling(ADC_devices device) {
+	ADC_device &instance = adcList[device];
+	if (!instance.active) { return false; }
+	if (!instance.calibrated) { return false; }
+	
+#ifdef __stm32f0
 	// Start sampling.
 	instance.regs->CR |= ADC_CR_ADSTART;
 	
@@ -306,6 +320,8 @@ bool ADC::getValue(ADC_devices device, uint16_t &val) {
 	}
 	
 	val = instance.regs->DR;
+	
+	instance.sampling = false;
 	
 	return true;
 #else

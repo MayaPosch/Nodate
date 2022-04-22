@@ -184,15 +184,17 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	// Ensure the relevant device is enabled.
 	if (channel == ADC_VSENSE) {
 		// Enable TSEN in ADC_CCR.
-		//instance.regs->CCR |= ADC_CCR_TSEN;
 		ADC1_COMMON->CCR |= ADC_CCR_TSEN;
+		
+		// Minimum sample rate for STM32F042 is 4 microseconds.
+		// Set sample rate to 239.5 ADC cycles (14 MHz clock src) for >17 microseconds.
+		instance.regs->SMPR |= 7; // b111, all bits set.
 		
 		// Use ADC channel 16.
 		instance.regs->CHSELR |= (1 << 16);
 	}
 	else if (channel == ADC_VREFINT) {
 		// Enable VREFEN in ADC_CCR.
-		//instance.regs->CCR |= ADC_CCR_VREFEN;
 		ADC1_COMMON->CCR |= ADC_CCR_VREFEN;
 		
 		// Use ADC channel 17.
@@ -200,7 +202,6 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	}
 	else if (channel == ADC_VBAT) {
 		// Enable VBATEN.
-		//instance.regs->CCR |= ADC_CCR_VBATEN;
 		ADC1_COMMON->CCR |= ADC_CCR_VBATEN;
 		
 		// Use channel 18.
@@ -277,6 +278,34 @@ bool ADC::start(ADC_devices device) {
 	
 	// Start sampling.
 	instance.regs->CR |= ADC_CR_ADSTART;
+	
+	instance.sampling = true;
+	
+	return true;
+#else
+	return false;
+#endif
+}
+
+
+// --- GET VALUE ---
+// Obtain the last sampled value.
+bool ADC::getValue(ADC_devices device, uint16_t &val) {
+	ADC_device &instance = adcList[device];
+	if (!instance.active) { return false; }
+	if (!instance.sampling) { return false; }
+	
+#ifdef __stm32f0
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->ISR & ADC_ISR_EOC) == 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
+	
+	val = instance.regs->DR;
 	
 	return true;
 #else

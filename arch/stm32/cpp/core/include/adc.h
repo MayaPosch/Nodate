@@ -77,6 +77,7 @@ public:
 	static bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb);
 #endif
 	static bool start(ADC_devices device);
+	static bool getValue(ADC_devices device, uint16_t &val);
 	static bool stop(ADC_devices device);
 };
 

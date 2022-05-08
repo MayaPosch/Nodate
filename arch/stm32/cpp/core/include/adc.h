@@ -51,7 +51,19 @@ enum ADC_internal {
 struct ADC_channel {
 	//
 };
-	
+
+
+typedef void (*ADC_cb)();
+
+
+struct ADC_interrupts {
+	ADC_cb watchdog = 0;	// Analogue watchdog
+	ADC_cb overrun = 0;		// Overrun event.
+	ADC_cb eoseq = 0;		// End of conversion sequence.
+	ADC_cb eoc = 0;			// End of conversion.
+	ADC_cb eosmp = 0;		// End of sampling.
+	ADC_cb ready = 0;		// ADC ready.
+};
 
 
 struct ADC_device {
@@ -61,7 +73,8 @@ struct ADC_device {
 	ADC_TypeDef* regs;
 	RccPeripheral per;
 	IRQn_Type irqType;
-	std::function<void(uint8_t)> callback;
+	//std::function<void(uint8_t)> callback;
+	ADC_interrupts cbs;
 };
 
 
@@ -72,9 +85,11 @@ public:
 	static bool configure(ADC_devices device, ADC_modes mode);
 	static bool channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t pin, uint8_t time = 0);
 	static bool channel(ADC_devices device, ADC_internal channel, uint8_t time = 0);
-	static bool enableInterrupt(ADC_devices device, bool enable = true);
+	static bool enableInterrupt(ADC_devices device, ADC_interrupts isr);
+	static bool disableInterrupt(ADC_devices device);
 #ifdef NODATE_DMA_ENABLED
 	static bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb);
+	static bool stopDMA(ADC_devices device);
 #endif
 	static bool start(ADC_devices device);
 	static bool startSampling(ADC_devices device);

@@ -225,25 +225,55 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 
 // --- ENABLE INTERRUPT ---
 //
-bool ADC::enableInterrupt(ADC_devices device, bool enable) {
+bool ADC::enableInterrupt(ADC_devices device, ADC_interrupts isr) {
 	ADC_device &instance = adcList[device];
 	if (instance.sampling) { return false; } // Can't change channels while sampling.
 	
 #ifdef __stm32f0
-	if (enable) {
-		// Enable interrupt on overrrun
+	// Enable interrupts for which a callback exists.
+	if (isr.watchdog) {
+		instance.regs->IER |= ADC_IER_AWDIE;
+	}
+	else if (isr.overrun) {
 		instance.regs->IER |= ADC_IER_OVRIE;
+	}
+	else if (isr.eoseq) {
+		instance.regs->IER |= ADC_IER_EOSEQIE;
+	}
+	else if (isr.eoc) {
+		instance.regs->IER |= ADC_IER_EOCIE;
+	}
+	else if (isr.eosmp) {
+		instance.regs->IER |= ADC_IER_EOSMPIE;
+	}
+	else if (isr.ready) {
+		instance.regs->IER |= ADC_IER_ADRDYIE;
+	}
+	
+	instance.cbs = isr;
 
-		// Configure NVIC for ADC:
-		// - Enable Interrupt.
-		// - Set priority.
-		NVIC_EnableIRQ(instance.irqType);
-		NVIC_SetPriority(instance.irqType, 0);
-	}
-	else {
-		NVIC_DisableIRQ(instance.irqType);
-		instance.regs->IER &= ~ADC_IER_OVRIE;
-	}
+	// Configure NVIC for ADC:
+	// - Enable Interrupt.
+	// - Set priority.
+	NVIC_EnableIRQ(instance.irqType);
+	NVIC_SetPriority(instance.irqType, 0);
+	
+	return true;
+#else
+	return false;
+#endif
+}
+
+
+// --- ENABLE INTERRUPT ---
+//
+bool ADC::disableInterrupt(ADC_devices device) {
+	ADC_device &instance = adcList[device];
+	if (instance.sampling) { return false; } // Can't alter interrupts while sampling.
+	
+#ifdef __stm32f0
+	NVIC_DisableIRQ(instance.irqType);
+	instance.regs->IER &= ~ADC_IER_OVRIE;
 	
 	return true;
 #else
@@ -396,6 +426,24 @@ bool ADC::configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA
 	return false;
 #endif
 }
+
+
+// --- STOP DMA ---
+// Terminate DMA transfer.
+bool ADC::stopDMA(ADC_devices device) {
+	ADC_device &instance = adcList[device];
+	if (!instance.active) { return false; }
+	
+#ifdef __stm32f0
+	instance.regs->CFGR1 &= ~ADC_CFGR1_DMAEN;
+	DMA::abort(DMA_1, 1);
+	
+	return true;
+#else
+	return false;
+#endif
+}
+
 
 #endif
 

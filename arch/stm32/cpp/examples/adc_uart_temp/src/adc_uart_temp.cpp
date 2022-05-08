@@ -10,14 +10,27 @@
 
 // Reference: RM0091, A.7.16.
 // Note: calibration address may differ for other MCUs.
-#define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
 #define TEMP30_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7B8))
+#define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
 #define VDD_CALIB ((uint16_t) (330))
 #define VDD_APPLI ((uint16_t) (330))
 
 
 void uartCallback(char ch) {
 	//USART::sendUart(usartTarget, ch);
+}
+
+
+template<typename T>
+T to_temperature_x10(T value) {
+    const T low       = 30;
+    const T high      = 110;
+    const T range     = high - low;
+    const T cal_low   = *TEMP30_CAL_ADDR;
+    const T cal_high  = *TEMP110_CAL_ADDR;
+    const T cal_range = cal_high - cal_low;
+    
+    return 10 * low + 10 * range * (value - cal_low) / cal_range;
 }
 
 
@@ -63,20 +76,21 @@ int main() {
 		printf("Raw: %d.\n", raw);
 		
 		// Debug
-		printf("C30: %d.\n", (int32_t) *TEMP30_CAL_ADDR);
-		printf("C110: %d.\n", (int32_t) *TEMP110_CAL_ADDR);
+		printf("C30: %d.\n", *TEMP30_CAL_ADDR);
+		printf("C110: %d.\n", *TEMP110_CAL_ADDR);
 		
 		// 6. Calculate Celsius value.
 		// Ref.: RM0091, A.7.16. Adapt for other MCUs.
-		int32_t temperature;
+		//int32_t temperature;
 		//temperature = (((int32_t) raw * VDD_APPLI / VDD_CALIB) - (int32_t) *TEMP30_CAL_ADDR);
-		temperature = (((int32_t) raw) - (int32_t) *TEMP30_CAL_ADDR);
+		/*temperature = (((int16_t) raw) - *TEMP30_CAL_ADDR);
 		temperature = temperature * (int32_t)(110 - 30);
 		temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
-		temperature = temperature + 30;
+		temperature = temperature + 30;*/
 		//temperature = (((110 - 30) * ((int32_t) raw - (int32_t) *TEMP30_CAL_ADDR)) / ((int32_t) *TEMP110_CAL_ADDR - (int32_t) *TEMP30_CAL_ADDR)) + 30;
+		//uint32_t temp = to_temperature_x10((uint32_t) raw);
 		
 		// 7. Print out value.
-		printf("Temp: %d °C.\n", temperature);
+		printf("Temp: %d °C.\n", temp);
 	}
 }

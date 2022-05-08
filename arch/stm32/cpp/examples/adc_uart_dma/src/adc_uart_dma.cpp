@@ -16,7 +16,7 @@ volatile bool sampling_adc = false;
 
 void uartCallback(char ch) {
 	sampling_toggle = true;
-	//USART::sendUart(usartTarget, ch);
+	USART::sendUart(usartTarget, ch);
 }
 
 
@@ -97,12 +97,8 @@ int main() {
 	ch = '2';
 	USART::sendUart(ud.usart, ch);
 	
-	
 	// 4. Start sampling.
-	sampling_adc = true;
-	
-	// Start DMA-based sampling.
-	ADC::configureDMA(ADC_1, (uint32_t*) &ADC_array, buf_len, cbs);
+	sampling_adc = false;
 	
 	ch = '3';
 	USART::sendUart(ud.usart, ch);
@@ -111,12 +107,30 @@ int main() {
 		// 5. Stop sampling if a character is received on the USART & sampling.
 		// Else restart sampling.
 		if (sampling_toggle) {
+			ch = 't';
+			USART::sendUart(ud.usart, ch);
 			if (sampling_adc) {
-				ADC::stop(ADC_1);
+				ADC::stopDMA(ADC_1);
 				sampling_adc = false;
 			}
 			else {
-				ADC::start(ADC_1);
+				ch = 's';
+				USART::sendUart(ud.usart, ch);
+				
+				// Configure DMA-based sampling.
+				if (!ADC::configureDMA(ADC_1, (uint32_t*) &ADC_array, buf_len, cbs)) {
+					ch = 'c';
+					USART::sendUart(ud.usart, ch);
+					while (1) { }
+				}
+				
+				// Start the ADC.
+				if (!ADC::start(ADC_1)) {
+					// ADC start fail.
+					ch = 'f';
+					USART::sendUart(ud.usart, ch);
+					while (1) { }
+				}
 				sampling_adc = true;
 			}
 			

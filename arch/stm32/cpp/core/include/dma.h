@@ -56,6 +56,7 @@ struct DMA_channel {
 	IRQn_Type irqType;
 	DMA_config config;
 	DMA_callbacks cb;
+	bool active = false;
 };
 
 
@@ -75,6 +76,7 @@ class DMA {
 public:
 	static bool start(DMA_devices device);
 	static bool configureChannel(DMA_devices device, DMA_config config, DMA_callbacks cb);
+	static bool abort(DMA_devices device, uint8_t channel);
 };
 
 

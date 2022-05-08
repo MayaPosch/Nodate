@@ -195,6 +195,9 @@ bool DMA::configureChannel(DMA_devices device, DMA_config config, DMA_callbacks 
 	if (config.channel > 7) { return false; }
 	
 	DMA_channel &ch = instance.channels[config.channel - 1];
+
+	// Disable channel.
+	ch.regs->CCR &= ~DMA_CCR_EN;
 	
 	// Set the target peripheral data register address.
 	// Set the target memory address.
@@ -225,10 +228,33 @@ bool DMA::configureChannel(DMA_devices device, DMA_config config, DMA_callbacks 
 
 	// Enable channel.
 	ch.regs->CCR |= DMA_CCR_EN;
+	ch.active = true;
  
 	// Configure NVIC for DMA.
 	NVIC_EnableIRQ(ch.irqType);
 	NVIC_SetPriority(ch.irqType, 0);
+	
+	return true;
+#else
+	return false;
+#endif
+}
+
+
+// --- ABORT ---
+// Stop any active DMA transfer.
+bool DMA::abort(DMA_devices device, uint8_t channel) {
+	DMA_device &instance = dmaList[device];
+#ifdef __stm32f0	
+	DMA_channel &ch = instance.channels[channel - 1];
+	if (!ch.active) { return false; }
+	
+	// Disable interrupts.
+	ch.regs->CCR &= ~(DMA_CCR_HTIE | DMA_CCR_TCIE | DMA_CCR_TEIE);
+	
+	// Disable the channel.
+	ch.regs->CCR &= ~DMA_CCR_EN;
+	ch.active = false;
 	
 	return true;
 #else

@@ -20,7 +20,7 @@ USART_devices usartTarget = USART_1;
 volatile bool sampling_toggle = false;
 volatile bool sampling_adc = false;
 volatile bool tx_ready = false;
-volatile bool led_on = false;
+volatile bool led_on = true;
 
 
 void uartCallback(char ch) {
@@ -61,6 +61,14 @@ void sequence_complete_cb() {
 }
 
 
+void adc_overrun() {
+	// Send error code, stop ADC.
+	char ch = 'o';
+	USART::sendUart(usartTarget, ch);
+	ADC::stop(ADC_1);
+}
+
+
 int main() {
 	// 1. Set up UART
 	usartTarget = ud.usart;
@@ -91,11 +99,12 @@ int main() {
 	ADC::configure(ADC_1, ADC_MODE_CONTINUOUS);
 	//ADC::channel(ADC_1, 0, GPIO_PORT_A, 0, 7);
 	//ADC::channel(ADC_1, 1, GPIO_PORT_A, 1, 7);
-	ADC::channel(ADC_1, ADC_VSENSE);	// Sample Vsense temperature sensor. Default sampling time.
-	ADC::channel(ADC_1, 0, GPIO_PORT_A, 0);	// Port A, pin 0 (A0). Default sampling time.
+	ADC::channel(ADC_1, ADC_VSENSE, 7);	// Sample Vsense temperature sensor. Long sampling time.
+	ADC::channel(ADC_1, 0, GPIO_PORT_A, 0, 7);	// Port A, pin 0 (A0). Long sampling time.
 	ADC_interrupts isr;
 	isr.eoc		= conversion_complete_cb;
 	isr.eoseq 	= sequence_complete_cb;
+	isr.overrun = adc_overrun;
 	ADC::enableInterrupt(ADC_1, isr);
 	
 	ch = '2';
@@ -106,8 +115,8 @@ int main() {
 		// 5. Stop sampling if a character is received on the USART & sampling.
 		// Else start sampling.
 		if (sampling_toggle) {
-			ch = 't';
-			USART::sendUart(ud.usart, ch);
+			//ch = 't';
+			//USART::sendUart(ud.usart, ch);
 			if (sampling_adc) {
 				ADC::stop(ADC_1);
 				sampling_adc = false;
@@ -122,6 +131,9 @@ int main() {
 					USART::sendUart(ud.usart, ch);
 					while (1) { }
 				}
+				
+				// Start sampling.
+				ADC::startSampling(ADC_1);
 				
 				sampling_adc = true;
 			}

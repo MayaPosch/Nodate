@@ -21,19 +21,6 @@ void uartCallback(char ch) {
 }
 
 
-template<typename T>
-T to_temperature_x10(T value) {
-    const T low       = 30;
-    const T high      = 110;
-    const T range     = high - low;
-    const T cal_low   = *TEMP30_CAL_ADDR;
-    const T cal_high  = *TEMP110_CAL_ADDR;
-    const T cal_range = cal_high - cal_low;
-    
-    return 10 * low + 10 * range * (value - cal_low) / cal_range;
-}
-
-
 int main() {
 	// 1. Set up UART
 	USART_def& ud = boardUSARTs[1];
@@ -50,7 +37,7 @@ int main() {
 	
 	// 2. Set up ADC.
 	ADC::configure(ADC_1, ADC_MODE_SINGLE);
-	ADC::channel(ADC_1, ADC_VSENSE);	// Sample Vsense temperature sensor. Default sampling time.
+	ADC::channel(ADC_1, ADC_VSENSE, 7);	// Sample Vsense temperature sensor. Long sampling time.
 	
 	// 3. Start the ADC.
 	if (!ADC::start(ADC_1)) {
@@ -81,16 +68,15 @@ int main() {
 		
 		// 6. Calculate Celsius value.
 		// Ref.: RM0091, A.7.16. Adapt for other MCUs.
-		//int32_t temperature;
+		int32_t temperature;
 		//temperature = (((int32_t) raw * VDD_APPLI / VDD_CALIB) - (int32_t) *TEMP30_CAL_ADDR);
-		/*temperature = (((int16_t) raw) - *TEMP30_CAL_ADDR);
+		temperature = (((int16_t) raw) - *TEMP30_CAL_ADDR);
 		temperature = temperature * (int32_t)(110 - 30);
 		temperature = temperature / (int32_t)(*TEMP110_CAL_ADDR - *TEMP30_CAL_ADDR);
-		temperature = temperature + 30;*/
+		temperature = temperature + 30;
 		//temperature = (((110 - 30) * ((int32_t) raw - (int32_t) *TEMP30_CAL_ADDR)) / ((int32_t) *TEMP110_CAL_ADDR - (int32_t) *TEMP30_CAL_ADDR)) + 30;
-		//uint32_t temp = to_temperature_x10((uint32_t) raw);
 		
 		// 7. Print out value.
-		printf("Temp: %d °C.\n", temp);
+		printf("Temp: %d °C.\n", temperature);
 	}
 }

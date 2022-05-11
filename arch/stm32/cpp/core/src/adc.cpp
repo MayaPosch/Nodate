@@ -58,29 +58,29 @@ extern "C" {
 		// Check which interrupt got triggered in ADC_ISR.
 		// Trigger appropriate callback.
 		ADC_device &instance = adcList[0];
-		if (instance.regs->ISR & ADC_ISR_AWD1 == ADC_ISR_AWD1) {
+		if ((instance.regs->ISR & ADC_ISR_AWD1) != 0) {
 			instance.cbs.watchdog();
 			instance.regs->ISR |= ADC_ISR_AWD1;
 		}
-		else if (instance.regs->ISR & ADC_ISR_OVR == ADC_ISR_OVR) {
+		else if ((instance.regs->ISR & ADC_ISR_OVR) != 0) {
 			instance.cbs.overrun();
 			instance.regs->ISR |= ADC_ISR_OVR;
 		}
-		else if (instance.regs->ISR & ADC_ISR_EOS == ADC_ISR_EOS) {
+		else if ((instance.regs->ISR & ADC_ISR_EOS) != 0) {
 			instance.cbs.eoseq();
 			instance.regs->ISR |= ADC_ISR_EOS;
 		}
-		else if (instance.regs->ISR & ADC_ISR_EOC == ADC_ISR_EOC) {
+		else if ((instance.regs->ISR & ADC_ISR_EOC) != 0) {
 			instance.cbs.eoc();
-			if (instance.regs->ISR & ADC_ISR_EOC == ADC_ISR_EOC) {	// Was ADC_DR read?
+			if ((instance.regs->ISR & ADC_ISR_EOC) != 0) {	// Was ADC_DR read?
 				instance.regs->ISR |= ADC_ISR_EOC;	// Clear ISR flag.
 			}
 		}
-		else if (instance.regs->ISR & ADC_ISR_EOSMP == ADC_ISR_EOSMP) {
+		else if ((instance.regs->ISR & ADC_ISR_EOSMP) != 0) {
 			instance.cbs.eosmp();
 			instance.regs->ISR |= ADC_ISR_EOSMP;
 		}
-		else if (instance.regs->ISR & ADC_ISR_ADRDY == ADC_ISR_ADRDY) {
+		else if ((instance.regs->ISR & ADC_ISR_ADRDY) != 0) {
 			instance.cbs.ready();
 			instance.regs->ISR |= ADC_ISR_ADRDY;
 		}

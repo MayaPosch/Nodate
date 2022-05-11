@@ -52,6 +52,43 @@ ADC_device* ADC_list() {
 ADC_device* adcList = ADC_list();
 
 
+#ifdef __stm32f0
+extern "C" {
+	void ADC1_IRQHandler(void) {
+		// Check which interrupt got triggered in ADC_ISR.
+		// Trigger appropriate callback.
+		ADC_device &instance = adcList[0];
+		if (instance.regs->ISR & ADC_ISR_AWD1 == ADC_ISR_AWD1) {
+			instance.cbs.watchdog();
+			instance.regs->ISR |= ADC_ISR_AWD1;
+		}
+		else if (instance.regs->ISR & ADC_ISR_OVR == ADC_ISR_OVR) {
+			instance.cbs.overrun();
+			instance.regs->ISR |= ADC_ISR_OVR;
+		}
+		else if (instance.regs->ISR & ADC_ISR_EOS == ADC_ISR_EOS) {
+			instance.cbs.eoseq();
+			instance.regs->ISR |= ADC_ISR_EOS;
+		}
+		else if (instance.regs->ISR & ADC_ISR_EOC == ADC_ISR_EOC) {
+			instance.cbs.eoc();
+			if (instance.regs->ISR & ADC_ISR_EOC == ADC_ISR_EOC) {	// Was ADC_DR read?
+				instance.regs->ISR |= ADC_ISR_EOC;	// Clear ISR flag.
+			}
+		}
+		else if (instance.regs->ISR & ADC_ISR_EOSMP == ADC_ISR_EOSMP) {
+			instance.cbs.eosmp();
+			instance.regs->ISR |= ADC_ISR_EOSMP;
+		}
+		else if (instance.regs->ISR & ADC_ISR_ADRDY == ADC_ISR_ADRDY) {
+			instance.cbs.ready();
+			instance.regs->ISR |= ADC_ISR_ADRDY;
+		}
+	}
+}
+#endif
+
+
 bool ADC::calibrate(ADC_devices device) {
 	ADC_device &instance = adcList[device];
 #ifdef __stm32f0
@@ -117,6 +154,7 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	
 	// Select PCLK/2 by writing 01 in CKMODE.
 	//instance.regs->CFGR2 |= ADC_CFGR2_CKMODE_0;
+	
 	// Select asynchronous clock source (CLKMODE 00).
 	// This requires that the 14 MHz clock is configured in the RCC.
 	// TODO: Make clock source configurable.
@@ -265,15 +303,16 @@ bool ADC::enableInterrupt(ADC_devices device, ADC_interrupts isr) {
 }
 
 
-// --- ENABLE INTERRUPT ---
+// --- DISABLE INTERRUPTS ---
 //
-bool ADC::disableInterrupt(ADC_devices device) {
+bool ADC::disableInterrupts(ADC_devices device) {
 	ADC_device &instance = adcList[device];
 	if (instance.sampling) { return false; } // Can't alter interrupts while sampling.
 	
 #ifdef __stm32f0
+	// Disable interrupts and reset ISR register.
 	NVIC_DisableIRQ(instance.irqType);
-	instance.regs->IER &= ~ADC_IER_OVRIE;
+	instance.regs->IER = 0x00;
 	
 	return true;
 #else

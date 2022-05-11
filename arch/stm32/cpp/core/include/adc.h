@@ -86,7 +86,7 @@ public:
 	static bool channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t pin, uint8_t time = 0);
 	static bool channel(ADC_devices device, ADC_internal channel, uint8_t time = 0);
 	static bool enableInterrupt(ADC_devices device, ADC_interrupts isr);
-	static bool disableInterrupt(ADC_devices device);
+	static bool disableInterrupts(ADC_devices device);
 #ifdef NODATE_DMA_ENABLED
 	static bool configureDMA(ADC_devices device, uint32_t* buffer, uint16_t count, DMA_callbacks cb);
 	static bool stopDMA(ADC_devices device);

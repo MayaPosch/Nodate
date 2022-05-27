@@ -363,7 +363,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	uint32_t usartClock = SystemCoreClock >> tmp;
 	uint16_t uartdiv = usartClock / baudrate;
 	
-#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
+#if defined __stm32f0 || defined __stm32f3 || defined __stm32f7 || defined __stm32l4
 	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_MANTISSA_Pos) |
 							((uartdiv % 16) << USART_BRR_DIV_FRACTION_Pos));
 #elif defined __stm32f4 || defined __stm32f1

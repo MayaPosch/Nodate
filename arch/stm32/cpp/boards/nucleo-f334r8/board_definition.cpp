@@ -1,7 +1,7 @@
 /*
-	nucleo_f746zg.h - board definition file for the ST Nucleo-F746ZG board.
+	board_definition.h - board definition file for the ST Nucleo-F334R8 board.
 	
-	MCU: STM32F746ZG
+	MCU: STM32F334R8
 	
 	2021/02/24, Maya Posch
 */
@@ -22,9 +22,9 @@ USART_def boardUSARTs[2];
 uint8_t boardLEDs_count = 1;
 uint8_t boardButtons_count = 0;
 
-uint8_t boardUSART_count = 2;
-static GpioPinDef usartTxDef[2];
-static GpioPinDef usartRxDef[2];
+uint8_t boardUSART_count = 3;
+static GpioPinDef usartTxDef[3];
+static GpioPinDef usartRxDef[3];
 
 // TODO: Finish clock configuration.
 bool init() {
@@ -58,23 +58,35 @@ bool init() {
 	USART_def usart;
 	usart.usart = USART_1;
 	usart.configs = 2;
-	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 1 };
-	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 0 };
+	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 7 };
+	usartTxDef[1] = { .port = GPIO_PORT_C, .pin = 4, .af = 7 };
 	usart.tx = usartTxDef;
-	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 1 };
-	usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 0 };
+	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 7 };
+	usartRxDef[1] = { .port = GPIO_PORT_C, .pin = 5, .af = 7 };
 	usart.rx = usartRxDef;
 	boardUSARTs[0] = usart;
 	
 	usart.usart = USART_2;
 	usart.configs = 2;
-	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 2, .af = 1 };
-	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 14, .af = 1 };
+	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 2, .af = 7 };
+	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 3, .af = 7 };
 	usart.tx = usartTxDef;
-	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 15, .af = 1 };
-	usartRxDef[1] = { .port = GPIO_PORT_A, .pin = 3, .af = 1 };
+	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 3, .af = 7 };
+	usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 4, .af = 7 };
 	usart.rx = usartRxDef;
 	boardUSARTs[1] = usart;
+	
+	usart.usart = USART_3;
+	usart.configs = 3;
+	usartTxDef[0] = { .port = GPIO_PORT_B, .pin = 9, .af = 7 };
+	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 10, .af = 7 };
+	usartTxDef[1] = { .port = GPIO_PORT_C, .pin = 10, .af = 7 };
+	usart.tx = usartTxDef;
+	usartRxDef[0] = { .port = GPIO_PORT_B, .pin = 8, .af = 7 };
+	usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 11, .af = 7 };
+	usartRxDef[1] = { .port = GPIO_PORT_C, .pin = 11, .af = 7 };
+	usart.rx = usartRxDef;
+	boardUSARTs[2] = usart;
 	
 	
 	return true;

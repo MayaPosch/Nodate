@@ -10,7 +10,8 @@ NDLANGUAGE ?= cpp
 
 # Board preset.
 #BOARD ?= nucleo-f746zg
-BOARD ?= nucleo-f042k6
+#BOARD ?= nucleo-f042k6
+BOARD ?= nucleo-f334r8
 
 # Set the MCU and programmer types.
 #

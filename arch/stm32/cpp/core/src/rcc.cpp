@@ -274,6 +274,15 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_ETH].enable = RCC_AHB1ENR_ETHMACEN_Pos;
 #endif
 
+#ifdef RCC_AHBENR_ADC12EN
+	peripheralHandlesStatic[RCC_ADC1].exists = true;
+	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->AHBENR);
+	peripheralHandlesStatic[RCC_ADC1].enable = RCC_AHBENR_ADC12EN_Pos;
+	peripheralHandlesStatic[RCC_ADC2].exists = true;
+	peripheralHandlesStatic[RCC_ADC2].enr = &(RCC->AHBENR);
+	peripheralHandlesStatic[RCC_ADC2].enable = RCC_AHBENR_ADC12EN_Pos;
+#endif
+
 	// APB2
 
 #ifdef RCC_APB2ENR_SYSCFGCOMPEN

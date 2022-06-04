@@ -73,6 +73,7 @@ struct ADC_device {
 	ADC_TypeDef* regs;
 	RccPeripheral per;
 	IRQn_Type irqType;
+	uint8_t conversions = 0;
 	//std::function<void(uint8_t)> callback;
 	ADC_interrupts cbs;
 };
@@ -80,11 +81,13 @@ struct ADC_device {
 
 class ADC {
 	static bool calibrate(ADC_devices device);
+	static ADC_Common_TypeDef* common;
 	
 public:
 	static bool configure(ADC_devices device, ADC_modes mode);
 	static bool channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t pin, uint8_t time = 0);
 	static bool channel(ADC_devices device, ADC_internal channel, uint8_t time = 0);
+	static bool finishChannelConfig(ADC_devices device);
 	static bool enableInterrupt(ADC_devices device, ADC_interrupts isr);
 	static bool disableInterrupts(ADC_devices device);
 #ifdef NODATE_DMA_ENABLED

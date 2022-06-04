@@ -89,6 +89,14 @@ extern "C" {
 #endif
 
 
+// --- Static members.
+#if defined __stm32f0 || defined __stm32f7
+	ADC_Common_TypeDef* ADC::common = (ADC_Common_TypeDef*) ADC_BASE;
+#elif defined __stm32f3
+	ADC_Common_TypeDef* ADC::common = ((ADC_Common_TypeDef *) ADC1_2_COMMON_BASE);
+#endif
+
+
 bool ADC::calibrate(ADC_devices device) {
 	ADC_device &instance = adcList[device];
 #ifdef __stm32f0
@@ -123,6 +131,38 @@ bool ADC::calibrate(ADC_devices device) {
 	instance.calibrated = true;
 	
 	return true;
+#elif defined __stm32f3
+	// Ensure ADVREGEN value is b01 and vreg startup elapsed.
+	// ADVREG must transition through b00 when enabling/disabling.
+	instance.regs->CR &= ~ADC_CR_ADVREGEN;
+	instance.regs->CR |= ADC_CR_ADVREGEN_0; // Enable VREG.
+	
+	// Wait for 10 microseconds (worst case) for vreg to sabilise.
+	// TODO: Optimise with microsecond delay function.
+	Timer::delay(1); // 1 ms.
+	
+	// Ensure ADEN == 0.
+	instance.regs->CR &= ~(ADC_CR_ADEN);
+	
+	// Select input mode for calibration (single-ended input).
+	// Default is single-ended.
+	
+	// Start calibration.
+	instance.regs->CR |= ADC_CR_ADCAL;
+	
+	// Wait for calibration to complete.
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->CR & ADC_CR_ADCAL) != 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
+				
+	instance.calibrated = true;
+	
+	return true;
 #else
 	return false;
 #endif
@@ -138,7 +178,6 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 		if (!calibrate(device)) { return false; }
 	}
 	
-#ifdef __stm32f0
 	// Check status. Set parameters.
 	if (device == ADC_1) 		{ instance.per = RCC_ADC1; }
 	else if (device == ADC_2)	{ instance.per = RCC_ADC2; }
@@ -152,6 +191,7 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 		}
 	}
 	
+#ifdef __stm32f0
 	// Select PCLK/2 by writing 01 in CKMODE.
 	//instance.regs->CFGR2 |= ADC_CFGR2_CKMODE_0;
 	
@@ -180,6 +220,27 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	instance.active = true;
 	
 	return true;
+#elif defined __stm32f3
+	// Select asynchronous clock source (CKMODE b00).
+	common->CCR &= ~(ADC12_CCR_CKMODE);
+	RCC->CFGR2 |= RCC_CFGR2_ADCPRE12;
+	
+	// Optional:
+	// Wait for ADC clock to sabilise.
+	// TODO: Optimise with microsecond delay function.
+	Timer::delay(1); // 1 ms.
+	
+	// Select continuous or single mode.
+	if (mode == ADC_MODE_SINGLE) {
+		instance.regs->CFGR &= ~ADC_CFGR_CONT;
+	}
+	else {
+		instance.regs->CFGR |= ADC_CFGR_CONT;
+	}
+	
+	instance.active = true;
+
+	return false;
 #else
 	return false;
 #endif
@@ -192,18 +253,46 @@ bool ADC::channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t 
 	ADC_device &instance = adcList[device];
 	if (instance.sampling) { return false; } // Can't change channels while sampling.
 	
-#ifdef __stm32f0
+#if defined __stm32f0
 	if (pin > 18) { return false; } // Only 19 channels available.
 	
 	// Set the target pin to analogue mode.
 	GPIO::set_analog(port, pin);
-	
+
 	// Select the channel as active.
 	instance.regs->CHSELR |= (1 << pin);
 	
 	// Set the sampling time. On F0 this is the same for all channels.
 	if (time > 7) { return false; } // three bits value.
 	instance.regs->SMPR = time;
+#elif defined __stm32f3
+	// F334 has 14 (ADC1) and 17 (ADC2) channels.
+	if (pin > 16) { return false; }
+	
+	// Set the target pin to analogue mode.
+	GPIO::set_analog(port, pin);
+	
+	// Set the channel as active in the regular sequence register (SQR1-4).
+	// Set channel # in SQRx at the current offset.
+	if (instance.conversions < 5) {
+		instance.regs->SQR1 |= (channel << (6 * instance.conversions));
+	}
+	else if (instance.conversions < 10) {
+		instance.regs->SQR2 |= (channel  << (6 * instance.conversions - 4));
+	}
+	else if (instance.conversions < 15) {
+		instance.regs->SQR3 |= (channel << (6 * instance.conversions - 9));
+	}
+	else if (instance.conversions < 17) {
+		instance.regs->SQR4 |= (channel << (6 * instance.conversions - 14));
+	}
+	else {
+		return false;
+	}
+	
+	// Increase registered number of conversions.
+	instance.conversions++;
+#endif
 	
 	return true;
 #else
@@ -218,11 +307,12 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	ADC_device &instance = adcList[device];
 	if (instance.sampling) { return false; } // Can't change channels while sampling.
 	
-#ifdef __stm32f0
+#if defined __stm32f0
 	// Ensure the relevant device is enabled.
 	if (channel == ADC_VSENSE) {
 		// Enable TSEN in ADC_CCR.
-		ADC1_COMMON->CCR |= ADC_CCR_TSEN;
+		//ADC1_COMMON->CCR |= ADC_CCR_TSEN;
+		common->CCR |= ADC_CCR_TSEN;
 		
 		// Minimum sample rate for STM32F042 is 4 microseconds.
 		// Set sample rate to 239.5 ADC cycles (14 MHz clock src) for >17 microseconds.
@@ -233,14 +323,16 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	}
 	else if (channel == ADC_VREFINT) {
 		// Enable VREFEN in ADC_CCR.
-		ADC1_COMMON->CCR |= ADC_CCR_VREFEN;
+		//ADC1_COMMON->CCR |= ADC_CCR_VREFEN;
+		common->CCR |= ADC_CCR_VREFEN;
 		
 		// Use ADC channel 17.
 		instance.regs->CHSELR |= (1 << 17);
 	}
 	else if (channel == ADC_VBAT) {
 		// Enable VBATEN.
-		ADC1_COMMON->CCR |= ADC_CCR_VBATEN;
+		//ADC1_COMMON->CCR |= ADC_CCR_VBATEN;
+		common->CCR |= ADC_CCR_VBATEN;
 		
 		// Use channel 18.
 		instance.regs->CHSELR |= (1 << 18);
@@ -255,9 +347,78 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	instance.regs->SMPR = time;
 	
 	return true;
+#elif  defined __stm32f3
+	// Ensure the relevant device is enabled.
+	if (channel == ADC_VSENSE) {
+		// Enable TSEN in ADC_CCR.
+		common->CCR |= ADC12_CCR_TSEN;
+		
+		// Minimum sample rate for STM32F042 is 4 microseconds.
+		// Set sample rate to 239.5 ADC cycles (14 MHz clock src) for >17 microseconds.
+		instance.regs->SMPR2 |= (7 << (3 * 6)); // b111, all bits set.
+		
+		// Use ADC channel 16.
+		//instance.regs->CHSELR |= (1 << 16);
+	}
+	else if (channel == ADC_VREFINT) {
+		// Enable VREFEN in ADC_CCR.
+		common->CCR |= ADC12_CCR_VREFEN;
+		
+		// Use ADC channel 17.
+		//instance.regs->CHSELR |= (1 << 17);
+	}
+	else if (channel == ADC_VBAT) {
+		// Enable VBATEN.
+		common->CCR |= ADC12_CCR_VBATEN;
+		
+		// Use channel 18.
+		//instance.regs->CHSELR |= (1 << 18);
+	}
+	else {
+		// The universe broke. Again.
+		return false;
+	}
+	
+	// Set the channel as active in the regular sequence register (SQR1-4).
+	// Set channel # in SQRx at the current offset.
+	if (instance.conversions < 5) {
+		instance.regs->SQR1 |= (channel << (6 * instance.conversions));
+	}
+	else if (instance.conversions < 10) {
+		instance.regs->SQR2 |= (channel  << (6 * instance.conversions - 4));
+	}
+	else if (instance.conversions < 15) {
+		instance.regs->SQR3 |= (channel << (6 * instance.conversions - 9));
+	}
+	else if (instance.conversions < 17) {
+		instance.regs->SQR4 |= (channel << (6 * instance.conversions - 14));
+	}
+	else {
+		return false;
+	}
+	
+	// Increase registered number of conversions.
+	instance.conversions++;
+	
+	return true;
 #else
 	return false;
 #endif
+}
+
+
+// --- FINISH CHANNEL CONFIG ---
+//
+bool ADC::finishChannelConfig(ADC_devices device) {
+	ADC_device &instance = adcList[device];
+	if (instance.sampling) { return false; } // Can't change channels while sampling.
+	
+#if defined __stm32f3
+	// SQR1 L[3:0] -> Number of items in the total sequence (SQR 1-4).
+	// Update SQR_L by L + 1
+	instance.regs->SQR1 |= (instance.conversions - 1);
+#endif
+	return true;
 }
 
 
@@ -328,7 +489,7 @@ bool ADC::start(ADC_devices device) {
 	if (!instance.active) { return false; }
 	if (!instance.calibrated) { return false; }
 	
-#ifdef __stm32f0
+#if defined __stm32f0 || defined __stm32f3
 	// Ensure that ADRDY is 0.
 	if ((instance.regs->ISR & ADC_ISR_ADRDY) != 0) {
 		instance.regs->ISR |= ADC_ISR_ADRDY;
@@ -482,9 +643,6 @@ bool ADC::stopDMA(ADC_devices device) {
 	return false;
 #endif
 }
-
-
-#endif
 
 
 #endif

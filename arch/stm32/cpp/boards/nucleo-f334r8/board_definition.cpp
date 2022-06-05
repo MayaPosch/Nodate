@@ -20,7 +20,7 @@ BoardButton boardButtons[1];
 USART_def boardUSARTs[2];
 
 uint8_t boardLEDs_count = 1;
-uint8_t boardButtons_count = 0;
+uint8_t boardButtons_count = 1;
 
 uint8_t boardUSART_count = 3;
 static GpioPinDef usartTxDef[3];
@@ -80,11 +80,11 @@ bool init() {
 	usart.configs = 3;
 	usartTxDef[0] = { .port = GPIO_PORT_B, .pin = 9, .af = 7 };
 	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 10, .af = 7 };
-	usartTxDef[1] = { .port = GPIO_PORT_C, .pin = 10, .af = 7 };
+	usartTxDef[2] = { .port = GPIO_PORT_C, .pin = 10, .af = 7 };
 	usart.tx = usartTxDef;
 	usartRxDef[0] = { .port = GPIO_PORT_B, .pin = 8, .af = 7 };
 	usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 11, .af = 7 };
-	usartRxDef[1] = { .port = GPIO_PORT_C, .pin = 11, .af = 7 };
+	usartRxDef[2] = { .port = GPIO_PORT_C, .pin = 11, .af = 7 };
 	usart.rx = usartRxDef;
 	boardUSARTs[2] = usart;
 	

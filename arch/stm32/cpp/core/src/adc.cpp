@@ -292,7 +292,6 @@ bool ADC::channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t 
 	
 	// Increase registered number of conversions.
 	instance.conversions++;
-#endif
 	
 	return true;
 #else
@@ -644,5 +643,6 @@ bool ADC::stopDMA(ADC_devices device) {
 #endif
 }
 
+#endif
 
 #endif

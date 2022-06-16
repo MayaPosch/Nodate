@@ -493,7 +493,7 @@ bool USART::sendUart(USART_devices device, char &ch) {
 	if (!instance.active) { return false; }
 	
 	// Copy bit to the device's transmission register.
-#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
+#if defined __stm32f0 || defined __stm32f3 || defined __stm32f7 || defined __stm32l4
 	while (!(instance.regs->ISR & USART_ISR_TXE)) {};
 	instance.regs->TDR = (uint8_t) ch;
 #elif defined __stm32f4 || defined __stm32f1

@@ -343,6 +343,12 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	
 	instance.active = true;
 	
+#ifndef __stm32f3
+	// Configure CR1 register.
+	// TODO: Enable configuring of other registers.
+	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE);
+#endif
+	
 	// Set the baud rate (BR register).
 	// TODO: adjust for STM32F1.
 	//instance.regs->BRR = SystemCoreClock / baudrate;
@@ -363,16 +369,24 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	uint32_t usartClock = SystemCoreClock >> tmp;
 	uint16_t uartdiv = usartClock / baudrate;
 	
-#if defined __stm32f0 || defined __stm32f3 || defined __stm32f7 || defined __stm32l4
+#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
 	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_MANTISSA_Pos) |
 							((uartdiv % 16) << USART_BRR_DIV_FRACTION_Pos));
 #elif defined __stm32f4 || defined __stm32f1
 	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_Mantissa_Pos) |
 							((uartdiv % 16) << USART_BRR_DIV_Fraction_Pos));
+#elif defined __stm32f3
+	// Assuming sampling by 16.
+	instance.regs->BRR = (((usartClock) + ((baudrate) / 2U)) / (baudrate));
 #endif
 	
 	// Enable the USART via its CR1 register.
-	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
+#ifndef __stm32f3
+	//instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
+	instance.regs->CR1 |= USART_CR1_UE;
+#else
+	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE);
+#endif
 	
 	// Save parameters.
 	instance.tx_pin 	= tx_pin;
@@ -386,7 +400,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	instance.callback	= callback;
 	
 	// Configure interrupt.
-	//instance.regs->CR1 |= USART_CR1_RXNEIE;
+	instance.regs->CR1 |= USART_CR1_RXNEIE;
 	NVIC_SetPriority(instance.irqType, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 1));
 	NVIC_EnableIRQ(instance.irqType);
 	
@@ -494,11 +508,13 @@ bool USART::sendUart(USART_devices device, char &ch) {
 	
 	// Copy bit to the device's transmission register.
 #if defined __stm32f0 || defined __stm32f3 || defined __stm32f7 || defined __stm32l4
-	while (!(instance.regs->ISR & USART_ISR_TXE)) {};
+	while (!(instance.regs->ISR & USART_ISR_TXE)) {}; // TODO: add timeout.
 	instance.regs->TDR = (uint8_t) ch;
 #elif defined __stm32f4 || defined __stm32f1
-	while (!(instance.regs->SR & USART_SR_TXE)) {};
+	while (!(instance.regs->SR & USART_SR_TXE)) {}; // TODO: add timeout.
 	instance.regs->DR = (uint8_t) ch;
+#else
+	return false;
 #endif
 	
 	return true;

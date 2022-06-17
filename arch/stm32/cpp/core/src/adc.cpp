@@ -518,7 +518,7 @@ bool ADC::startSampling(ADC_devices device) {
 	if (!instance.active) { return false; }
 	if (!instance.calibrated) { return false; }
 	
-#ifdef __stm32f0
+#if defined __stm32f0 || defined __stm32f3
 	// Start sampling.
 	instance.regs->CR |= ADC_CR_ADSTART;
 	
@@ -538,7 +538,7 @@ bool ADC::getValue(ADC_devices device, uint16_t &val) {
 	if (!instance.active) { return false; }
 	if (!instance.sampling) { return false; }
 	
-#ifdef __stm32f0
+#if defined __stm32f0 || defined __stm32f3
 	uint32_t timeout = 400; // TODO: make configurable.
 	uint32_t ts = McuCore::getSysTick();
 	while ((instance.regs->ISR & ADC_ISR_EOC) == 0) {
@@ -566,7 +566,7 @@ bool ADC::stop(ADC_devices device) {
 	if (!instance.active) { return false; }
 	if (!instance.calibrated) { return false; }
 	
-#ifdef __stm32f0
+#if defined __stm32f0 || defined __stm32f3
 	instance.regs->CR |= ADC_CR_ADSTP;
 	uint32_t timeout = 400; // TODO: make configurable.
 	uint32_t ts = McuCore::getSysTick();

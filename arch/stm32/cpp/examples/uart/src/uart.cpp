@@ -9,8 +9,8 @@ USART_devices usartTarget = USART_1;
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
-	USART::sendUart(USART_2, ch);
-	//USART::sendUart(usartTarget, ch);
+	//USART::sendUart(USART_2, ch);
+	USART::sendUart(usartTarget, ch);
 	
 	led_on = !led_on;
 }

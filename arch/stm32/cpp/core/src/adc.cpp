@@ -26,7 +26,13 @@ ADC_device* ADC_list() {
 #else
 	adc_devices[ADC_1].irqType = ADC1_IRQn;
 #endif
+#elif defined RCC_AHBENR_ADC12EN
+	adc_devices[ADC_1].regs = ADC1;
+	adc_devices[ADC_1].irqType = ADC1_2_IRQn;
+	adc_devices[ADC_2].regs = ADC2;
+	adc_devices[ADC_2].irqType = ADC1_2_IRQn;
 #endif
+
 
 #ifdef RCC_APB2ENR_ADC2EN
 	adc_devices[ADC_2].regs = ADC2;
@@ -137,12 +143,14 @@ bool ADC::calibrate(ADC_devices device) {
 	instance.regs->CR &= ~ADC_CR_ADVREGEN;
 	instance.regs->CR |= ADC_CR_ADVREGEN_0; // Enable VREG.
 	
-	// Wait for 10 microseconds (worst case) for vreg to sabilise.
+	// Wait for 10 microseconds (worst case) for vreg to stabilise.
 	// TODO: Optimise with microsecond delay function.
 	Timer::delay(1); // 1 ms.
 	
 	// Ensure ADEN == 0.
-	instance.regs->CR &= ~(ADC_CR_ADEN);
+	if ((instance.regs->CR & ADC_CR_ADEN) != 0) {
+		instance.regs->CR |= ADC_CR_ADDIS; // Disable ADC.
+	}
 	
 	// Select input mode for calibration (single-ended input).
 	// Default is single-ended.
@@ -222,11 +230,12 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	return true;
 #elif defined __stm32f3
 	// Select asynchronous clock source (CKMODE b00).
-	common->CCR &= ~(ADC12_CCR_CKMODE);
-	RCC->CFGR2 |= RCC_CFGR2_ADCPRE12;
+	//common->CCR &= ~(ADC_CCR_CKMODE);
+	common->CCR |= ADC_CCR_CKMODE_1; // HCLK/2
+	//RCC->CFGR2 |= RCC_CFGR2_ADCPRE12;
 	
 	// Optional:
-	// Wait for ADC clock to sabilise.
+	// Wait for ADC clock to stabilise.
 	// TODO: Optimise with microsecond delay function.
 	Timer::delay(1); // 1 ms.
 	
@@ -240,7 +249,7 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	
 	instance.active = true;
 
-	return false;
+	return true;
 #else
 	return false;
 #endif
@@ -350,7 +359,7 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	// Ensure the relevant device is enabled.
 	if (channel == ADC_VSENSE) {
 		// Enable TSEN in ADC_CCR.
-		common->CCR |= ADC12_CCR_TSEN;
+		common->CCR |= ADC_CCR_TSEN;
 		
 		// Minimum sample rate for STM32F042 is 4 microseconds.
 		// Set sample rate to 239.5 ADC cycles (14 MHz clock src) for >17 microseconds.
@@ -361,14 +370,14 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	}
 	else if (channel == ADC_VREFINT) {
 		// Enable VREFEN in ADC_CCR.
-		common->CCR |= ADC12_CCR_VREFEN;
+		common->CCR |= ADC_CCR_VREFEN;
 		
 		// Use ADC channel 17.
 		//instance.regs->CHSELR |= (1 << 17);
 	}
 	else if (channel == ADC_VBAT) {
 		// Enable VBATEN.
-		common->CCR |= ADC12_CCR_VBATEN;
+		common->CCR |= ADC_CCR_VBATEN;
 		
 		// Use channel 18.
 		//instance.regs->CHSELR |= (1 << 18);

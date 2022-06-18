@@ -41,8 +41,16 @@ int main() {
 	printf("Starting ADC & USART example...\n");
 	
 	// 2. Set up ADC.
-	ADC::configure(ADC_1, ADC_MODE_SINGLE);
-	ADC::channel(ADC_1, ADC_VSENSE, 7);	// Sample Vsense temperature sensor. Long sampling time.
+	if (!ADC::configure(ADC_1, ADC_MODE_SINGLE)) {
+		printf("ADC configure failed.\n");
+		while (1) { }
+	}
+	
+	if (!ADC::channel(ADC_1, ADC_VSENSE, 7)) {	// Sample Vsense temperature sensor. Long sampling time
+		printf("ADC channel configure failed.\n");
+		while (1) { }
+	}
+	
 	ADC::finishChannelConfig(ADC_1);
 	
 	// 3. Start the ADC.
@@ -56,7 +64,10 @@ int main() {
 		timer.delay(5000);
 	
 		// 4. Start sampling.
-		ADC::startSampling(ADC_1);
+		if (!ADC::startSampling(ADC_1)) {
+			printf("ADC start sampling failed.\n");
+			while (1) { }
+		}
 		
 		// 4. Get the sampled value.
 		uint16_t raw;

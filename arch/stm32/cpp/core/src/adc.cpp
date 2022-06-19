@@ -231,8 +231,10 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 #elif defined __stm32f3
 	// Select asynchronous clock source (CKMODE b00).
 	//common->CCR &= ~(ADC_CCR_CKMODE);
+	//common->CCR = (uint32_t) 0x00000000U;
 	common->CCR |= ADC_CCR_CKMODE_1; // HCLK/2
-	//RCC->CFGR2 |= RCC_CFGR2_ADCPRE12;
+	//RCC->CFGR2 |= (uint32_t)((RCC_CFGR2_ADCPRE12 << 16U) | RCC_CFGR2_ADCPRE12_DIV1) ;
+	//RCC->CFGR2 |= RCC_CFGR2_ADCPRE12_DIV1; // PLL/1
 	
 	// Optional:
 	// Wait for ADC clock to stabilise.
@@ -284,7 +286,7 @@ bool ADC::channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t 
 	// Set the channel as active in the regular sequence register (SQR1-4).
 	// Set channel # in SQRx at the current offset.
 	if (instance.conversions < 5) {
-		instance.regs->SQR1 |= (channel << (6 * instance.conversions));
+		instance.regs->SQR1 |= (channel << (6 * (instance.conversions + 1)));
 	}
 	else if (instance.conversions < 10) {
 		instance.regs->SQR2 |= (channel  << (6 * instance.conversions - 4));
@@ -357,6 +359,7 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	return true;
 #elif  defined __stm32f3
 	// Ensure the relevant device is enabled.
+	uint8_t ch = 0;
 	if (channel == ADC_VSENSE) {
 		// Enable TSEN in ADC_CCR.
 		common->CCR |= ADC_CCR_TSEN;
@@ -367,6 +370,7 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 		
 		// Use ADC channel 16.
 		//instance.regs->CHSELR |= (1 << 16);
+		ch = 16;
 	}
 	else if (channel == ADC_VREFINT) {
 		// Enable VREFEN in ADC_CCR.
@@ -374,6 +378,7 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 		
 		// Use ADC channel 17.
 		//instance.regs->CHSELR |= (1 << 17);
+		ch = 17;
 	}
 	else if (channel == ADC_VBAT) {
 		// Enable VBATEN.
@@ -381,6 +386,7 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 		
 		// Use channel 18.
 		//instance.regs->CHSELR |= (1 << 18);
+		ch = 18;
 	}
 	else {
 		// The universe broke. Again.
@@ -390,16 +396,16 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	// Set the channel as active in the regular sequence register (SQR1-4).
 	// Set channel # in SQRx at the current offset.
 	if (instance.conversions < 5) {
-		instance.regs->SQR1 |= (channel << (6 * instance.conversions));
+		instance.regs->SQR1 |= (ch << (6 * (instance.conversions + 1)));
 	}
 	else if (instance.conversions < 10) {
-		instance.regs->SQR2 |= (channel  << (6 * instance.conversions - 4));
+		instance.regs->SQR2 |= (ch  << (6 * instance.conversions - 4));
 	}
 	else if (instance.conversions < 15) {
-		instance.regs->SQR3 |= (channel << (6 * instance.conversions - 9));
+		instance.regs->SQR3 |= (ch << (6 * instance.conversions - 9));
 	}
 	else if (instance.conversions < 17) {
-		instance.regs->SQR4 |= (channel << (6 * instance.conversions - 14));
+		instance.regs->SQR4 |= (ch << (6 * instance.conversions - 14));
 	}
 	else {
 		return false;

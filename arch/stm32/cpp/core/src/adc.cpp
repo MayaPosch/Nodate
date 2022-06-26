@@ -182,9 +182,6 @@ bool ADC::calibrate(ADC_devices device) {
 bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	ADC_device &instance = adcList[device];
 	if (instance.active) { return true; } // Already active.
-	if (!instance.calibrated) { 
-		if (!calibrate(device)) { return false; }
-	}
 	
 	// Check status. Set parameters.
 	if (device == ADC_1) 		{ instance.per = RCC_ADC1; }
@@ -197,6 +194,10 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 			// TODO: set status.
 			return false;
 		}
+	}
+	
+	if (!instance.calibrated) {
+		if (!calibrate(device)) { return false; }
 	}
 	
 #ifdef __stm32f0

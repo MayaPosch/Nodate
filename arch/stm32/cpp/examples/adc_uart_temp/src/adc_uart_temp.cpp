@@ -18,6 +18,9 @@
 #elif defined __stm32f3
 #define TS_CAL_30 ((uint16_t*) ((uint32_t) 0x1FFFF7B8))
 #define TS_CAL_110 ((uint16_t*) ((uint32_t) 0x1FFFF7C2))
+#elif defined __stm32f4
+#define TS_CAL_30 ((uint16_t*) ((uint32_t) 0x1FFF7A2C))
+#define TS_CAL_110 ((uint16_t*) ((uint32_t) 0x1FFF7A2E))
 #endif
 
 

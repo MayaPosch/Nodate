@@ -10,6 +10,7 @@
 #define BOARD_DEFINITION
 
 #include <rcc.h>
+#include <usart.h>
 
 #include "../board_types.h"
 
@@ -23,7 +24,8 @@ extern RccSysClockConfig maxSysClockCfg;
 // --- UARTS ---
 
 // Define the number and features of the U(S)ARTs on the board.
-//uint8_t board_USART_count = 
+extern uint8_t boardUSART_count;
+extern USART_def boardUSARTs[3];
 
 // --- LEDS ---
 

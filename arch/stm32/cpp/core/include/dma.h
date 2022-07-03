@@ -52,7 +52,11 @@ struct DMA_callbacks {
 
 
 struct DMA_channel {
+#ifdef __stm32f4
+	DMA_Stream_TypeDef* regs;
+#else
 	DMA_Channel_TypeDef* regs;
+#endif
 	IRQn_Type irqType;
 	DMA_config config;
 	DMA_callbacks cb;

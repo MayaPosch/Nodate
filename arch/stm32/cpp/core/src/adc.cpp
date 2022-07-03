@@ -96,7 +96,7 @@ extern "C" {
 
 
 // --- Static members.
-#if defined __stm32f0 || defined __stm32f7
+#if defined __stm32f0 || defined __stm32f4 || defined __stm32f7
 	ADC_Common_TypeDef* ADC::common = (ADC_Common_TypeDef*) ADC_BASE;
 #elif defined __stm32f3
 	ADC_Common_TypeDef* ADC::common = ((ADC_Common_TypeDef *) ADC1_2_COMMON_BASE);
@@ -168,6 +168,11 @@ bool ADC::calibrate(ADC_devices device) {
 		}
 	}
 				
+	instance.calibrated = true;
+	
+	return true;
+#elif defined __stm32f4
+	// No calibration needed.
 	instance.calibrated = true;
 	
 	return true;
@@ -253,6 +258,19 @@ bool ADC::configure(ADC_devices device, ADC_modes mode) {
 	instance.active = true;
 
 	return true;
+#elif defined __stm32f4
+	// Use default ADCPRE in ADC_CCR (PCKL/2).
+
+	// Select continuous or single mode.
+	if (mode == ADC_MODE_SINGLE) {
+		instance.regs->CR2 &= ~ADC_CR2_CONT;
+	}
+	else {
+		instance.regs->CR2 |= ADC_CR2_CONT;
+	}
+	
+	instance.active = true;
+	return true;
 #else
 	return false;
 #endif
@@ -302,6 +320,36 @@ bool ADC::channel(ADC_devices device, uint8_t channel, GPIO_ports port, uint8_t 
 		return false;
 	}
 	
+	// TODO: Set sample rate.
+	
+	
+	// Increase registered number of conversions.
+	instance.conversions++;
+	
+	return true;
+#elif defined __stm32f4
+	// F334 has 14 (ADC1) and 17 (ADC2) channels.
+	if (pin > 16) { return false; }
+	
+	// Set the target pin to analogue mode.
+	GPIO::set_analog(port, pin);
+	
+	if (instance.conversions < 7) {
+		instance.regs->SQR3 |= (channel << (5 * (instance.conversions)));
+	}
+	else if (instance.conversions < 13) {
+		instance.regs->SQR2 |= (channel  << (5 * instance.conversions - 6));
+	}
+	else if (instance.conversions < 17) {
+		instance.regs->SQR1 |= (channel << (5 * instance.conversions - 12));
+	}
+	else {
+		return false;
+	}
+	
+	// TODO: Set sample rate.
+	
+	
 	// Increase registered number of conversions.
 	instance.conversions++;
 	
@@ -322,7 +370,6 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	// Ensure the relevant device is enabled.
 	if (channel == ADC_VSENSE) {
 		// Enable TSEN in ADC_CCR.
-		//ADC1_COMMON->CCR |= ADC_CCR_TSEN;
 		common->CCR |= ADC_CCR_TSEN;
 		
 		// Minimum sample rate for STM32F042 is 4 microseconds.
@@ -334,7 +381,6 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	}
 	else if (channel == ADC_VREFINT) {
 		// Enable VREFEN in ADC_CCR.
-		//ADC1_COMMON->CCR |= ADC_CCR_VREFEN;
 		common->CCR |= ADC_CCR_VREFEN;
 		
 		// Use ADC channel 17.
@@ -342,7 +388,6 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	}
 	else if (channel == ADC_VBAT) {
 		// Enable VBATEN.
-		//ADC1_COMMON->CCR |= ADC_CCR_VBATEN;
 		common->CCR |= ADC_CCR_VBATEN;
 		
 		// Use channel 18.
@@ -393,7 +438,7 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 		// The universe broke. Again.
 		return false;
 	}
-	
+
 	// Set the channel as active in the regular sequence register (SQR1-4).
 	// Set channel # in SQRx at the current offset.
 	if (instance.conversions < 5) {
@@ -407,6 +452,56 @@ bool ADC::channel(ADC_devices device, ADC_internal channel, uint8_t time) {
 	}
 	else if (instance.conversions < 17) {
 		instance.regs->SQR4 |= (ch << (6 * instance.conversions - 14));
+	}
+	else {
+		return false;
+	}
+#elif defined __stm32f4
+	// Ensure the relevant device is enabled.
+	uint8_t ch = 0;
+	if (channel == ADC_VSENSE) {
+		// Enable TSVREFE in ADC_CCR.
+		// If VBATE is also enabled, setting this will have no effect.
+		common->CCR |= ADC_CCR_TSVREFE;
+		
+		// Minimum sample rate for STM32F042 is 4 microseconds.
+		// Set sample rate to 239.5 ADC cycles (14 MHz clock src) for >17 microseconds.
+		// F411 has SMPR1 & 2 inverted compared to F334.
+		instance.regs->SMPR1 |= (7 << (3 * 6)); // b111, all bits set.
+		
+		// Use ADC channel 16.
+		ch = 16;
+	}
+	else if (channel == ADC_VREFINT) {
+		// Enable TSVREFE in ADC_CCR.
+		// If VBATE is also enabled, setting this will have no effect.
+		common->CCR |= ADC_CCR_TSVREFE;
+		
+		// Use ADC channel 17.
+		ch = 17;
+	}
+	else if (channel == ADC_VBAT) {
+		// Enable VBATE.
+		common->CCR |= ADC_CCR_VBATE;
+		
+		// Use channel 18.
+		ch = 18;
+	}
+	else {
+		// The universe broke. Again.
+		return false;
+	}
+
+	// Set the channel as active in the regular sequence register (SQR1-4).
+	// Set channel # in SQRx at the current offset.
+	if (instance.conversions < 7) {
+		instance.regs->SQR3 |= (ch << (5 * (instance.conversions)));
+	}
+	else if (instance.conversions < 13) {
+		instance.regs->SQR2 |= (ch  << (5 * instance.conversions - 6));
+	}
+	else if (instance.conversions < 17) {
+		instance.regs->SQR1 |= (ch << (5 * instance.conversions - 12));
 	}
 	else {
 		return false;
@@ -432,6 +527,10 @@ bool ADC::finishChannelConfig(ADC_devices device) {
 	// SQR1 L[3:0] -> Number of items in the total sequence (SQR 1-4).
 	// Update SQR_L by L + 1
 	instance.regs->SQR1 |= (instance.conversions - 1);
+#elif defined __stm32f4
+	// SQR1 L[3:0] -> Number of items in the total sequence (SQR 1-4).
+	// Update SQR_L by L + 1
+	instance.regs->SQR1 |= (instance.conversions - 1) << (4 * 5);
 #endif
 	return true;
 }
@@ -522,6 +621,11 @@ bool ADC::start(ADC_devices device) {
 	}
 	
 	return true;
+#elif defined __stm32f4
+	// Ensure the ADC device is enabled.
+	instance.regs->CR2 |= ADC_CR2_ADON;
+	
+	return true;
 #else
 	return false;
 #endif
@@ -537,6 +641,13 @@ bool ADC::startSampling(ADC_devices device) {
 #if defined __stm32f0 || defined __stm32f3
 	// Start sampling.
 	instance.regs->CR |= ADC_CR_ADSTART;
+	
+	instance.sampling = true;
+	
+	return true;
+#elif defined __stm32f4
+	// Start sampling.
+	instance.regs->CR2 |= ADC_CR2_SWSTART;
 	
 	instance.sampling = true;
 	
@@ -558,6 +669,22 @@ bool ADC::getValue(ADC_devices device, uint16_t &val) {
 	uint32_t timeout = 400; // TODO: make configurable.
 	uint32_t ts = McuCore::getSysTick();
 	while ((instance.regs->ISR & ADC_ISR_EOC) == 0) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
+	
+	val = instance.regs->DR;
+	
+	instance.sampling = false;
+	
+	return true;
+#elif defined __stm32f4
+	// Wait for EOC.
+	uint32_t timeout = 400; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
+	while ((instance.regs->SR & ADC_SR_EOC) == 0) {
 		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
 			// TODO: set status.
 			return false;
@@ -601,6 +728,12 @@ bool ADC::stop(ADC_devices device) {
 			return false;
 		}
 	}
+	
+	return true;
+#elif defined __stm32f4
+	// Disable the peripheral.
+	// F411 appears to have no explicit STOP bit.
+	instance.regs->CR2 &= ~ADC_CR2_ADON;
 	
 	return true;
 #else

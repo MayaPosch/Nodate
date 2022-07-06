@@ -19,7 +19,7 @@ BoardLED boardLEDs[1];
 BoardButton boardButtons[1];
 USART_def boardUSARTs[3];
 
-uint8_t boardLEDs_count = 3;
+uint8_t boardLEDs_count = 1;
 uint8_t boardButtons_count = 1;
 uint8_t boardUSART_count = 3;
 

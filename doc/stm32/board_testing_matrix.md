@@ -14,7 +14,7 @@ Test status for each supported board.
 &nbsp; | STM32F103CB  | maple_mini | :heavy_check_mark: | | | | | | | n/a
 **F4** | &nbsp; | &nbsp; | &nbsp;
 &nbsp; | STM32F407VGT  | stm32f4-discovery | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | | | | :accept:
-&nbsp; | STM32F411CE | black_pill_f411 | :heavy_check_mark: | :question: | :question: | :question: | | | | n/a
+&nbsp; | STM32F411CE | black_pill_f411 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :question: | | | | n/a
 **L4** | &nbsp; | &nbsp;
 &nbsp; | STM32L433CCT | Fox Pill | 
 &nbsp; | STM32L496ZG | Nucleo-L496ZG-P | 

@@ -281,6 +281,12 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 
 
 // --- SET AF ---
+bool GPIO::set_af(GpioPinDef def) {
+	return set_af(def.port, def.pin, def.af);
+}
+
+
+// --- SET AF ---
 /**
  * \brief       Set alternate function mode for a peripheral
  *
@@ -387,6 +393,7 @@ bool GPIO::set_analog(GPIO_ports port, uint8_t pin) {
 }
 
 
+// --- SET OUTPUT PARAMETERS ---
 bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, 
 							GPIO_out_type type, GPIO_out_speed speed) {
 	// Validate port & pin.
@@ -459,6 +466,13 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 #endif
 	
 	return true;
+}
+
+
+// --- SET OUTPUT PARAMETERS ---
+bool GPIO::set_output_parameters(GpioPinDef def, GPIO_pupd pupd, GPIO_out_type type, 
+																GPIO_out_speed speed) {
+	return set_output_parameters(def.port, def.pin, pupd, type, speed);
 }
 
 

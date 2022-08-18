@@ -40,6 +40,7 @@
 #include <dma.h>
 #include <usart.h>
 #include <adc.h>
+#include <spi.h>
 
 #include <board_definition.h>
 

@@ -216,6 +216,12 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 }
 
 
+// --- SET OUTPUT ---
+bool GPIO::set_output(GpioPinDef def, GPIO_pupd pupd, GPIO_out_type type, GPIO_out_speed speed) {
+	return set_output(def.port, def.pin, pupd, type, speed);
+}
+
+
 // --- SET AF ---
 /**
  * \brief       Set alternate function mode for a pin
@@ -505,6 +511,12 @@ bool GPIO::write(GPIO_ports port, uint8_t pin, GPIO_level level) {
 	}
 	
 	return true;
+}
+
+
+// --- WRITE ---
+bool GPIO::write(GpioPinDef def, GPIO_level level) {
+	return write(def.port, def.pin, level);
 }
 
 

@@ -100,6 +100,8 @@ public:
 	static bool set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd);
 	static bool set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
+	static bool set_output(GpioPinDef def, GPIO_pupd pupd = GPIO_FLOATING, 
+							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
 	static bool set_af(GPIO_ports port, uint8_t pin, uint8_t af);
 	static bool set_af(GpioPinDef def);
 	static bool set_af(RccPeripheral per, uint8_t af);
@@ -109,6 +111,7 @@ public:
 	static bool set_output_parameters(GpioPinDef def, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
 	static bool write(GPIO_ports port, uint8_t pin, GPIO_level level);
+	static bool write(GpioPinDef def, GPIO_level level);
 	static bool write(GPIO_ports port, uint8_t pin, uint32_t level);
 	static uint8_t read(GPIO_ports port, uint8_t pin);
 	static uint32_t readAnalog(GPIO_ports port, uint8_t pin);

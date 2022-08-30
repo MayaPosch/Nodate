@@ -2,18 +2,27 @@
 	st7735.h - Header of ST7735 TFT LCD library for Nodate framework.
 	
 	Revision 0.
-	
-	Notes:
-			- 
 			
 	Features:
 			-
+	
+	Notes:
+			- Inspired by: https://github.com/bersch/ST7735S
 			
 	2022/08/18, Maya Posch
 */
 
 
 #include <nodate.h>
+
+
+// Display orientation in degrees.
+enum ST7735_orientation {
+	ST7735_ORIENTATION_0 = 0,
+	ST7735_ORIENTATION_90 = 1,
+	ST7735_ORIENTATION_180 = 2,
+	ST7735_ORIENTATION_270 = 3
+};
 
 
 typedef struct  {
@@ -35,10 +44,28 @@ class ST7735 {
 	GpioPinDef dc;	// Data/Command.
 	uint32_t width;
 	uint32_t height;
+	uint32_t xstart;
+	uint32_t ystart;
+	uint32_t buffer_width;
+	uint32_t buffer_height;
+	uint32_t buffer_xstart;
+	uint32_t buffer_ystart;
 	color565_t* frame;
+	uint16_t xmin, xmax, ymin, ymax;
+	uint8_t madctl;	// Memory Data Access Control state.
+	
+	bool send(uint8_t* data, uint16_t len);
+	bool sendData(uint8_t* data, uint16_t len);
+	bool sendCommand(uint8_t* data, uint16_t len);
 	
 public:
 	ST7735(SPI_devices device, GpioPinDef reset, GpioPinDef cs, GpioPinDef dc);
 	
-	bool init(uint32_t width, uint32_t height);
+	bool init(uint32_t width, uint32_t height, uint32_t xstart = 1, uint32_t ystart = 26);
+	bool setOrientation(ST7735_orientation orientation);
+	
+	bool setBackground(uint8_t r, uint8_t g, uint8_t b);
+	
+	bool display();
+	void resetWindow();
 };

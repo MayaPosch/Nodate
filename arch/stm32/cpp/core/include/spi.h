@@ -22,14 +22,6 @@ enum SPI_devices {
 };
 
 
-/* enum I2C_modes {
-	I2C_MODE_SM10 = 0,
-	I2C_MODE_SM100,
-	I2C_MODE_FM,
-	I2C_MODE_FMP
-}; */
-
-
 struct SPI_pins {
 	GpioPinDef miso;
 	GpioPinDef mosi;
@@ -50,7 +42,6 @@ struct SPI_device {
 	bool active = false;
 	bool master = false;
 	bool i2s	= false;
-	//uint8_t slaveTarget;
 	SPI_TypeDef* regs;
 	RccPeripheral per;
 	IRQn_Type irqType;

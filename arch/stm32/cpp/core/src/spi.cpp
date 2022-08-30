@@ -165,7 +165,7 @@ bool SPI::startI2SSlave(SPI_devices device, I2S_pins pins) {
 }
 
 
-// -- SEND TO SLAVE ---
+// -- SEND DATA ---
 bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
 	// Write each byte into the DR register to transfer it.
 	for (uint16_t i = 0; i < len; ++i) {
@@ -185,6 +185,14 @@ bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
 	}
 	
 	return true;
+}
+
+
+// --- RECEIVE DATA ---
+bool SPI::receiveData(SPI_devices device, uint8_t* data, uint16_t* len) {
+	//
+	
+	return false;
 }
 
 

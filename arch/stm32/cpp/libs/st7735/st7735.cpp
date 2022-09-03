@@ -75,41 +75,6 @@ enum ST7735S_Command {
 };
 
 
-/* columns: 1 = # of params, 2 = command, 3 .. = params */
-static uint8_t init_cmd[] = {
-	1, SWRESET, /* software reset */
-	1,  SLPOUT, /* sleep out, turn off sleep mode */
-	1, DISPOFF,  /*  output from frame mem disabled */
-	4, FRMCTR1, 0x00, 0b111111, 0b111111, /* frame frequency normal mode (highest frame rate in normal mode) */
-	4, FRMCTR2, 0b1111, 0x01, 0x01, /* frame frequency idle mode */
-	7, FRMCTR3, 0x05, 0x3c, 0x3c, 0x05, 0x3c, 0x3c,  /* frame freq partial mode: 1-3 dot inv, 4-6 col inv */
-	2,  INVCTR, 0x03, /* display inversion control: 3-bit 0=dot, 1=col */
-	4,  PWCTR1, 0b11111100, 0x08, 0b10, /* power control */
-	2,  PWCTR2, 0xc0,
-	3,  PWCTR3, 0x0d, 0x00,
-	3,  PWCTR4, 0x8d, 0x2a,
-	3,  PWCTR5, 0x8d, 0xee, /* partial */
-	/* display brightness and gamma */
-	2,	 GCV, 0b11011000, /* auto gate pump freq, max power save */
-	2, NVFCTR1, 0b01000000, /* automatic adjust gate pumping clock for saving power consumption */
-	2,  VMCTR1, 0b001111,  /* VCOM voltage setting */
-	2, VMOFCTR, 0b10000, /* ligthness of black color 0-0x1f */
-	2,  GAMSET, 0x08, /* gamma 1, 2, 4, 8 */
-	2,  MADCTL, 0b01100000, /* row oder, col order, row colum xchange, vert refr order, rgb/bgr, hor refr order, 0, 0 */
-	2,  COLMOD, 0x05, /* 3=12bit, 5=16-bit, 6=18-bit  pixel color mode */
-	17, GMCTRP1,0x02, 0x1c, 0x07, 0x12, 0x37, 0x32, 0x29, 0x2c,
-				0x29, 0x25, 0x2b, 0x39, 0x00, 0x01, 0x03, 0x10,
-	17, GMCTRN1,0x03, 0x1d, 0x07, 0x06, 0x2E, 0x2C, 0x29, 0x2c,
-				0x2e, 0x2e, 0x37, 0x3f, 0x00, 0x00, 0x02, 0x10,
-	5,   CASET, 0, 0, 0, defHEIGHT-1,
-	5,   RASET, 0, 0, 0, defWIDTH-1,
-	1,   INVON, /* display inversion on/off */
-	1,  IDMOFF, /* idle mode off */
-	1,   NORON,  /* normal display mode on */
-	1,  DISPON,  /* recover from display off, output from frame mem enabled */
-};
-
-
 //#define FRAMESIZE (defWIDTH*defHEIGHT)
 //color565_t frame[FRAMESIZE] = {0};
 
@@ -165,13 +130,47 @@ bool ST7735::init(uint32_t width, uint32_t height, uint32_t xstart, uint32_t yst
 	
 	if (!res) { return false; }
 	
+	/* columns: 1 = # of params, 2 = command, 3 .. = params */
+	uint8_t init_cmd[] = {
+		1, SWRESET, /* software reset */
+		1,  SLPOUT, /* sleep out, turn off sleep mode */
+		1, DISPOFF,  /*  output from frame mem disabled */
+		4, FRMCTR1, 0x00, 0b111111, 0b111111, /* frame frequency normal mode (highest frame rate in normal mode) */
+		4, FRMCTR2, 0b1111, 0x01, 0x01, /* frame frequency idle mode */
+		7, FRMCTR3, 0x05, 0x3c, 0x3c, 0x05, 0x3c, 0x3c,  /* frame freq partial mode: 1-3 dot inv, 4-6 col inv */
+		2,  INVCTR, 0x03, /* display inversion control: 3-bit 0=dot, 1=col */
+		4,  PWCTR1, 0b11111100, 0x08, 0b10, /* power control */
+		2,  PWCTR2, 0xc0,
+		3,  PWCTR3, 0x0d, 0x00,
+		3,  PWCTR4, 0x8d, 0x2a,
+		3,  PWCTR5, 0x8d, 0xee, /* partial */
+		/* display brightness and gamma */
+		2,	 GCV, 0b11011000, /* auto gate pump freq, max power save */
+		2, NVFCTR1, 0b01000000, /* automatic adjust gate pumping clock for saving power consumption */
+		2,  VMCTR1, 0b001111,  /* VCOM voltage setting */
+		2, VMOFCTR, 0b10000, /* ligthness of black color 0-0x1f */
+		2,  GAMSET, 0x08, /* gamma 1, 2, 4, 8 */
+		2,  MADCTL, 0b01100000, /* row oder, col order, row colum xchange, vert refr order, rgb/bgr, hor refr order, 0, 0 */
+		2,  COLMOD, 0x05, /* 3=12bit, 5=16-bit, 6=18-bit  pixel color mode */
+		17, GMCTRP1,0x02, 0x1c, 0x07, 0x12, 0x37, 0x32, 0x29, 0x2c,
+					0x29, 0x25, 0x2b, 0x39, 0x00, 0x01, 0x03, 0x10,
+		17, GMCTRN1,0x03, 0x1d, 0x07, 0x06, 0x2E, 0x2C, 0x29, 0x2c,
+					0x2e, 0x2e, 0x37, 0x3f, 0x00, 0x00, 0x02, 0x10,
+		5,	CASET, 0, 0, 0, (uint8_t) ((uint8_t) height - (uint8_t) 1),
+		5,	RASET, 0, 0, 0, (uint8_t) ((uint8_t) width - (uint8_t) 1),
+		1,	INVON, /* display inversion on/off */
+		1,  IDMOFF, /* idle mode off */
+		1,	NORON,  /* normal display mode on */
+		1,  DISPON,  /* recover from display off, output from frame mem enabled */
+	};
+	
 	// Run init sequence.
 	uint8_t args;
 
 	for (uint16_t i = 0; i < sizeof(init_cmd); i += args + 1) {
 		args = init_cmd[i];
 
-		send(device, &init_cmd[i + 1], args);
+		send(&init_cmd[i + 1], args);
 	}
 	
 	// Create framebuffer.
@@ -263,11 +262,11 @@ bool ST7735::setOrientation(ST7735_orientation orientation) {
 // Transfer the framebuffer to the display.
 bool ST7735::display() {
 	//
-	uint16_t xm = xmin + buffer_xstart, ym = ymin + buffer_ystart;
-	uint16_t xx = xmax + buffer_xstart, yx = ymax + buffer_ystart;
+	uint8_t xm = xmin + buffer_xstart, ym = ymin + buffer_ystart;
+	uint8_t xx = xmax + buffer_xstart, yx = ymax + buffer_ystart;
 
-	uint8_t cas[] = { CASET, xm >> 8, xm, xx >> 8, xx };
-	uint8_t ras[] = { RASET, ym >> 8, ym, yx >> 8, yx };
+	uint8_t cas[] = { CASET, (uint8_t) (xm >> 8), xm, (uint8_t) (xx >> 8), xx };
+	uint8_t ras[] = { RASET, (uint8_t) (ym >> 8), ym, (uint8_t) (yx >> 8), yx };
 	uint8_t ram[] = { RAMWR };
 
 	send(cas, sizeof(cas));
@@ -295,8 +294,157 @@ void ST7735::resetWindow() {
 
 
 // --- SET BACKGROUND COLOR ---
-bool ST7735::setBackground(uint8_t r, uint8_t g, uint8_t b) {
-	setbgColorC((color565_t){ .r = r, .g = g, .b = b });
+bool ST7735::setBackgroundColor(uint8_t r, uint8_t g, uint8_t b) {
+	//setbgColorC((color565_t){ .r = r, .g = g, .b = b });
+	color565_t c = { r, g, b };
+	bg_color.u[0] = c.u[1];
+	bg_color.u[1] = c.u[0];
 	
 	return true;
+}
+
+
+// --- SET COLOR ---
+bool ST7735::setColor(uint8_t r, uint8_t g, uint8_t b) {
+	//setbgColorC((color565_t){ .r = r, .g = g, .b = b });
+	color565_t c = { r, g, b };
+	color.u[0] = c.u[1];
+	color.u[1] = c.u[0];
+	
+	return true;
+}
+
+
+// --- FILL SCREEN ---
+void ST7735::fillScreen() {
+	filledRectangle(0, 0, buffer_width, buffer_height);
+}
+
+
+// --- FILLED RECTANGLE ---
+void ST7735::filledRectangle(uint16_t x, uint16_t y, uint16_t x2, uint16_t y2) {
+	if (x > x2) { uint16_t tmp = x; x = x2; x2 = tmp; }
+	if (y > y2) { uint16_t tmp = y; y = y2; y2 = tmp; }
+
+	/* fast ergonomic grid fill */
+	if (abs(x - x2) < abs(y - y2)) {
+		uint16_t xl = x2 - ((abs(x - x2) & 1) ? 0 : 1);
+		while (x < x2) {
+			drawLine(x, y, x, y2);
+			drawLine(xl, y, xl, y2);
+			x += 2;
+			xl -= 2;
+		}
+	} 
+	else {
+		uint16_t yl = y2 - ((abs(y - y2) & 1) ? 0 : 1);
+		while (y < y2) {
+			drawLine(x, y, x2, y);
+			drawLine(x, yl, x2, yl);
+			y += 2;
+			yl -= 2;
+		}
+	}
+}
+
+
+// --- DRAW LINE ---
+void ST7735::drawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+	uint16_t abs_y = abs(y1 - y0);
+	uint16_t abs_x = abs(x1 - x0);
+
+	if (abs_y <= abs_x) {
+		if (x0 > x1)
+			_LineLow(x1, y1, x0, y0);
+		else
+			_LineLow(x0, y0, x1, y1);
+	}
+	
+	if (abs_y >= abs_x) {
+		if (y0 > y1)
+			_LineHigh(x1, y1, x0, y0);
+		else
+			_LineHigh(x0, y0, x1, y1);
+	}
+}
+
+
+// --- LINE LOW ---
+void ST7735::_LineLow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+	int16_t dx = x1 - x0;
+	int16_t dy = y1 - y0;
+	int16_t yi = 1;
+
+	if (dy < 0) {
+		yi = -1;
+		dy = -dy;
+	}
+
+	int16_t D = 2 * dy - dx;
+	uint16_t y = y0;
+
+	for (uint16_t x = x0; x <= x1; x++) {
+		drawPixel(x,y);
+		if (D > 0) {
+			y += yi;
+			D -= 2 * dx;
+		}
+		
+		D += 2 * dy;
+	}
+}
+
+
+// --- LINE HIGH ---
+void ST7735::_LineHigh(uint16_t x0,uint16_t y0, uint16_t x1, uint16_t y1) {
+	int16_t dx = x1 - x0;
+	int16_t dy = y1 - y0;
+	int16_t xi = 1;
+
+	if (dx < 0) {
+		xi = -1;
+		dx = -dx;
+	}
+
+	int16_t D = 2*dx - dy;
+	uint16_t x = x0;
+
+	for (uint16_t y = y0; y < y1; y++) {
+		drawPixel(x,y);
+		if (D > 0) {
+			x += xi;
+			D -= 2*dy;
+		}
+		
+		D += 2 * dx;
+	}
+}
+
+
+// --- DRAW PIXEL ---
+void ST7735::drawPixel(uint16_t x, uint16_t y) {
+	if (x < buffer_width && y < buffer_height) {
+		frame[buffer_width * y + x] = color;
+		updateWindow(x, y);
+	}
+}
+
+
+// --- DRAW BACKGROUND PIXEL ---
+void ST7735::drawBackgroundPixel(uint16_t x, uint16_t y) {
+	if (x < buffer_width && y < buffer_height) {
+		frame[buffer_width * y + x] = bg_color;
+		updateWindow(x, y);
+	}
+}
+
+
+// --- UPDATE WINDOW ---
+void ST7735::updateWindow(uint16_t x, uint16_t y) {
+    if (x < buffer_width && y < buffer_height) {
+        if (x < xmin) xmin = x;
+        if (x > xmax) xmax = x;
+        if (y < ymin) ymin = y;
+        if (y > ymax) ymax = y;
+    }
 }

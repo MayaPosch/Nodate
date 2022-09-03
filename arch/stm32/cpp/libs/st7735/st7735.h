@@ -53,10 +53,15 @@ class ST7735 {
 	color565_t* frame;
 	uint16_t xmin, xmax, ymin, ymax;
 	uint8_t madctl;	// Memory Data Access Control state.
+	color565_t color;
+	color565_t bg_color;
 	
 	bool send(uint8_t* data, uint16_t len);
 	bool sendData(uint8_t* data, uint16_t len);
 	bool sendCommand(uint8_t* data, uint16_t len);
+	
+	void _LineLow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+	void _LineHigh(uint16_t x0,uint16_t y0, uint16_t x1, uint16_t y1);
 	
 public:
 	ST7735(SPI_devices device, GpioPinDef reset, GpioPinDef cs, GpioPinDef dc);
@@ -64,7 +69,15 @@ public:
 	bool init(uint32_t width, uint32_t height, uint32_t xstart = 1, uint32_t ystart = 26);
 	bool setOrientation(ST7735_orientation orientation);
 	
-	bool setBackground(uint8_t r, uint8_t g, uint8_t b);
+	bool setBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
+	bool setColor(uint8_t r, uint8_t g, uint8_t b);
+	void fillScreen();
+	void filledRectangle(uint16_t x, uint16_t y, uint16_t x2, uint16_t y2);
+	void drawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+	void drawPixel(uint16_t x, uint16_t y);
+	void drawBackgroundPixel(uint16_t x, uint16_t y);
+	void updateWindow(uint16_t x, uint16_t y);
+	void setFont(uint8_t* font);
 	
 	bool display();
 	void resetWindow();

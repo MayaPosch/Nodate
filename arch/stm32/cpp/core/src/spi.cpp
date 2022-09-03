@@ -64,7 +64,7 @@ SPI_device* spiList = SPI_list();
 // --- START SPI MASTER ---
 // Start the device in SPI mode.
 bool SPI::startSPIMaster(SPI_devices device, SPI_pins pins) {
-	SPI_device &instance = spiList[device]
+	SPI_device &instance = spiList[device];
 	
 	// Check status. Set parameters.
 	if (instance.active) { return true; } // Already active.
@@ -167,6 +167,8 @@ bool SPI::startI2SSlave(SPI_devices device, I2S_pins pins) {
 
 // -- SEND DATA ---
 bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
+	SPI_device &instance = spiList[device];
+	
 	// Write each byte into the DR register to transfer it.
 	for (uint16_t i = 0; i < len; ++i) {
 		// Check that the TX buffer is empty.
@@ -181,7 +183,7 @@ bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
 			}
 		}
 		
-		instance.regs->DR = data++;
+		instance.regs->DR = data[i];
 	}
 	
 	return true;
@@ -199,7 +201,7 @@ bool SPI::receiveData(SPI_devices device, uint8_t* data, uint16_t* len) {
 // --- STOP ---
 // Stop the peripheral.
 bool stop(SPI_devices device) {
-	SPI_device &instance = spiList[device]
+	SPI_device &instance = spiList[device];
 	
 	// Check status.
 	if (!instance.active) { return true; } // Already stopped.

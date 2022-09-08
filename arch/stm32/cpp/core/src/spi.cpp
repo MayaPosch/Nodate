@@ -74,7 +74,7 @@ bool SPI::startSPIMaster(SPI_devices device, SPI_pins pins) {
 	else if (device == SPI_4)	{ instance.per = RCC_SPI4; }
 	else if (device == SPI_5)	{ instance.per = RCC_SPI5; }
 	
-#ifdef __STM32F4
+#ifdef STM32F4
 	// Configure GPIO pins: MOSI, MISO, SCLK, SS.
 	if (!GPIO::set_af(pins.miso) || 
 		!GPIO::set_af(pins.mosi) || 

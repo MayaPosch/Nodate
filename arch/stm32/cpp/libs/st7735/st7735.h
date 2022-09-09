@@ -66,7 +66,7 @@ class ST7735 {
 public:
 	ST7735(SPI_devices device, GpioPinDef reset, GpioPinDef cs, GpioPinDef dc);
 	
-	bool init(uint32_t width, uint32_t height, uint32_t xstart = 1, uint32_t ystart = 26);
+	bool init(uint32_t width, uint32_t height, uint32_t xstart = 0, uint32_t ystart = 0);
 	bool setOrientation(ST7735_orientation orientation);
 	
 	bool setBackgroundColor(uint8_t r, uint8_t g, uint8_t b);

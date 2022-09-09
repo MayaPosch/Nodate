@@ -75,10 +75,6 @@ enum ST7735S_Command {
 };
 
 
-//#define FRAMESIZE (defWIDTH*defHEIGHT)
-//color565_t frame[FRAMESIZE] = {0};
-
-
 // --- CONSTRUCTOR ---
 ST7735::ST7735(SPI_devices device, GpioPinDef reset, GpioPinDef cs, GpioPinDef dc) {
 	this->device = device;
@@ -262,8 +258,10 @@ bool ST7735::setOrientation(ST7735_orientation orientation) {
 // Transfer the framebuffer to the display.
 bool ST7735::display() {
 	//
-	uint8_t xm = xmin + buffer_xstart, ym = ymin + buffer_ystart;
-	uint8_t xx = xmax + buffer_xstart, yx = ymax + buffer_ystart;
+	uint8_t xm = xmin + buffer_xstart;
+	uint8_t ym = ymin + buffer_ystart;
+	uint8_t xx = xmax + buffer_xstart;
+	uint8_t yx = ymax + buffer_ystart;
 
 	uint8_t cas[] = { CASET, (uint8_t) (xm >> 8), xm, (uint8_t) (xx >> 8), xx };
 	uint8_t ras[] = { RASET, (uint8_t) (ym >> 8), ym, (uint8_t) (yx >> 8), yx };
@@ -384,7 +382,7 @@ void ST7735::_LineLow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 	uint16_t y = y0;
 
 	for (uint16_t x = x0; x <= x1; x++) {
-		drawPixel(x,y);
+		drawPixel(x, y);
 		if (D > 0) {
 			y += yi;
 			D -= 2 * dx;
@@ -406,14 +404,14 @@ void ST7735::_LineHigh(uint16_t x0,uint16_t y0, uint16_t x1, uint16_t y1) {
 		dx = -dx;
 	}
 
-	int16_t D = 2*dx - dy;
+	int16_t D = 2 * dx - dy;
 	uint16_t x = x0;
 
 	for (uint16_t y = y0; y < y1; y++) {
-		drawPixel(x,y);
+		drawPixel(x, y);
 		if (D > 0) {
 			x += xi;
-			D -= 2*dy;
+			D -= 2 * dy;
 		}
 		
 		D += 2 * dx;

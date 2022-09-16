@@ -7,8 +7,17 @@
 // --- CONSTRUCTOR ---
 BME280::BME280(I2C_devices device, uint8_t address) {
 	ready = true;
-	this->device = device;
+	spi = false;
+	this->i2c_device = device;
 	this->address = address;
+}
+
+
+BME280::BME280(SPI_devices device, GpioPinDef cs) {
+	ready = true;
+	spi = true;
+	this->spi_device = device;
+	this->cs = cs;
 }
 
 
@@ -24,11 +33,13 @@ bool BME280::isReady() {
 bool BME280::readID(uint8_t &id) {
 	// Send register to read to the device.
 	uint8_t data = 0xd0;
-	I2C::setSlaveTarget(device, address);
-	I2C::sendToSlave(device, &data, 1);
+	/* I2C::setSlaveTarget(device, address);
+	I2C::sendToSlave(device, &data, 1); */
+	send(&data, 1);
     
     // Initiate the read sequence
-	return I2C::receiveFromSlave(device, 1, &id);
+	//return I2C::receiveFromSlave(device, 1, &id);
+	return receive(&id, 1);
 }
 
 
@@ -38,32 +49,40 @@ bool BME280::initialize() {
 	uint8_t ctrl_hum_reg  = osrs_h;
 	uint8_t config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en;
 	
-	I2C::setSlaveTarget(device, address);
+	//I2C::setSlaveTarget(device, address);
+	start();
 
 	uint8_t data[2];
 	data[0] = controlHumidity;
 	data[1] = ctrl_hum_reg;
-	if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	//if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	if (!send(data, 2)) { return false; }
 	
 	data[0] = reg_Control;
 	data[1] = ctrl_meas_reg;
-	if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	//if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	if (!send(data, 2)) { return false; }
 	
 	data[0] = reg_Config;
 	data[1] = config_reg;
-	if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	//if (!I2C::sendToSlave(device, data, 2)) { return false; }
+	if (!send(data, 2)) { return false; }
 
-	I2C::sendToSlave(device, &reg_CalibrationTStart, 1);
+	//I2C::sendToSlave(device, &reg_CalibrationTStart, 1);
+	send(&reg_CalibrationTStart, 1);
 	uint8_t buffer[64];
-	I2C::receiveFromSlave(device, reg_CalibrationTEnd - reg_CalibrationTStart + 1, buffer);
+	//I2C::receiveFromSlave(device, reg_CalibrationTEnd - reg_CalibrationTStart + 1, buffer);
+	receive(buffer, reg_CalibrationTEnd - reg_CalibrationTStart + 1);
 	
 	// This data is in Big Endian format from the BME280.
     dig_T1 = (buffer[1] << 8) | buffer[0];
     dig_T2 = (buffer[3] << 8) | buffer[2];
     dig_T3 = (buffer[5] << 8) | buffer[4];
 
-	I2C::sendToSlave(device, &reg_CalibrationPStart, 1);
-	I2C::receiveFromSlave(device, reg_CalibrationPEnd - reg_CalibrationPStart + 1, buffer);
+	//I2C::sendToSlave(device, &reg_CalibrationPStart, 1);
+	send(&reg_CalibrationPStart, 1);
+	//I2C::receiveFromSlave(device, reg_CalibrationPEnd - reg_CalibrationPStart + 1, buffer);
+	receive(buffer, reg_CalibrationPEnd - reg_CalibrationPStart + 1);
 
     dig_P1 = (buffer[1] << 8) | buffer[0];
     dig_P2 = (buffer[3] << 8) | buffer[2];
@@ -75,20 +94,29 @@ bool BME280::initialize() {
     dig_P8 = (buffer[15] << 8) | buffer[14];
 	dig_P9 = (buffer[17] << 8) | buffer[16];
 
-	I2C::sendToSlave(device, &reg_H1, 1);
-	I2C::receiveFromSlave(device, 1, buffer);
+	//I2C::sendToSlave(device, &reg_H1, 1);
+	send(&reg_H1, 1);
+	//I2C::receiveFromSlave(device, 1, buffer);
+	receive(buffer, 1);
 	dig_H1 = buffer[0];
 	
-	I2C::sendToSlave(device, &reg_H2, 1);
-	I2C::receiveFromSlave(device, 2, buffer);
+	//I2C::sendToSlave(device, &reg_H2, 1);
+	//I2C::receiveFromSlave(device, 2, buffer);
+	send(&reg_H2, 1);
+	receive(buffer, 2);
     dig_H2 = (buffer[1] << 8) | buffer[0];
 	
-	I2C::sendToSlave(device, &reg_H3, 1);
-	I2C::receiveFromSlave(device, 1, buffer);
+	//I2C::sendToSlave(device, &reg_H3, 1);
+	//I2C::receiveFromSlave(device, 1, buffer);
+	send(&reg_H3, 1);
+	receive(buffer, 1);
     dig_H3 = buffer[0];
 	
-	I2C::sendToSlave(device, &reg_H4, 1);
-	I2C::receiveFromSlave(device, 4, buffer);
+	//I2C::sendToSlave(device, &reg_H4, 1);
+	//I2C::receiveFromSlave(device, 4, buffer);
+	send(&reg_H4, 1);
+	receive(buffer, 4);
+	end();
     dig_H4 = (buffer[0] << 4) | (buffer[1]&0x0F);
 	
     dig_H5 = (buffer[2]<<4) | ((buffer[1] & 0xF0)>>4);
@@ -100,8 +128,11 @@ bool BME280::initialize() {
 
 bool BME280::softReset() {
 	uint8_t data[] = { reg_SoftReset, softResetInstruction };
-	I2C::setSlaveTarget(device, address);
-	I2C::sendToSlave(device, data, 2);
+	/* I2C::setSlaveTarget(device, address);
+	I2C::sendToSlave(device, data, 2); */
+	start();
+	send(data, 2);
+	end();
 	
 	return true;
 }
@@ -132,15 +163,20 @@ float BME280::humidity() {
 bool BME280::rawTemperature(int32_t &t) {
 	// Send register to read to the device.
 	uint8_t data = 0xFA;
-	I2C::setSlaveTarget(device, address);
-	I2C::sendToSlave(device, &data, 1);
+	//I2C::setSlaveTarget(device, address);
+	//I2C::sendToSlave(device, &data, 1);
+	start();
+	send(&data, 1);
     
     // Initiate the read sequence
 	uint8_t buffer[3];
-    if (!(I2C::receiveFromSlave(device, 3, buffer))) {
+    //if (!(I2C::receiveFromSlave(device, 3, buffer))) {
+    if (!(receive(buffer, 3))) {
+		end();
         return false;
     }
 	
+	end();
  	t = ((buffer[0] << 12) | (buffer[1] << 4) | (buffer[2] >> 4));
 
     return true;
@@ -156,4 +192,76 @@ float BME280::compensateTemperature(int32_t rawTemp) {
 	float temperature = (t_fine * 5 + 128) >> 8;  /* temperature in 0.01 deg C*/
 
 	return temperature / 100;
+}
+
+
+// --- START ---
+// Take any actions to enable communication with the device.
+bool BME280::start() {
+	if (spi) {
+		// Set the chip select line to active low.
+		if (!GPIO::write(cs, GPIO_LEVEL_LOW)) { return false; }
+	}
+	
+	return true;
+}
+
+
+// --- END ---
+// Take any actions to disable communication with the device.
+bool BME280::end() {
+	if (spi) {
+		// Set the chip select line to high (high-Z).
+		if (!GPIO::write(cs, GPIO_LEVEL_HIGH)) { return false; }
+	}
+	
+	return true;
+}
+
+
+// --- SEND ---
+bool BME280::send(uint8_t* data, uint16_t len) {
+	if (spi) {
+#ifdef NODATE_SPI_ENABLED
+		// Use SPI send.
+		if (!SPI::sendData(spi_device, data, len)) { return false; }
+#endif
+	}
+	else {
+#ifdef NODATE_I2C_ENABLED
+		// Use I2C send.
+		I2C::setSlaveTarget(i2c_device, address);
+		I2C::sendToSlave(i2c_device, data, len);
+#endif
+	}
+	
+	return true;
+}
+
+
+// --- RECEIVE ---
+bool BME280::receive(uint8_t* data, uint16_t len) {
+	if (spi) {
+#ifdef NODATE_SPI_ENABLED
+		// Use SPI receive.
+		// First enable the slave select (CS) line.
+		bool res;
+		res = GPIO::write(cs, GPIO_LEVEL_LOW);
+		res = SPI::receiveData(spi_device, data, len);
+		
+		if (!res) { return false; }
+		
+		// Disable slave again.
+		res = GPIO::write(cs, GPIO_LEVEL_HIGH);
+		if (!res) { return false; }
+#endif
+	}
+	else {
+#ifdef NODATE_I2C_ENABLED
+		// Use I2C receive.
+		I2C::receiveFromSlave(i2c_device, len, data);
+#endif
+	}
+	
+	return true;
 }

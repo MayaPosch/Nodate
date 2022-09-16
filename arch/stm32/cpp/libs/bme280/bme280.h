@@ -13,7 +13,7 @@
 #ifndef LIB_BME280_H
 #define LIB_BME280_H
 
-#include <i2c.h>
+#include <nodate.h>
 
 
 #define BME280_MODE_NORMAL			0x03 // Reads sensor at set interval.
@@ -21,9 +21,12 @@
 
 
 class BME280 {
-	I2C_devices device;
+	bool spi = false;
+	I2C_devices i2c_device;
+	SPI_devices spi_device;
 	uint8_t address;
 	bool ready;
+	GpioPinDef cs;
 	
 	uint16_t dig_T1;
 	int16_t dig_T2;
@@ -79,6 +82,7 @@ class BME280 {
 	
 public:
 	BME280(I2C_devices device, uint8_t address);
+	BME280(SPI_devices device, GpioPinDef cs);
 	bool isReady();
 	bool readID(uint8_t &id);
 	bool initialize();
@@ -91,6 +95,11 @@ public:
 	bool rawTemperature(int32_t &t);
 	
 	float compensateTemperature(int32_t rawTemp);
+	
+	bool start();	// Start communication.
+	bool end();	// Stop communication.
+	bool send(uint8_t* data, uint16_t len);
+	bool receive(uint8_t* data, uint16_t len);
 };
 
 #endif

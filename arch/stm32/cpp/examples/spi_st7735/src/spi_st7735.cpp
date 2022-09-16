@@ -76,9 +76,9 @@ int main() {
 	} */
 	
 	// 3. Set up ST7735 library instance.
-	GpioPinDef reset 	= { GPIO_PORT_A, 1, 0 };
-	GpioPinDef cs 		= { GPIO_PORT_A, 2, 0 };
-	GpioPinDef dc 		= { GPIO_PORT_A, 3, 0 };
+	GpioPinDef reset 	= { GPIO_PORT_B, 0, 0 };
+	GpioPinDef cs 		= { GPIO_PORT_B, 1, 0 };
+	GpioPinDef dc 		= { GPIO_PORT_B, 2, 0 };
 	ST7735 display(SPI_1, reset, cs, dc);
 	
 	printf("Created display instance.\n");

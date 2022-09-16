@@ -181,12 +181,13 @@ bool ST7735::init(uint32_t width, uint32_t height, uint32_t xstart, uint32_t yst
 
 // --- SEND ---
 bool ST7735::send(uint8_t* data, uint16_t len) {
-	sendCommand(data++, 1);
+	bool res = false;
+	res = sendCommand(data++, 1);
 	if (--len > 0) {
-		sendData(data, len);
+		res = sendData(data, len);
 	}
 	
-	return true;
+	return res;
 }
 
 
@@ -196,7 +197,11 @@ bool ST7735::sendData(uint8_t* data, uint16_t len) {
 	GPIO::write(dc, GPIO_LEVEL_HIGH);
 	
 	// Transfer the data.
-	return SPI::sendData(device, data, len);
+	GPIO::write(cs, GPIO_LEVEL_LOW);
+	bool res = SPI::sendData(device, data, len);
+	GPIO::write(cs, GPIO_LEVEL_HIGH);
+	
+	return res;
 }
 
 
@@ -206,7 +211,11 @@ bool ST7735::sendCommand(uint8_t* data, uint16_t len) {
 	GPIO::write(dc, GPIO_LEVEL_LOW);
 	
 	// Transfer the data.
-	return SPI::sendData(device, data, len);
+	GPIO::write(cs, GPIO_LEVEL_LOW);
+	bool res = SPI::sendData(device, data, len);
+	GPIO::write(cs, GPIO_LEVEL_HIGH);
+	
+	return res;
 }
 
 

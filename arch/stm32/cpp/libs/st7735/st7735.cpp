@@ -154,7 +154,7 @@ bool ST7735::init(uint32_t width, uint32_t height, uint32_t xstart, uint32_t yst
 					0x2e, 0x2e, 0x37, 0x3f, 0x00, 0x00, 0x02, 0x10,
 		5,	CASET, 0, 0, 0, (uint8_t) ((uint8_t) height - (uint8_t) 1),
 		5,	RASET, 0, 0, 0, (uint8_t) ((uint8_t) width - (uint8_t) 1),
-		1,	INVON, /* display inversion on/off */
+		1,	INVOFF, /* display inversion off */
 		1,  IDMOFF, /* idle mode off */
 		1,	NORON,  /* normal display mode on */
 		1,  DISPON,  /* recover from display off, output from frame mem enabled */
@@ -170,7 +170,8 @@ bool ST7735::init(uint32_t width, uint32_t height, uint32_t xstart, uint32_t yst
 	}
 	
 	// Create framebuffer.
-	frame = new color565_t[(width * height)];
+	//frame = new color565_t[(width * height)];
+	frame = (color565_t*) calloc((width * height), sizeof(color565_t));
 	
 	resetWindow();
 	
@@ -257,18 +258,9 @@ bool ST7735::setOrientation(ST7735_orientation orientation) {
 // --- DISPLAY ---
 // Transfer the framebuffer to the display.
 bool ST7735::display() {
-	//
-	uint8_t xm = xmin + buffer_xstart;
-	uint8_t ym = ymin + buffer_ystart;
-	uint8_t xx = xmax + buffer_xstart;
-	uint8_t yx = ymax + buffer_ystart;
-
-	uint8_t cas[] = { CASET, (uint8_t) (xm >> 8), xm, (uint8_t) (xx >> 8), xx };
-	uint8_t ras[] = { RASET, (uint8_t) (ym >> 8), ym, (uint8_t) (yx >> 8), yx };
+	// Send RAM WRITE command before sending the buffer data.
 	uint8_t ram[] = { RAMWR };
 
-	send(cas, sizeof(cas));
-	send(ras, sizeof(ras));
 	sendCommand(ram, 1);
 
 	uint16_t len  = (xmax - xmin + 1) * 2;
@@ -276,7 +268,7 @@ bool ST7735::display() {
 		sendData((uint8_t*) &frame[buffer_width * y + xmin], len);
 	}
 
-	resetWindow();
+	//resetWindow();
 	
 	return true;
 }
@@ -321,10 +313,19 @@ void ST7735::fillScreen() {
 
 // --- FILLED RECTANGLE ---
 void ST7735::filledRectangle(uint16_t x, uint16_t y, uint16_t x2, uint16_t y2) {
-	if (x > x2) { uint16_t tmp = x; x = x2; x2 = tmp; }
-	if (y > y2) { uint16_t tmp = y; y = y2; y2 = tmp; }
+	if (x > x2) {	
+		uint16_t tmp = x;
+		x = x2; 
+		x2 = tmp; 
+	}
+	
+	if (y > y2) {
+		uint16_t tmp = y;
+		y = y2;
+		y2 = tmp;
+	}
 
-	/* fast ergonomic grid fill */
+	// Fast ergonomic grid fill.
 	if (abs(x - x2) < abs(y - y2)) {
 		uint16_t xl = x2 - ((abs(x - x2) & 1) ? 0 : 1);
 		while (x < x2) {

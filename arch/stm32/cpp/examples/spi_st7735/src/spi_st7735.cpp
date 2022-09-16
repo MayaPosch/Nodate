@@ -31,7 +31,7 @@ int main() {
 	// Start SysTick.
 	McuCore::initSysTick();
 	
-	printf("Starting SPI ST7735 OLED example...\n");
+	printf("Starting SPI ST7735 TFT example...\n");
 	
 	// This example shows a demo sequence on an attached ST7735-based LCD display.
 	// Uses:

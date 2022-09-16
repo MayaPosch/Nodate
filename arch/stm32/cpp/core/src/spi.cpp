@@ -191,8 +191,24 @@ bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
 
 
 // --- RECEIVE DATA ---
-bool SPI::receiveData(SPI_devices device, uint8_t* data, uint16_t* len) {
-	//
+bool SPI::receiveData(SPI_devices device, uint8_t* data, uint16_t count) {
+	SPI_device &instance = spiList[device];
+	
+	for (uint8_t i = 0; i < count; ++i) {
+        uint32_t timeout = 400;
+		uint32_t ts = McuCore::getSysTick();
+        // 1. Check SR_RXNE == 1. (Receive data register Not Empty).
+        while ((instance.regs->SR & SPI_SR_RXNE) != SPI_SR_RXNE) {
+			// Handle timeout.
+			if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+				// TODO: set status.
+				return false;
+			}
+        }
+		
+        // 2. Read DR contents into buffer.
+		data[i] = (uint8_t) instance.regs->DR;
+	}
 	
 	return false;
 }

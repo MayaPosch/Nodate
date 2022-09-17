@@ -56,11 +56,23 @@ int main () {
 	
 	// 2. Set up SPI.
 	// Note: this targets SPI 1 on the STM32F411CE MCU
-	SPI_pins spins;
+	/* SPI_pins spins;
 	spins.miso = { GPIO_PORT_A, 6, 5 };
 	spins.mosi = { GPIO_PORT_A, 7, 5 };
 	spins.sclk = { GPIO_PORT_A, 5, 5 };
-	spins.nss = { GPIO_PORT_A, 4, 5 };
+	spins.nss = { GPIO_PORT_A, 4, 5 }; */
+	// Note: this set targets SPI 1 (no remap) on STM32F103.
+	SPI_pins spins;
+	spins.miso = { GPIO_PORT_A, 6, 0 };
+	spins.mosi = { GPIO_PORT_A, 7, 0 };
+	spins.sclk = { GPIO_PORT_A, 5, 0 };
+	spins.nss = { GPIO_PORT_A, 4, 0 };
+	// Note: this set targets SPI 1 on STM32F042.
+	/* SPI_pins spins;
+	spins.miso = { GPIO_PORT_A, 6, 0 };
+	spins.mosi = { GPIO_PORT_A, 7, 0 };
+	spins.sclk = { GPIO_PORT_A, 5, 0 };
+	spins.nss = { GPIO_PORT_A, 4, 0 }; */
 	if (!SPI::startSPIMaster(SPI_1, spins)) {
 		// Handle error.
 		printf("SPI master init error.\n");

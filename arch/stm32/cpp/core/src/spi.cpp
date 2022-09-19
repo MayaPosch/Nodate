@@ -117,7 +117,16 @@ bool SPI::startSPIMaster(SPI_devices device, SPI_pins pins) {
 	
 	// Configure SPI peripheral.
 	// TODO: enable configuring of CR1_BR for baud rates. Defaulting to Pclk/2.
+#ifdef STM32F0
+	uint32_t reg_cr1 = 0;
+	reg_cr1 |= SPI_CR1_BR; // Use Fpclk / 256.
+	instance.regs->CR1 = reg_cr1;
 	
+	// Use 8-bit mode.
+	uint32_t reg_cr2 = 0;
+	reg_cr2 = SPI_CR2_FRXTH | SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
+	instance.regs->CR2 = reg_cr2;
+#else
 	// Configure CPOL & CPHA.
 	// TODO: enable configuration. Use default (0 & 0) for now.
 	
@@ -128,11 +137,12 @@ bool SPI::startSPIMaster(SPI_devices device, SPI_pins pins) {
 	// Set CR2_FRF.
 	// FIXME: make configurable. Default is 0x0 (Motorola). Other option is TI (0x1).
 	
+#endif
 	// Set MSTR.
 	// MSTR has to be set to enable Master mode. Default is slave mode.
 	instance.regs->CR1 |= SPI_CR1_MSTR;
 	
-	// Set NSS as output.
+	// Set NSS as output. Disables multi-master mode.
 	instance.regs->CR2 |= SPI_CR2_SSOE;
 	
 	// Enable peripheral (SPE).

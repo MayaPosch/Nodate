@@ -18,6 +18,10 @@ BME280::BME280(SPI_devices device, GpioPinDef cs) {
 	spi = true;
 	this->spi_device = device;
 	this->cs = cs;
+	
+	if (!GPIO::set_output(cs, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
+		ready = false;
+	}
 }
 
 
@@ -35,11 +39,15 @@ bool BME280::readID(uint8_t &id) {
 	uint8_t data = 0xd0;
 	/* I2C::setSlaveTarget(device, address);
 	I2C::sendToSlave(device, &data, 1); */
+	start();
 	send(&data, 1);
     
     // Initiate the read sequence
 	//return I2C::receiveFromSlave(device, 1, &id);
-	return receive(&id, 1);
+	bool res = receive(&id, 1);
+	end();
+	
+	return res;
 }
 
 
@@ -244,16 +252,9 @@ bool BME280::receive(uint8_t* data, uint16_t len) {
 	if (spi) {
 #ifdef NODATE_SPI_ENABLED
 		// Use SPI receive.
-		// First enable the slave select (CS) line.
-		bool res;
-		res = GPIO::write(cs, GPIO_LEVEL_LOW);
-		res = SPI::receiveData(spi_device, data, len);
-		
-		if (!res) { return false; }
-		
-		// Disable slave again.
-		res = GPIO::write(cs, GPIO_LEVEL_HIGH);
-		if (!res) { return false; }
+		if (!SPI::receiveData(spi_device, data, len)) { 
+			return false; 
+		}
 #endif
 	}
 	else {

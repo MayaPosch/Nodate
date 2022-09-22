@@ -124,6 +124,7 @@ bool SPI::startSPIMaster(SPI_devices device, SPI_pins pins) {
 	
 	// Use 8-bit mode.
 	uint32_t reg_cr2 = 0;
+	// FIFO reception threshold & Data Size.
 	reg_cr2 = SPI_CR2_FRXTH | SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
 	instance.regs->CR2 = reg_cr2;
 #else
@@ -199,8 +200,31 @@ bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
 			}
 		}
 		
-		instance.regs->DR = data[i];
+		*((volatile uint8_t*) &(instance.regs->DR)) = data[i];
 	}
+	
+	// Wait for SR_TXE to indicate empty status.
+	uint32_t ts = McuCore::getSysTick();
+	uint32_t timeout = 400; // TODO: make configurable.
+	while ((instance.regs->SR & SPI_SR_TXE) != SPI_SR_TXE) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			return false;
+		}
+	}
+	
+	// Wait for SR_BSY to indicate bus not busy.
+	ts = McuCore::getSysTick();
+	while ((instance.regs->SR & SPI_SR_BSY) == SPI_SR_BSY) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			return false;
+		}
+	}
+	
+	// Read SPI_DR to clear it.
+	uint16_t t = instance.regs->DR;
+	
+	// Clear SR overrun flag.
+	t = instance.regs->SR;
 	
 	return true;
 }
@@ -210,10 +234,23 @@ bool SPI::sendData(SPI_devices device, uint8_t* data, uint16_t len) {
 bool SPI::receiveData(SPI_devices device, uint8_t* data, uint16_t count) {
 	SPI_device &instance = spiList[device];
 	
-	for (uint8_t i = 0; i < count; ++i) {
-        uint32_t timeout = 400;
-		uint32_t ts = McuCore::getSysTick();
-        // 1. Check SR_RXNE == 1. (Receive data register Not Empty).
+	uint32_t timeout = 400;
+	uint32_t ts;
+	for (uint16_t i = 0; i < count; ++i) {
+		ts = McuCore::getSysTick();
+		// 1. Wait for SR_BSY to indicate bus not busy.
+		ts = McuCore::getSysTick();
+		while ((instance.regs->SR & SPI_SR_BSY) == SPI_SR_BSY) {
+			if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+				return false;
+			}
+		}
+		
+		// 2. Send dummy byte to generate a CLK signal.
+		*((volatile uint8_t*) &(instance.regs->DR)) = 0x00;
+	
+        // 3. Check SR_RXNE == 1. (Receive data register Not Empty).
+		ts = McuCore::getSysTick();
         while ((instance.regs->SR & SPI_SR_RXNE) != SPI_SR_RXNE) {
 			// Handle timeout.
 			if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
@@ -222,11 +259,67 @@ bool SPI::receiveData(SPI_devices device, uint8_t* data, uint16_t count) {
 			}
         }
 		
-        // 2. Read DR contents into buffer.
+        // 4. Read DR contents into buffer.
 		data[i] = (uint8_t) instance.regs->DR;
 	}
 	
-	return false;
+	// Wait for BSY to be unset.
+	ts = McuCore::getSysTick();
+	while ((instance.regs->SR & SPI_SR_BSY) == SPI_SR_BSY) {
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+
+// --- TRANSCEIVE DATA ---
+// Transmit the TX data buffer while receiving in the RX data buffer.
+bool SPI::transceiveData(SPI_devices device, uint8_t* txdata, uint16_t txcount,
+													uint8_t* rxdata, uint16_t rxcount) {
+	SPI_device &instance = spiList[device];
+	
+	bool txallowed = true;
+	uint32_t ts = McuCore::getSysTick();
+	uint32_t timeout = 400;
+	while (txcount > 0 && rxcount > 0) {
+		// Send phase.
+		// Check if the send buffer is empty.
+		if (((instance.regs->SR & SPI_SR_TXE) == SPI_SR_TXE) && txallowed) {
+			if (txcount > 0) {
+				instance.regs->DR = *txdata++;
+				txallowed = false;
+				txcount--;
+			}
+			else {
+				// Send dummy byte.
+				instance.regs->DR = 0x00;
+			}
+		}
+	
+		// Receive phase.
+		// Check if receive buffer has data.
+		if (((instance.regs->SR & SPI_SR_RXNE) == SPI_SR_RXNE) && rxcount > 0) {
+			// Read DR contents into buffer.
+			*rxdata++ = (uint8_t) instance.regs->DR;
+			txallowed = true;
+			rxcount--;
+		}
+		
+		// Handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+			// TODO: set status.
+			return false;
+		}
+	}
+	
+	// Wait until TX FIFO empty.
+	
+	// Wait until BSY flag is clear.
+	
+	return true;
 }
 
 
@@ -241,7 +334,7 @@ bool stop(SPI_devices device) {
 	// Disable peripheral.
 	instance.regs->CR1 &= ~SPI_CR1_SPE;
 	
-	return false;
+	return true;
 }
 
 #endif

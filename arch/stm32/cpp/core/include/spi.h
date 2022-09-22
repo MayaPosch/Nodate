@@ -63,6 +63,8 @@ public:
 	//static bool startSlave(I2C_devices device, uint8_t address);
 	static bool sendData(SPI_devices device, uint8_t* data, uint16_t len);
 	static bool receiveData(SPI_devices device, uint8_t* data, uint16_t count);
+	static bool transceiveData(SPI_devices device, uint8_t* txdata, uint16_t txcount,
+													uint8_t* rxdata, uint16_t rxcount);
 	//static bool sendToSlaveBegin(I2C_devices device, uint8_t len);
 	//static bool sendToSlaveByte(I2C_devices device, uint8_t data);
 	//static bool sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len);

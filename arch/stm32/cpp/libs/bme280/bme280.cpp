@@ -45,6 +45,7 @@ bool BME280::readID(uint8_t &id) {
     // Initiate the read sequence
 	//return I2C::receiveFromSlave(device, 1, &id);
 	bool res = receive(&id, 1);
+	//bool res = transceive(&data, 1, &id, 1);
 	end();
 	
 	return res;
@@ -81,6 +82,7 @@ bool BME280::initialize() {
 	uint8_t buffer[64];
 	//I2C::receiveFromSlave(device, reg_CalibrationTEnd - reg_CalibrationTStart + 1, buffer);
 	receive(buffer, reg_CalibrationTEnd - reg_CalibrationTStart + 1);
+	//transceive(&reg_CalibrationTStart, 1, buffer, reg_CalibrationTEnd - reg_CalibrationTStart + 1);
 	
 	// This data is in Big Endian format from the BME280.
     dig_T1 = (buffer[1] << 8) | buffer[0];
@@ -91,6 +93,7 @@ bool BME280::initialize() {
 	send(&reg_CalibrationPStart, 1);
 	//I2C::receiveFromSlave(device, reg_CalibrationPEnd - reg_CalibrationPStart + 1, buffer);
 	receive(buffer, reg_CalibrationPEnd - reg_CalibrationPStart + 1);
+	//transceive(&reg_CalibrationPStart, 1, buffer, reg_CalibrationPEnd - reg_CalibrationPStart + 1);
 
     dig_P1 = (buffer[1] << 8) | buffer[0];
     dig_P2 = (buffer[3] << 8) | buffer[2];
@@ -106,12 +109,14 @@ bool BME280::initialize() {
 	send(&reg_H1, 1);
 	//I2C::receiveFromSlave(device, 1, buffer);
 	receive(buffer, 1);
+	//transceive(&reg_H1, 1, buffer, 1);
 	dig_H1 = buffer[0];
 	
 	//I2C::sendToSlave(device, &reg_H2, 1);
 	//I2C::receiveFromSlave(device, 2, buffer);
 	send(&reg_H2, 1);
 	receive(buffer, 2);
+	//transceive(&reg_H2, 1, buffer, 2);
     dig_H2 = (buffer[1] << 8) | buffer[0];
 	
 	//I2C::sendToSlave(device, &reg_H3, 1);
@@ -124,6 +129,7 @@ bool BME280::initialize() {
 	//I2C::receiveFromSlave(device, 4, buffer);
 	send(&reg_H4, 1);
 	receive(buffer, 4);
+	//transceive(&reg_H4, 1, buffer, 4);
 	end();
     dig_H4 = (buffer[0] << 4) | (buffer[1]&0x0F);
 	
@@ -252,8 +258,8 @@ bool BME280::receive(uint8_t* data, uint16_t len) {
 	if (spi) {
 #ifdef NODATE_SPI_ENABLED
 		// Use SPI receive.
-		if (!SPI::receiveData(spi_device, data, len)) { 
-			return false; 
+		if (!SPI::receiveData(spi_device, data, len)) {
+			return false;
 		}
 #endif
 	}
@@ -261,6 +267,30 @@ bool BME280::receive(uint8_t* data, uint16_t len) {
 #ifdef NODATE_I2C_ENABLED
 		// Use I2C receive.
 		I2C::receiveFromSlave(i2c_device, len, data);
+#endif
+	}
+	
+	return true;
+}
+
+
+// --- TRANSCEIVE ---
+// Combined send/receive.
+bool BME280::transceive(uint8_t* txdata, uint16_t txlen, uint8_t* rxdata, uint16_t rxlen) {
+	if (spi) {
+#ifdef NODATE_SPI_ENABLED
+		// Use SPI transceive.
+		if (!SPI::transceiveData(spi_device, txdata, txlen, rxdata, rxlen)) {
+			return false;
+		}
+#endif
+	}
+	else {
+#ifdef NODATE_I2C_ENABLED
+		// Use I2C send and receive.
+		I2C::setSlaveTarget(i2c_device, address);
+		I2C::sendToSlave(i2c_device, txdata, txlen);
+		I2C::receiveFromSlave(i2c_device, rxlen, rxdata);
 #endif
 	}
 	

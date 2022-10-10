@@ -53,7 +53,7 @@ bool BME280::readID(uint8_t &id) {
 
 
 bool BME280::initialize() {
-	// Read calibration data from device and store it.
+	// Set the configuration for the device.
 	uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | BME280_OperationMode;
 	uint8_t ctrl_hum_reg  = osrs_h;
 	uint8_t config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en;
@@ -65,18 +65,19 @@ bool BME280::initialize() {
 	data[0] = controlHumidity;
 	data[1] = ctrl_hum_reg;
 	//if (!I2C::sendToSlave(device, data, 2)) { return false; }
-	if (!send(data, 2)) { return false; }
+	if (!write(data, 2)) { return false; }
 	
 	data[0] = reg_Control;
 	data[1] = ctrl_meas_reg;
 	//if (!I2C::sendToSlave(device, data, 2)) { return false; }
-	if (!send(data, 2)) { return false; }
+	if (!write(data, 2)) { return false; }
 	
 	data[0] = reg_Config;
 	data[1] = config_reg;
 	//if (!I2C::sendToSlave(device, data, 2)) { return false; }
-	if (!send(data, 2)) { return false; }
+	if (!write(data, 2)) { return false; }
 
+	// Read calibration data from device and store it.
 	//I2C::sendToSlave(device, &reg_CalibrationTStart, 1);
 	send(&reg_CalibrationTStart, 1);
 	uint8_t buffer[64];
@@ -234,10 +235,36 @@ bool BME280::end() {
 
 
 // --- SEND ---
+// Perform a read request on a register.
 bool BME280::send(uint8_t* data, uint16_t len) {
 	if (spi) {
 #ifdef NODATE_SPI_ENABLED
 		// Use SPI send.
+		// Ensure the first bit is set to the 'read' state (1).
+		*data |= 0x80;
+		if (!SPI::sendData(spi_device, data, len)) { return false; }
+#endif
+	}
+	else {
+#ifdef NODATE_I2C_ENABLED
+		// Use I2C send.
+		I2C::setSlaveTarget(i2c_device, address);
+		I2C::sendToSlave(i2c_device, data, len);
+#endif
+	}
+	
+	return true;
+}
+
+
+// --- WRITE ---
+// Perform a write action to a register.
+bool BME280::write(uint8_t* data, uint16_t len) {
+	if (spi) {
+#ifdef NODATE_SPI_ENABLED
+		// Use SPI send.
+		// Ensure we set the first bit to the 'write' state (0)
+		*data & ~0x80;
 		if (!SPI::sendData(spi_device, data, len)) { return false; }
 #endif
 	}

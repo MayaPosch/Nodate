@@ -99,6 +99,7 @@ public:
 	bool start();	// Start communication.
 	bool end();	// Stop communication.
 	bool send(uint8_t* data, uint16_t len);
+	bool write(uint8_t* data, uint16_t len);
 	bool receive(uint8_t* data, uint16_t len);
 	bool transceive(uint8_t* txdata, uint16_t txlen, uint8_t* rxdata, uint16_t rxlen);
 };

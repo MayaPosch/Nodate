@@ -62,17 +62,17 @@ int main () {
 	spins.sclk = { GPIO_PORT_A, 5, 5 };
 	spins.nss = { GPIO_PORT_A, 4, 5 }; */
 	// Note: this set targets SPI 1 (no remap) on STM32F103.
-	SPI_pins spins;
-	spins.miso = { GPIO_PORT_A, 6, 0 };
-	spins.mosi = { GPIO_PORT_A, 7, 0 };
-	spins.sclk = { GPIO_PORT_A, 5, 0 };
-	spins.nss = { GPIO_PORT_A, 4, 0 };
-	// Note: this set targets SPI 1 on STM32F042.
 	/* SPI_pins spins;
 	spins.miso = { GPIO_PORT_A, 6, 0 };
 	spins.mosi = { GPIO_PORT_A, 7, 0 };
 	spins.sclk = { GPIO_PORT_A, 5, 0 };
 	spins.nss = { GPIO_PORT_A, 4, 0 }; */
+	// Note: this set targets SPI 1 on STM32F042.
+	SPI_pins spins;
+	spins.miso = { GPIO_PORT_A, 6, 0 };
+	spins.mosi = { GPIO_PORT_A, 7, 0 };
+	spins.sclk = { GPIO_PORT_A, 5, 0 };
+	spins.nss = { GPIO_PORT_A, 4, 0 };
 	if (!SPI::startSPIMaster(SPI_1, spins)) {
 		// Handle error.
 		printf("SPI master init error.\n");
@@ -108,7 +108,7 @@ int main () {
 	// Soft reset sensor.
 	// Note: enabling this results in the calibration data from the sensor to be zero.
 	// 			May take a longer delay after reset?
-	//sensor.softReset();
+	sensor.softReset();
 	
 	Timer timer;
 	timer.delay(1000);
@@ -144,6 +144,25 @@ int main () {
 	
 	while(1) {
 		//
+		timer.delay(2000);
+	
+		// Get raw temperature.
+		/* int32_t raw;
+		if (!sensor.rawTemperature(raw)) {
+			printf("Reading raw temperature failed.\n");
+			while (1) { }
+		}
+		
+		printf("Raw temp: %d.\n", raw);
+		
+		// Read temperature.
+		float t;
+		if (!sensor.temperature(t)) {
+			printf("Reading temperature failed.\n");
+			while (1) { }
+		}
+	
+		printf("Temp: %f.\n", t); */
 	}
 	
 	return 0;

@@ -17,14 +17,12 @@
 RccSysClockConfig maxSysClockCfg;
 BoardLED boardLEDs[1];
 BoardButton boardButtons[1];
-USART_def boardUSARTs[2];
+USART_def boardUSARTs[3];
 
 uint8_t boardLEDs_count = 1;
 uint8_t boardButtons_count = 0;
 
-uint8_t boardUSART_count = 2;
-static GpioPinDef usartTxDef[2];
-static GpioPinDef usartRxDef[2];
+uint8_t boardUSART_count = 3;
 
 // TODO: Finish clock configuration.
 bool init() {
@@ -58,23 +56,35 @@ bool init() {
 	USART_def usart;
 	usart.usart = USART_1;
 	usart.configs = 2;
-	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 1 };
-	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 0 };
-	usart.tx = usartTxDef;
-	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 1 };
-	usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 0 };
-	usart.rx = usartRxDef;
+	usart.tx = new GpioPinDef[2];
+	usart.tx[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 0 };
+	usart.tx[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 0 };
+	usart.rx = new GpioPinDef[2];
+	usart.rx[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 0 };
+	usart.rx[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 0 };
 	boardUSARTs[0] = usart;
 	
 	usart.usart = USART_2;
 	usart.configs = 2;
-	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 2, .af = 1 };
-	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 14, .af = 1 };
-	usart.tx = usartTxDef;
-	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 15, .af = 1 };
-	usartRxDef[1] = { .port = GPIO_PORT_A, .pin = 3, .af = 1 };
-	usart.rx = usartRxDef;
+	usart.tx = new GpioPinDef[2];
+	usart.tx[0] = { .port = GPIO_PORT_A, .pin = 2, .af = 0 };
+	usart.tx[1] = { .port = GPIO_PORT_D, .pin = 5, .af = 1 };
+	usart.rx = new GpioPinDef[2];
+	usart.rx[0] = { .port = GPIO_PORT_A, .pin = 3, .af = 0 };
+	usart.rx[1] = { .port = GPIO_PORT_D, .pin = 6, .af = 1 };
 	boardUSARTs[1] = usart;
+	
+	usart.usart = USART_3;
+	usart.configs = 3;
+	usart.tx = new GpioPinDef[3];
+	usart.tx[0] = { .port = GPIO_PORT_B, .pin = 10, .af = 0 };
+	usart.tx[1] = { .port = GPIO_PORT_D, .pin = 8, .af = 1 };
+	usart.tx[2] = { .port = GPIO_PORT_C, .pin = 10, .af = 3 };
+	usart.rx = new GpioPinDef[3];
+	usart.rx[0] = { .port = GPIO_PORT_B, .pin = 11, .af = 0 };
+	usart.rx[1] = { .port = GPIO_PORT_D, .pin = 9, .af = 1 };
+	usart.rx[2] = { .port = GPIO_PORT_C, .pin = 11, .af = 3 };
+	boardUSARTs[2] = usart;
 	
 	
 	return true;

@@ -29,7 +29,7 @@ extern RccSysClockConfig maxSysClockCfg;
 
 // Define the number and features of the U(S)ARTs on the board.
 extern uint8_t boardUSART_count;
-extern USART_def boardUSARTs[2];
+extern USART_def boardUSARTs[3];
 
 // --- LEDS ---
 

@@ -147,7 +147,6 @@ int main () {
 		timer.delay(2000);
 	
 		// Get raw temperature.
-		/* int32_t raw;
 		if (!sensor.rawTemperature(raw)) {
 			printf("Reading raw temperature failed.\n");
 			while (1) { }
@@ -156,13 +155,12 @@ int main () {
 		printf("Raw temp: %d.\n", raw);
 		
 		// Read temperature.
-		float t;
 		if (!sensor.temperature(t)) {
 			printf("Reading temperature failed.\n");
 			while (1) { }
 		}
 	
-		printf("Temp: %f.\n", t); */
+		printf("Temp: %f.\n", t);
 	}
 	
 	return 0;

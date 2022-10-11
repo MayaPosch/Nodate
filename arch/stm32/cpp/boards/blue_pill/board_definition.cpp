@@ -17,7 +17,7 @@
 RccSysClockConfig maxSysClockCfg;
 BoardLED boardLEDs[1];
 BoardButton boardButtons[1];
-USART_def boardUSARTs[2];
+USART_def boardUSARTs[3];
 
 uint8_t boardLEDs_count = 1;
 uint8_t boardButtons_count = 0;

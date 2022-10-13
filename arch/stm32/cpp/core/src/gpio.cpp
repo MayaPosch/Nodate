@@ -349,9 +349,14 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, RccPeripheral per, uint8_t af, G
 		else if (speed == GPIO_MID) {	instance.regs->CRH |= (0x1 << pinmode);	}
 		else if (speed == GPIO_HIGH) {	instance.regs->CRH |= (0x3 << pinmode);	} */
 	
-		instance.regs->CRH &= ~(0x1 << pincnf);
+		instance.regs->CRH &= ~(0x3 << pincnf);
 		if (type == GPIO_PUSH_PULL) {		instance.regs->CRH |= (0x2 << pincnf);	}
 		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRH |= (0x3 << pincnf);	}
+	}
+	
+	if (af == 0) {
+		// No remapping requested, we are done here.
+		return true;
 	}
 	
 	uint32_t field_mask = 0x3;

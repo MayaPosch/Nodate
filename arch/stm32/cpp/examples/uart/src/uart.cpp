@@ -39,6 +39,14 @@ int main () {
 		while (1) { }
 	}
 	
+	// Start SysTick.
+	McuCore::initSysTick();
+	
+	char ch = 'a';
+	if (!USART::sendUart(usartTarget, ch)) {
+		while (1) { }
+	}
+	
 	// 2. Set up LED.
 	uint8_t 	led_pin;
 	GPIO_ports 	led_port;
@@ -70,7 +78,7 @@ int main () {
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
 	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
 	
-	char ch = 'a';
+	ch = 'b';
 	if (!USART::sendUart(usartTarget, ch)) {
 		while (1) { }
 	}

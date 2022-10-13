@@ -75,7 +75,7 @@ bool init() {
 	boardUSARTs[1] = usart;
 	
 	usart.usart = USART_3;
-	usart.configs = 3;
+	usart.configs = 2;
 	usart.tx = new GpioPinDef[3];
 	usart.tx[0] = { .port = GPIO_PORT_B, .pin = 10, .af = 0 };
 	usart.tx[1] = { .port = GPIO_PORT_D, .pin = 8, .af = 1 };

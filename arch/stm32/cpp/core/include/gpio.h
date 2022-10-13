@@ -104,7 +104,7 @@ public:
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);
 	static bool set_af(GPIO_ports port, uint8_t pin, uint8_t af);
 	static bool set_af(GpioPinDef def);
-	static bool set_af(RccPeripheral per, uint8_t af);
+	static bool set_af(GPIO_ports port, uint8_t pin, RccPeripheral per, uint8_t af, GPIO_out_type type = GPIO_PUSH_PULL);
 	static bool set_analog(GPIO_ports port, uint8_t pin);
 	static bool set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd = GPIO_FLOATING, 
 							GPIO_out_type type = GPIO_PUSH_PULL, GPIO_out_speed speed = GPIO_LOW);

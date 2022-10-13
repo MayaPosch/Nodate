@@ -254,7 +254,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	// Input/output registers are spread over two combined registers (CRL, CRH).
 	// A call to GPIO::set_af(RccPeripheral per, uint8_t af) is also required
 	// to fully enable an Alternate Function
-	if (pin < 8) {
+	/* if (pin < 8) {
 		// Set CRL register (CNF).
 		uint8_t pincnf = (pin * 4) + 3;
 		instance.regs->CRL |= (0x1 << pincnf);
@@ -263,7 +263,9 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 		// Set CRH register (CNF).
 		uint8_t pincnf = ((pin - 8) * 4) + 3;
 		instance.regs->CRH |= (0x1 << pincnf);
-	}
+	} */
+	
+	return false;
 
 #else
 	uint8_t pin2 = pin * 2;
@@ -307,8 +309,51 @@ bool GPIO::set_af(GpioPinDef def) {
  * \param[in]   af: alternate function mode value
  * \return      true on success, false otherwise
  */
-bool GPIO::set_af(RccPeripheral per, uint8_t af) {
+bool GPIO::set_af(GPIO_ports port, uint8_t pin, RccPeripheral per, uint8_t af, GPIO_out_type type) {
 #ifdef STM32F1
+	// Validate port & pin.
+	if (pin > 15) { return false; }
+	if (af > 15) { return false; }
+	
+	GPIO_instance* instancesStatic = GPIO_instances();
+	GPIO_instance &instance = instancesStatic[port];
+	
+	// Check if port is active, if not, try to activate it.
+	if (!instance.active) {
+		if (!Rcc::enablePort((RccPort) port)) { return false; }
+		instance.active = true;
+	}
+	
+	// First set the GPIO parameters.
+	// Input/output registers are spread over two combined registers (CRL, CRH).
+	if (pin < 8) {
+		// Set CRL register (CNF & MODE).
+		uint8_t pinmode = pin * 4; // Offset into register.
+		uint8_t pincnf = pinmode + 2;
+		
+		/* if (speed == GPIO_LOW) {		instance.regs->CRL |= (0x2 << pinmode); }
+		else if (speed == GPIO_MID) {	instance.regs->CRL |= (0x1 << pinmode);	}
+		else if (speed == GPIO_HIGH) {	instance.regs->CRL |= (0x3 << pinmode);	} */
+	
+		// Set AF version, not the general output PU/PD.
+		instance.regs->CRL &= ~(0x3 << pincnf); // Reset.
+		if (type == GPIO_PUSH_PULL) {		instance.regs->CRL |= (0x2 << pincnf);	}
+		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRL |= (0x3 << pincnf);	}
+	}
+	else {
+		// Set CRH register.
+		uint8_t pinmode = (pin - 8) * 4;
+		uint8_t pincnf = pinmode + 2;
+		
+		/* if (speed == GPIO_LOW) {		instance.regs->CRH |= (0x2 << pinmode); }
+		else if (speed == GPIO_MID) {	instance.regs->CRH |= (0x1 << pinmode);	}
+		else if (speed == GPIO_HIGH) {	instance.regs->CRH |= (0x3 << pinmode);	} */
+	
+		instance.regs->CRH &= ~(0x1 << pincnf);
+		if (type == GPIO_PUSH_PULL) {		instance.regs->CRH |= (0x2 << pincnf);	}
+		else if (type == GPIO_OPEN_DRAIN) {	instance.regs->CRH |= (0x3 << pincnf);	}
+	}
+	
 	uint32_t field_mask = 0x3;
 	if ((per == RCC_USART3) || (per == RCC_TIM1) || (per == RCC_TIM2) || (per == RCC_TIM3) || (per == RCC_CAN)) {
 		// four values are possible for AF
@@ -366,7 +411,7 @@ bool GPIO::set_af(RccPeripheral per, uint8_t af) {
 	AFIO->MAPR |= (af << pos);
 	return true;
 #else
-	// default for mcu's other than STM32F1 series
+	// Default for MCUs other than STM32F1 series
 	return false;
 #endif
 }
@@ -418,7 +463,7 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 	// Input/output registers are spread over two combined registers (CRL, CRH).
 	if (pin < 8) {
 		// Set CRL register (CNF & MODE).
-		uint8_t pinmode = pin * 4;
+		uint8_t pinmode = pin * 4; // Offset into register.
 		uint8_t pincnf = pinmode + 2;
 		
 		if (speed == GPIO_LOW) {		instance.regs->CRL |= (0x2 << pinmode); }

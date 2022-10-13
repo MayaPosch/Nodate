@@ -53,8 +53,6 @@ struct USART_def {
 
 
 class USART {
-	static GPIO gpio;
-	
 public:
 	static bool startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, uint8_t tx_af,
 											GPIO_ports rx_port, uint8_t rx_pin, uint8_t rx_af,

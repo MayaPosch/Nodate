@@ -86,9 +86,6 @@ USART_device* USART_list() {
 USART_device* devicesStatic = USART_list();
 
 
-GPIO USART::gpio;
-
-
 // Callback handlers.
 // Overrides the default handlers and allows the use of custom callback functions.
 #if defined __stm32f0
@@ -301,7 +298,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	if (instance.active) { return true; }
 	
 	// Set TX as high speed, push-pull.
-	if (!gpio.set_output_parameters(tx_port, tx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
+	if (!GPIO::set_output_parameters(tx_port, tx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) tx_port);
 		return false;
 	}
@@ -311,28 +308,41 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	// STM32F1 requires setting AF mode in the peripheral register
 	// as well as setting the MODEx1 pin in the CRL or CRH
 	// register, as appropriate
-	if (!gpio.set_af(per, tx_af)) {
+	
+	// Set AF mode on TX pin with push-pull configuration.
+	if (!GPIO::set_af(tx_port, tx_pin, per, tx_af, GPIO_PUSH_PULL)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
-#endif
-	if (!gpio.set_af(tx_port, tx_pin, tx_af)) {
+	
+	/* if (!GPIO::set_af(tx_port, tx_pin, tx_af)) {
+		Rcc::disablePort((RccPort) tx_port);
+		return false;
+	} */
+	
+	// RX pin is input. Enable pull-up.
+	if (!GPIO::set_input(rx_port, rx_pin, GPIO_PULL_UP)) {
+		return false;
+	}
+#else
+	if (!GPIO::set_af(tx_port, tx_pin, tx_af)) {
 		Rcc::disablePort((RccPort) tx_port);
 		return false;
 	}
 	
-	if (!gpio.set_af(rx_port, rx_pin, rx_af)) {
+	if (!GPIO::set_af(rx_port, rx_pin, rx_af)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
 		
-	if (!gpio.set_output_parameters(rx_port, rx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
+	if (!GPIO::set_output_parameters(rx_port, rx_pin, GPIO_PULL_UP, GPIO_PUSH_PULL, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) tx_port);
 		Rcc::disablePort((RccPort) rx_port);
 		return false;
 	}
+#endif
 	
 	// Set up and enable the USART peripheral.
 	if (!Rcc::enable(per)) { 

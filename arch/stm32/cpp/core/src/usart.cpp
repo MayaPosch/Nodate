@@ -356,7 +356,11 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 #ifndef __stm32f3
 	// Configure CR1 register.
 	// TODO: Enable configuring of other registers.
-	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE);
+	//instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE);
+#endif
+
+#ifdef STM32F1
+	instance.regs->CR1 |= USART_CR1_UE;
 #endif
 	
 	// Set the baud rate (BR register).
@@ -392,8 +396,12 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	
 	// Enable the USART via its CR1 register.
 #ifndef __stm32f3
+#ifdef STM32F1
+	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE);
+#else
 	//instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
 	instance.regs->CR1 |= USART_CR1_UE;
+#endif
 #else
 	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE);
 #endif

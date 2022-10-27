@@ -81,11 +81,13 @@ float           Microseconds,
 /* end of variables for time measurement */
 
 
+USART_devices usartTarget = USART_1;
+USART_def& ud = boardUSARTs[1];
+
+
 void uartCallback(char ch) {
 	// Copy character into send buffer.
-	//USART::sendUart(USART_2, ch);
-	USART::sendUart(USART_3, ch);
-	//USART::sendUart(USART_1, ch);
+	USART::sendUart(usartTarget, ch);
 }
 
 
@@ -105,14 +107,28 @@ int main () {
 	
 	// Nucleo-F746ZG
 	// USART3, PD8:7 (TX), PD9:7 (RX).
-	USART::startUart(USART_3, GPIO_PORT_D, 8, 7, GPIO_PORT_D, 9, 7, 9600, uartCallback);
+	//USART::startUart(USART_3, GPIO_PORT_D, 8, 7, GPIO_PORT_D, 9, 7, 9600, uartCallback);
+	usartTarget = ud.usart;
+	USART::startUart(ud.usart, ud.tx[0].port, ud.tx[0].pin, ud.tx[0].af, 
+								ud.rx[0].port, ud.rx[0].pin, ud.rx[0].af, 115200, uartCallback);
 	
 	//const uint8_t led_pin = 3; // Nucleo-f042k6: Port B, pin 3.
 	//const GPIO_ports led_port = GPIO_PORT_B;
-	const uint8_t led_pin = 13; // STM32F4-Discovery: Port D, pin 13 (orange)
-	const GPIO_ports led_port = GPIO_PORT_D;
+	//const uint8_t led_pin = 13; // STM32F4-Discovery: Port D, pin 13 (orange)
+	//const GPIO_ports led_port = GPIO_PORT_D;
 	//const uint8_t led_pin = 7; // Nucleo-F746ZG: Port B, pin 7 (blue)
 	//const GPIO_ports led_port = GPIO_PORT_B;
+	
+	uint8_t 	led_pin;
+	GPIO_ports 	led_port;
+	bool		led_enable = true;
+	if (boardLEDs_count > 0) {
+		led_pin = boardLEDs[0].pin.pin;
+		led_port = boardLEDs[0].pin.port;
+	}
+	else {
+		led_enable = false;
+	}
 	
 	// Set up stdout.
 	IO::setStdOutTarget(USART_2);

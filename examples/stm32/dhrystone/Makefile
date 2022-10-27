@@ -11,7 +11,8 @@ NDLANGUAGE ?= cpp
 # One can use the board preset.
 #BOARD ?= nucleo-f042k6
 #BOARD ?= stm32f4-discovery
-BOARD ?= nucleo-f746zg
+#BOARD ?= nucleo-f746zg
+BOARD ?= black_pill_f411
 
 # Set the MCU and programmer types.
 #
@@ -31,6 +32,16 @@ APP_C_FILES = src/dhry_2.c
 APP_FLAGS = -DMSC_CLOCK -DHZ=60
 APP_C_FLAGS = 
 APP_CPP_FLAGS = 
+
+
+# Set Nodate modules to enable.
+# Available modules:
+# ethernet, i2c, gpio, interrupts, timer, usart
+NODATE_MODULES = gpio timer usart
+
+# Set library modules to enable.
+# library name matches the folder name in libs/. E.g. freertos, LwIP, libscpi, bme280
+NODATE_LIBRARIES = 
 
 
 #

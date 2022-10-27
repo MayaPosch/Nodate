@@ -27,14 +27,15 @@ bool init() {
 	// Target frequency: 100 MHz.
 	// Input: 25 MHz HSE, no bypass.
 	maxSysClockCfg.source 		= RCC_SYSCLOCK_SRC_PLL;
+	maxSysClockCfg.base_freq	= 25000000;
 	maxSysClockCfg.HSE_bypass 	= false;
 	maxSysClockCfg.HSI_enabled	= false;
 	maxSysClockCfg.PLL_enabled = true;
 	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSE;
-	maxSysClockCfg.PLLM		= 8;
-	maxSysClockCfg.PLLN		= 432;
+	maxSysClockCfg.PLLM		= 25;
+	maxSysClockCfg.PLLN		= 200;
 	maxSysClockCfg.PLLP		= 2;
-	maxSysClockCfg.PLLQ		= 9;
+	maxSysClockCfg.PLLQ		= 4;
 	maxSysClockCfg.AHB_prescale	= 1;
 	maxSysClockCfg.APB1_prescale	= 4;
 	maxSysClockCfg.APB2_prescale	= 2;

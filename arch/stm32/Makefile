@@ -179,6 +179,15 @@ ifneq (, $(findstring bme280, $(NODATE_LIBRARIES)))
 	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/bme280
 endif
 
+ifneq (, $(findstring st7735, $(NODATE_LIBRARIES)))
+	NODATE_ST7735 = 1
+	LIB_INCLUDES += -I $(TOP)/$(NDLANGUAGE)/libs/st7735 \
+			-I $(TOP)/$(NDLANGUAGE)/libs/st7735
+	LIB_CPP_SRC += $(wildcard arch/stm32/$(NDLANGUAGE)/libs/st7735/*.cpp)
+	
+	LIB_MKDIRS += $(MAKEDIR) $(APPFOLDER)/obj/arch/stm32/$(NDLANGUAGE)/libs/st7735
+endif
+
 
 
 

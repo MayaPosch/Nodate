@@ -109,20 +109,79 @@ bool Clock::enableMaxClock() {
 #endif
 
 #if defined __stm32f4
-	// Use HSI (assume already enabled), PLL on, PLL PreDiv ?, Mul ?.
-	// Flash latency: 1. Pre-fetch buffer enabled.
-	FLASH->ACR |= (FLASH_ACR_LATENCY_5WS | FLASH_ACR_PRFTEN);
+	// Set Flash latency. Set pre-fetch buffer enabled.
+	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTEN);
 	
+	// Set the SW sys clock switch to the right input type.
+	uint32_t newSysClock;
 	RCC->CFGR &= ~(RCC_CFGR_SW);
-	RCC->CFGR |= RCC_CFGR_SW_HSI;
+	if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_PLL) {
+		RCC->CFGR |= RCC_CFGR_SW_PLL;
+		uint32_t reg = 0;
+		if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSI) {
+			reg |= RCC_PLLCFGR_PLLSRC_HSI;	// PLL source is HSI.
+		}
+		else if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSE) {
+			reg |= RCC_PLLCFGR_PLLSRC_HSE;	// PLL source is HSE.
+		}
+		else {
+			return false;
+		}
+		
+		// Set PLL configuration parameters.
+		reg |= (maxSysClockCfg.PLLM << RCC_PLLCFGR_PLLM_Pos)
+				| (maxSysClockCfg.PLLN << RCC_PLLCFGR_PLLN_Pos) 
+				| (maxSysClockCfg.PLLP << RCC_PLLCFGR_PLLP_Pos)
+				| (maxSysClockCfg.PLLQ << RCC_PLLCFGR_PLLQ_Pos);
+		RCC->PLLCFGR = reg;
+		
+		// Enable PLL.
+		RCC->CFGR |= RCC_CFGR_SW_PLL;
+		while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
+		
+		newSysClock = ((maxSysClockCfg.base_freq / maxSysClockCfg.PLLM) * maxSysClockCfg.PLLN)
+						/ maxSysClockCfg.PLLP;
+	}
+	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSI) {
+		RCC->CFGR |= RCC_CFGR_SW_HSI;
+		newSysClock = maxSysClockCfg.base_freq;
+	}
+	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSE) {
+		RCC->CFGR |= RCC_CFGR_SW_HSE;
+		newSysClock = maxSysClockCfg.base_freq;
+	}
+	else {
+		return false;
+	}
 	
-	RCC->PLLCFGR |= RCC_PLLCFGR_PLLSRC_HSI | (8 << RCC_PLLCFGR_PLLM_Pos)
-						| (336 << RCC_PLLCFGR_PLLN_Pos) | (2 << RCC_PLLCFGR_PLLP_Pos)
-						| (7 << RCC_PLLCFGR_PLLQ_Pos);
+	// Set AHB prescaler.
+	uint32_t ahb_div = 1;
+	if 		(maxSysClockCfg.AHB_prescale == 2)		{ ahb_div = 8; 	}
+	else if (maxSysClockCfg.AHB_prescale == 4) 		{ ahb_div = 9; 	}
+	else if (maxSysClockCfg.AHB_prescale == 8) 		{ ahb_div = 10; }
+	else if (maxSysClockCfg.AHB_prescale == 16) 	{ ahb_div = 11;	}
+	else if (maxSysClockCfg.AHB_prescale == 64) 	{ ahb_div = 12; }
+	else if (maxSysClockCfg.AHB_prescale == 128) 	{ ahb_div = 13; }
+	else if (maxSysClockCfg.AHB_prescale == 256) 	{ ahb_div = 14; }
+	else if (maxSysClockCfg.AHB_prescale == 512) 	{ ahb_div = 15; }
+	RCC->CFGR |= (ahb_div << RCC_CFGR_HPRE);
 	
-	RCC->CFGR |= RCC_CFGR_SW_PLL;
-	while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
-	SystemCoreClock = 48000000;	// 48 MHz.
+	// Set APB prescalers.
+	uint32_t apb1_div = 1;
+	uint32_t apb2_div = 1;
+	if 		(maxSysClockCfg.APB1_prescale == 2)		{ apb1_div = 4; 	}
+	else if (maxSysClockCfg.APB1_prescale == 4) 	{ apb1_div = 5; 	}
+	else if (maxSysClockCfg.APB1_prescale == 8) 	{ apb1_div = 6; 	}
+	else if (maxSysClockCfg.APB1_prescale == 16)	{ apb1_div = 7; 	}
+	if 		(maxSysClockCfg.APB2_prescale == 2)		{ apb2_div = 4; 	}
+	else if (maxSysClockCfg.APB2_prescale == 4) 	{ apb2_div = 5; 	}
+	else if (maxSysClockCfg.APB2_prescale == 8) 	{ apb2_div = 6; 	}
+	else if (maxSysClockCfg.APB2_prescale == 16)	{ apb2_div = 7; 	}
+	RCC->CFGR |= (apb1_div << RCC_CFGR_PPRE1);
+	RCC->CFGR |= (apb2_div << RCC_CFGR_PPRE2);
+	
+	// Update System core clock variable.
+	SystemCoreClock = newSysClock;
 #endif
 
 #if defined __stm32f7
@@ -135,10 +194,10 @@ bool Clock::enableMaxClock() {
 #endif
 	
 	// Configure system clock.	
-	Rcc::configureSysClock(maxSysClockCfg);
+	//Rcc::configureSysClock(maxSysClockCfg);
 
 	// Update SystemCoreClock variable.
-	SystemCoreClockUpdate();
+	//SystemCoreClockUpdate();
 	
 	return true;
 }

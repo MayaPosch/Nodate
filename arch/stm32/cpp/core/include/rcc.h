@@ -106,6 +106,7 @@ enum RccPllClockSrc {
 
 struct RccSysClockConfig {
 	RccSysClockSrc source;
+	uint32_t base_freq;		// Frequency (Hz) of the HSE/HSI source.
 	bool HSE_bypass = false;
 	bool HSI_enabled = true;
 	bool PLL_enabled = false;

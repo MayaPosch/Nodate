@@ -160,6 +160,54 @@ bool SPI::startSPIMaster(SPI_devices device, SPI_pins pins) {
 // -- START I2S MASTER ---
 // Starts the device in I2S configuration.
 bool SPI::startI2SMaster(SPI_devices device, I2S_pins pins) {
+	SPI_device &instance = spiList[device];
+	
+	// Check status. Set parameters.
+	if (instance.active) { return true; } // Already active.
+	if (device == SPI_1) 		{ instance.per = RCC_SPI1; }
+	else if (device == SPI_2)	{ instance.per = RCC_SPI2; }
+	else if (device == SPI_3)	{ instance.per = RCC_SPI3; }
+	else if (device == SPI_4)	{ instance.per = RCC_SPI4; }
+	else if (device == SPI_5)	{ instance.per = RCC_SPI5; }
+	
+#if defined STM32F0 || defined STM32F1 || defined STM32F4
+	// Configure GPIO pins: SD, WS, CK, MCK.
+	// SD:	(MOSI)	Serial Data, the half-duplex data in/output.
+	// WS:	(NSS)	Word Select, data control signal.
+	// CK:	(SCK)	Serial Clock. Output in master mode.
+	// MCK:	(opt)	Optional Master Clock output.
+#ifdef STM32F1
+	if (!GPIO::set_af(instance.per, pins.miso.af)) {
+		return false;
+	}
+#endif
+
+	// TODO: Make MCK optional.
+	if (!GPIO::set_af(pins.sd) || 
+		!GPIO::set_af(pins.ws) || 
+		!GPIO::set_af(pins.ck) || 
+		!GPIO::set_af(pins.mck)) {
+		return false;
+	}
+	
+	// Set the pin parameters.
+	// TODO: Make MCK optional.
+	if (!GPIO::set_output_parameters(pins.sd, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_HIGH)) {
+		return false;
+	}
+	
+	if (!GPIO::set_output_parameters(pins.ws, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_HIGH)) {
+		return false;
+	}
+	
+	if (!GPIO::set_output_parameters(pins.ck, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_HIGH)) {
+		return false;
+	}
+	
+	if (!GPIO::set_output_parameters(pins.mck, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_HIGH)) {
+		return false;
+	}
+
 	//
 	
 	return false;

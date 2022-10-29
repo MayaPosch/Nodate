@@ -15,7 +15,7 @@ static const uint8_t handle_max = std::numeric_limits<uint8_t>::max();
 
 
 const int portCount = 11;
-const int peripheralCount = 45;
+const int peripheralCount = 46;
 bool getAHBprescaler(uint32_t divisor, uint32_t &AHBfield);
 bool getAPB1prescaler(uint32_t divisor, uint32_t &APB1field);
 bool getAPB2prescaler(uint32_t divisor, uint32_t &APB2field);
@@ -579,14 +579,21 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_PWR].enable = RCC_APB1ENR1_PWREN_Pos;
 #endif
 
-#ifdef RCC_APB1ENR_DACEN
+/* #ifdef RCC_APB1ENR_DACEN
 	peripheralHandlesStatic[RCC_DAC].exists = true;
 	peripheralHandlesStatic[RCC_DAC].enr = &(RCC->APB1ENR);
 	peripheralHandlesStatic[RCC_DAC].enable = RCC_APB1ENR_DACEN_Pos;
-#elif defined RCC_APB1ENR1_DAC1EN
-	peripheralHandlesStatic[RCC_DAC].exists = true;
-	peripheralHandlesStatic[RCC_DAC].enr = &(RCC->APB1ENR1);
-	peripheralHandlesStatic[RCC_DAC].enable = RCC_APB1ENR1_DAC1EN_Pos;
+#elif defined RCC_APB1ENR1_DAC1EN */
+#if defined RCC_APB1ENR_DAC1EN
+	peripheralHandlesStatic[RCC_DAC1].exists = true;
+	peripheralHandlesStatic[RCC_DAC1].enr = &(RCC->APB1ENR);
+	peripheralHandlesStatic[RCC_DAC1].enable = RCC_APB1ENR_DAC1EN_Pos;
+#endif
+
+#if defined RCC_APB1ENR_DAC2EN
+	peripheralHandlesStatic[RCC_DAC2].exists = true;
+	peripheralHandlesStatic[RCC_DAC2].enr = &(RCC->APB1ENR);
+	peripheralHandlesStatic[RCC_DAC2].enable = RCC_APB1ENR_DAC2EN_Pos;
 #endif
 
 #ifdef RCC_APB1ENR_CECEN

@@ -90,7 +90,11 @@ bool DAC::start(DAC_devices device, DAC_channel ch, DAC_ch_cfg ch_cfg) {
 		// Leaving on b0000 for unmask bit 0 default (amplitude == 1).
 	}
 	
+	// Enable the channel.
+	creg |= DAC_CR_EN1;
+	
 	instance.regs->CR = creg;
+	
 	
 	instance.active = true;
 	

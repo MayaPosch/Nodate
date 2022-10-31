@@ -27,18 +27,19 @@ uint8_t boardUSART_count = 3;
 // TODO: Finish clock configuration.
 bool init() {
 	maxSysClockCfg.source 		= RCC_SYSCLOCK_SRC_PLL;
+	maxSysClockCfg.base_freq	= 8000000;
 	maxSysClockCfg.HSE_bypass 	= false;
 	maxSysClockCfg.HSI_enabled	= false;
 	maxSysClockCfg.PLL_enabled = true;
-	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSI;
-	maxSysClockCfg.PLLM		= 1;
+	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSE;
+	maxSysClockCfg.PLLM		= 9;	// PLLMul for F1, ignore other PLL factors.
 	maxSysClockCfg.PLLN		= 1;
 	maxSysClockCfg.PLLP		= 1;
 	maxSysClockCfg.PLLQ		= 1;
 	maxSysClockCfg.AHB_prescale	= 1;
-	maxSysClockCfg.APB1_prescale	= 1;
+	maxSysClockCfg.APB1_prescale	= 2;
 	maxSysClockCfg.APB2_prescale	= 1;
-	maxSysClockCfg.FLASH_latency	= 1;
+	maxSysClockCfg.FLASH_latency	= 2;
 
 	BoardLED bl;
 	bl.pin.port = GPIO_PORT_C;

@@ -22,7 +22,7 @@ bool rtc_enabled = false;
 // --- ENABLE RTC ---
 bool Rtc::enableRTC() {
 	// TODO: instead of the LSI, the LSE should be available as optional RTC clock source.
-#if defined __stm32f4 || defined __stm32f7
+#if defined __stm32f4 || defined __stm32f7 || defined __stm32f1
 	if (rtc_enabled) { return true; }
 	
 	// Use LSI for the RTC. Ensure it's enabled.
@@ -56,6 +56,32 @@ bool Rtc::enableRTC() {
 	// Disable PWR.
 	if (!Rcc::disable(RCC_PWR)) { return false; }
 	
+#ifdef __stm32f1
+	// Poll RTOFF to ensure RTC is ready.
+	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
+		// TODO: Handle timeout.
+	}
+	
+	// Set CNF to enter configuration mode.
+	RTC->CRL |= RTC_CRL_CNF;
+	
+	// Set the alarm time. Resolution is 1 second.
+	uint32_t alarmval = 1;
+	RTC->ALRH = alarmval >> 16;				// Set the ALARM MSB word.
+	RTC->ALRL = (alarmval & RTC_ALRL_RTC_ALR); 	// Set the ALARM LSB word.
+	
+	// Unset CNF to leave configuration mode.
+	RTC->CRL &= ~RTC_CRL_CNF;
+	
+	// Poll RTOFF to ensure RTC is ready.
+	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
+		// TODO: Handle timeout.
+	}
+	
+	// Enable alarm interrupt.
+	RTC->CRH |= RTC_CRH_ALRIE;
+	
+#else
 	// Disable alarm A to modify it.
 	// Wait for the action to complete.
 	RTC->CR &=~ RTC_CR_ALRAE;
@@ -76,6 +102,8 @@ bool Rtc::enableRTC() {
 	// Configure interrupts.
 	EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
 	EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
+#endif
+
 #if defined __stm32f0
 	NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
 	NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
@@ -101,7 +129,7 @@ bool Rtc::enableRTC() {
 	
 	return true;
 #else
-	// No usable RTC peripheral exists. Return -1.
+	// No usable RTC peripheral exists.
 	return false;
 #endif 
 }

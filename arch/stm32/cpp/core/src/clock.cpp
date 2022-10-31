@@ -31,6 +31,35 @@ uint8_t RTC_Bcd2ToByte(uint8_t Value) {
 }
 
 
+// --- BCD conversion ---
+uint8_t bcd2dec8(uint8_t bcd) {
+	uint8_t dec = (bcd >> 4) * 10 + (bcd & 0x0f);
+	return dec;
+}
+
+uint8_t dec2bcd8(uint8_t dec) {
+	uint8_t bcd = (dec % 10) | (dec / 10) << 4;
+	return bcd;
+}
+
+uint16_t bcd2dec16(uint16_t bcd) {
+	return bcd2dec8(bcd >> 8) * 100 + bcd2dec8(bcd & 0xff);
+}
+
+uint16_t dec2bcd16(uint16_t dec) {
+	return dec2bcd8(dec % 100) | dec2bcd8(dec / 100) << 8;
+}
+
+uint32_t bcd2dec32(uint32_t bcd) {
+	return bcd2dec16(bcd >> 16) * 10000 + bcd2dec16(bcd & 0xffff);
+}
+
+uint32_t dec2bcd32(uint32_t dec) {
+	return dec2bcd16(dec % 10000) | dec2bcd16(dec / 10000) << 16;
+}
+// ---
+
+
 int _times(struct tms* buf) {
 #if defined RTC_TR_SU
 	if (!rtc_pwr_enabled) {
@@ -54,6 +83,20 @@ int _times(struct tms* buf) {
 	buf->tms_cstime = ticks;
 	
 	return ticks; // Return clock ticks.
+#elif defined __stm32F1
+	// Get value in BCD format.
+	register uint16_t high = 0, low = 0;
+
+	high = RTC->CNTH & RTC_CNTH_RTC_CNT;
+	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
+	uint32_t ticks =  bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
+	ticks = ticks * SystemCoreClock;
+	buf->tms_utime = ticks;
+	buf->tms_stime = ticks;
+	buf->tms_cutime = ticks;
+	buf->tms_cstime = ticks;
+	
+	return ticks;
 #else
 	// No usable RTC peripheral exists. Return -1.
 	return -1;
@@ -108,6 +151,130 @@ bool Clock::enableMaxClock() {
 #endif
 #endif
 
+#if defined __stm32f1
+	// Set Flash latency. Set pre-fetch buffer enabled.
+	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
+	
+	// Set AHB prescaler.
+	uint32_t cfgreg = 0;
+	uint32_t ahb_div = 1;
+	if 		(maxSysClockCfg.AHB_prescale == 2)		{ ahb_div = 8; 	}
+	else if (maxSysClockCfg.AHB_prescale == 4) 		{ ahb_div = 9; 	}
+	else if (maxSysClockCfg.AHB_prescale == 8) 		{ ahb_div = 10; }
+	else if (maxSysClockCfg.AHB_prescale == 16) 	{ ahb_div = 11;	}
+	else if (maxSysClockCfg.AHB_prescale == 64) 	{ ahb_div = 12; }
+	else if (maxSysClockCfg.AHB_prescale == 128) 	{ ahb_div = 13; }
+	else if (maxSysClockCfg.AHB_prescale == 256) 	{ ahb_div = 14; }
+	else if (maxSysClockCfg.AHB_prescale == 512) 	{ ahb_div = 15; }
+	cfgreg |= (ahb_div << RCC_CFGR_HPRE);
+	
+	// Set APB prescalers.
+	uint32_t apb1_div = 1;
+	uint32_t apb2_div = 1;
+	if 		(maxSysClockCfg.APB1_prescale == 2)		{ apb1_div = 4; 	}
+	else if (maxSysClockCfg.APB1_prescale == 4) 	{ apb1_div = 5; 	}
+	else if (maxSysClockCfg.APB1_prescale == 8) 	{ apb1_div = 6; 	}
+	else if (maxSysClockCfg.APB1_prescale == 16)	{ apb1_div = 7; 	}
+	if 		(maxSysClockCfg.APB2_prescale == 2)		{ apb2_div = 4; 	}
+	else if (maxSysClockCfg.APB2_prescale == 4) 	{ apb2_div = 5; 	}
+	else if (maxSysClockCfg.APB2_prescale == 8) 	{ apb2_div = 6; 	}
+	else if (maxSysClockCfg.APB2_prescale == 16)	{ apb2_div = 7; 	}
+	cfgreg |= (apb1_div << RCC_CFGR_PPRE1);
+	cfgreg |= (apb2_div << RCC_CFGR_PPRE2);
+	
+	// Configure sysclock.
+	uint32_t newSysClock;
+	//RCC->CFGR &= ~(RCC_CFGR_SW);
+	if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_PLL) {
+		//uint32_t reg = 0;
+		if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSI) {
+			if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSION) {
+				// Enable HSI clock.
+				RCC->CR |= RCC_CR_HSION;
+				while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+					// TODO: Handle timeout.
+				}
+			}
+			
+			cfgreg &= ~RCC_CFGR_PLLSRC;	// PLL source is HSI.
+			
+			// Disable HSE.
+			//RCC->CR &= ~RCC_CR_HSEON;
+		}
+		else if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSE) {
+			if ((RCC->CR & RCC_CR_HSEON) != RCC_CR_HSEON) {
+				// Enable HSE clock.
+				RCC->CR |= RCC_CR_HSEON;
+				while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
+					// TODO: Handle timeout.
+				}
+			}
+			
+			cfgreg |= RCC_CFGR_PLLSRC;	// PLL source is HSE.
+			
+			// Disable HSI.
+			//RCC->CR &= ~RCC_CR_HSION;
+		}
+		else {
+			return false;
+		}
+		
+		// Set PLL configuration parameters.
+		uint32_t pllmul = 0;
+		if (maxSysClockCfg.PLLM >= 2) { pllmul = maxSysClockCfg.PLLM - 2; }
+		cfgreg |= pllmul << RCC_CFGR_PLLMULL;
+		
+		// Turn on PLL.
+		cfgreg |= RCC_CR_PLLON;
+		RCC->CFGR = cfgreg;
+		while (!(RCC->CR & RCC_CR_PLLRDY)) {
+			// TODO: Timeout handling.
+		}
+		
+		// Enable PLL as input.
+		RCC->CFGR |= RCC_CFGR_SW_PLL;
+		while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
+		
+		newSysClock = (maxSysClockCfg.base_freq * maxSysClockCfg.PLLM);
+	}
+	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSI) {
+		if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSION) {
+			// Enable HSI clock.
+			RCC->CR |= RCC_CR_HSION;
+			while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+				// TODO: Handle timeout.
+			}
+		}
+		
+		cfgreg |= RCC_CFGR_SW_HSI;
+		RCC->CFGR = cfgreg;
+		//RCC->CFGR |= RCC_CFGR_SW_HSI;
+		while (!(RCC->CFGR & RCC_CFGR_SWS_HSI)) { }	// Wait for clock to stabilise.
+		newSysClock = maxSysClockCfg.base_freq;
+	}
+	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSE) {
+		if ((RCC->CR & RCC_CR_HSEON) != RCC_CR_HSEON) {
+			// Enable HSI clock.
+			RCC->CR |= RCC_CR_HSEON;
+			while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
+				// TODO: Handle timeout.
+			}
+		}
+		
+		cfgreg |= RCC_CFGR_SW_HSE;
+		RCC->CFGR = cfgreg;
+		//RCC->CFGR |= RCC_CFGR_SW_HSE;
+		while (!(RCC->CFGR & RCC_CFGR_SWS_HSE)) { }	// Wait for clock to stabilise.
+		newSysClock = maxSysClockCfg.base_freq;
+	}
+	else {
+		return false;
+	}
+	
+	// Update System core clock variable.
+	SystemCoreClock = newSysClock;
+#endif
+
 #if defined __stm32f4
 	// Set Flash latency. Set pre-fetch buffer enabled.
 	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTEN);
@@ -116,13 +283,34 @@ bool Clock::enableMaxClock() {
 	uint32_t newSysClock;
 	RCC->CFGR &= ~(RCC_CFGR_SW);
 	if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_PLL) {
-		RCC->CFGR |= RCC_CFGR_SW_PLL;
 		uint32_t reg = 0;
 		if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSI) {
+			if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSION) {
+				// Enable HSI clock.
+				RCC->CR |= RCC_CR_HSION;
+				while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+					// TODO: Handle timeout.
+				}
+			}
+			
 			reg |= RCC_PLLCFGR_PLLSRC_HSI;	// PLL source is HSI.
+			
+			// Disable HSE.
+			//RCC->CR &= ~RCC_CR_HSEON;
 		}
 		else if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSE) {
+			if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSEON) {
+				// Enable HSI clock.
+				RCC->CR |= RCC_CR_HSEON;
+				while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+					// TODO: Handle timeout.
+				}
+			}
+			
 			reg |= RCC_PLLCFGR_PLLSRC_HSE;	// PLL source is HSE.
+			
+			// Disable HSI.
+			//RCC->CR &= ~RCC_CR_HSION;
 		}
 		else {
 			return false;
@@ -135,6 +323,12 @@ bool Clock::enableMaxClock() {
 				| (maxSysClockCfg.PLLQ << RCC_PLLCFGR_PLLQ_Pos);
 		RCC->PLLCFGR = reg;
 		
+		// Turn on PLL.
+		RCC->CFGR |= RCC_CR_PLLON;
+		while (!(RCC->CR & RCC_CR_PLLRDY)) {
+			// TODO: Timeout handling.
+		}
+		
 		// Enable PLL.
 		RCC->CFGR |= RCC_CFGR_SW_PLL;
 		while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
@@ -143,11 +337,29 @@ bool Clock::enableMaxClock() {
 						/ maxSysClockCfg.PLLP;
 	}
 	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSI) {
+		if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSION) {
+			// Enable HSI clock.
+			RCC->CR |= RCC_CR_HSION;
+			while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+				// TODO: Handle timeout.
+			}
+		}
+			
 		RCC->CFGR |= RCC_CFGR_SW_HSI;
+		while (!(RCC->CFGR & RCC_CFGR_SWS_HSI)) { }	// Wait for clock to stabilise.
 		newSysClock = maxSysClockCfg.base_freq;
 	}
 	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSE) {
+		if ((RCC->CR & RCC_CR_HSEON) != RCC_CR_HSEON) {
+			// Enable HSI clock.
+			RCC->CR |= RCC_CR_HSEON;
+			while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
+				// TODO: Handle timeout.
+			}
+		}
+			
 		RCC->CFGR |= RCC_CFGR_SW_HSE;
+		while (!(RCC->CFGR & RCC_CFGR_SWS_HSE)) { }	// Wait for clock to stabilise.
 		newSysClock = maxSysClockCfg.base_freq;
 	}
 	else {

@@ -28,6 +28,18 @@ struct RtcTime {
 	uint8_t second_units;
 };
 
+struct RTC_TimeTypeDef {
+  uint8_t Hours;            /*!< Specifies the RTC Time Hour.
+                                 This parameter must be a number between Min_Data = 0 and Max_Data = 23 */
+
+  uint8_t Minutes;          /*!< Specifies the RTC Time Minutes.
+                                 This parameter must be a number between Min_Data = 0 and Max_Data = 59 */
+
+  uint8_t Seconds;          /*!< Specifies the RTC Time Seconds.
+                                 This parameter must be a number between Min_Data = 0 and Max_Data = 59 */
+
+};
+
 
 class Rtc {
 	//

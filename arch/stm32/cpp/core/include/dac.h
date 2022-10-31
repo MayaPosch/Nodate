@@ -52,6 +52,7 @@ struct DAC_ch_cfg {
 	bool 		waveGen = false;
 	DAC_wave 	waveGenCfg = DAC_WAVE_NOISE;
 	uint32_t 	outputBuffer;
+	GpioPinDef	pin;
 };
 
 
@@ -74,3 +75,4 @@ public:
 	bool write(DAC_devices device, uint16_t data);
 };
 
+#endif

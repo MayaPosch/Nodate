@@ -41,6 +41,7 @@
 #include <usart.h>
 #include <adc.h>
 #include <spi.h>
+#include <dac.h>
 
 #include <board_definition.h>
 

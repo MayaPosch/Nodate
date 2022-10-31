@@ -60,6 +60,11 @@ ifneq (, $(findstring adc, $(NODATE_MODULES)))
 	NODATE_MOD_ENABLE += -DNODATE_ADC_ENABLED
 endif
 
+ifneq (, $(findstring dac, $(NODATE_MODULES)))
+	NODATE_DAC = 1
+	NODATE_MOD_ENABLE += -DNODATE_DAC_ENABLED
+endif
+
 ifneq (, $(findstring dma, $(NODATE_MODULES)))
 	NODATE_DMA = 1
 	NODATE_MOD_ENABLE += -DNODATE_DMA_ENABLED

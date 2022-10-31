@@ -92,22 +92,10 @@ void uartCallback(char ch) {
 
 
 int main () {
+	// Set the maximum system clock speed profile.
+	Clock::enableMaxClock();
+	
 	// Start UART.
-	// Nucleo-F042K6 (STM32F042): USART2 (TX: PA2 (AF1), RX: PA15 (AF1)).
-	// USART2 is normally connected to USB (ST-Link) on the Nucleo board.
-	//USART::startUart(USART_2, GPIO_PORT_A, 2, 1, GPIO_PORT_A, 15, 1, 9600, uartCallback);
-	// USART 2, (TX) PA2:1 [A7], (RX) PA3:1 [A2].
-	//USART::startUart(USART_2, GPIO_PORT_A, 2, 1, GPIO_PORT_A, 3, 1, 9600, uartCallback);
-	// USART 1, (TX) PA9:1 [D1], (RX) PA10:1 [D0].
-	//USART::startUart(USART_1, GPIO_PORT_A, 9, 1, GPIO_PORT_A, 10, 1, 9600, uartCallback);
-	
-	// STM32F4-Discovery (STM32F407).
-	// USART2, (TX) PA2:7, (RX) PA3:7.
-	//USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
-	
-	// Nucleo-F746ZG
-	// USART3, PD8:7 (TX), PD9:7 (RX).
-	//USART::startUart(USART_3, GPIO_PORT_D, 8, 7, GPIO_PORT_D, 9, 7, 9600, uartCallback);
 	usartTarget = ud.usart;
 	USART::startUart(ud.usart, ud.tx[0].port, ud.tx[0].pin, ud.tx[0].af, 
 								ud.rx[0].port, ud.rx[0].pin, ud.rx[0].af, 115200, uartCallback);
@@ -136,9 +124,6 @@ int main () {
 	// Set the pin mode on the LED pin.
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);
 	GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
-	
-	// Set the maximum system clock speed profile.
-	Clock::enableMaxClock();
 	
 	// Run the Dhrystone benchmark.
 	/*****/
@@ -207,6 +192,8 @@ int main () {
 	Rtc::enableRTC();
 	Timer timer;
 	timer.delay(100);
+	
+	printf("Enabled RTC.");
  
 #ifdef TIMES
 	times (&time_info);
@@ -353,13 +340,8 @@ int main () {
 		printf ("\n");
 	}
 	
-	
-	//char c = 'h';
-	
 	while (1) {
-		// The interrupt handler will handle things from here.
-		
-		// The LED is used to indicate reception of data.
+		// Idly blink here.
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
 		timer.delay(1000);
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);

@@ -25,14 +25,17 @@ bool Rtc::enableRTC() {
 #if defined __stm32f4 || defined __stm32f7 || defined __stm32f1
 	if (rtc_enabled) { return true; }
 	
+#ifndef __stm32f1
 	// Use LSI for the RTC. Ensure it's enabled.
 	RCC->CSR |= RCC_CSR_LSION;
 	while ((RCC->CSR & RCC_CSR_LSIRDY) != RCC_CSR_LSIRDY) {
 		// TODO: handle time-out.
 	}
+#endif
 	
-	// Enable PWR.
+	// Enable PWR and the backup domain (BKP)
 	if (!Rcc::enable(RCC_PWR)) { return false; }
+	if (!Rcc::enable(RCC_BKP)) { return false; }
 	
 	// Enable PWR backup access.
 #if defined __stm32f7
@@ -49,14 +52,25 @@ bool Rtc::enableRTC() {
 	// Reset backup domain.
 	//RCC->BDCR |= RCC_BDCR_BDRST;
 	
+#ifdef __stm32f1
+	
+	// TODO: Allow selecting RTC clock source.
 	// Configure LSI as RTC clock source.
 	// Enable RTC clock.
-	RCC->BDCR = (RCC->BDCR & ~RCC_BDCR_RTCSEL) | RCC_BDCR_RTCEN | RCC_BDCR_RTCSEL_1;
+	// (RCC->BDCR & ~RCC_BDCR_RTCSEL)
+	//RCC->BDCR |= RCC_BDCR_RTCEN | RCC_BDCR_RTCSEL_LSI;
+	
+	// Enable the LSE as input.
+	RCC->BDCR |= RCC_BDCR_LSEON; // Enable
+	while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { } // External Low Speed oscillator Ready?
+	RCC->BDCR |= RCC_BDCR_RTCSEL_LSE; 	// Select Source
+	RCC->BDCR |= RCC_BDCR_RTCEN; 		// Enable
+	
+	RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
+	while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
 	
 	// Disable PWR.
-	if (!Rcc::disable(RCC_PWR)) { return false; }
-	
-#ifdef __stm32f1
+	//if (!Rcc::disable(RCC_PWR)) { return false; }
 	// Poll RTOFF to ensure RTC is ready.
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
 		// TODO: Handle timeout.
@@ -64,6 +78,20 @@ bool Rtc::enableRTC() {
 	
 	// Set CNF to enter configuration mode.
 	RTC->CRL |= RTC_CRL_CNF;
+	
+	//RTC->PRLL = 0x7FFF; //signal period of 1sec.
+	//RTC->PRLL = 0x32; 
+	//signal period of 1sec.
+	
+	RTC->PRLH = 0x0000;
+	RTC->PRLL = 0x7FFF; // Signal period of 1 sec.
+	 
+	//RTC->PRLL = 0x5; //signal period 107 ms.	 
+	//RTC->PRLL = 0x1; //signal period 8 ms
+	 
+	//reset 32bit counter
+	RTC->CNTH = 0x0000;
+	RTC->CNTL = 0x0000;
 	
 	// Set the alarm time. Resolution is 1 second.
 	uint32_t alarmval = 1;

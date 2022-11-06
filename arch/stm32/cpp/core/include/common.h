@@ -31,8 +31,10 @@
 
 #ifdef __cplusplus
 #include <cstdint>
+#include <cstdlib>
 #else
 #include <stdint.h>
+#include <stdlib.h>
 #endif
 
 #endif

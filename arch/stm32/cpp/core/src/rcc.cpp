@@ -15,7 +15,7 @@ static const uint8_t handle_max = std::numeric_limits<uint8_t>::max();
 
 
 const int portCount = 11;
-const int peripheralCount = 46;
+const int peripheralCount = 47;
 bool getAHBprescaler(uint32_t divisor, uint32_t &AHBfield);
 bool getAPB1prescaler(uint32_t divisor, uint32_t &APB1field);
 bool getAPB2prescaler(uint32_t divisor, uint32_t &APB2field);
@@ -577,6 +577,12 @@ RccPeripheralHandle* peripheralHandles() {
 	peripheralHandlesStatic[RCC_PWR].exists = true;
 	peripheralHandlesStatic[RCC_PWR].enr = &(RCC->APB1ENR1);
 	peripheralHandlesStatic[RCC_PWR].enable = RCC_APB1ENR1_PWREN_Pos;
+#endif
+
+#ifdef RCC_APB1ENR_BKPEN
+	peripheralHandlesStatic[RCC_BKP].exists = true;
+	peripheralHandlesStatic[RCC_BKP].enr = &(RCC->APB1ENR);
+	peripheralHandlesStatic[RCC_BKP].enable = RCC_APB1ENR_BKPEN_Pos;
 #endif
 
 /* #ifdef RCC_APB1ENR_DACEN

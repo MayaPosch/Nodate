@@ -27,6 +27,7 @@
 
 
 #include <core.h>
+#include <rcc.h>
 #include <clock.h>
 #include <common.h>
 #include <ethernet.h>
@@ -34,7 +35,6 @@
 #include <i2c.h>
 #include <interrupts.h>
 #include <io.h>
-#include <rcc.h>
 #include <rtc.h>
 #include <timer.h>
 #include <dma.h>

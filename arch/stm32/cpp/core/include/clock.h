@@ -8,10 +8,10 @@
 #define CLOCK_H
 
 
-#include "common.h"
+#include "nodate.h"
 
 class Clock {
-	//
+	static bool changeBusSpeeds(RccSysClockConfig cfg);
 	
 public:
 	static bool enableMaxClock();

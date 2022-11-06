@@ -52,6 +52,7 @@ enum RccPeripheral {
 	RCC_CAN,
 	RCC_CRS,
 	RCC_PWR,
+	RCC_BKP,
 	RCC_DAC1,
 	RCC_DAC2,
 	RCC_CEC,

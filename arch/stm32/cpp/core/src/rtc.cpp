@@ -27,10 +27,10 @@ bool Rtc::enableRTC() {
 	
 #ifndef __stm32f1
 	// Use LSI for the RTC. Ensure it's enabled.
-	RCC->CSR |= RCC_CSR_LSION;
+	/* RCC->CSR |= RCC_CSR_LSION;
 	while ((RCC->CSR & RCC_CSR_LSIRDY) != RCC_CSR_LSIRDY) {
 		// TODO: handle time-out.
-	}
+	} */
 #endif
 	
 	// Enable PWR and the backup domain (BKP)
@@ -61,16 +61,22 @@ bool Rtc::enableRTC() {
 	//RCC->BDCR |= RCC_BDCR_RTCEN | RCC_BDCR_RTCSEL_LSI;
 	
 	// Enable the LSE as input.
-	RCC->BDCR |= RCC_BDCR_LSEON; // Enable
+	// First reset the backup domain.
+	RCC->BDCR |= RCC_BDCR_BDRST;
+	RCC->BDCR &= ~RCC_BDCR_BDRST;
+	RCC->BDCR |= RCC_BDCR_LSEON; // Enable LSE
 	while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { } // External Low Speed oscillator Ready?
 	RCC->BDCR |= RCC_BDCR_RTCSEL_LSE; 	// Select Source
-	RCC->BDCR |= RCC_BDCR_RTCEN; 		// Enable
 	
-	RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
-	while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
+	// Enable the RTC.
+	RCC->BDCR |= RCC_BDCR_RTCEN;
+	
+	//RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
+	//while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
 	
 	// Disable PWR.
 	//if (!Rcc::disable(RCC_PWR)) { return false; }
+	
 	// Poll RTOFF to ensure RTC is ready.
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
 		// TODO: Handle timeout.
@@ -94,9 +100,13 @@ bool Rtc::enableRTC() {
 	RTC->CNTL = 0x0000;
 	
 	// Set the alarm time. Resolution is 1 second.
-	uint32_t alarmval = 1;
-	RTC->ALRH = alarmval >> 16;				// Set the ALARM MSB word.
-	RTC->ALRL = (alarmval & RTC_ALRL_RTC_ALR); 	// Set the ALARM LSB word.
+	//uint32_t alarmval = 1;
+	//RTC->ALRH = alarmval >> 16;				// Set the ALARM MSB word.
+	//RTC->ALRL = (alarmval & RTC_ALRL_RTC_ALR); 	// Set the ALARM LSB word.
+	
+	// Enable alarm interrupt.
+	// TODO: implement.
+	//RTC->CRH |= RTC_CRH_ALRIE;
 	
 	// Unset CNF to leave configuration mode.
 	RTC->CRL &= ~RTC_CRL_CNF;
@@ -105,9 +115,6 @@ bool Rtc::enableRTC() {
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
 		// TODO: Handle timeout.
 	}
-	
-	// Enable alarm interrupt.
-	RTC->CRH |= RTC_CRH_ALRIE;
 	
 #else
 	// Disable alarm A to modify it.
@@ -136,11 +143,12 @@ bool Rtc::enableRTC() {
 	NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
 	NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
 #else
-	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
-	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC.
+/* 	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
+	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC. */
 #endif
 	
 	// End configuration phase.
+	
 	
 	// RTC init phase.
 	Rtc::setTime(0); // Set time to 0.

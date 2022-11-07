@@ -105,7 +105,7 @@ int _times(struct tms* buf) {
 
 
 // --- 
-bool Clock::changeBusSpeeds(RccSysClockConfig cfg) {
+bool Clock::configureAHB(RccSysClockConfig cfg) {
 #if defined __stm32f1
 	// Set AHB prescaler.
 	uint32_t ahb_div = 1;
@@ -119,6 +119,13 @@ bool Clock::changeBusSpeeds(RccSysClockConfig cfg) {
 	else if (cfg.AHB_prescale == 512) 	{ ahb_div = 15; }
 	RCC->CFGR |= (ahb_div << RCC_CFGR_HPRE);
 	
+	return true;
+#endif
+	return false;
+}
+
+bool Clock::configureAPB(RccSysClockConfig cfg) {
+#if defined __stm32f1
 	// Set APB prescalers.
 	uint32_t apb1_div = 1;
 	if 		(cfg.APB1_prescale == 2)	{ apb1_div = 4;	}
@@ -189,6 +196,9 @@ bool Clock::enableMaxClock() {
 #endif
 
 #if defined __stm32f1
+	// Set Flash latency. Set pre-fetch buffer enabled.
+	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
+	
 	// Configure sysclock.
 	uint32_t newSysClock;
 	if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_PLL) {
@@ -224,12 +234,6 @@ bool Clock::enableMaxClock() {
 			return false;
 		}
 		
-		// Set Flash latency. Set pre-fetch buffer enabled.
-		FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
-		
-		// Set AHB & APB speeds.
-		if (!changeBusSpeeds(maxSysClockCfg)) { return false; }
-		
 		// Set PLL configuration parameters.
 		uint32_t pllmul = 0;
 		if (maxSysClockCfg.PLLM >= 2) { pllmul = maxSysClockCfg.PLLM - 2; }
@@ -241,10 +245,15 @@ bool Clock::enableMaxClock() {
 			// TODO: Timeout handling.
 		}
 		
+		// Set AHB speeds.
+		if (!configureAHB(maxSysClockCfg)) { return false; }
+		
 		// Enable PLL as input.
 		RCC->CFGR &= ~(RCC_CFGR_SW);
 		RCC->CFGR |= RCC_CFGR_SW_PLL;
 		while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
+		
+		if (!configureAPB(maxSysClockCfg)) { return false; }
 		
 		newSysClock = (maxSysClockCfg.base_freq * maxSysClockCfg.PLLM);
 	}
@@ -258,14 +267,16 @@ bool Clock::enableMaxClock() {
 		}
 		
 		// Set Flash latency. Set pre-fetch buffer enabled.
-		FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
+		//FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
 		
-		// Set AHB & APB speeds.
-		if (!changeBusSpeeds(maxSysClockCfg)) { return false; }
+		// Set AHB speeds.
+		if (!configureAHB(maxSysClockCfg)) { return false; }
 		
 		RCC->CFGR &= ~(RCC_CFGR_SW);
 		RCC->CFGR |= RCC_CFGR_SW_HSI;
 		while (!(RCC->CFGR & RCC_CFGR_SWS_HSI)) { }	// Wait for clock to stabilise.
+		
+		if (!configureAPB(maxSysClockCfg)) { return false; }
 		newSysClock = maxSysClockCfg.base_freq;
 	}
 	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSE) {
@@ -278,21 +289,24 @@ bool Clock::enableMaxClock() {
 		}
 		
 		// Set Flash latency. Set pre-fetch buffer enabled.
-		FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
+		//FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
 		
-		// Set AHB & APB speeds.
-		if (!changeBusSpeeds(maxSysClockCfg)) { return false; }
+		// Set AHB speeds.
+		if (!configureAHB(maxSysClockCfg)) { return false; }
 		
 		RCC->CFGR &= ~(RCC_CFGR_SW);
 		RCC->CFGR |= RCC_CFGR_SW_HSE;
 		while (!(RCC->CFGR & RCC_CFGR_SWS_HSE)) { }	// Wait for clock to stabilise.
+		
+		if (!configureAPB(maxSysClockCfg)) { return false; }
 		newSysClock = maxSysClockCfg.base_freq;
 	}
 	else {
 		return false;
 	}
 	
-	// Update System core clock variable.
+	// Update System core clock variable and systick.
+	McuCore::initSysTick();
 	SystemCoreClock = newSysClock;
 #endif
 

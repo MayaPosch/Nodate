@@ -11,7 +11,8 @@
 #include "nodate.h"
 
 class Clock {
-	static bool changeBusSpeeds(RccSysClockConfig cfg);
+	static bool configureAHB(RccSysClockConfig cfg);
+	static bool configureAPB(RccSysClockConfig cfg);
 	
 public:
 	static bool enableMaxClock();

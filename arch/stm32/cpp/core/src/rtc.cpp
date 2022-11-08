@@ -89,15 +89,17 @@ bool Rtc::enableRTC() {
 	//RTC->PRLL = 0x32; 
 	//signal period of 1sec.
 	
+	// Set prescaler.
 	RTC->PRLH = 0x0000;
 	RTC->PRLL = 0x7FFF; // Signal period of 1 sec.
 	 
-	//RTC->PRLL = 0x5; //signal period 107 ms.	 
-	//RTC->PRLL = 0x1; //signal period 8 ms
-	 
-	//reset 32bit counter
-	RTC->CNTH = 0x0000;
-	RTC->CNTL = 0x0000;
+	// Reset 32bit counter
+	//RTC->CNTH = 0x0000;
+	//RTC->CNTL = 0x0000;
+	
+	// Configure interrupts.
+	EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
+	EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
 	
 	// Set the alarm time. Resolution is 1 second.
 	//uint32_t alarmval = 1;
@@ -107,14 +109,6 @@ bool Rtc::enableRTC() {
 	// Enable alarm interrupt.
 	// TODO: implement.
 	//RTC->CRH |= RTC_CRH_ALRIE;
-	
-	// Unset CNF to leave configuration mode.
-	RTC->CRL &= ~RTC_CRL_CNF;
-	
-	// Poll RTOFF to ensure RTC is ready.
-	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
-		// TODO: Handle timeout.
-	}
 	
 #else
 	// Disable alarm A to modify it.
@@ -139,16 +133,24 @@ bool Rtc::enableRTC() {
 	EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
 #endif
 
-#if defined __stm32f0
+#if defined __stm32f0 || defined __stm32f1
 	NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
 	NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
 #else
-/* 	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
-	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC. */
+ 	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
+	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC.
 #endif
 	
 	// End configuration phase.
+#if defined __stm32f1
+	// Unset CNF to leave configuration mode.
+	RTC->CRL &= ~RTC_CRL_CNF;
 	
+	// Poll RTOFF to ensure RTC is ready.
+	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
+		// TODO: Handle timeout.
+	}
+#endif
 	
 	// RTC init phase.
 	Rtc::setTime(0); // Set time to 0.
@@ -231,7 +233,15 @@ bool Rtc::getTime(RtcTime &time) {
 
 // --- GET TIME ---
 bool Rtc::getTime(char* t, uint8_t &len) {
-	//
+#if defined __stm32f1
+	// Get value in BCD format.
+	register uint16_t high = 0, low = 0;
+
+	high = RTC->CNTH & RTC_CNTH_RTC_CNT;
+	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
+	//uint32_t ticks =  bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
+	uint32_t ticks =  (uint32_t)(((uint32_t) high << 16U) | low);
+#endif
 	
 	return true;
 }

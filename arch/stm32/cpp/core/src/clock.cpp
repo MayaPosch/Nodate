@@ -83,7 +83,7 @@ int _times(struct tms* buf) {
 	buf->tms_cstime = ticks;
 	
 	return ticks; // Return clock ticks.
-#elif defined __stm32F1
+#elif defined __stm32f1
 	// Get value in BCD format.
 	register uint16_t high = 0, low = 0;
 

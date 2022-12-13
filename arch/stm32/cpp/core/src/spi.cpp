@@ -210,6 +210,9 @@ bool SPI::startI2SMaster(SPI_devices device, I2S_pins pins) {
 
 	//
 	
+	return true;
+#endif
+	
 	return false;
 }
 

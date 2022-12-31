@@ -16,6 +16,8 @@
 #include <rtc.h>
 #include <rcc.h>
 
+#include <time.h>
+
 // DEBUG
 #include <printf.h>
 
@@ -53,10 +55,9 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	uint32_t tTR = RTC->TR;
 	uint32_t ticks = (uint8_t) bcd2dec32(tTR & (RTC_TR_ST | RTC_TR_SU));
 	ticks = ticks * SystemCoreClock;
-	/* buf->tms_utime = ticks;
-	buf->tms_stime = ticks;
-	buf->tms_cutime = ticks;
-	buf->tms_cstime = ticks; */
+	
+	tp->tv_sec = ticks;
+	tp->tv_usec = 0;
 	
 	return ticks; // Return clock ticks.
 #elif defined __stm32f1
@@ -70,14 +71,16 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 
 	high = RTC->CNTH & RTC_CNTH_RTC_CNT;
 	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
-	uint32_t ticks =  bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
-	ticks = ticks * SystemCoreClock;
-	/* buf->tms_utime = ticks;
-	buf->tms_stime = ticks;
-	buf->tms_cutime = ticks;
-	buf->tms_cstime = ticks; */
 	
-	return ticks;
+	// Debug
+	printf("H/L: %d - %d.\n", high, low);
+	
+	uint32_t ticks = bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
+	//ticks = ticks * SystemCoreClock;
+	tp->tv_sec = ticks;
+	tp->tv_usec = 0;
+	
+	return 0;
 #else
 	// No usable RTC peripheral exists. Return -1.
 	return -1;
@@ -157,17 +160,17 @@ bool Rtc::enableRTC() {
 	// (RCC->BDCR & ~RCC_BDCR_RTCSEL)
 	//RCC->BDCR |= RCC_BDCR_RTCEN | RCC_BDCR_RTCSEL_LSI;
 	
-	printf("Enable LSE...");
-	
-	// Enable the LSE as input.
-	RCC->BDCR |= RCC_BDCR_LSEON; // Enable LSE
-	while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { } // External Low Speed oscillator Ready?
-	
 	printf("Reset BKP domain...");
 	
 	// First reset the backup domain.
 	RCC->BDCR |= RCC_BDCR_BDRST;
 	RCC->BDCR &= ~RCC_BDCR_BDRST;
+	
+	printf("Enable LSE...");
+	
+	// Enable the LSE as input.
+	RCC->BDCR |= RCC_BDCR_LSEON; // Enable LSE
+	while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { } // External Low Speed oscillator Ready?
 	
 	printf("Select source...");
 	
@@ -185,9 +188,9 @@ bool Rtc::enableRTC() {
 	//if (!Rcc::disable(RCC_PWR)) { return false; }
 	
 	// Poll RTOFF to ensure RTC is ready.
-	/* while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
+	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
 		// TODO: Handle timeout.
-	} */
+	}
 	
 	printf("Disable write protect...");
 	
@@ -276,12 +279,12 @@ bool Rtc::enableRTC() {
 	// Unset CNF to leave configuration mode.
 	RTC->CRL &= ~RTC_CRL_CNF;
 	
-	/* printf("Poll RTOFF...");
+	printf("Poll RTOFF...");
 	
 	// Poll RTOFF to ensure RTC is ready.
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
 		// TODO: Handle timeout.
-	} */
+	}
 #endif
 
 	printf("RTC enabled.");

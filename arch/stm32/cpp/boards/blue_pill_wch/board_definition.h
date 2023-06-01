@@ -29,19 +29,19 @@ extern RccSysClockConfig maxSysClockCfg;
 
 // Define the number and features of the U(S)ARTs on the board.
 extern uint8_t boardUSART_count;
-extern USART_def boardUSARTs[];
+extern USART_def boardUSARTs[3];
 
 // --- LEDS ---
 
 // Define the number and features of the user-addressable LEDs on the board.
 extern uint8_t boardLEDs_count;
-extern BoardLED boardLEDs[];
+extern BoardLED boardLEDs[1];
 
 
 // --- BUTTONS ---
 
 // Define the user-defined buttons on the board.
 extern uint8_t boardButtons_count;
-extern BoardButton boardButtons[];
+extern BoardButton boardButtons[1];
 
 #endif

@@ -1,5 +1,5 @@
 # Definition file for the STM32 'Blue Pill' STM32F103C8 development board.
 
 MCU := stm32f103xb
-PROGRAMMER := interface/stlink-v2.cfg -f target/stm32f1x.cfg
+PROGRAMMER := interface/stlink-v2-1.cfg -f target/stm32f1x.cfg
 

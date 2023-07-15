@@ -50,14 +50,14 @@ public:
 	static bool setSlaveTarget(I2C_devices device, uint8_t slave);
 	static bool startSlave(I2C_devices device, uint8_t address);
 	static bool sendToSlave(I2C_devices device, uint8_t* data, uint16_t len);
-	static bool sendToSlaveBegin(I2C_devices device, uint8_t len);
+	static bool sendToSlaveBegin(I2C_devices device, uint8_t len); // Only defined for STM32F0 (return false otherw.).
 	static bool sendToSlaveByte(I2C_devices device, uint8_t data);
 	static bool sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len);
 	static bool sendToSlaveEnd(I2C_devices device);
-	static bool sendToMaster(I2C_devices device, uint8_t* data, uint8_t len);
+	static bool sendToMaster(I2C_devices device, uint8_t* data, uint8_t len); // No actions in definition.
 	static bool receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer);
     static bool receiveFromSlave(I2C_devices device, uint8_t len);
-	static bool receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer);
+	static bool receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer); // No actions in definition.
 	static bool stop(I2C_devices device);
 };
 

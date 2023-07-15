@@ -453,11 +453,17 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 	
 	// Configure SDA & SCL pins.
 #ifdef __stm32f1
-	if (!GPIO::set_af(instance.per, scl_af)) {
+	if (!GPIO::set_af(scl_port, scl_pin, instance.per, scl_af, GPIO_OPEN_DRAIN)) {
 		Rcc::disablePort((RccPort) scl_port);
 		return false;
 	}
-#endif
+
+	if (!GPIO::set_af(sda_port, sda_pin, instance.per, sda_af, GPIO_OPEN_DRAIN)) {
+		Rcc::disablePort((RccPort) scl_port);
+		Rcc::disablePort((RccPort) sda_port);
+		return false;
+	}
+#else
 	if (!GPIO::set_af(scl_port, scl_pin, scl_af)) {
 		Rcc::disablePort((RccPort) scl_port);
 		return false;
@@ -468,14 +474,15 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 		Rcc::disablePort((RccPort) sda_port);
 		return false;
 	}
-	
-	if (!GPIO::set_output_parameters(scl_port, scl_pin, GPIO_FLOATING, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
+#endif
+
+	if (!GPIO::set_output_parameters(scl_port, scl_pin, GPIO_PULL_UP, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) scl_port);
 		Rcc::disablePort((RccPort) sda_port);
 		return false;
 	}
 	
-	if (!GPIO::set_output_parameters(sda_port, sda_pin, GPIO_FLOATING, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
+	if (!GPIO::set_output_parameters(sda_port, sda_pin, GPIO_PULL_UP, GPIO_OPEN_DRAIN, GPIO_HIGH)) {
 		Rcc::disablePort((RccPort) scl_port);
 		Rcc::disablePort((RccPort) sda_port);
 		return false;

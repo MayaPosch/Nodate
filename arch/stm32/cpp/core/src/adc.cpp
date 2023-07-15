@@ -2,6 +2,7 @@
 	adc.cpp - Implementation of the ADC module.
 	
 	2021/04/26, Maya Posch
+	2023/06/14, Andriandreo – Fix support for STM32F1.
 */
 
 
@@ -144,11 +145,16 @@ bool ADC::calibrate(ADC_devices device) {
 	
 	return true;
 #elif defined __stm32f1
-	// Ensure ADON == 0.
-	if ((instance.regs->CR2 & ADC_CR2_ADON) != 0) {
-		instance.regs->CR2 |= ADC_CR2_ADON; // Disable ADC.
+	// Ensure ADON == 0. NOT WANTED: ADC must be enabled to calibrate.
+//	if ((instance.regs->CR2 & ADC_CR2_ADON) != 0) {
+//		instance.regs->CR2 &= ~(ADC_CR2_ADON); // Disable ADC.
+//	}
+
+	// Ensure ADON == 1. ADC must be enabled to calibrate.
+	if ((instance.regs->CR2 & ADC_CR2_ADON) == 0) {
+		instance.regs->CR2 |= ADC_CR2_ADON; // Enable ADC.
 	}
-	
+
 	// Start calibration.
 	instance.regs->CR2 |= ADC_CR2_CAL;
 	
@@ -723,9 +729,14 @@ bool ADC::start(ADC_devices device) {
 	}
 	
 	return true;
-#elif defined __stm32f4 || defined __stm32f1
-	// Ensure the ADC device is enabled.
-	instance.regs->CR2 |= ADC_CR2_ADON;
+#elif defined __stm32f4 || defined __stm32f1 
+	// Already started upon calibration.
+	
+	// Ensure ADC is enabled (ADON bit set once – twice to start conversion w/o ext. trigger – not wanted here).
+	if ((instance.regs->CR2 & ADC_CR2_ADON) == 0) {
+		instance.regs->CR2 |= ADC_CR2_ADON;
+		calibrate(device);
+	}
 	
 	return true;
 #else
@@ -749,6 +760,8 @@ bool ADC::startSampling(ADC_devices device) {
 	return true;
 #elif defined __stm32f4 || defined __stm32f1
 	// Start sampling.
+	instance.regs->CR2 |= ADC_CR2_EXTSEL;
+	instance.regs->CR2 |= ADC_CR2_EXTTRIG;
 	instance.regs->CR2 |= ADC_CR2_SWSTART;
 	
 	instance.sampling = true;

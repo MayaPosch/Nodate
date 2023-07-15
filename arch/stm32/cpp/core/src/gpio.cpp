@@ -78,7 +78,7 @@ bool GPIO::set_input(GPIO_ports port, uint8_t pin, GPIO_pupd pupd) {
 	}
 	
 	// Set parameters.
-#ifdef STM32F1
+#ifdef __stm32f1
 	// Input/output registers are spread over two registers (CRL, CRH).
 	if (pin < 8) {
 		// Set CRL register (CNF 0x2 & MODE 0x0).
@@ -153,7 +153,7 @@ bool GPIO::set_output(GPIO_ports port, uint8_t pin, GPIO_pupd pupd, GPIO_out_typ
 	}
 	
 	// Set parameters.
-#ifdef STM32F1
+#ifdef __stm32f1
 	// Input/output registers are spread over two combined registers (CRL, CRH).
 	if (pin < 8) {
 		// Set CRL register (CNF & MODE).
@@ -226,9 +226,13 @@ bool GPIO::set_output(GpioPinDef def, GPIO_pupd pupd, GPIO_out_type type, GPIO_o
 /**
  * \brief       Set alternate function mode for a pin
  *
- * Configures an mcu pin for alternate function mode.  Use with STM32F1
+ * Configures an MCU pin for alternate function mode.  Use with STM32F1
  * requires an additional call to GPIO::set_af(per, af) to fully
  * implement the alternate function.
+ * 
+ * IT IS DEFINED BELOW, BUT USE 
+ * GPIO::set_af(port, pin, per, af, type) 
+ * FOR STM32F1, INSTEAD
  *
  * \param[in]   port: GPIO port
  * \param[in]   pin: pin to be modified
@@ -241,7 +245,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	
 	GPIO_instance* instancesStatic = GPIO_instances();
 	GPIO_instance &instance = instancesStatic[port];
-	
+
 	// Check if port is active, if not, try to activate it.
 	if (!instance.active) {
 		if (!Rcc::enablePort((RccPort) port)) { return false; }
@@ -249,7 +253,7 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	}
 	
 	// Set parameters.
-#ifdef STM32F1
+#ifdef __stm32f1
 	// STM32F1 Details:
 	// Input/output registers are spread over two combined registers (CRL, CRH).
 	// A call to GPIO::set_af(RccPeripheral per, uint8_t af) is also required
@@ -287,6 +291,77 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, uint8_t af) {
 	return true;
 }
 
+// --- SET AF ---
+// Set alternate function mode on a pin.
+bool GPIO::set_af(RccPeripheral per, uint8_t af) {
+#ifdef __stm32f1
+	if (af == 0) {
+		// No remapping requested, we are done here.
+		return true;
+	}
+	
+	uint32_t field_mask = 0x3;
+	if ((per == RCC_USART3) || (per == RCC_TIM1) || (per == RCC_TIM2) || (per == RCC_TIM3) || (per == RCC_CAN)) {
+		// four values are possible for AF
+		if (af > 3) { return false; }
+	}
+	else {
+		// two values are possible for AF: remapped (1) or not remapped (0).
+		if (af > 1) { return false; }
+		field_mask = 0x1;
+	}
+	
+	// Ensure the AFIO peripheral is enabled.
+	if (!afio_enabled) {
+		if (!Rcc::enable(RCC_AFIO)) {
+			return false;
+		}
+		afio_enabled = true;
+	}
+	
+	// Set correct value in AFIO_MAPR register.
+	// Not all peripherals are available on all MCU's
+	// Not all peripherals available on an MCU have remappable alternate functions
+	// spi1 and i2c1 are not bracketed by an #if define because they always exist
+	// and are remappable
+	uint8_t pos = 0;
+	if (per == RCC_SPI1) 		{ pos = AFIO_MAPR_SPI1_REMAP_Pos; }
+	else if (per == RCC_I2C1)	{ pos = AFIO_MAPR_I2C1_REMAP_Pos; }
+#if defined AFIO_MAPR_USART1_REMAP_Pos
+	else if (per == RCC_USART1)	{ pos = AFIO_MAPR_USART1_REMAP_Pos; }
+#endif
+#if defined AFIO_MAPR_USART2_REMAP_Pos
+	else if (per == RCC_USART2)	{ pos = AFIO_MAPR_USART2_REMAP_Pos; }
+#endif
+#if defined AFIO_MAPR_USART3_REMAP_Pos
+	else if (per == RCC_USART3)	{ pos = AFIO_MAPR_USART3_REMAP_Pos; }
+#endif
+	else if (per == RCC_TIM1)	{ pos = AFIO_MAPR_TIM1_REMAP_Pos; }
+	else if (per == RCC_TIM2)	{ pos = AFIO_MAPR_TIM2_REMAP_Pos; }
+	else if (per == RCC_TIM3)	{ pos = AFIO_MAPR_TIM3_REMAP_Pos; }
+#if defined AFIO_MAPR_TIM4_REMAP_Pos
+	else if (per == RCC_TIM4)	{ pos = AFIO_MAPR_TIM4_REMAP_Pos; }
+#endif
+#if defined AFIO_MAPR_CAN_REMAP_Pos
+	else if (per == RCC_CAN)	{ pos = AFIO_MAPR_CAN_REMAP_Pos; }
+#endif
+	else {
+		// per is not a remappable peripheral; return true as there
+		// is no work to be done
+		return true;
+		
+	}
+
+	// clear and set the appropriate field
+	AFIO->MAPR &= ~(field_mask << pos);
+	AFIO->MAPR |= (af << pos);
+	return true;
+#else
+	// Default for MCUs other than STM32F1 series
+	return false;
+#endif
+}
+
 
 // --- SET AF ---
 bool GPIO::set_af(GpioPinDef def) {
@@ -298,19 +373,19 @@ bool GPIO::set_af(GpioPinDef def) {
 /**
  * \brief       Set alternate function mode for a peripheral
  *
- * Configures an mcu peripheral for alternate function mode.  Applies only to STM32F1.
+ * Configures an MCU peripheral for alternate function mode.  Applies only to STM32F1.
  * Acceptable values of the af parameter is dependent on the peripheral selected.
  * Returns true if peripheral is set to alternate function mode or if peripheral has
- * no alternate function option available.  Returns false if if improper alternate
- * function mode value is requested or if mcu is not in the STM32F1 line.
- * See the mcu documentation for additional details.
+ * no alternate function option available.  Returns false if improper alternate
+ * function mode value is requested or if MCU is not in the STM32F1 line.
+ * See the MCU documentation for additional details.
  *
  * \param[in]   per: peripheral
  * \param[in]   af: alternate function mode value
  * \return      true on success, false otherwise
  */
 bool GPIO::set_af(GPIO_ports port, uint8_t pin, RccPeripheral per, uint8_t af, GPIO_out_type type) {
-#ifdef STM32F1
+#ifdef __stm32f1
 	// Validate port & pin.
 	if (pin > 15) { return false; }
 	if (af > 15) { return false; }
@@ -379,8 +454,8 @@ bool GPIO::set_af(GPIO_ports port, uint8_t pin, RccPeripheral per, uint8_t af, G
 	}
 	
 	// Set correct value in AFIO_MAPR register.
-	// Not all peripherals are available on all mcu's
-	// Not all peripherals available on an mcu have remappable alternate functions
+	// Not all peripherals are available on all MCU's
+	// Not all peripherals available on an MCU have remappable alternate functions
 	// spi1 and i2c1 are not bracketed by an #if define because they always exist
 	// and are remappable
 	uint8_t pos = 0;
@@ -437,7 +512,7 @@ bool GPIO::set_analog(GPIO_ports port, uint8_t pin) {
 	}
 
 	// Set parameters
-#ifdef STM32F1
+#ifdef __stm32f1
 	// TODO: implement.
 	return false;
 	
@@ -464,7 +539,7 @@ bool GPIO::set_output_parameters(GPIO_ports port, uint8_t pin, GPIO_pupd pupd,
 		instance.active = true;
 	}
 
-#ifdef STM32F1
+#ifdef __stm32f1
 	// Input/output registers are spread over two combined registers (CRL, CRH).
 	if (pin < 8) {
 		// Set CRL register (CNF & MODE).

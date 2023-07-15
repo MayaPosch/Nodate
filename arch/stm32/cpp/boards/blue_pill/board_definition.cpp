@@ -59,10 +59,10 @@ bool init() {
 	usart.configs = 2;
 	usart.tx = new GpioPinDef[2];
 	usart.tx[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 0 };
-	usart.tx[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 0 };
+	usart.tx[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 1 };
 	usart.rx = new GpioPinDef[2];
 	usart.rx[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 0 };
-	usart.rx[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 0 };
+	usart.rx[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 1 };
 	boardUSARTs[0] = usart;
 	
 	usart.usart = USART_2;
@@ -79,12 +79,12 @@ bool init() {
 	usart.configs = 2;
 	usart.tx = new GpioPinDef[3];
 	usart.tx[0] = { .port = GPIO_PORT_B, .pin = 10, .af = 0 };
-	usart.tx[1] = { .port = GPIO_PORT_D, .pin = 8, .af = 1 };
-	usart.tx[2] = { .port = GPIO_PORT_C, .pin = 10, .af = 3 };
+	usart.tx[1] = { .port = GPIO_PORT_C, .pin = 10, .af = 1 };
+	usart.tx[2] = { .port = GPIO_PORT_D, .pin = 8, .af = 3 };
 	usart.rx = new GpioPinDef[3];
 	usart.rx[0] = { .port = GPIO_PORT_B, .pin = 11, .af = 0 };
-	usart.rx[1] = { .port = GPIO_PORT_D, .pin = 9, .af = 1 };
-	usart.rx[2] = { .port = GPIO_PORT_C, .pin = 11, .af = 3 };
+	usart.rx[1] = { .port = GPIO_PORT_C, .pin = 11, .af = 1 };
+	usart.rx[2] = { .port = GPIO_PORT_D, .pin = 9, .af = 3 };
 	boardUSARTs[2] = usart;
 	
 	

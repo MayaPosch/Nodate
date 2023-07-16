@@ -207,8 +207,31 @@ bool SPI::startI2SMaster(SPI_devices device, I2S_pins pins) {
 	if (!GPIO::set_output_parameters(pins.mck, GPIO_FLOATING, GPIO_PUSH_PULL, GPIO_HIGH)) {
 		return false;
 	}
+	
+		
+	// Configure SPI_I2SCFGR & SPI_I2SPR.
+	// Defaults:
+	// * Mode:              Master Tx.
+	// * Standard:  Philips.
+	// * Format:    16-bit.
+	// * MCLK out:  Disabled.
+	// * Frequency: 44100.
+	// * Polarity:  Low level.
+	// TODO: allow for configuration of these I2S settings.
+	uint32_t cfgreg = 0;
+	cfgreg |= SPI_I2SCFGR_I2SMOD | (2 << SPI_I2SCFGR_I2SCFG);
+	instance.regs->I2SCFGR = cfgreg;
 
-	//
+	// TODO: allow MCLK out to be enabled.
+	// TODO: allow for sample rates other than 44,100 Hz.
+	uint32_t preg = 0;
+	preg |=
+	instance.regs->I2SPR = preg;
+
+	// Enable I2S peripheral.
+	instance.regs->I2SCFGR |= SPI_I2SCFGR_I2SE;
+
+	instance.active = true;
 	
 	return true;
 #endif

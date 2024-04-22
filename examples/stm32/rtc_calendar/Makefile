@@ -10,8 +10,9 @@ NDLANGUAGE ?= cpp
 
 # One can use the board preset.
 #BOARD ?= nucleo-f042k6
-BOARD ?= stm32f4-discovery
+#BOARD ?= stm32f4-discovery
 #BOARD ?= nucleo-f746zg
+BOARD ?= blue_pill
 
 # Set the MCU and programmer types.
 #
@@ -30,6 +31,12 @@ APP_C_FILES = $(wildcard src/*.c)
 APP_FLAGS = 
 APP_C_FLAGS = 
 APP_CPP_FLAGS = 
+
+
+# Set Nodate modules to enable.
+# Available modules:
+# ethernet, i2c, gpio, interrupts, timer, usart
+NODATE_MODULES = gpio timer usart
 
 
 #

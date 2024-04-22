@@ -4,15 +4,18 @@
 */
 
 
-#include <rtc.h>
-#include <usart.h>
-#include <io.h>
-#include <timer.h>
+#include <nodate.h>
+#include <printf.h>
+
+
+// Globals.
+USART_def& ud = boardUSARTs[0];
+//USART_devices usartTarget = ud.usart;
 
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
-	USART::sendUart(USART_2, ch);
+	USART::sendUart(ud.usart, ch);
 	//USART::sendUart(USART_1, ch);
 }
 
@@ -33,10 +36,13 @@ int main() {
 	
 	// STM32F4-Discovery (STM32F407).
 	// USART2, (TX) PA2:7, (RX) PA3:7.
-	USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
+	//USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
+	
+	USART::startUart(ud.usart, ud.tx[0].port, ud.tx[0].pin, ud.tx[0].af, 
+								ud.rx[0].port, ud.rx[0].pin, ud.rx[0].af, 115200, uartCallback);
 	
 	// Set up stdout.
-	IO::setStdOutTarget(USART_2);
+	IO::setStdOutTarget(ud.usart);
 	
 	printf("Starting RTC Calendar example...\n");
 	

@@ -26,6 +26,7 @@
 #endif /* __GNUC__ */
 
 
+#include <utils.h>
 #include <core.h>
 #include <rcc.h>
 #include <clock.h>

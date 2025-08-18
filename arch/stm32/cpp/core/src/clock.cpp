@@ -31,8 +31,8 @@ uint8_t RTC_Bcd2ToByte(uint8_t Value) {
 }
 
 
-// --- BCD conversion ---
-uint8_t bcd2dec8(uint8_t bcd) {
+// --- BCD conversion --- -> Moved to utils.cpp
+/* uint8_t bcd2dec8(uint8_t bcd) {
 	uint8_t dec = (bcd >> 4) * 10 + (bcd & 0x0f);
 	return dec;
 }
@@ -56,7 +56,7 @@ uint32_t bcd2dec32(uint32_t bcd) {
 
 uint32_t dec2bcd32(uint32_t dec) {
 	return dec2bcd16(dec % 10000) | dec2bcd16(dec / 10000) << 16;
-}
+} */
 // ---
 
 

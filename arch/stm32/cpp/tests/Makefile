@@ -4,8 +4,8 @@
 INCLUDES := -I. -I ../core/include
 SOURCE_ROOT := ../core/src
 #FLAGS := -std=c++11 -g3 -DSTM32F4=1 -D__stm32f4
-FLAGS := -std=c++11 -g3 -DSTM32F0=1 -D__stm32f0
-#FLAGS := -std=c++11 -g3 -DSTM32F1=1 -D__stm32f1
+#FLAGS := -std=c++11 -g3 -DSTM32F0=1 -D__stm32f0
+FLAGS := -std=c++11 -g3 -DSTM32F1=1 -D__stm32f1
 
 
 all: mkdir rcc_test interrupts_test gpio_test eventful uart_test
@@ -31,3 +31,12 @@ eventful:
 	
 uart_test:
 	g++ -o bin/uart_test uart_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp $(SOURCE_ROOT)/gpio.cpp $(SOURCE_ROOT)/usart.cpp  $(FLAGS) $(INCLUDES)
+	
+rtc_test:
+	g++ -o bin/rtc_test rtc_test.cpp common.cpp $(SOURCE_ROOT)/rcc.cpp \
+												$(SOURCE_ROOT)/rtc.cpp \
+												$(SOURCE_ROOT)/core.cpp \
+												$(SOURCE_ROOT)/utils.cpp \
+												$(SOURCE_ROOT)/printf.c \
+												-DNODATE_RTC_ENABLED=1 \
+												$(FLAGS) $(INCLUDES)

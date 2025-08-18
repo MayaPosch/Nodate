@@ -17,6 +17,7 @@
 #define RTC_H
 
 #include <common.h>
+#include <nodate.h>
 
 
 struct RtcTime {
@@ -26,6 +27,13 @@ struct RtcTime {
 	uint8_t minute_units;
 	uint8_t second_tens;
 	uint8_t second_units;
+};
+
+
+enum RtcClock {
+	RTC_CLOCK_LSI,
+	RTC_CLOCK_LSE,
+	RTC_CLOCK_HSE
 };
 
 struct RTC_TimeTypeDef {
@@ -45,7 +53,7 @@ class Rtc {
 	//
 	
 public:
-	static bool enableRTC();
+	static bool enableRTC(RtcClock clk = RTC_CLOCK_LSE);
 	static bool setTime(uint32_t time);
 	static bool getTime(RtcTime &time);
 	static bool getTime(char* t, uint8_t &len);

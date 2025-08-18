@@ -13,6 +13,53 @@
 extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Clock) */
 
 
+struct ADC_TypeDef {
+  __IO uint32_t SR;
+  __IO uint32_t CR1;
+  __IO uint32_t CR2;
+  __IO uint32_t SMPR1;
+  __IO uint32_t SMPR2;
+  __IO uint32_t JOFR1;
+  __IO uint32_t JOFR2;
+  __IO uint32_t JOFR3;
+  __IO uint32_t JOFR4;
+  __IO uint32_t HTR;
+  __IO uint32_t LTR;
+  __IO uint32_t SQR1;
+  __IO uint32_t SQR2;
+  __IO uint32_t SQR3;
+  __IO uint32_t JSQR;
+  __IO uint32_t JDR1;
+  __IO uint32_t JDR2;
+  __IO uint32_t JDR3;
+  __IO uint32_t JDR4;
+  __IO uint32_t DR;
+};
+
+
+extern ADC_TypeDef* ADC1;
+
+
+struct BKP_TypeDef {
+  uint32_t  RESERVED0;
+  __IO uint32_t DR1;
+  __IO uint32_t DR2;
+  __IO uint32_t DR3;
+  __IO uint32_t DR4;
+  __IO uint32_t DR5;
+  __IO uint32_t DR6;
+  __IO uint32_t DR7;
+  __IO uint32_t DR8;
+  __IO uint32_t DR9;
+  __IO uint32_t DR10;
+  __IO uint32_t RTCCR;
+  __IO uint32_t CR;
+  __IO uint32_t CSR;
+};
+
+extern BKP_TypeDef* BKP;
+
+
 #ifdef STM32F0
 // STM32F0
 struct GPIO_TypeDef {
@@ -49,6 +96,25 @@ struct AFIO_TypeDef {
 };
 
 extern AFIO_TypeDef* AFIO;
+
+struct PWR_TypeDef {
+  __IO uint32_t CR;
+  __IO uint32_t CSR;
+};
+
+
+struct I2C_TypeDef {
+  __IO uint32_t CR1;
+  __IO uint32_t CR2;
+  __IO uint32_t OAR1;
+  __IO uint32_t OAR2;
+  __IO uint32_t DR;
+  __IO uint32_t SR1;
+  __IO uint32_t SR2;
+  __IO uint32_t CCR;
+  __IO uint32_t TRISE;
+};
+
 #else
 // STM32F4
 struct GPIO_TypeDef {
@@ -71,6 +137,9 @@ extern GPIO_TypeDef* GPIOC;
 extern GPIO_TypeDef* GPIOD;
 extern GPIO_TypeDef* GPIOE;
 extern GPIO_TypeDef* GPIOF;
+
+extern PWR_TypeDef* PWR;
+extern I2C_TypeDef* I2C1;
 
 
 #ifdef STM32F0
@@ -105,6 +174,20 @@ struct RCC_TypeDef {
   __IO uint32_t APB1ENR;
   __IO uint32_t BDCR;
   __IO uint32_t CSR;
+};
+
+
+struct RTC_TypeDef {
+  __IO uint32_t CRH;
+  __IO uint32_t CRL;
+  __IO uint32_t PRLH;
+  __IO uint32_t PRLL;
+  __IO uint32_t DIVH;
+  __IO uint32_t DIVL;
+  __IO uint32_t CNTH;
+  __IO uint32_t CNTL;
+  __IO uint32_t ALRH;
+  __IO uint32_t ALRL;
 };
 
 #else
@@ -145,6 +228,22 @@ struct RCC_TypeDef {
 #endif
 
 extern RCC_TypeDef* RCC;
+extern RTC_TypeDef* RTC;
+
+
+struct SPI_TypeDef {
+  __IO uint32_t CR1;
+  __IO uint32_t CR2;
+  __IO uint32_t SR;
+  __IO uint32_t DR;
+  __IO uint32_t CRCPR;
+  __IO uint32_t RXCRCR;
+  __IO uint32_t TXCRCR;
+  __IO uint32_t I2SCFGR;
+};
+
+extern SPI_TypeDef* SPI1;
+
 
 #ifdef STM32F0
 // STM32F0
@@ -167,6 +266,18 @@ struct SYSCFG_TypeDef {
 #endif
 
 extern SYSCFG_TypeDef* SYSCFG;
+
+struct DMA_Channel_TypeDef {
+  __IO uint32_t CCR;
+  __IO uint32_t CNDTR;
+  __IO uint32_t CPAR;
+  __IO uint32_t CMAR;
+};
+
+struct DMA_TypeDef {
+  __IO uint32_t ISR;
+  __IO uint32_t IFCR;
+};
 
 
 struct EXTI_TypeDef {
@@ -378,372 +489,11 @@ extern USART_TypeDef* USART3;
 // --- DEFINES ---
 
 #if defined STM32F0
-// STM32F0
-#define RCC_AHBENR_GPIOAEN_Pos                   (17U) 
-#define RCC_AHBENR_GPIOAEN 			(0x1UL << RCC_AHBENR_GPIOAEN_Pos)
-#define RCC_AHBENR_GPIOBEN_Pos                   (18U)
-#define RCC_AHBENR_GPIOBEN 			(0x1UL << RCC_AHBENR_GPIOBEN_Pos)
-#define RCC_AHBENR_GPIOCEN_Pos                   (19U)
-#define RCC_AHBENR_GPIOCEN 			(0x1UL << RCC_AHBENR_GPIOCEN_Pos)
-#define RCC_AHBENR_GPIOFEN_Pos                   (22U)   
-#define RCC_AHBENR_GPIOFEN 			(0x1UL << RCC_AHBENR_GPIOFEN_Pos)
-
-#define RCC_APB2ENR_SYSCFGCOMPEN_Pos 	(0U)
-#define RCC_APB2ENR_SYSCFGCOMPEN 	(0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos)
-
-#define RCC_APB2ENR_USART1EN_Pos                 (14U)                         
-#define RCC_APB2ENR_USART1EN_Msk                 (0x1UL << RCC_APB2ENR_USART1EN_Pos) /*!< 0x00004000 */
-#define RCC_APB2ENR_USART1EN                     RCC_APB2ENR_USART1EN_Msk      /*!< USART1 clock enable */
-
-#define RCC_APB1ENR_USART2EN_Pos                 (17U)                         
-#define RCC_APB1ENR_USART2EN_Msk                 (0x1UL << RCC_APB1ENR_USART2EN_Pos) /*!< 0x00020000 */
-#define RCC_APB1ENR_USART2EN                     RCC_APB1ENR_USART2EN_Msk      /*!< USART2 clock enable */
-
-#define USART_CR1_UE_Pos              (0U)                                     
-#define USART_CR1_UE_Msk              (0x1UL << USART_CR1_UE_Pos)               /*!< 0x00000001 */
-#define USART_CR1_UE                  USART_CR1_UE_Msk                         /*!< USART Enable */
-#define USART_CR1_UESM_Pos            (1U)                                     
-#define USART_CR1_UESM_Msk            (0x1UL << USART_CR1_UESM_Pos)             /*!< 0x00000002 */
-#define USART_CR1_UESM                USART_CR1_UESM_Msk                       /*!< USART Enable in STOP Mode */
-#define USART_CR1_RE_Pos              (2U)                                     
-#define USART_CR1_RE_Msk              (0x1UL << USART_CR1_RE_Pos)               /*!< 0x00000004 */
-#define USART_CR1_RE                  USART_CR1_RE_Msk                         /*!< Receiver Enable */
-#define USART_CR1_TE_Pos              (3U)                                     
-#define USART_CR1_TE_Msk              (0x1UL << USART_CR1_TE_Pos)               /*!< 0x00000008 */
-#define USART_CR1_TE                  USART_CR1_TE_Msk                         /*!< Transmitter Enable */
-#define USART_CR1_IDLEIE_Pos          (4U)                                     
-#define USART_CR1_IDLEIE_Msk          (0x1UL << USART_CR1_IDLEIE_Pos)           /*!< 0x00000010 */
-#define USART_CR1_IDLEIE              USART_CR1_IDLEIE_Msk                     /*!< IDLE Interrupt Enable */
-#define USART_CR1_RXNEIE_Pos          (5U)                                     
-#define USART_CR1_RXNEIE_Msk          (0x1UL << USART_CR1_RXNEIE_Pos)           /*!< 0x00000020 */
-#define USART_CR1_RXNEIE              USART_CR1_RXNEIE_Msk                     /*!< RXNE Interrupt Enable */
-
-/******************  Bit definition for USART_BRR register  *******************/
-#define USART_BRR_DIV_FRACTION_Pos    (0U)                                     
-#define USART_BRR_DIV_FRACTION_Msk    (0xFUL << USART_BRR_DIV_FRACTION_Pos)     /*!< 0x0000000F */
-#define USART_BRR_DIV_FRACTION        USART_BRR_DIV_FRACTION_Msk               /*!< Fraction of USARTDIV */
-#define USART_BRR_DIV_MANTISSA_Pos    (4U)                                     
-#define USART_BRR_DIV_MANTISSA_Msk    (0xFFFUL << USART_BRR_DIV_MANTISSA_Pos)   /*!< 0x0000FFF0 */
-#define USART_BRR_DIV_MANTISSA        USART_BRR_DIV_MANTISSA_Msk               /*!< Mantissa of USARTDIV */
-
-#define USART_ISR_RXNE_Pos            (5U)                                     
-#define USART_ISR_RXNE_Msk            (0x1UL << USART_ISR_RXNE_Pos)             /*!< 0x00000020 */
-#define USART_ISR_RXNE                USART_ISR_RXNE_Msk                       /*!< Read Data Register Not Empty */
-
+	#include "stm32f0/stm32f0_def.h"
 #elif defined STM32F1
-// STM32F1
-#define RCC_APB2ENR_AFIOEN_Pos               (0U)                              
-#define RCC_APB2ENR_AFIOEN_Msk               (0x1UL << RCC_APB2ENR_AFIOEN_Pos)  /*!< 0x00000001 */
-#define RCC_APB2ENR_AFIOEN                   RCC_APB2ENR_AFIOEN_Msk            /*!< Alternate Function I/O clock enable */
-#define RCC_APB2ENR_IOPAEN_Pos               (2U)                              
-#define RCC_APB2ENR_IOPAEN_Msk               (0x1UL << RCC_APB2ENR_IOPAEN_Pos)  /*!< 0x00000004 */
-#define RCC_APB2ENR_IOPAEN                   RCC_APB2ENR_IOPAEN_Msk            /*!< I/O port A clock enable */
-#define RCC_APB2ENR_IOPBEN_Pos               (3U)                              
-#define RCC_APB2ENR_IOPBEN_Msk               (0x1UL << RCC_APB2ENR_IOPBEN_Pos)  /*!< 0x00000008 */
-#define RCC_APB2ENR_IOPBEN                   RCC_APB2ENR_IOPBEN_Msk            /*!< I/O port B clock enable */
-#define RCC_APB2ENR_IOPCEN_Pos               (4U)                              
-#define RCC_APB2ENR_IOPCEN_Msk               (0x1UL << RCC_APB2ENR_IOPCEN_Pos)  /*!< 0x00000010 */
-#define RCC_APB2ENR_IOPCEN                   RCC_APB2ENR_IOPCEN_Msk            /*!< I/O port C clock enable */
-#define RCC_APB2ENR_IOPDEN_Pos               (5U)                              
-#define RCC_APB2ENR_IOPDEN_Msk               (0x1UL << RCC_APB2ENR_IOPDEN_Pos)  /*!< 0x00000020 */
-#define RCC_APB2ENR_IOPDEN                   RCC_APB2ENR_IOPDEN_Msk            /*!< I/O port D clock enable */
-#define RCC_APB2ENR_ADC1EN_Pos               (9U)                              
-#define RCC_APB2ENR_ADC1EN_Msk               (0x1UL << RCC_APB2ENR_ADC1EN_Pos)  /*!< 0x00000200 */
-#define RCC_APB2ENR_ADC1EN                   RCC_APB2ENR_ADC1EN_Msk            /*!< ADC 1 interface clock enable */
-
-#define RCC_APB2ENR_ADC2EN_Pos               (10U)                             
-#define RCC_APB2ENR_ADC2EN_Msk               (0x1UL << RCC_APB2ENR_ADC2EN_Pos)  /*!< 0x00000400 */
-#define RCC_APB2ENR_ADC2EN                   RCC_APB2ENR_ADC2EN_Msk            /*!< ADC 2 interface clock enable */
-
-#define RCC_APB2ENR_TIM1EN_Pos               (11U)                             
-#define RCC_APB2ENR_TIM1EN_Msk               (0x1UL << RCC_APB2ENR_TIM1EN_Pos)  /*!< 0x00000800 */
-#define RCC_APB2ENR_TIM1EN                   RCC_APB2ENR_TIM1EN_Msk            /*!< TIM1 Timer clock enable */
-#define RCC_APB2ENR_SPI1EN_Pos               (12U)                             
-#define RCC_APB2ENR_SPI1EN_Msk               (0x1UL << RCC_APB2ENR_SPI1EN_Pos)  /*!< 0x00001000 */
-#define RCC_APB2ENR_SPI1EN                   RCC_APB2ENR_SPI1EN_Msk            /*!< SPI 1 clock enable */
-#define RCC_APB2ENR_USART1EN_Pos             (14U)                             
-#define RCC_APB2ENR_USART1EN_Msk             (0x1UL << RCC_APB2ENR_USART1EN_Pos) /*!< 0x00004000 */
-#define RCC_APB2ENR_USART1EN                 RCC_APB2ENR_USART1EN_Msk          /*!< USART1 clock enable */
-
-/*****************  Bit definition for RCC_APB1ENR register  ******************/
-#define RCC_APB1ENR_TIM2EN_Pos               (0U)                              
-#define RCC_APB1ENR_TIM2EN_Msk               (0x1UL << RCC_APB1ENR_TIM2EN_Pos)  /*!< 0x00000001 */
-#define RCC_APB1ENR_TIM2EN                   RCC_APB1ENR_TIM2EN_Msk            /*!< Timer 2 clock enabled*/
-#define RCC_APB1ENR_TIM3EN_Pos               (1U)                              
-#define RCC_APB1ENR_TIM3EN_Msk               (0x1UL << RCC_APB1ENR_TIM3EN_Pos)  /*!< 0x00000002 */
-#define RCC_APB1ENR_TIM3EN                   RCC_APB1ENR_TIM3EN_Msk            /*!< Timer 3 clock enable */
-#define RCC_APB1ENR_WWDGEN_Pos               (11U)                             
-#define RCC_APB1ENR_WWDGEN_Msk               (0x1UL << RCC_APB1ENR_WWDGEN_Pos)  /*!< 0x00000800 */
-#define RCC_APB1ENR_WWDGEN                   RCC_APB1ENR_WWDGEN_Msk            /*!< Window Watchdog clock enable */
-#define RCC_APB1ENR_USART2EN_Pos             (17U)                             
-#define RCC_APB1ENR_USART2EN_Msk             (0x1UL << RCC_APB1ENR_USART2EN_Pos) /*!< 0x00020000 */
-#define RCC_APB1ENR_USART2EN                 RCC_APB1ENR_USART2EN_Msk          /*!< USART 2 clock enable */
-#define RCC_APB1ENR_I2C1EN_Pos               (21U)                             
-#define RCC_APB1ENR_I2C1EN_Msk               (0x1UL << RCC_APB1ENR_I2C1EN_Pos)  /*!< 0x00200000 */
-#define RCC_APB1ENR_I2C1EN                   RCC_APB1ENR_I2C1EN_Msk            /*!< I2C 1 clock enable */
-
-#define RCC_APB1ENR_CAN1EN_Pos               (25U)                             
-#define RCC_APB1ENR_CAN1EN_Msk               (0x1UL << RCC_APB1ENR_CAN1EN_Pos)  /*!< 0x02000000 */
-#define RCC_APB1ENR_CAN1EN                   RCC_APB1ENR_CAN1EN_Msk            /*!< CAN1 clock enable */
-
-#define RCC_APB1ENR_BKPEN_Pos                (27U)                             
-#define RCC_APB1ENR_BKPEN_Msk                (0x1UL << RCC_APB1ENR_BKPEN_Pos)   /*!< 0x08000000 */
-#define RCC_APB1ENR_BKPEN                    RCC_APB1ENR_BKPEN_Msk             /*!< Backup interface clock enable */
-#define RCC_APB1ENR_PWREN_Pos                (28U)                             
-#define RCC_APB1ENR_PWREN_Msk                (0x1UL << RCC_APB1ENR_PWREN_Pos)   /*!< 0x10000000 */
-#define RCC_APB1ENR_PWREN                    RCC_APB1ENR_PWREN_Msk             /*!< Power interface clock enable */
-
-#define RCC_APB1ENR_TIM4EN_Pos               (2U)                              
-#define RCC_APB1ENR_TIM4EN_Msk               (0x1UL << RCC_APB1ENR_TIM4EN_Pos)  /*!< 0x00000004 */
-#define RCC_APB1ENR_TIM4EN                   RCC_APB1ENR_TIM4EN_Msk            /*!< Timer 4 clock enable */
-#define RCC_APB1ENR_SPI2EN_Pos               (14U)                             
-#define RCC_APB1ENR_SPI2EN_Msk               (0x1UL << RCC_APB1ENR_SPI2EN_Pos)  /*!< 0x00004000 */
-#define RCC_APB1ENR_SPI2EN                   RCC_APB1ENR_SPI2EN_Msk            /*!< SPI 2 clock enable */
-#define RCC_APB1ENR_USART3EN_Pos             (18U)                             
-#define RCC_APB1ENR_USART3EN_Msk             (0x1UL << RCC_APB1ENR_USART3EN_Pos) /*!< 0x00040000 */
-#define RCC_APB1ENR_USART3EN                 RCC_APB1ENR_USART3EN_Msk          /*!< USART 3 clock enable */
-#define RCC_APB1ENR_I2C2EN_Pos               (22U)                             
-#define RCC_APB1ENR_I2C2EN_Msk               (0x1UL << RCC_APB1ENR_I2C2EN_Pos)  /*!< 0x00400000 */
-#define RCC_APB1ENR_I2C2EN                   RCC_APB1ENR_I2C2EN_Msk            /*!< I2C 2 clock enable */
-
-#define RCC_APB1ENR_USBEN_Pos                (23U)                             
-#define RCC_APB1ENR_USBEN_Msk                (0x1UL << RCC_APB1ENR_USBEN_Pos)   /*!< 0x00800000 */
-#define RCC_APB1ENR_USBEN                    RCC_APB1ENR_USBEN_Msk             /*!< USB Device clock enable */
-
-/******************  Bit definition for AFIO_MAPR register  *******************/
-#define AFIO_MAPR_SPI1_REMAP_Pos             (0U)                              
-#define AFIO_MAPR_SPI1_REMAP_Msk             (0x1UL << AFIO_MAPR_SPI1_REMAP_Pos) /*!< 0x00000001 */
-#define AFIO_MAPR_SPI1_REMAP                 AFIO_MAPR_SPI1_REMAP_Msk          /*!< SPI1 remapping */
-#define AFIO_MAPR_I2C1_REMAP_Pos             (1U)                              
-#define AFIO_MAPR_I2C1_REMAP_Msk             (0x1UL << AFIO_MAPR_I2C1_REMAP_Pos) /*!< 0x00000002 */
-#define AFIO_MAPR_I2C1_REMAP                 AFIO_MAPR_I2C1_REMAP_Msk          /*!< I2C1 remapping */
-#define AFIO_MAPR_USART1_REMAP_Pos           (2U)                              
-#define AFIO_MAPR_USART1_REMAP_Msk           (0x1UL << AFIO_MAPR_USART1_REMAP_Pos) /*!< 0x00000004 */
-#define AFIO_MAPR_USART1_REMAP               AFIO_MAPR_USART1_REMAP_Msk        /*!< USART1 remapping */
-#define AFIO_MAPR_USART2_REMAP_Pos           (3U)                              
-#define AFIO_MAPR_USART2_REMAP_Msk           (0x1UL << AFIO_MAPR_USART2_REMAP_Pos) /*!< 0x00000008 */
-#define AFIO_MAPR_USART2_REMAP               AFIO_MAPR_USART2_REMAP_Msk        /*!< USART2 remapping */
-
-
-#define AFIO_MAPR_TIM1_REMAP_Pos             (6U)                              
-#define AFIO_MAPR_TIM1_REMAP_Msk             (0x3UL << AFIO_MAPR_TIM1_REMAP_Pos) /*!< 0x000000C0 */
-#define AFIO_MAPR_TIM1_REMAP                 AFIO_MAPR_TIM1_REMAP_Msk          /*!< TIM1_REMAP[1:0] bits (TIM1 remapping) */
-#define AFIO_MAPR_TIM1_REMAP_0               (0x1UL << AFIO_MAPR_TIM1_REMAP_Pos) /*!< 0x00000040 */
-#define AFIO_MAPR_TIM1_REMAP_1               (0x2UL << AFIO_MAPR_TIM1_REMAP_Pos) /*!< 0x00000080 */
-
-/*!< TIM1_REMAP configuration */
-#define AFIO_MAPR_TIM1_REMAP_NOREMAP         0x00000000U                          /*!< No remap (ETR/PA12, CH1/PA8, CH2/PA9, CH3/PA10, CH4/PA11, BKIN/PB12, CH1N/PB13, CH2N/PB14, CH3N/PB15) */
-#define AFIO_MAPR_TIM1_REMAP_PARTIALREMAP_Pos (6U)                             
-#define AFIO_MAPR_TIM1_REMAP_PARTIALREMAP_Msk (0x1UL << AFIO_MAPR_TIM1_REMAP_PARTIALREMAP_Pos) /*!< 0x00000040 */
-#define AFIO_MAPR_TIM1_REMAP_PARTIALREMAP    AFIO_MAPR_TIM1_REMAP_PARTIALREMAP_Msk /*!< Partial remap (ETR/PA12, CH1/PA8, CH2/PA9, CH3/PA10, CH4/PA11, BKIN/PA6, CH1N/PA7, CH2N/PB0, CH3N/PB1) */
-#define AFIO_MAPR_TIM1_REMAP_FULLREMAP_Pos   (6U)                              
-#define AFIO_MAPR_TIM1_REMAP_FULLREMAP_Msk   (0x3UL << AFIO_MAPR_TIM1_REMAP_FULLREMAP_Pos) /*!< 0x000000C0 */
-#define AFIO_MAPR_TIM1_REMAP_FULLREMAP       AFIO_MAPR_TIM1_REMAP_FULLREMAP_Msk /*!< Full remap (ETR/PE7, CH1/PE9, CH2/PE11, CH3/PE13, CH4/PE14, BKIN/PE15, CH1N/PE8, CH2N/PE10, CH3N/PE12) */
-
-#define AFIO_MAPR_TIM2_REMAP_Pos             (8U)                              
-#define AFIO_MAPR_TIM2_REMAP_Msk             (0x3UL << AFIO_MAPR_TIM2_REMAP_Pos) /*!< 0x00000300 */
-#define AFIO_MAPR_TIM2_REMAP                 AFIO_MAPR_TIM2_REMAP_Msk          /*!< TIM2_REMAP[1:0] bits (TIM2 remapping) */
-#define AFIO_MAPR_TIM2_REMAP_0               (0x1UL << AFIO_MAPR_TIM2_REMAP_Pos) /*!< 0x00000100 */
-#define AFIO_MAPR_TIM2_REMAP_1               (0x2UL << AFIO_MAPR_TIM2_REMAP_Pos) /*!< 0x00000200 */
-
-/*!< TIM2_REMAP configuration */
-#define AFIO_MAPR_TIM2_REMAP_NOREMAP         0x00000000U                          /*!< No remap (CH1/ETR/PA0, CH2/PA1, CH3/PA2, CH4/PA3) */
-#define AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Pos (8U)                            
-#define AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk (0x1UL << AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Pos) /*!< 0x00000100 */
-#define AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1   AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk /*!< Partial remap (CH1/ETR/PA15, CH2/PB3, CH3/PA2, CH4/PA3) */
-#define AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Pos (9U)                            
-#define AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk (0x1UL << AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Pos) /*!< 0x00000200 */
-#define AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2   AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk /*!< Partial remap (CH1/ETR/PA0, CH2/PA1, CH3/PB10, CH4/PB11) */
-#define AFIO_MAPR_TIM2_REMAP_FULLREMAP_Pos   (8U)                              
-#define AFIO_MAPR_TIM2_REMAP_FULLREMAP_Msk   (0x3UL << AFIO_MAPR_TIM2_REMAP_FULLREMAP_Pos) /*!< 0x00000300 */
-#define AFIO_MAPR_TIM2_REMAP_FULLREMAP       AFIO_MAPR_TIM2_REMAP_FULLREMAP_Msk /*!< Full remap (CH1/ETR/PA15, CH2/PB3, CH3/PB10, CH4/PB11) */
-
-#define AFIO_MAPR_TIM3_REMAP_Pos             (10U)                             
-#define AFIO_MAPR_TIM3_REMAP_Msk             (0x3UL << AFIO_MAPR_TIM3_REMAP_Pos) /*!< 0x00000C00 */
-#define AFIO_MAPR_TIM3_REMAP                 AFIO_MAPR_TIM3_REMAP_Msk          /*!< TIM3_REMAP[1:0] bits (TIM3 remapping) */
-#define AFIO_MAPR_TIM3_REMAP_0               (0x1UL << AFIO_MAPR_TIM3_REMAP_Pos) /*!< 0x00000400 */
-#define AFIO_MAPR_TIM3_REMAP_1               (0x2UL << AFIO_MAPR_TIM3_REMAP_Pos) /*!< 0x00000800 */
-
-/*!< TIM3_REMAP configuration */
-#define AFIO_MAPR_TIM3_REMAP_NOREMAP         0x00000000U                          /*!< No remap (CH1/PA6, CH2/PA7, CH3/PB0, CH4/PB1) */
-#define AFIO_MAPR_TIM3_REMAP_PARTIALREMAP_Pos (11U)                            
-#define AFIO_MAPR_TIM3_REMAP_PARTIALREMAP_Msk (0x1UL << AFIO_MAPR_TIM3_REMAP_PARTIALREMAP_Pos) /*!< 0x00000800 */
-#define AFIO_MAPR_TIM3_REMAP_PARTIALREMAP    AFIO_MAPR_TIM3_REMAP_PARTIALREMAP_Msk /*!< Partial remap (CH1/PB4, CH2/PB5, CH3/PB0, CH4/PB1) */
-#define AFIO_MAPR_TIM3_REMAP_FULLREMAP_Pos   (10U)                             
-#define AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk   (0x3UL << AFIO_MAPR_TIM3_REMAP_FULLREMAP_Pos) /*!< 0x00000C00 */
-#define AFIO_MAPR_TIM3_REMAP_FULLREMAP       AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk /*!< Full remap (CH1/PC6, CH2/PC7, CH3/PC8, CH4/PC9) */
-
-
-#define AFIO_MAPR_CAN_REMAP_Pos              (13U)                             
-#define AFIO_MAPR_CAN_REMAP_Msk              (0x3UL << AFIO_MAPR_CAN_REMAP_Pos) /*!< 0x00006000 */
-#define AFIO_MAPR_CAN_REMAP                  AFIO_MAPR_CAN_REMAP_Msk           /*!< CAN_REMAP[1:0] bits (CAN Alternate function remapping) */
-#define AFIO_MAPR_CAN_REMAP_0                (0x1UL << AFIO_MAPR_CAN_REMAP_Pos) /*!< 0x00002000 */
-#define AFIO_MAPR_CAN_REMAP_1                (0x2UL << AFIO_MAPR_CAN_REMAP_Pos) /*!< 0x00004000 */
-
-/*!< CAN_REMAP configuration */
-#define AFIO_MAPR_CAN_REMAP_REMAP1           0x00000000U                          /*!< CANRX mapped to PA11, CANTX mapped to PA12 */
-#define AFIO_MAPR_CAN_REMAP_REMAP2_Pos       (14U)                             
-#define AFIO_MAPR_CAN_REMAP_REMAP2_Msk       (0x1UL << AFIO_MAPR_CAN_REMAP_REMAP2_Pos) /*!< 0x00004000 */
-#define AFIO_MAPR_CAN_REMAP_REMAP2           AFIO_MAPR_CAN_REMAP_REMAP2_Msk    /*!< CANRX mapped to PB8, CANTX mapped to PB9 */
-#define AFIO_MAPR_CAN_REMAP_REMAP3_Pos       (13U)                             
-#define AFIO_MAPR_CAN_REMAP_REMAP3_Msk       (0x3UL << AFIO_MAPR_CAN_REMAP_REMAP3_Pos) /*!< 0x00006000 */
-#define AFIO_MAPR_CAN_REMAP_REMAP3           AFIO_MAPR_CAN_REMAP_REMAP3_Msk    /*!< CANRX mapped to PD0, CANTX mapped to PD1 */
-
-/******************  Bit definition for USART_BRR register  *******************/
-#define USART_BRR_DIV_Fraction_Pos          (0U)                               
-#define USART_BRR_DIV_Fraction_Msk          (0xFUL << USART_BRR_DIV_Fraction_Pos) /*!< 0x0000000F */
-#define USART_BRR_DIV_Fraction              USART_BRR_DIV_Fraction_Msk         /*!< Fraction of USARTDIV */
-#define USART_BRR_DIV_Mantissa_Pos          (4U)                               
-#define USART_BRR_DIV_Mantissa_Msk          (0xFFFUL << USART_BRR_DIV_Mantissa_Pos) /*!< 0x0000FFF0 */
-#define USART_BRR_DIV_Mantissa              USART_BRR_DIV_Mantissa_Msk         /*!< Mantissa of USARTDIV */
-
-/******************  Bit definition for USART_CR1 register  *******************/
-#define USART_CR1_SBK_Pos                   (0U)                               
-#define USART_CR1_SBK_Msk                   (0x1UL << USART_CR1_SBK_Pos)        /*!< 0x00000001 */
-#define USART_CR1_SBK                       USART_CR1_SBK_Msk                  /*!< Send Break */
-#define USART_CR1_RWU_Pos                   (1U)                               
-#define USART_CR1_RWU_Msk                   (0x1UL << USART_CR1_RWU_Pos)        /*!< 0x00000002 */
-#define USART_CR1_RWU                       USART_CR1_RWU_Msk                  /*!< Receiver wakeup */
-#define USART_CR1_RE_Pos                    (2U)                               
-#define USART_CR1_RE_Msk                    (0x1UL << USART_CR1_RE_Pos)         /*!< 0x00000004 */
-#define USART_CR1_RE                        USART_CR1_RE_Msk                   /*!< Receiver Enable */
-#define USART_CR1_TE_Pos                    (3U)                               
-#define USART_CR1_TE_Msk                    (0x1UL << USART_CR1_TE_Pos)         /*!< 0x00000008 */
-#define USART_CR1_TE                        USART_CR1_TE_Msk                   /*!< Transmitter Enable */
-#define USART_CR1_IDLEIE_Pos                (4U)                               
-#define USART_CR1_IDLEIE_Msk                (0x1UL << USART_CR1_IDLEIE_Pos)     /*!< 0x00000010 */
-#define USART_CR1_IDLEIE                    USART_CR1_IDLEIE_Msk               /*!< IDLE Interrupt Enable */
-#define USART_CR1_RXNEIE_Pos                (5U)                               
-#define USART_CR1_RXNEIE_Msk                (0x1UL << USART_CR1_RXNEIE_Pos)     /*!< 0x00000020 */
-#define USART_CR1_RXNEIE                    USART_CR1_RXNEIE_Msk               /*!< RXNE Interrupt Enable */
-#define USART_CR1_TCIE_Pos                  (6U)                               
-#define USART_CR1_TCIE_Msk                  (0x1UL << USART_CR1_TCIE_Pos)       /*!< 0x00000040 */
-#define USART_CR1_TCIE                      USART_CR1_TCIE_Msk                 /*!< Transmission Complete Interrupt Enable */
-#define USART_CR1_TXEIE_Pos                 (7U)                               
-#define USART_CR1_TXEIE_Msk                 (0x1UL << USART_CR1_TXEIE_Pos)      /*!< 0x00000080 */
-#define USART_CR1_TXEIE                     USART_CR1_TXEIE_Msk                /*!< PE Interrupt Enable */
-#define USART_CR1_PEIE_Pos                  (8U)                               
-#define USART_CR1_PEIE_Msk                  (0x1UL << USART_CR1_PEIE_Pos)       /*!< 0x00000100 */
-#define USART_CR1_PEIE                      USART_CR1_PEIE_Msk                 /*!< PE Interrupt Enable */
-#define USART_CR1_PS_Pos                    (9U)                               
-#define USART_CR1_PS_Msk                    (0x1UL << USART_CR1_PS_Pos)         /*!< 0x00000200 */
-#define USART_CR1_PS                        USART_CR1_PS_Msk                   /*!< Parity Selection */
-#define USART_CR1_PCE_Pos                   (10U)                              
-#define USART_CR1_PCE_Msk                   (0x1UL << USART_CR1_PCE_Pos)        /*!< 0x00000400 */
-#define USART_CR1_PCE                       USART_CR1_PCE_Msk                  /*!< Parity Control Enable */
-#define USART_CR1_WAKE_Pos                  (11U)                              
-#define USART_CR1_WAKE_Msk                  (0x1UL << USART_CR1_WAKE_Pos)       /*!< 0x00000800 */
-#define USART_CR1_WAKE                      USART_CR1_WAKE_Msk                 /*!< Wakeup method */
-#define USART_CR1_M_Pos                     (12U)                              
-#define USART_CR1_M_Msk                     (0x1UL << USART_CR1_M_Pos)          /*!< 0x00001000 */
-#define USART_CR1_M                         USART_CR1_M_Msk                    /*!< Word length */
-#define USART_CR1_UE_Pos                    (13U)                              
-#define USART_CR1_UE_Msk                    (0x1UL << USART_CR1_UE_Pos)         /*!< 0x00002000 */
-#define USART_CR1_UE                        USART_CR1_UE_Msk                   /*!< USART Enable */
-
-/*******************  Bit definition for USART_SR register  *******************/
-#define USART_SR_PE_Pos                     (0U)                               
-#define USART_SR_PE_Msk                     (0x1UL << USART_SR_PE_Pos)          /*!< 0x00000001 */
-#define USART_SR_PE                         USART_SR_PE_Msk                    /*!< Parity Error */
-#define USART_SR_FE_Pos                     (1U)                               
-#define USART_SR_FE_Msk                     (0x1UL << USART_SR_FE_Pos)          /*!< 0x00000002 */
-#define USART_SR_FE                         USART_SR_FE_Msk                    /*!< Framing Error */
-#define USART_SR_NE_Pos                     (2U)                               
-#define USART_SR_NE_Msk                     (0x1UL << USART_SR_NE_Pos)          /*!< 0x00000004 */
-#define USART_SR_NE                         USART_SR_NE_Msk                    /*!< Noise Error Flag */
-#define USART_SR_ORE_Pos                    (3U)                               
-#define USART_SR_ORE_Msk                    (0x1UL << USART_SR_ORE_Pos)         /*!< 0x00000008 */
-#define USART_SR_ORE                        USART_SR_ORE_Msk                   /*!< OverRun Error */
-#define USART_SR_IDLE_Pos                   (4U)                               
-#define USART_SR_IDLE_Msk                   (0x1UL << USART_SR_IDLE_Pos)        /*!< 0x00000010 */
-#define USART_SR_IDLE                       USART_SR_IDLE_Msk                  /*!< IDLE line detected */
-#define USART_SR_RXNE_Pos                   (5U)                               
-#define USART_SR_RXNE_Msk                   (0x1UL << USART_SR_RXNE_Pos)        /*!< 0x00000020 */
-#define USART_SR_RXNE                       USART_SR_RXNE_Msk                  /*!< Read Data Register Not Empty */
-#define USART_SR_TC_Pos                     (6U)                               
-#define USART_SR_TC_Msk                     (0x1UL << USART_SR_TC_Pos)          /*!< 0x00000040 */
-#define USART_SR_TC                         USART_SR_TC_Msk                    /*!< Transmission Complete */
-#define USART_SR_TXE_Pos                    (7U)                               
-#define USART_SR_TXE_Msk                    (0x1UL << USART_SR_TXE_Pos)         /*!< 0x00000080 */
-#define USART_SR_TXE                        USART_SR_TXE_Msk                   /*!< Transmit Data Register Empty */
-#define USART_SR_LBD_Pos                    (8U)                               
-#define USART_SR_LBD_Msk                    (0x1UL << USART_SR_LBD_Pos)         /*!< 0x00000100 */
-#define USART_SR_LBD                        USART_SR_LBD_Msk                   /*!< LIN Break Detection Flag */
-#define USART_SR_CTS_Pos                    (9U)                               
-#define USART_SR_CTS_Msk                    (0x1UL << USART_SR_CTS_Pos)         /*!< 0x00000200 */
-#define USART_SR_CTS                        USART_SR_CTS_Msk                   /*!< CTS Flag */
-
+	#include "stm32f1/stm32f1_def.h"
 #else
-
-// STM32F4
-#define RCC_AHB1ENR_GPIOAEN_Pos            (0U)                                
-#define RCC_AHB1ENR_GPIOAEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOAEN_Pos)   //!< 0x00000001 
-#define RCC_AHB1ENR_GPIOAEN                RCC_AHB1ENR_GPIOAEN_Msk             
-#define RCC_AHB1ENR_GPIOBEN_Pos            (1U)                                
-#define RCC_AHB1ENR_GPIOBEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOBEN_Pos)   //!< 0x00000002 
-#define RCC_AHB1ENR_GPIOBEN                RCC_AHB1ENR_GPIOBEN_Msk             
-#define RCC_AHB1ENR_GPIOCEN_Pos            (2U)                                
-#define RCC_AHB1ENR_GPIOCEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOCEN_Pos)   //!< 0x00000004 
-#define RCC_AHB1ENR_GPIOCEN                RCC_AHB1ENR_GPIOCEN_Msk             
-#define RCC_AHB1ENR_GPIODEN_Pos            (3U)                                
-#define RCC_AHB1ENR_GPIODEN_Msk            (0x1UL << RCC_AHB1ENR_GPIODEN_Pos)   //!< 0x00000008 
-#define RCC_AHB1ENR_GPIODEN                RCC_AHB1ENR_GPIODEN_Msk             
-#define RCC_AHB1ENR_GPIOEEN_Pos            (4U)                                
-#define RCC_AHB1ENR_GPIOEEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOEEN_Pos)   //!< 0x00000010 
-#define RCC_AHB1ENR_GPIOEEN                RCC_AHB1ENR_GPIOEEN_Msk             
-#define RCC_AHB1ENR_GPIOFEN_Pos            (5U)                                
-#define RCC_AHB1ENR_GPIOFEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOFEN_Pos)   //!< 0x00000020 
-#define RCC_AHB1ENR_GPIOFEN                RCC_AHB1ENR_GPIOFEN_Msk             
-#define RCC_AHB1ENR_GPIOGEN_Pos            (6U)                                
-#define RCC_AHB1ENR_GPIOGEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOGEN_Pos)   //!< 0x00000040 
-#define RCC_AHB1ENR_GPIOGEN                RCC_AHB1ENR_GPIOGEN_Msk             
-#define RCC_AHB1ENR_GPIOHEN_Pos            (7U)                                
-#define RCC_AHB1ENR_GPIOHEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOHEN_Pos)   //!< 0x00000080 
-#define RCC_AHB1ENR_GPIOHEN                RCC_AHB1ENR_GPIOHEN_Msk             
-#define RCC_AHB1ENR_GPIOIEN_Pos            (8U)                                
-#define RCC_AHB1ENR_GPIOIEN_Msk            (0x1UL << RCC_AHB1ENR_GPIOIEN_Pos)   //!< 0x00000100 
-#define RCC_AHB1ENR_GPIOIEN                RCC_AHB1ENR_GPIOIEN_Msk 
-
-#define RCC_APB2ENR_SYSCFGEN_Pos           (14U)                               
-#define RCC_APB2ENR_SYSCFGEN_Msk           (0x1UL << RCC_APB2ENR_SYSCFGEN_Pos)  //!< 0x00004000
-#define RCC_APB2ENR_SYSCFGEN               RCC_APB2ENR_SYSCFGEN_Msk
-
-#define RCC_APB2ENR_USART1EN_Pos           (4U)                                
-#define RCC_APB2ENR_USART1EN_Msk           (0x1UL << RCC_APB2ENR_USART1EN_Pos)  /*!< 0x00000010 */
-#define RCC_APB2ENR_USART1EN               RCC_APB2ENR_USART1EN_Msk     
-
-#define RCC_APB1ENR_USART2EN_Pos           (17U)                               
-#define RCC_APB1ENR_USART2EN_Msk           (0x1UL << RCC_APB1ENR_USART2EN_Pos)  /*!< 0x00020000 */
-#define RCC_APB1ENR_USART2EN               RCC_APB1ENR_USART2EN_Msk                
-
-#define USART_CR1_UE_Pos              (13U)                                    
-#define USART_CR1_UE_Msk              (0x1UL << USART_CR1_UE_Pos)               /*!< 0x00002000 */
-#define USART_CR1_UE                  USART_CR1_UE_Msk                         /*!<USART Enable                           */
-#define USART_CR1_RE_Pos              (2U)                                     
-#define USART_CR1_RE_Msk              (0x1UL << USART_CR1_RE_Pos)               /*!< 0x00000004 */
-#define USART_CR1_RE                  USART_CR1_RE_Msk                         /*!<Receiver Enable                        */
-#define USART_CR1_TE_Pos              (3U)                                     
-#define USART_CR1_TE_Msk              (0x1UL << USART_CR1_TE_Pos)               /*!< 0x00000008 */
-#define USART_CR1_TE                  USART_CR1_TE_Msk                         /*!<Transmitter Enable                     */
-#define USART_CR1_IDLEIE_Pos          (4U)                                     
-#define USART_CR1_IDLEIE_Msk          (0x1UL << USART_CR1_IDLEIE_Pos)           /*!< 0x00000010 */
-#define USART_CR1_IDLEIE              USART_CR1_IDLEIE_Msk                     /*!<IDLE Interrupt Enable                  */
-#define USART_CR1_RXNEIE_Pos          (5U)                                     
-#define USART_CR1_RXNEIE_Msk          (0x1UL << USART_CR1_RXNEIE_Pos)           /*!< 0x00000020 */
-#define USART_CR1_RXNEIE              USART_CR1_RXNEIE_Msk                     /*!<RXNE Interrupt Enable                  */
-
-/******************  Bit definition for USART_BRR register  *******************/
-#define USART_BRR_DIV_Fraction_Pos    (0U)                                     
-#define USART_BRR_DIV_Fraction_Msk    (0xFUL << USART_BRR_DIV_Fraction_Pos)     /*!< 0x0000000F */
-#define USART_BRR_DIV_Fraction        USART_BRR_DIV_Fraction_Msk               /*!<Fraction of USARTDIV */
-#define USART_BRR_DIV_Mantissa_Pos    (4U)                                     
-#define USART_BRR_DIV_Mantissa_Msk    (0xFFFUL << USART_BRR_DIV_Mantissa_Pos)   /*!< 0x0000FFF0 */
-#define USART_BRR_DIV_Mantissa        USART_BRR_DIV_Mantissa_Msk               /*!<Mantissa of USARTDIV */
-
-#define USART_SR_RXNE_Pos             (5U)                                     
-#define USART_SR_RXNE_Msk             (0x1UL << USART_SR_RXNE_Pos)              /*!< 0x00000020 */
-#define USART_SR_RXNE                 USART_SR_RXNE_Msk                        /*!<Read Data Register Not Empty */
-
+	#include "stm32f4/stm32f4_def.h"
 #endif
 
 

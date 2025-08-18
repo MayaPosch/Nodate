@@ -1,9 +1,33 @@
 
 #include "common.h"
 
+#include <cstdio>
+
+// Custom printf things. Implement putchar handler.
+extern "C" {
+	void _putchar(char character);
+}
+
+void _putchar(char character) {
+	putchar(character);
+}
+
+// ---
+
+// Core
+// Defined in core-specific file.
+SysTick_Type tSysTick = { .CALIB = 1 };
+SysTick_Type* SysTick = &tSysTick;
+// End core.
+
 
 uint32_t SystemCoreClock = 8000000;
 
+ADC_TypeDef tADC1;
+ADC_TypeDef* ADC1 = &tADC1;
+
+BKP_TypeDef tBkp;
+BKP_TypeDef* BKP = &tBkp;
 
 GPIO_TypeDef tGpioA;
 GPIO_TypeDef* GPIOA = &tGpioA;
@@ -23,8 +47,17 @@ AFIO_TypeDef tAfio;
 AFIO_TypeDef* AFIO = &tAfio;
 #endif
 
+PWR_TypeDef tPWR;
+PWR_TypeDef* PWR = &tPWR;
+
+I2C_TypeDef tI2C1;
+I2C_TypeDef* I2C1 = &tI2C1;
+
 RCC_TypeDef tRcc;
 RCC_TypeDef* RCC = &tRcc;
+
+RTC_TypeDef tRtc;
+RTC_TypeDef* RTC = &tRtc;
 
 SYSCFG_TypeDef tSyscfg;
 SYSCFG_TypeDef* SYSCFG = &tSyscfg;
@@ -110,3 +143,6 @@ USART_TypeDef tUsart2;
 USART_TypeDef* USART2 = & tUsart2;
 USART_TypeDef tUsart3;
 USART_TypeDef* USART3 = & tUsart3;
+
+SPI_TypeDef tSPI1;
+SPI_TypeDef* SPI1 = &tSPI1;

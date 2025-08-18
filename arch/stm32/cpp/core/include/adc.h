@@ -81,7 +81,9 @@ struct ADC_device {
 
 class ADC {
 	static bool calibrate(ADC_devices device);
+#ifndef STM32F1
 	static ADC_Common_TypeDef* common;
+#endif
 	
 public:
 	static bool configure(ADC_devices device, ADC_modes mode);

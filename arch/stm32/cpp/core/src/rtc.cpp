@@ -13,15 +13,16 @@
 */
 
 
-#include <rtc.h>
-#include <rcc.h>
+#include "rtc.h"
+
+#ifdef NODATE_RTC_ENABLED
 
 #include <time.h>
 
 // DEBUG
 #include <printf.h>
 
-uint32_t bcd2dec32(uint32_t bcd); // Defined in clock.cpp
+uint32_t bcd2dec32(uint32_t bcd); // Defined in utils.cpp
 
 #define RTC_BKP_DATE_TIME_UPDATED ((uint32_t) 0x32F2)
 
@@ -59,7 +60,8 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	tp->tv_sec = ticks;
 	tp->tv_usec = 0;
 	
-	return ticks; // Return clock ticks.
+	//return ticks; // Return clock ticks.
+	return 0;
 #elif defined __stm32f1
 	if (!rtc_enabled) {
 		if (!Rtc::enableRTC()) { return -1; }
@@ -68,6 +70,8 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	
 	// Get value in BCD format.
 	register uint16_t high = 0, low = 0;
+	
+	// TODO: check RSF flag
 
 	high = RTC->CNTH & RTC_CNTH_RTC_CNT;
 	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
@@ -110,7 +114,7 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 
 
 // --- ENABLE RTC ---
-bool Rtc::enableRTC() {
+bool Rtc::enableRTC(RtcClock clk) {
 	// TODO: instead of the LSI, the LSE should be available as optional RTC clock source.
 #if defined __stm32f4 || defined __stm32f7 || defined __stm32f1
 	if (rtc_enabled) { return true; }
@@ -125,8 +129,10 @@ bool Rtc::enableRTC() {
 	
 	// TODO: Check that no data is stored in the backup register. In this case the RTC is already
 	// configured and should not be reconfigured.
-	if ((BKP->DR1 & BKP_DR1_D) == RTC_BKP_DATE_TIME_UPDATED) {
+	//if ((BKP->DR1 & BKP_DR1_D) == RTC_BKP_DATE_TIME_UPDATED) {
+	if (BKP->DR1 == RTC_BKP_DATE_TIME_UPDATED) {
 		// RTC is configured already.
+		return true;
 	}
 	
 #ifndef __stm32f1
@@ -154,11 +160,8 @@ bool Rtc::enableRTC() {
 	
 #ifdef __stm32f1
 	
-	// TODO: Allow selecting RTC clock source.
-	// Configure LSI as RTC clock source.
+	// Configure RTC clock source.
 	// Enable RTC clock.
-	// (RCC->BDCR & ~RCC_BDCR_RTCSEL)
-	//RCC->BDCR |= RCC_BDCR_RTCEN | RCC_BDCR_RTCSEL_LSI;
 	
 	printf("Reset BKP domain...");
 	
@@ -166,23 +169,28 @@ bool Rtc::enableRTC() {
 	RCC->BDCR |= RCC_BDCR_BDRST;
 	RCC->BDCR &= ~RCC_BDCR_BDRST;
 	
-	printf("Enable LSE...");
-	
-	// Enable the LSE as input.
-	RCC->BDCR |= RCC_BDCR_LSEON; // Enable LSE
-	while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { } // External Low Speed oscillator Ready?
-	
-	printf("Select source...");
-	
-	RCC->BDCR |= RCC_BDCR_RTCSEL_LSE; 	// Select Source
+	if (clk == RTC_CLOCK_LSE) {	
+		printf("Enable LSE...");
+		
+		// Enable the LSE as input.
+		RCC->BDCR |= RCC_BDCR_LSEON; // Enable LSE
+		while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { } // External Low Speed oscillator Ready?
+		RCC->BDCR |= RCC_BDCR_RTCSEL_LSE; 	// Select Source
+	}
+	else if (clk == RTC_CLOCK_LSI) {
+		printf("Select LSI...");
+		RCC->CSR |= RCC_CSR_LSION; // Enable LSI
+		while ((RCC->CSR & RCC_CSR_LSIRDY) == 0) { } // Wait until ready. TODO: timeout.
+		RCC->BDCR |= RCC_BDCR_RTCSEL_LSI;	// Set source.
+	}
 	
 	printf("Enable RTC...");
 	
 	// Enable the RTC.
 	RCC->BDCR |= RCC_BDCR_RTCEN;
 	
-	//RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
-	//while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
+	RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
+	while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
 	
 	// Disable PWR.
 	//if (!Rcc::disable(RCC_PWR)) { return false; }
@@ -197,25 +205,29 @@ bool Rtc::enableRTC() {
 	// Disable write protection and enter configuration mode.
 	RTC->CRL |= RTC_CRL_CNF;
 	
-	//RTC->PRLL = 0x7FFF; //signal period of 1sec.
-	//RTC->PRLL = 0x32; 
-	//signal period of 1sec.
-	
 	printf("Prescaler...");
 	
 	// Set prescaler.
-	RTC->PRLH = 0x0000;
-	RTC->PRLL = 0x7FFF; // Signal period of 1 sec.
+	if (clk == RTC_CLOCK_LSE) {
+		// 32,768 Hz input, ox7FFF gets 1 Hz.
+		RTC->PRLH = 0x0000;
+		RTC->PRLL = 0x7FFF;
+	}
+	else if (clk == RTC_CLOCK_LSI) {
+		// 40 kHz input.
+		RTC->PRLH = 0x0000;
+		RTC->PRLL = 0x9C3F;
+	}
 	 
 	// Reset 32bit counter
-	//RTC->CNTH = 0x0000;
-	//RTC->CNTL = 0x0000;
+	RTC->CNTH = 0x0000;
+	RTC->CNTL = 0x0000;
 	
 	printf("Interrupts...");
 	
 	// Configure interrupts.
-	EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
-	EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
+	//EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
+	//EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
 	
 	// Set the alarm time. Resolution is 1 second.
 	//uint32_t alarmval = 1;
@@ -250,9 +262,9 @@ bool Rtc::enableRTC() {
 #endif
 
 #if defined __stm32f0 || defined __stm32f1
-	printf("IRQs...");
-	NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
-	NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
+	//printf("IRQs...");
+	//NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
+	//NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
 #else
  	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
 	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC.
@@ -282,14 +294,22 @@ bool Rtc::enableRTC() {
 	printf("Poll RTOFF...");
 	
 	// Poll RTOFF to ensure RTC is ready.
+	uint32_t timeout = 1000; // TODO: make configurable.
+	uint32_t ts = McuCore::getSysTick();
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
-		// TODO: Handle timeout.
+		// Handle timeout.
+		if (((McuCore::getSysTick() - ts) > timeout) || timeout == 0) {
+				// TODO: set status.
+				printf("RTC ready timeout.\n");
+				return false;
+			}
 	}
 #endif
 
 	printf("RTC enabled.");
 	
 	rtc_enabled = true;
+	BKP->DR1 = RTC_BKP_DATE_TIME_UPDATED; // Set magic number in Backup register.
 	
 	return true;
 #else
@@ -422,3 +442,5 @@ bool Rtc::disableRTC() {
 	
 	return true;
 }
+
+#endif

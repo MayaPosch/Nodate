@@ -189,13 +189,21 @@ bool Rtc::enableRTC(RtcClock clk) {
 	// Enable the RTC.
 	RCC->BDCR |= RCC_BDCR_RTCEN;
 	
-	RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
+	//RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
 	while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
 	
 	// Disable PWR.
 	//if (!Rcc::disable(RCC_PWR)) { return false; }
 	
 	// Poll RTOFF to ensure RTC is ready.
+	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
+		// TODO: Handle timeout.
+	}
+	
+	// Enable RTC second global interrupt.
+	RTC->CRH |= RTC_CRH_SECIE;
+	
+	// Poll for ready.
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
 		// TODO: Handle timeout.
 	}

@@ -18,6 +18,9 @@
 
 #include <ctime>
 
+#include "peripherals/rcc_mock.h"
+#include "peripherals/rtc_mock.h"
+
 
 int suseconds_t;
 
@@ -34,6 +37,10 @@ extern "C" {
 
 int main() {
 	std::cout << "Running GPIO test..." << std::endl;
+	
+	// Create the mock perpiheral instances.
+	RCC_mock rcc_mock;
+	RTC_mock rtc_mock;
 	
 	// Start RTC, using the LSI clock source.
 	if (!Rtc::enableRTC(RTC_CLOCK_LSI)) {

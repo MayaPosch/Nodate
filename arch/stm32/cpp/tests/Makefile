@@ -38,5 +38,8 @@ rtc_test:
 												$(SOURCE_ROOT)/core.cpp \
 												$(SOURCE_ROOT)/utils.cpp \
 												$(SOURCE_ROOT)/printf.c \
+												peripherals\rcc_mock.cpp \
+												peripherals\rtc_mock.cpp \
+												chronotrigger.cpp \
 												-DNODATE_RTC_ENABLED=1 \
 												$(FLAGS) $(INCLUDES)

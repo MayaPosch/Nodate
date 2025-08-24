@@ -62,6 +62,36 @@ extern BKP_TypeDef* BKP;
 
 #ifdef STM32F0
 // STM32F0
+struct SysTick_Type {
+  __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Register */
+  __IOM uint32_t LOAD;                   /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register */
+  __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register */
+  __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
+};
+
+extern SysTick_Type* SysTick;
+
+
+struct ADC_Common_TypeDef {
+  __IO uint32_t CCR;          /*!< ADC common configuration register,             Address offset: ADC1 base address + 0x308 */
+};
+
+
+ struct I2C_TypeDef {
+  __IO uint32_t CR1;          /*!< I2C Control register 1,                      Address offset: 0x00 */
+  __IO uint32_t CR2;          /*!< I2C Control register 2,                      Address offset: 0x04 */
+  __IO uint32_t OAR1;     /*!< I2C Own address 1 register,        Address offset: 0x08 */
+  __IO uint32_t OAR2;     /*!< I2C Own address 2 register,        Address offset: 0x0C */
+  __IO uint32_t TIMINGR;  /*!< I2C Timing register,               Address offset: 0x10 */
+  __IO uint32_t TIMEOUTR; /*!< I2C Timeout register,              Address offset: 0x14 */
+  __IO uint32_t ISR;      /*!< I2C Interrupt and status register, Address offset: 0x18 */
+  __IO uint32_t ICR;      /*!< I2C Interrupt clear register,      Address offset: 0x1C */
+  __IO uint32_t PECR;     /*!< I2C PEC register,                  Address offset: 0x20 */
+  __IO uint32_t RXDR;     /*!< I2C Receive data register,         Address offset: 0x24 */
+  __IO uint32_t TXDR;     /*!< I2C Transmit data register,        Address offset: 0x28 */
+};
+
+
 struct GPIO_TypeDef {
   __IO uint32_t MODER;        //!< GPIO port mode register,                     Address offset: 0x00      
   __IO uint32_t OTYPER;       //!< GPIO port output type register,              Address offset: 0x04      
@@ -74,6 +104,36 @@ struct GPIO_TypeDef {
   __IO uint32_t AFR[2];       //!< GPIO alternate function low register,  Address offset: 0x20-0x24 
   __IO uint32_t BRR;          //!< GPIO bit reset register,                     Address offset: 0x28      
 };
+
+
+struct RTC_TypeDef {
+  __IO uint32_t TR;         /*!< RTC time register,                                         Address offset: 0x00 */
+  __IO uint32_t DR;         /*!< RTC date register,                                         Address offset: 0x04 */
+  __IO uint32_t CR;         /*!< RTC control register,                                      Address offset: 0x08 */                                                                                            
+  __IO uint32_t ISR;        /*!< RTC initialization and status register,                    Address offset: 0x0C */
+  __IO uint32_t PRER;       /*!< RTC prescaler register,                                    Address offset: 0x10 */
+       uint32_t RESERVED1;  /*!< Reserved,                                                  Address offset: 0x14 */
+       uint32_t RESERVED2;  /*!< Reserved,                                                  Address offset: 0x18 */
+  __IO uint32_t ALRMAR;     /*!< RTC alarm A register,                                      Address offset: 0x1C */
+       uint32_t RESERVED3;  /*!< Reserved,                                                  Address offset: 0x20 */
+  __IO uint32_t WPR;        /*!< RTC write protection register,                             Address offset: 0x24 */
+  __IO uint32_t SSR;        /*!< RTC sub second register,                                   Address offset: 0x28 */
+  __IO uint32_t SHIFTR;     /*!< RTC shift control register,                                Address offset: 0x2C */
+  __IO uint32_t TSTR;       /*!< RTC time stamp time register,                              Address offset: 0x30 */
+  __IO uint32_t TSDR;       /*!< RTC time stamp date register,                              Address offset: 0x34 */
+  __IO uint32_t TSSSR;      /*!< RTC time-stamp sub second register,                        Address offset: 0x38 */
+  __IO uint32_t CALR;       /*!< RTC calibration register,                                  Address offset: 0x3C */
+  __IO uint32_t TAFCR;      /*!< RTC tamper and alternate function configuration register,  Address offset: 0x40 */
+  __IO uint32_t ALRMASSR;   /*!< RTC alarm A sub second register,                           Address offset: 0x44 */
+       uint32_t RESERVED4;  /*!< Reserved,                                                  Address offset: 0x48 */
+       uint32_t RESERVED5;  /*!< Reserved,                                                  Address offset: 0x4C */
+  __IO uint32_t BKP0R;      /*!< RTC backup register 0,                                     Address offset: 0x50 */
+  __IO uint32_t BKP1R;      /*!< RTC backup register 1,                                     Address offset: 0x54 */
+  __IO uint32_t BKP2R;      /*!< RTC backup register 2,                                     Address offset: 0x58 */
+  __IO uint32_t BKP3R;      /*!< RTC backup register 3,                                     Address offset: 0x5C */
+  __IO uint32_t BKP4R;      /*!< RTC backup register 4,                                     Address offset: 0x60 */
+};
+
 
 #elif defined STM32F1
 // STM32F1
@@ -96,11 +156,6 @@ struct AFIO_TypeDef {
 };
 
 extern AFIO_TypeDef* AFIO;
-
-struct PWR_TypeDef {
-  __IO uint32_t CR;
-  __IO uint32_t CSR;
-};
 
 
 struct I2C_TypeDef {
@@ -137,6 +192,13 @@ extern GPIO_TypeDef* GPIOC;
 extern GPIO_TypeDef* GPIOD;
 extern GPIO_TypeDef* GPIOE;
 extern GPIO_TypeDef* GPIOF;
+
+
+struct PWR_TypeDef {
+  __IO uint32_t CR;
+  __IO uint32_t CSR;
+};
+
 
 extern PWR_TypeDef* PWR;
 extern I2C_TypeDef* I2C1;

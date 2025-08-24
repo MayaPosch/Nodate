@@ -37,11 +37,24 @@ RTC_mock::~RTC_mock() {
 // --- CALLBACK ---
 void RTC_mock::callback(int value) {
 	// Registers to monitor:
+#ifdef __stm32f1
 	// - if RTC_CRL_RSF 	== 0 -> set RTC_CRL_RSF to 1
 	if ((RTC->CRL & RTC_CRL_RSF) == 0) { RTC->CRL |= RTC_CRL_RSF; }	// Sync complete.
 
 	// - if RTC_CRL_RTOFF 	== 0 -> set RTC_CRL_RTOFF  to 1
 	if ((RTC->CRL & RTC_CRL_RTOFF) == 0) { RTC->CRL |= RTC_CRL_RTOFF; }
 	
-	// - if RCC_BDCR_RTCEN	== 1
+#else
+	
+#ifdef RTC_ISR_INIT
+	// - if RTC_ISR_INIT 	== 0 -> set RTC_ISR_INITF to 1
+	if ((RTC->ISR & RTC_ISR_INIT) == 1) { RTC->ISR |= RTC_ISR_INITF; }	// Init mode started.
+	else { RTC->ISR &= RTC_ISR_INITF; }
+#else
+	if ((RTC->ICSR & RTC_ICSR_INIT) == 1) { RTC->ISR |= RTC_ISR_INITF; }	// Init mode started.
+	else { RTC->ICSR &= RTC_ICSR_INITF; }
+#endif
+	
+	
+#endif
 }

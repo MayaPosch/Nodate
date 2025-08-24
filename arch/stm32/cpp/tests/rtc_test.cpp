@@ -38,12 +38,12 @@ extern "C" {
 int main() {
 	std::cout << "Running GPIO test..." << std::endl;
 	
-	// Create the mock perpiheral instances.
+	// Create the mock peripheral instances.
 	RCC_mock rcc_mock;
 	RTC_mock rtc_mock;
 	
-	// Start RTC, using the LSI clock source.
-	if (!Rtc::enableRTC(RTC_CLOCK_LSI)) {
+	// Start RTC, using the LSE clock source.
+	if (!Rtc::enableRTC(RTC_CLOCK_LSE)) {
 		std::cout << "Starting RTC failed.\n";
 		return 1;
 	}
@@ -55,6 +55,7 @@ int main() {
 	Rtc::setTime(new_time);
 	
 	// Get time and print out.
+	// For STM32F1 with its primitive (first-gen) RTC this always returns zeroes. 
 	RtcTime time;
 	Rtc::getTime(time);
 	printf("Time: %d%d:%d%d:%d%d\n", time.hour_tens, time.hour_units, time.minute_tens, 
@@ -62,6 +63,7 @@ int main() {
 									
 	// Check with C-style time functions.
 	// Signature: int _gettimeofday (struct timeval * tp, void * tzvp);
+	// When using newlib's date functions, this function gets called, so we validate it directly.
 	timeval tp;
 	if (_gettimeofday(&tp, NULL) != 0) {
 		std::cout << "Error calling gettimeofday.\n";

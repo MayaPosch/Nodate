@@ -14,10 +14,25 @@
 #include "../common.h"
 
 #include <functional>
+#include <iostream>
 
 
 // --- CONSTRUCTOR ---
 RTC_mock::RTC_mock() {
+	// Set defaults.
+#ifdef __stm32f1
+	RTC->CRL = 0;
+#else
+	
+#ifdef RTC_ISR_INIT
+	std::cout << "ISR_INIT\n";
+	RTC->ISR = 0;
+#else
+	RTC->ICSR = 0;
+#endif
+	
+#endif
+	
 	// We need to monitor a few registers which require a response. 
 	// Set up a polling loop for this using a ChronoTrigger callback.
 	// The integer parameter is currently unused.
@@ -48,11 +63,11 @@ void RTC_mock::callback(int value) {
 	
 #ifdef RTC_ISR_INIT
 	// - if RTC_ISR_INIT 	== 0 -> set RTC_ISR_INITF to 1
-	if ((RTC->ISR & RTC_ISR_INIT) == 1) { RTC->ISR |= RTC_ISR_INITF; }	// Init mode started.
-	else { RTC->ISR &= RTC_ISR_INITF; }
+	if ((RTC->ISR & RTC_ISR_INIT) != 0) { RTC->ISR |= RTC_ISR_INITF; }	// Init mode started.
+	else if ((RTC->ISR & RTC_ISR_INITF) != 0) { RTC->ISR &= ~(RTC_ISR_INITF); }
 #else
-	if ((RTC->ICSR & RTC_ICSR_INIT) == 1) { RTC->ISR |= RTC_ISR_INITF; }	// Init mode started.
-	else { RTC->ICSR &= RTC_ICSR_INITF; }
+	if ((RTC->ICSR & RTC_ICSR_INIT) != 1) { RTC->ISR |= RTC_ISR_INITF; }	// Init mode started.
+	else if ((RTC->ICSR & RTC_ICSR_INITF) != 0) { RTC->ICSR &= ~(RTC_ICSR_INITF); }
 #endif
 	
 	

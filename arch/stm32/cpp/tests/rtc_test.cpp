@@ -72,7 +72,9 @@ int main() {
 	
 	time_t result = tp.tv_sec; //time(NULL);
     if (result != (time_t)(-1)) {
-        printf("The current time is %s(%jd seconds since the Epoch)\n",
+		
+        printf("The asctime is %s\n", asctime(localtime(&result)));
+        printf("The current gmtime is %s(%jd seconds since the Epoch)\n",
                asctime(gmtime(&result)), (intmax_t)result);
 	}
 	else {

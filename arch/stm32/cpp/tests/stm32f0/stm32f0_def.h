@@ -213,25 +213,109 @@
 #define RCC_CFGR_PPRE_DIV16_Msk                  (0x7UL << RCC_CFGR_PPRE_DIV16_Pos) /*!< 0x00000700 */
 #define RCC_CFGR_PPRE_DIV16                      RCC_CFGR_PPRE_DIV16_Msk       /*!< HCLK divided by 16 */
 
-#define RCC_AHBENR_GPIOAEN_Pos                   (17U) 
-#define RCC_AHBENR_GPIOAEN 			(0x1UL << RCC_AHBENR_GPIOAEN_Pos)
-#define RCC_AHBENR_GPIOBEN_Pos                   (18U)
-#define RCC_AHBENR_GPIOBEN 			(0x1UL << RCC_AHBENR_GPIOBEN_Pos)
-#define RCC_AHBENR_GPIOCEN_Pos                   (19U)
-#define RCC_AHBENR_GPIOCEN 			(0x1UL << RCC_AHBENR_GPIOCEN_Pos)
-#define RCC_AHBENR_GPIOFEN_Pos                   (22U)   
-#define RCC_AHBENR_GPIOFEN 			(0x1UL << RCC_AHBENR_GPIOFEN_Pos)
 
-#define RCC_APB2ENR_SYSCFGCOMPEN_Pos 	(0U)
-#define RCC_APB2ENR_SYSCFGCOMPEN 	(0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos)
 
+/******************  Bit definition for RCC_AHBENR register  *****************/
+#define RCC_AHBENR_DMAEN_Pos                     (0U)                          
+#define RCC_AHBENR_DMAEN_Msk                     (0x1UL << RCC_AHBENR_DMAEN_Pos) /*!< 0x00000001 */
+#define RCC_AHBENR_DMAEN                         RCC_AHBENR_DMAEN_Msk          /*!< DMA1 clock enable */
+#define RCC_AHBENR_SRAMEN_Pos                    (2U)                          
+#define RCC_AHBENR_SRAMEN_Msk                    (0x1UL << RCC_AHBENR_SRAMEN_Pos) /*!< 0x00000004 */
+#define RCC_AHBENR_SRAMEN                        RCC_AHBENR_SRAMEN_Msk         /*!< SRAM interface clock enable */
+#define RCC_AHBENR_FLITFEN_Pos                   (4U)                          
+#define RCC_AHBENR_FLITFEN_Msk                   (0x1UL << RCC_AHBENR_FLITFEN_Pos) /*!< 0x00000010 */
+#define RCC_AHBENR_FLITFEN                       RCC_AHBENR_FLITFEN_Msk        /*!< FLITF clock enable */
+#define RCC_AHBENR_CRCEN_Pos                     (6U)                          
+#define RCC_AHBENR_CRCEN_Msk                     (0x1UL << RCC_AHBENR_CRCEN_Pos) /*!< 0x00000040 */
+#define RCC_AHBENR_CRCEN                         RCC_AHBENR_CRCEN_Msk          /*!< CRC clock enable */
+#define RCC_AHBENR_GPIOAEN_Pos                   (17U)                         
+#define RCC_AHBENR_GPIOAEN_Msk                   (0x1UL << RCC_AHBENR_GPIOAEN_Pos) /*!< 0x00020000 */
+#define RCC_AHBENR_GPIOAEN                       RCC_AHBENR_GPIOAEN_Msk        /*!< GPIOA clock enable */
+#define RCC_AHBENR_GPIOBEN_Pos                   (18U)                         
+#define RCC_AHBENR_GPIOBEN_Msk                   (0x1UL << RCC_AHBENR_GPIOBEN_Pos) /*!< 0x00040000 */
+#define RCC_AHBENR_GPIOBEN                       RCC_AHBENR_GPIOBEN_Msk        /*!< GPIOB clock enable */
+#define RCC_AHBENR_GPIOCEN_Pos                   (19U)                         
+#define RCC_AHBENR_GPIOCEN_Msk                   (0x1UL << RCC_AHBENR_GPIOCEN_Pos) /*!< 0x00080000 */
+#define RCC_AHBENR_GPIOCEN                       RCC_AHBENR_GPIOCEN_Msk        /*!< GPIOC clock enable */
+#define RCC_AHBENR_GPIOFEN_Pos                   (22U)                         
+#define RCC_AHBENR_GPIOFEN_Msk                   (0x1UL << RCC_AHBENR_GPIOFEN_Pos) /*!< 0x00400000 */
+#define RCC_AHBENR_GPIOFEN                       RCC_AHBENR_GPIOFEN_Msk        /*!< GPIOF clock enable */
+#define RCC_AHBENR_TSCEN_Pos                     (24U)                         
+#define RCC_AHBENR_TSCEN_Msk                     (0x1UL << RCC_AHBENR_TSCEN_Pos) /*!< 0x01000000 */
+#define RCC_AHBENR_TSCEN                         RCC_AHBENR_TSCEN_Msk          /*!< TS controller clock enable */
+
+/* Old Bit definition maintained for legacy purpose */
+#define  RCC_AHBENR_DMA1EN                   RCC_AHBENR_DMAEN        /*!< DMA1 clock enable */
+#define  RCC_AHBENR_TSEN                     RCC_AHBENR_TSCEN        /*!< TS clock enable */
+
+/*****************  Bit definition for RCC_APB2ENR register  *****************/
+#define RCC_APB2ENR_SYSCFGCOMPEN_Pos             (0U)                          
+#define RCC_APB2ENR_SYSCFGCOMPEN_Msk             (0x1UL << RCC_APB2ENR_SYSCFGCOMPEN_Pos) /*!< 0x00000001 */
+#define RCC_APB2ENR_SYSCFGCOMPEN                 RCC_APB2ENR_SYSCFGCOMPEN_Msk  /*!< SYSCFG and comparator clock enable */
+#define RCC_APB2ENR_ADCEN_Pos                    (9U)                          
+#define RCC_APB2ENR_ADCEN_Msk                    (0x1UL << RCC_APB2ENR_ADCEN_Pos) /*!< 0x00000200 */
+#define RCC_APB2ENR_ADCEN                        RCC_APB2ENR_ADCEN_Msk         /*!< ADC1 clock enable */
+#define RCC_APB2ENR_TIM1EN_Pos                   (11U)                         
+#define RCC_APB2ENR_TIM1EN_Msk                   (0x1UL << RCC_APB2ENR_TIM1EN_Pos) /*!< 0x00000800 */
+#define RCC_APB2ENR_TIM1EN                       RCC_APB2ENR_TIM1EN_Msk        /*!< TIM1 clock enable */
+#define RCC_APB2ENR_SPI1EN_Pos                   (12U)                         
+#define RCC_APB2ENR_SPI1EN_Msk                   (0x1UL << RCC_APB2ENR_SPI1EN_Pos) /*!< 0x00001000 */
+#define RCC_APB2ENR_SPI1EN                       RCC_APB2ENR_SPI1EN_Msk        /*!< SPI1 clock enable */
 #define RCC_APB2ENR_USART1EN_Pos                 (14U)                         
 #define RCC_APB2ENR_USART1EN_Msk                 (0x1UL << RCC_APB2ENR_USART1EN_Pos) /*!< 0x00004000 */
 #define RCC_APB2ENR_USART1EN                     RCC_APB2ENR_USART1EN_Msk      /*!< USART1 clock enable */
+#define RCC_APB2ENR_TIM16EN_Pos                  (17U)                         
+#define RCC_APB2ENR_TIM16EN_Msk                  (0x1UL << RCC_APB2ENR_TIM16EN_Pos) /*!< 0x00020000 */
+#define RCC_APB2ENR_TIM16EN                      RCC_APB2ENR_TIM16EN_Msk       /*!< TIM16 clock enable */
+#define RCC_APB2ENR_TIM17EN_Pos                  (18U)                         
+#define RCC_APB2ENR_TIM17EN_Msk                  (0x1UL << RCC_APB2ENR_TIM17EN_Pos) /*!< 0x00040000 */
+#define RCC_APB2ENR_TIM17EN                      RCC_APB2ENR_TIM17EN_Msk       /*!< TIM17 clock enable */
+#define RCC_APB2ENR_DBGMCUEN_Pos                 (22U)                         
+#define RCC_APB2ENR_DBGMCUEN_Msk                 (0x1UL << RCC_APB2ENR_DBGMCUEN_Pos) /*!< 0x00400000 */
+#define RCC_APB2ENR_DBGMCUEN                     RCC_APB2ENR_DBGMCUEN_Msk      /*!< DBGMCU clock enable */
 
+/* Old Bit definition maintained for legacy purpose */
+#define  RCC_APB2ENR_SYSCFGEN                RCC_APB2ENR_SYSCFGCOMPEN        /*!< SYSCFG clock enable */
+#define  RCC_APB2ENR_ADC1EN                  RCC_APB2ENR_ADCEN               /*!< ADC1 clock enable */
+
+/*****************  Bit definition for RCC_APB1ENR register  *****************/
+#define RCC_APB1ENR_TIM2EN_Pos                   (0U)                          
+#define RCC_APB1ENR_TIM2EN_Msk                   (0x1UL << RCC_APB1ENR_TIM2EN_Pos) /*!< 0x00000001 */
+#define RCC_APB1ENR_TIM2EN                       RCC_APB1ENR_TIM2EN_Msk        /*!< Timer 2 clock enable */
+#define RCC_APB1ENR_TIM3EN_Pos                   (1U)                          
+#define RCC_APB1ENR_TIM3EN_Msk                   (0x1UL << RCC_APB1ENR_TIM3EN_Pos) /*!< 0x00000002 */
+#define RCC_APB1ENR_TIM3EN                       RCC_APB1ENR_TIM3EN_Msk        /*!< Timer 3 clock enable */
+#define RCC_APB1ENR_TIM14EN_Pos                  (8U)                          
+#define RCC_APB1ENR_TIM14EN_Msk                  (0x1UL << RCC_APB1ENR_TIM14EN_Pos) /*!< 0x00000100 */
+#define RCC_APB1ENR_TIM14EN                      RCC_APB1ENR_TIM14EN_Msk       /*!< Timer 14 clock enable */
+#define RCC_APB1ENR_WWDGEN_Pos                   (11U)                         
+#define RCC_APB1ENR_WWDGEN_Msk                   (0x1UL << RCC_APB1ENR_WWDGEN_Pos) /*!< 0x00000800 */
+#define RCC_APB1ENR_WWDGEN                       RCC_APB1ENR_WWDGEN_Msk        /*!< Window Watchdog clock enable */
+#define RCC_APB1ENR_SPI2EN_Pos                   (14U)                         
+#define RCC_APB1ENR_SPI2EN_Msk                   (0x1UL << RCC_APB1ENR_SPI2EN_Pos) /*!< 0x00004000 */
+#define RCC_APB1ENR_SPI2EN                       RCC_APB1ENR_SPI2EN_Msk        /*!< SPI2 clock enable */
 #define RCC_APB1ENR_USART2EN_Pos                 (17U)                         
 #define RCC_APB1ENR_USART2EN_Msk                 (0x1UL << RCC_APB1ENR_USART2EN_Pos) /*!< 0x00020000 */
 #define RCC_APB1ENR_USART2EN                     RCC_APB1ENR_USART2EN_Msk      /*!< USART2 clock enable */
+#define RCC_APB1ENR_I2C1EN_Pos                   (21U)                         
+#define RCC_APB1ENR_I2C1EN_Msk                   (0x1UL << RCC_APB1ENR_I2C1EN_Pos) /*!< 0x00200000 */
+#define RCC_APB1ENR_I2C1EN                       RCC_APB1ENR_I2C1EN_Msk        /*!< I2C1 clock enable */
+#define RCC_APB1ENR_USBEN_Pos                    (23U)                         
+#define RCC_APB1ENR_USBEN_Msk                    (0x1UL << RCC_APB1ENR_USBEN_Pos) /*!< 0x00800000 */
+#define RCC_APB1ENR_USBEN                        RCC_APB1ENR_USBEN_Msk         /*!< USB clock enable */
+#define RCC_APB1ENR_CANEN_Pos                    (25U)                         
+#define RCC_APB1ENR_CANEN_Msk                    (0x1UL << RCC_APB1ENR_CANEN_Pos) /*!< 0x02000000 */
+#define RCC_APB1ENR_CANEN                        RCC_APB1ENR_CANEN_Msk         /*!< CAN clock enable */
+#define RCC_APB1ENR_CRSEN_Pos                    (27U)                         
+#define RCC_APB1ENR_CRSEN_Msk                    (0x1UL << RCC_APB1ENR_CRSEN_Pos) /*!< 0x08000000 */
+#define RCC_APB1ENR_CRSEN                        RCC_APB1ENR_CRSEN_Msk         /*!< CRS clock enable */
+#define RCC_APB1ENR_PWREN_Pos                    (28U)                         
+#define RCC_APB1ENR_PWREN_Msk                    (0x1UL << RCC_APB1ENR_PWREN_Pos) /*!< 0x10000000 */
+#define RCC_APB1ENR_PWREN                        RCC_APB1ENR_PWREN_Msk         /*!< PWR clock enable */
+#define RCC_APB1ENR_CECEN_Pos                    (30U)                         
+#define RCC_APB1ENR_CECEN_Msk                    (0x1UL << RCC_APB1ENR_CECEN_Pos) /*!< 0x40000000 */
+#define RCC_APB1ENR_CECEN                        RCC_APB1ENR_CECEN_Msk         /*!< CEC clock enable */
+
 
 
 

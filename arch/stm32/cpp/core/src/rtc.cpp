@@ -54,10 +54,31 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	//		clock_t tms_cstime; /* system time of children */
 	//	};
 	uint32_t tTR = RTC->TR;
-	uint32_t ticks = (uint8_t) bcd2dec32(tTR & (RTC_TR_ST | RTC_TR_SU));
-	ticks = ticks * SystemCoreClock;
+	uint32_t tDR = RTC->DR;
+	/*uint32_t ticks = (uint8_t) bcd2dec32(tTR & (RTC_TR_ST | RTC_TR_SU));
+	ticks = ticks * SystemCoreClock; */
 	
-	tp->tv_sec = ticks;
+	//RtcTime time = getTime();
+	tm tt;
+	tt.tm_sec = (uint8_t) bcd2dec32(tTR & (RTC_TR_ST | RTC_TR_SU));
+	printf("\nsec: %d\n", tt.tm_sec);
+	tt.tm_min = (uint8_t) bcd2dec32(tTR & (RTC_TR_MNT | RTC_TR_MNU));
+	printf("min: %d\n", tt.tm_min);
+	tt.tm_hour = (uint8_t) bcd2dec32(tTR & (RTC_TR_HT | RTC_TR_HU));
+	if (tt.tm_hour == 0) { tt.tm_hour = 1; } // Required on MSYS2/Windows
+	printf("hour: %d\n", tt.tm_hour);
+	tt.tm_mday = (uint8_t) bcd2dec32(tDR & (RTC_DR_DT | RTC_DR_DU));
+	if (tt.tm_mday == 0) { tt.tm_mday = 1; }
+	printf("mday: %d\n", tt.tm_mday);
+	tt.tm_mon = (uint8_t) bcd2dec32(tDR & (RTC_DR_MT | RTC_DR_MU));
+	printf("mon: %d\n", tt.tm_mon);
+	tt.tm_year = (uint8_t) bcd2dec32(tDR & (RTC_DR_YT | RTC_DR_YU));
+	if (tt.tm_year < 70) { tt.tm_year = 75; }
+	//tt.tm_year -= 1900;
+	printf("year: %d\n", tt.tm_year);
+	
+	printf("mktime: %d\n", mktime(&tt));
+	tp->tv_sec = mktime(&tt);
 	tp->tv_usec = 0;
 	
 	//return ticks; // Return clock ticks.
@@ -116,32 +137,30 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 // --- ENABLE RTC ---
 bool Rtc::enableRTC(RtcClock clk) {
 	// TODO: instead of the LSI, the LSE should be available as optional RTC clock source.
-#if defined __stm32f4 || defined __stm32f7 || defined __stm32f1
 	if (rtc_enabled) { return true; }
 	
-	printf("Enabling PWR, BKP...");
+	printf("Enabling PWR...");
 	
 	// Enable PWR and the backup domain (BKP)
 	if (!Rcc::enable(RCC_PWR)) { return false; }
+#if defined __stm32f1
+	printf("Enabling BKP...");
 	if (!Rcc::enable(RCC_BKP)) { return false; }
+#endif
 	
 	printf("Check data...");
 	
-	// TODO: Check that no data is stored in the backup register. In this case the RTC is already
+	// Check that no data is stored in the backup register. In this case the RTC is already
 	// configured and should not be reconfigured.
 	//if ((BKP->DR1 & BKP_DR1_D) == RTC_BKP_DATE_TIME_UPDATED) {
+#if defined __stm32f1
 	if (BKP->DR1 == RTC_BKP_DATE_TIME_UPDATED) {
+#else
+	if (RTC->BKP0R == RTC_BKP_DATE_TIME_UPDATED) {
+#endif
 		// RTC is configured already.
 		return true;
 	}
-	
-#ifndef __stm32f1
-	// Use LSI for the RTC. Ensure it's enabled.
-	/* RCC->CSR |= RCC_CSR_LSION;
-	while ((RCC->CSR & RCC_CSR_LSIRDY) != RCC_CSR_LSIRDY) {
-		// TODO: handle time-out.
-	} */
-#endif
 	
 	// Enable PWR backup access.
 #if defined __stm32f7
@@ -157,8 +176,6 @@ bool Rtc::enableRTC(RtcClock clk) {
 	
 	// Reset backup domain.
 	//RCC->BDCR |= RCC_BDCR_BDRST;
-	
-#ifdef __stm32f1
 	
 	// Configure RTC clock source.
 	// Enable RTC clock.
@@ -189,11 +206,49 @@ bool Rtc::enableRTC(RtcClock clk) {
 	// Enable the RTC.
 	RCC->BDCR |= RCC_BDCR_RTCEN;
 	
-	//RTC->CRL &= ~RTC_CRL_RSF; // Clear RSF
-	while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
+#ifndef __stm32f1
+	//while ((RTC->ISR & RTC_ISR_RSF) == 0) { }
 	
-	// Disable PWR.
-	//if (!Rcc::disable(RCC_PWR)) { return false; }
+	// Disable write protection.
+	RTC->WPR = 0xCA;
+	RTC->WPR = 0x53;
+	
+	// Enter initialisation mode.
+#ifdef RTC_ISR_INIT
+	RTC->ISR |= RTC_ISR_INIT;	// RTC 2
+	while ((RTC->ISR & RTC_ISR_INITF) == 0) {
+		// TODO: Handle timeout.
+	}
+#else
+	RTC->ICSR |= RTC_ICSR_INIT; // RTC 3
+	while ((RTC->ICSR & RTC_ICSR_INITF) == 0) {
+		// TODO: Handle timeout.
+	}
+#endif
+
+	printf("Init RTC started...");
+	
+	// Program prescaler. 
+	// TODO: by default this uses the LSE at 32,768 Hz. Add LSI option as well.
+	
+	// TODO: Set time and date in RTC_TR and RTC_DR.
+	
+	// TODO: Set 12h or 24h format in RTC_CR with FMT (default of 0 is 24h).
+	
+	
+	// Exit initialisation mode.
+#ifdef RTC_ISR_INIT
+	RTC->ISR &= ~(RTC_ISR_INIT);	// RTC 2
+#else
+	RTC->ICSR &= ~(RTC_ICSR_INIT); 	// RTC 3
+#endif
+
+	printf("Init RTC done.");
+	
+	// Re-enable write protection.
+	RTC->WPR = 0xFF;
+#else
+	while ((RTC->CRL & RTC_CRL_RSF) == 0) { } // wait for sync
 	
 	// Poll RTOFF to ensure RTC is ready.
 	while ((RTC->CRL & RTC_CRL_RTOFF) != RTC_CRL_RTOFF) {
@@ -232,6 +287,7 @@ bool Rtc::enableRTC(RtcClock clk) {
 	RTC->CNTL = 0x0000;
 	
 	printf("Interrupts...");
+#endif
 	
 	// Configure interrupts.
 	//EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
@@ -246,7 +302,7 @@ bool Rtc::enableRTC(RtcClock clk) {
 	// TODO: implement.
 	//RTC->CRH |= RTC_CRH_ALRIE;
 	
-#else
+/* #else
 	// Disable alarm A to modify it.
 	// Wait for the action to complete.
 	RTC->CR &=~ RTC_CR_ALRAE;
@@ -267,15 +323,15 @@ bool Rtc::enableRTC(RtcClock clk) {
 	// Configure interrupts.
 	EXTI->IMR |= EXTI_IMR_MR17;		// Unmask line 17.
 	EXTI->RTSR |= EXTI_RTSR_TR17;	// Trigger on rising edge.
-#endif
+#endif */
 
 #if defined __stm32f0 || defined __stm32f1
 	//printf("IRQs...");
 	//NVIC_SetPriority(RTC_IRQn, 0);	// RTC IRQ priority.
 	//NVIC_EnableIRQ(RTC_IRQn);		// Enable IRQ in NVIC.
 #else
- 	NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
-	NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC.
+ 	//NVIC_SetPriority(RTC_Alarm_IRQn, 0);	// RTC IRQ priority.
+	//NVIC_EnableIRQ(RTC_Alarm_IRQn);			// Enable IRQ in NVIC.
 #endif
 	
 	// RTC init phase.
@@ -317,39 +373,56 @@ bool Rtc::enableRTC(RtcClock clk) {
 	printf("RTC enabled.");
 	
 	rtc_enabled = true;
+#if defined __stm32f1
 	BKP->DR1 = RTC_BKP_DATE_TIME_UPDATED; // Set magic number in Backup register.
+#else
+	RTC->BKP0R = RTC_BKP_DATE_TIME_UPDATED;
+#endif
 	
 	return true;
-#else
-	// No usable RTC peripheral exists.
-	return false;
-#endif 
 }
 
 
 // --- SET TIME ---
 bool Rtc::setTime(uint32_t time) {
-#if defined __stm32f4 || defined __stm32f7
+#ifndef __stm32f1
 	// Unlock RTC write protection.
 	RTC->WPR = 0xCA;
 	RTC->WPR = 0x53;
 	
 	// Enable RTC init phase.
+#ifdef RTC_ISR_INIT
 	RTC->ISR |= RTC_ISR_INIT;
 	while ((RTC->ISR & RTC_ISR_INITF) != RTC_ISR_INITF) {
 		// TODO: handle time-out.
 	}
+#else
+	RTC->ICSR |= RTC_ICSR_INIT;
+	while ((RTC->ICSR & RTC_ICSR_INITF) != RTC_ICSR_INITF) {
+		// TODO: handle time-out.
+	}
+#endif
 	
-	RTC->PRER = 0x007F0137;	// Set prescaler: 40 kHz / 128 = 312 kHz, 312 / 312 = 1 Hz.
+	//RTC->PRER = 0x007F0137;	// Set prescaler: 40 kHz / 128 = 312 kHz, 312 / 312 = 1 Hz.
+	
+	// TODO: Implement 12h format selection.
+	// TODO: Implement setting of more than seconds with localtime.
+	//tm* tt = localtime((const time_t*) &time);
+	
 	RTC->TR = RTC_TR_PM | time;
 	
 	// Clear RTC init state.
+#ifdef RTC_ISR_INIT
 	RTC->ISR &= ~(RTC_ISR_INIT);
+#else
+	RTC->ICSR &= ~(RTC_ICSR_INIT);
+#endif
 	
 	// Disable write access.
 	RTC->WPR = 0xFE;
 	RTC->WPR = 0x64; 
-#elif defined __stm32f1
+	
+#else
 	// Unlock write protection and enter configuration mode.
 	RTC->CRL |= RTC_CRL_CNF;
 	
@@ -385,7 +458,7 @@ uint8_t bcd2ToByte(uint8_t value) {
 
 // --- GET TIME ---
 bool Rtc::getTime(RtcTime &time) {
-#if defined __stm32f4
+#ifndef __stm32f1
 	uint32_t currentTime = RTC->TR;
 	//time.hour_tens = (uint8_t) (((currentTime & RTC_TR_HT) >> 20) + 48);
 	time.hour_tens = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_HT) >> 20));
@@ -394,6 +467,18 @@ bool Rtc::getTime(RtcTime &time) {
 	time.minute_units = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_MNU) >> 8));
 	time.second_tens = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_ST) >> 4));
 	time.second_units = (uint8_t) bcd2ToByte(((currentTime & RTC_TR_SU)));
+#else
+	// Get value in BCD format.
+	/* register uint16_t high = 0, low = 0;
+
+	high = RTC->CNTH & RTC_CNTH_RTC_CNT;
+	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
+	
+	uint32_t ticks = bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low)); */
+	
+	// Convert into requested values.
+	
+	// FIXME: Implement this for the F1 series.
 #endif
 	
 	return true;
@@ -410,6 +495,8 @@ bool Rtc::getTime(char* t, uint8_t &len) {
 	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
 	//uint32_t ticks =  bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
 	uint32_t ticks =  (uint32_t)(((uint32_t) high << 16U) | low);
+	
+	// FIXME: Implement this for the F1 series.
 #endif
 	
 	return true;

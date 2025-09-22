@@ -65,7 +65,6 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	tt.tm_min = (uint8_t) bcd2dec32(tTR & (RTC_TR_MNT | RTC_TR_MNU));
 	printf("min: %d\n", tt.tm_min);
 	tt.tm_hour = (uint8_t) bcd2dec32(tTR & (RTC_TR_HT | RTC_TR_HU));
-	if (tt.tm_hour == 0) { tt.tm_hour = 1; } // Required on MSYS2/Windows
 	printf("hour: %d\n", tt.tm_hour);
 	tt.tm_mday = (uint8_t) bcd2dec32(tDR & (RTC_DR_DT | RTC_DR_DU));
 	if (tt.tm_mday == 0) { tt.tm_mday = 1; }
@@ -73,12 +72,16 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	tt.tm_mon = (uint8_t) bcd2dec32(tDR & (RTC_DR_MT | RTC_DR_MU));
 	printf("mon: %d\n", tt.tm_mon);
 	tt.tm_year = (uint8_t) bcd2dec32(tDR & (RTC_DR_YT | RTC_DR_YU));
-	if (tt.tm_year < 70) { tt.tm_year = 75; }
+	if (tt.tm_year < 70) { tt.tm_year = 70; }
 	//tt.tm_year -= 1900;
 	printf("year: %d\n", tt.tm_year);
 	
-	printf("mktime: %d\n", mktime(&tt));
-	tp->tv_sec = mktime(&tt);
+	//printf("mktime: %d\n", mktime(&tt));
+	time_t sec;
+	_rtc_maketime(&tt, &sec, RTC_4_YEAR_LEAP_YEAR_SUPPORT);
+	printf("_rtc_mktime: %d\n", sec);
+	//tp->tv_sec = mktime(&tt);
+	tp->tv_sec = sec;
 	tp->tv_usec = 0;
 	
 	//return ticks; // Return clock ticks.
@@ -100,8 +103,8 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	// Debug
 	printf("H/L: %d - %d.\n", high, low);
 	
-	uint32_t ticks = bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
-	//ticks = ticks * SystemCoreClock;
+	// Reassemble the 32-bit binary counter.
+	uint32_t ticks = (uint32_t) high << 16U) | low);
 	tp->tv_sec = ticks;
 	tp->tv_usec = 0;
 	

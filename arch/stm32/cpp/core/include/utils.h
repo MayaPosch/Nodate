@@ -12,3 +12,7 @@ uint16_t bcd2dec16(uint16_t bcd);
 uint16_t dec2bcd16(uint16_t dec);
 uint32_t bcd2dec32(uint32_t bcd);
 uint32_t dec2bcd32(uint32_t dec);
+
+// --- Time things ---
+// Defined in utils_time.cpp.
+#include <utils_time.h>

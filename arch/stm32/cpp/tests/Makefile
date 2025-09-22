@@ -38,6 +38,7 @@ rtc_test:
 												$(SOURCE_ROOT)/core.cpp \
 												$(SOURCE_ROOT)/utils.cpp \
 												$(SOURCE_ROOT)/printf.c \
+												$(SOURCE_ROOT)/utils_time.cpp \
 												peripherals\rcc_mock.cpp \
 												peripherals\rtc_mock.cpp \
 												chronotrigger.cpp \

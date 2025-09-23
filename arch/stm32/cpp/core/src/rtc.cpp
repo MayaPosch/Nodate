@@ -72,7 +72,7 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	tt.tm_mon = (uint8_t) bcd2dec32(tDR & (RTC_DR_MT | RTC_DR_MU));
 	printf("mon: %d\n", tt.tm_mon);
 	tt.tm_year = (uint8_t) bcd2dec32(tDR & (RTC_DR_YT | RTC_DR_YU));
-	if (tt.tm_year < 70) { tt.tm_year = 70; }
+	if (tt.tm_year < 70) { tt.tm_year += 70; }
 	//tt.tm_year -= 1900;
 	printf("year: %d\n", tt.tm_year);
 	

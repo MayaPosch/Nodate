@@ -39,7 +39,7 @@ bool init() {
 	maxSysClockCfg.AHB_prescale	= 1;
 	maxSysClockCfg.APB1_prescale	= 2;
 	maxSysClockCfg.APB2_prescale	= 1;
-	maxSysClockCfg.FLASH_latency	= 2;
+	maxSysClockCfg.FLASH_latency	= 2;	// 2 wait states for 72 MHz target clock.
 
 	BoardLED bl;
 	bl.pin.port = GPIO_PORT_C;

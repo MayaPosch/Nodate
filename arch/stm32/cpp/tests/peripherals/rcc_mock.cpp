@@ -14,6 +14,7 @@
 #include "../common.h"
 
 #include <functional>
+#include <iostream>
 
 
 // --- CONSTRUCTOR ---
@@ -44,4 +45,23 @@ void RCC_mock::callback(int value) {
 	if (RCC->CSR & RCC_CSR_LSION) { RCC->CSR |= RCC_CSR_LSIRDY; }
 	
 	// - if RCC_BDCR_RTCEN	== 1
+	
+	// --- Sysclock/Flash ---
+	// - if RCC_CR_HSION == 1 -> set RCC_CR_HSIRDY to 1
+	if (RCC->CR & RCC_CR_HSION) { RCC->CR |= RCC_CR_HSIRDY; }
+	
+	// - if RCC_CR_HSEON == 1 -> set RCC_CR_HSERDY to 1
+	if ((RCC->CR & RCC_CR_HSEON) && !(RCC->CR & RCC_CR_HSERDY)) { 
+		RCC->CR |= RCC_CR_HSERDY; std::cout << "Set HSERDY.\n"; 
+	}
+	
+	// - if RCC_CR_PLLON == 1 -> set RCC_CR_PLLRDY to 1.
+	if ((RCC->CR & RCC_CR_PLLON) && !(RCC->CR & RCC_CR_PLLRDY)) { 
+		RCC->CR |= RCC_CR_PLLRDY; std::cout << "Set PLLRDY.\n"; 
+	}
+	
+	// - if RCC_CFGR_SW_PLL == 1 -> set RCC_CFGR_SWS_PLL to 1.
+	if ((RCC->CFGR & RCC_CFGR_SW_PLL) && !(RCC->CFGR & RCC_CFGR_SWS_PLL)) {
+		RCC->CFGR |= RCC_CFGR_SWS_PLL; std::cout << "Set SWS PLL.\n";
+	}
 }

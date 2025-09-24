@@ -60,6 +60,25 @@ struct BKP_TypeDef {
 extern BKP_TypeDef* BKP;
 
 
+/** 
+  * @brief FLASH Registers
+  */
+
+struct FLASH_TypeDef {
+  __IO uint32_t ACR;
+  __IO uint32_t KEYR;
+  __IO uint32_t OPTKEYR;
+  __IO uint32_t SR;
+  __IO uint32_t CR;
+  __IO uint32_t AR;
+  __IO uint32_t RESERVED;
+  __IO uint32_t OBR;
+  __IO uint32_t WRPR;
+};
+
+extern FLASH_TypeDef* FLASH;
+
+
 #ifdef STM32F0
 // STM32F0
 struct SysTick_Type {

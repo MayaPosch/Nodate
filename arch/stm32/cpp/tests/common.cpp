@@ -29,6 +29,9 @@ ADC_TypeDef* ADC1 = &tADC1;
 BKP_TypeDef tBkp;
 BKP_TypeDef* BKP = &tBkp;
 
+FLASH_TypeDef tFlash;
+FLASH_TypeDef* FLASH = &tFlash;
+
 GPIO_TypeDef tGpioA;
 GPIO_TypeDef* GPIOA = &tGpioA;
 GPIO_TypeDef tGpioB;

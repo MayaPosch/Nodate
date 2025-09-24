@@ -873,3 +873,30 @@ extern SysTick_Type* SysTick;
 #define USART_SR_CTS_Msk                    (0x1UL << USART_SR_CTS_Pos)         /*!< 0x00000200 */
 #define USART_SR_CTS                        USART_SR_CTS_Msk                   /*!< CTS Flag */
 
+
+
+/******************************************************************************/
+/*                                                                            */
+/*                      FLASH and Option Bytes Registers                      */
+/*                                                                            */
+/******************************************************************************/
+/*******************  Bit definition for FLASH_ACR register  ******************/
+#define FLASH_ACR_LATENCY_Pos               (0U)                               
+#define FLASH_ACR_LATENCY_Msk               (0x7UL << FLASH_ACR_LATENCY_Pos)    /*!< 0x00000007 */
+#define FLASH_ACR_LATENCY                   FLASH_ACR_LATENCY_Msk              /*!< LATENCY[2:0] bits (Latency) */
+#define FLASH_ACR_LATENCY_0                 (0x1UL << FLASH_ACR_LATENCY_Pos)    /*!< 0x00000001 */
+#define FLASH_ACR_LATENCY_1                 (0x2UL << FLASH_ACR_LATENCY_Pos)    /*!< 0x00000002 */
+#define FLASH_ACR_LATENCY_2                 (0x4UL << FLASH_ACR_LATENCY_Pos)    /*!< 0x00000004 */
+
+#define FLASH_ACR_HLFCYA_Pos                (3U)                               
+#define FLASH_ACR_HLFCYA_Msk                (0x1UL << FLASH_ACR_HLFCYA_Pos)     /*!< 0x00000008 */
+#define FLASH_ACR_HLFCYA                    FLASH_ACR_HLFCYA_Msk               /*!< Flash Half Cycle Access Enable */
+#define FLASH_ACR_PRFTBE_Pos                (4U)                               
+#define FLASH_ACR_PRFTBE_Msk                (0x1UL << FLASH_ACR_PRFTBE_Pos)     /*!< 0x00000010 */
+#define FLASH_ACR_PRFTBE                    FLASH_ACR_PRFTBE_Msk               /*!< Prefetch Buffer Enable */
+#define FLASH_ACR_PRFTBS_Pos                (5U)                               
+#define FLASH_ACR_PRFTBS_Msk                (0x1UL << FLASH_ACR_PRFTBS_Pos)     /*!< 0x00000020 */
+#define FLASH_ACR_PRFTBS                    FLASH_ACR_PRFTBS_Msk               /*!< Prefetch Buffer Status */
+
+
+

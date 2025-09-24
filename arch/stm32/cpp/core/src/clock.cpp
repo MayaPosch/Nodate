@@ -7,9 +7,12 @@
 //#include <rcc.h>
 //#include <rtc.h>
 
-#include <nodate.h>
+//#include <nodate.h>
 
 #include <sys/times.h>
+
+// Debug
+#include <printf.h>
 
 
 extern "C" {
@@ -104,7 +107,7 @@ int _times(struct tms* buf) {
 }
 
 
-// --- 
+// --- CONFIGURE AHB ---
 bool Clock::configureAHB(RccSysClockConfig cfg) {
 #if defined __stm32f1
 	// Set AHB prescaler.
@@ -124,6 +127,8 @@ bool Clock::configureAHB(RccSysClockConfig cfg) {
 	return false;
 }
 
+
+// -- CONFIGURE APB ---
 bool Clock::configureAPB(RccSysClockConfig cfg) {
 #if defined __stm32f1
 	// Set APB prescalers.
@@ -197,6 +202,9 @@ bool Clock::enableMaxClock() {
 
 #if defined __stm32f1
 	// Set Flash latency. Set pre-fetch buffer enabled.
+	// - 0 wait states, if 0 < SYSCLK  24 MHz
+	// - 1 wait state, if 24 MHz < SYSCLK  48 MHz
+	// - 2 wait states, if 48 MHz < SYSCLK  72 MHz
 	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
 	
 	// Configure sysclock.
@@ -220,9 +228,13 @@ bool Clock::enableMaxClock() {
 			if ((RCC->CR & RCC_CR_HSEON) != RCC_CR_HSEON) {
 				// Enable HSE clock.
 				RCC->CR |= RCC_CR_HSEON;
-				while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
+				printf("HSEON set.\n");
+				//while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
+				while ((RCC->CR & RCC_CR_HSERDY) == 0) {
 					// TODO: Handle timeout.
 				}
+				
+				printf("HSERDY check.\n");
 			}
 			
 			RCC->CFGR |= RCC_CFGR_PLLSRC;	// PLL source is HSE.
@@ -234,26 +246,38 @@ bool Clock::enableMaxClock() {
 			return false;
 		}
 		
+		printf("Set PLL..\n");
+		
 		// Set PLL configuration parameters.
 		uint32_t pllmul = 0;
 		if (maxSysClockCfg.PLLM >= 2) { pllmul = maxSysClockCfg.PLLM - 2; }
 		RCC->CFGR |= pllmul << RCC_CFGR_PLLMULL;
 		
+		printf("Enable PLL..\n");
+		
 		// Turn on PLL.
-		RCC->CFGR |= RCC_CR_PLLON;
+		RCC->CR |= RCC_CR_PLLON;
 		while (!(RCC->CR & RCC_CR_PLLRDY)) {
 			// TODO: Timeout handling.
 		}
 		
+		printf("PLLRDY check.\n");
+		
 		// Set AHB speeds.
 		if (!configureAHB(maxSysClockCfg)) { return false; }
+		
+		printf("Configured AHB.\n");
 		
 		// Enable PLL as input.
 		RCC->CFGR &= ~(RCC_CFGR_SW);
 		RCC->CFGR |= RCC_CFGR_SW_PLL;
 		while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
 		
+		printf("PLL stable.\n");
+		
 		if (!configureAPB(maxSysClockCfg)) { return false; }
+		
+		printf("Set new clock...\n");
 		
 		newSysClock = (maxSysClockCfg.base_freq * maxSysClockCfg.PLLM);
 	}
@@ -447,6 +471,13 @@ bool Clock::enableMaxClock() {
 	//SystemCoreClockUpdate();
 	
 	return true;
+}
+
+
+// --- CURRENT SYS CLOCK ---
+// Returns the currently configured system clock.
+uint32_t Clock::currentSysClock() {
+	return SystemCoreClock;
 }
 
 

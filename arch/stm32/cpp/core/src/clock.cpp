@@ -347,7 +347,7 @@ bool Clock::enableMaxClock() {
 			if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSION) {
 				// Enable HSI clock.
 				RCC->CR |= RCC_CR_HSION;
-				while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+				while ((RCC->CR & RCC_CR_HSIRDY) == 0) {
 					// TODO: Handle timeout.
 				}
 			}
@@ -358,10 +358,10 @@ bool Clock::enableMaxClock() {
 			//RCC->CR &= ~RCC_CR_HSEON;
 		}
 		else if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSE) {
-			if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSEON) {
+			if ((RCC->CR & RCC_CR_HSEON) == 0) {
 				// Enable HSI clock.
 				RCC->CR |= RCC_CR_HSEON;
-				while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+				while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
 					// TODO: Handle timeout.
 				}
 			}
@@ -383,7 +383,7 @@ bool Clock::enableMaxClock() {
 		RCC->PLLCFGR = reg;
 		
 		// Turn on PLL.
-		RCC->CFGR |= RCC_CR_PLLON;
+		RCC->CR |= RCC_CR_PLLON;
 		while (!(RCC->CR & RCC_CR_PLLRDY)) {
 			// TODO: Timeout handling.
 		}
@@ -399,7 +399,7 @@ bool Clock::enableMaxClock() {
 		if ((RCC->CR & RCC_CR_HSION) != RCC_CR_HSION) {
 			// Enable HSI clock.
 			RCC->CR |= RCC_CR_HSION;
-			while ((RCC->CR & RCC_CR_HSIRDY) != RCC_CR_HSIRDY) {
+			while ((RCC->CR & RCC_CR_HSIRDY) == 0) {
 				// TODO: Handle timeout.
 			}
 		}
@@ -409,10 +409,10 @@ bool Clock::enableMaxClock() {
 		newSysClock = maxSysClockCfg.base_freq;
 	}
 	else if (maxSysClockCfg.source == RCC_SYSCLOCK_SRC_HSE) {
-		if ((RCC->CR & RCC_CR_HSEON) != RCC_CR_HSEON) {
+		if ((RCC->CR & RCC_CR_HSEON) == 0) {
 			// Enable HSI clock.
 			RCC->CR |= RCC_CR_HSEON;
-			while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
+			while ((RCC->CR & RCC_CR_HSERDY) == 0) {
 				// TODO: Handle timeout.
 			}
 		}
@@ -444,6 +444,7 @@ bool Clock::enableMaxClock() {
 	else if (maxSysClockCfg.APB1_prescale == 4) 	{ apb1_div = 5; 	}
 	else if (maxSysClockCfg.APB1_prescale == 8) 	{ apb1_div = 6; 	}
 	else if (maxSysClockCfg.APB1_prescale == 16)	{ apb1_div = 7; 	}
+	
 	if 		(maxSysClockCfg.APB2_prescale == 2)		{ apb2_div = 4; 	}
 	else if (maxSysClockCfg.APB2_prescale == 4) 	{ apb2_div = 5; 	}
 	else if (maxSysClockCfg.APB2_prescale == 8) 	{ apb2_div = 6; 	}

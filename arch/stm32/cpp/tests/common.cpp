@@ -72,8 +72,10 @@ EXTI_TypeDef* EXTI = &tExti;
 NVIC_Type tNvic;
 NVIC_Type* NVIC = &tNvic;
 
-/* SCB_Type tScb;
-SCB_Type* SCB = &tScb; */
+#ifdef __stm32f4
+SCB_Type tScb = { .CPUID = 42, .PFR = 0, .DFR = 0, .ADR = 0, .MMFR = 0, .ISAR = 0 };
+SCB_Type* SCB = &tScb;
+#endif
 
 
 /**

@@ -35,7 +35,13 @@ int main() {
 	
 	// Check that the new sysclock matches.
 	// Here we assume the PLL is used as the SW input.
-	uint32_t newSysClock = (maxSysClockCfg.base_freq * maxSysClockCfg.PLLM);
+	uint32_t newSysClock;
+#if defined __stm32f1
+	newSysClock = (maxSysClockCfg.base_freq * maxSysClockCfg.PLLM);
+#elif defined __stm32f4
+	newSysClock = ((maxSysClockCfg.base_freq / maxSysClockCfg.PLLM) * maxSysClockCfg.PLLN)
+						/ maxSysClockCfg.PLLP;
+#endif
 	uint32_t sysclock = Clock::currentSysClock();
 	std::cout << "target clock - current clock: " <<  newSysClock << " - " << sysclock << std::endl;
 	

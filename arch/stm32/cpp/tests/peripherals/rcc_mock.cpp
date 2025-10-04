@@ -48,11 +48,13 @@ void RCC_mock::callback(int value) {
 	
 	// --- Sysclock/Flash ---
 	// - if RCC_CR_HSION == 1 -> set RCC_CR_HSIRDY to 1
-	if (RCC->CR & RCC_CR_HSION) { RCC->CR |= RCC_CR_HSIRDY; }
+	if ((RCC->CR & RCC_CR_HSION) && !(RCC->CR & RCC_CR_HSIRDY)) { 
+		RCC->CR |= RCC_CR_HSIRDY; std::cout << "Set HSERDY.\n";
+	}
 	
 	// - if RCC_CR_HSEON == 1 -> set RCC_CR_HSERDY to 1
 	if ((RCC->CR & RCC_CR_HSEON) && !(RCC->CR & RCC_CR_HSERDY)) { 
-		RCC->CR |= RCC_CR_HSERDY; std::cout << "Set HSERDY.\n"; 
+		RCC->CR |= RCC_CR_HSERDY; std::cout << "Set HSERDY.\n";
 	}
 	
 	// - if RCC_CR_PLLON == 1 -> set RCC_CR_PLLRDY to 1.

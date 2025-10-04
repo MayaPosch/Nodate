@@ -3,9 +3,9 @@
 
 INCLUDES := -I. -I ../core/include -I ../boards/blue_pill
 SOURCE_ROOT := ../core/src
-#FLAGS := -std=c++11 -g3 -DSTM32F4=1 -D__stm32f4
+FLAGS := -std=c++11 -g3 -DSTM32F4=1 -D__stm32f4
 #FLAGS := -std=c++11 -g3 -DSTM32F0=1 -D__stm32f0
-FLAGS := -std=c++11 -g3 -DSTM32F1=1 -D__stm32f1
+#FLAGS := -std=c++11 -g3 -DSTM32F1=1 -D__stm32f1
 
 
 all: mkdir rcc_test interrupts_test gpio_test eventful uart_test
@@ -53,5 +53,7 @@ sysclock_test:
 												$(SOURCE_ROOT)/printf.c \
 												peripherals\rcc_mock.cpp \
 												chronotrigger.cpp \
-												../boards/blue_pill/board_definition.cpp \
+												../boards/black_pill_f411/board_definition.cpp \
 												$(FLAGS) $(INCLUDES)
+												
+												#../boards/blue_pill/board_definition.cpp \

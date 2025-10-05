@@ -64,7 +64,17 @@ uint32_t dec2bcd32(uint32_t dec) {
 
 
 int _times(struct tms* buf) {
-#if defined RTC_TR_SU
+	timeval tp;
+	gettimeofday(&tp, NULL);
+	
+	uint32_t ticks = (uint32_t) tp.tv_sec;
+	buf->tms_utime = ticks;
+	buf->tms_stime = ticks;
+	buf->tms_cutime = ticks;
+	buf->tms_cstime = ticks;
+	
+	return (int) ticks;
+/* #if defined RTC_TR_SU
 	if (!rtc_pwr_enabled) {
 		if (!Rtc::enableRTC()) { return -1; }
 		rtc_pwr_enabled = true;
@@ -72,10 +82,10 @@ int _times(struct tms* buf) {
 	
 	// Fill tms struct from RTC registers.
 	// struct tms {
-	//		clock_t tms_utime;  /* user time */
-	//		clock_t tms_stime;  /* system time */
-	//		clock_t tms_cutime; /* user time of children */
-	//		clock_t tms_cstime; /* system time of children */
+	//		clock_t tms_utime;  // user time 
+	//		clock_t tms_stime;  // system time 
+	//		clock_t tms_cutime; // user time of children 
+	//		clock_t tms_cstime; // system time of children 
 	//	};
 	uint32_t tTR = RTC->TR;
 	uint32_t ticks = (uint8_t) RTC_Bcd2ToByte(tTR & (RTC_TR_ST | RTC_TR_SU));
@@ -87,12 +97,12 @@ int _times(struct tms* buf) {
 	
 	return ticks; // Return clock ticks.
 #elif defined __stm32f1
-	// Get value in BCD format.
+	// Get value.
 	register uint16_t high = 0, low = 0;
 
 	high = RTC->CNTH & RTC_CNTH_RTC_CNT;
 	low  = RTC->CNTL & RTC_CNTL_RTC_CNT;
-	uint32_t ticks =  bcd2dec32((uint32_t)(((uint32_t) high << 16U) | low));
+	uint32_t ticks =  (uint32_t)(((uint32_t) high << 16U) | low);
 	ticks = ticks * SystemCoreClock;
 	buf->tms_utime = ticks;
 	buf->tms_stime = ticks;
@@ -103,7 +113,7 @@ int _times(struct tms* buf) {
 #else
 	// No usable RTC peripheral exists. Return -1.
 	return -1;
-#endif 
+#endif  */
 }
 
 

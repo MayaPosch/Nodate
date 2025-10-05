@@ -114,7 +114,7 @@ int _gettimeofday (struct timeval * tp, void * tzvp) {
 	printf("H/L: %d - %d.\n", high, low);
 	
 	// Reassemble the 32-bit binary counter.
-	uint32_t ticks = (uint32_t) high << 16U) | low);
+	uint32_t ticks = (uint32_t) ((high << 16U) | low);
 	tp->tv_sec = ticks;
 	tp->tv_usec = 0;
 	

@@ -49,10 +49,14 @@ int main() {
 	}
 	
 	// Set RTC defaults.
-	// This uses the BCD format.
+	// This uses the BCD format for non-F1.
 	uint32_t dectime = 60; // in seconds.
+#ifdef __stm32f1
+	Rtc::setTime(dectime);
+#else
 	uint32_t new_time = dec2bcd32(dectime);
 	Rtc::setTime(new_time);
+#endif
 	
 	// Get time and print out.
 	// For STM32F1 with its primitive (first-gen) RTC this always returns zeroes. 

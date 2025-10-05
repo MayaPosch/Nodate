@@ -22,6 +22,16 @@
 // DEBUG
 #include <printf.h>
 
+// Handle differences between CMSIS register definition.
+// This missing define seems to exist in F4xx headers for some reason.
+#ifndef RCC_BDCR_RTCSEL_LSE
+#define RCC_BDCR_RTCSEL_NOCLOCK                  (0x00000000U)                 /*!< No clock */
+#define RCC_BDCR_RTCSEL_LSE                      (0x00000100U)                 /*!< LSE oscillator clock used as RTC clock */
+#define RCC_BDCR_RTCSEL_LSI                      (0x00000200U)                 /*!< LSI oscillator clock used as RTC clock */
+#define RCC_BDCR_RTCSEL_HSE                      (0x00000300U)                 /*!< HSE oscillator clock divided by 128 used as RTC clock */
+#endif
+// -->
+
 uint32_t bcd2dec32(uint32_t bcd); // Defined in utils.cpp
 
 #define RTC_BKP_DATE_TIME_UPDATED ((uint32_t) 0x32F2)

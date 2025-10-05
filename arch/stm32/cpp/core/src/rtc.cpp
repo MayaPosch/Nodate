@@ -399,6 +399,9 @@ bool Rtc::enableRTC(RtcClock clk) {
 // --- SET TIME ---
 bool Rtc::setTime(uint32_t time) {
 #ifndef __stm32f1
+	// Convert value to BCD.
+	time = dec2bcd32(time);
+
 	// Unlock RTC write protection.
 	RTC->WPR = 0xCA;
 	RTC->WPR = 0x53;

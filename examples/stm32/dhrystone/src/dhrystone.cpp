@@ -81,7 +81,7 @@ float           Microseconds,
 /* end of variables for time measurement */
 
 
-USART_devices usartTarget = USART_1;
+USART_devices usartTarget = USART_2;
 USART_def& ud = boardUSARTs[1];
 
 
@@ -119,7 +119,7 @@ int main () {
 	}
 	
 	// Set up stdout.
-	IO::setStdOutTarget(USART_2);
+	IO::setStdOutTarget(usartTarget);
 	
 	// Set the pin mode on the LED pin.
 	GPIO::set_output(led_port, led_pin, GPIO_PULL_UP);

@@ -62,10 +62,14 @@ uint32_t dec2bcd32(uint32_t dec) {
 } */
 // ---
 
+// Forward declaration. Implementation is in rtc.cpp.
+extern "C" {
+	int _gettimeofday (struct timeval * tp, void * tzvp);
+}
 
 int _times(struct tms* buf) {
 	timeval tp;
-	gettimeofday(&tp, NULL);
+	_gettimeofday(&tp, NULL);
 	
 	uint32_t ticks = (uint32_t) tp.tv_sec;
 	buf->tms_utime = ticks;

@@ -134,7 +134,7 @@ bool Clock::configureAHB(RccSysClockConfig cfg) {
 	else if (cfg.AHB_prescale == 128) 	{ ahb_div = 13; }
 	else if (cfg.AHB_prescale == 256) 	{ ahb_div = 14; }
 	else if (cfg.AHB_prescale == 512) 	{ ahb_div = 15; }
-	RCC->CFGR |= (ahb_div << RCC_CFGR_HPRE);
+	RCC->CFGR |= (ahb_div << RCC_CFGR_HPRE_Pos);
 	
 	return true;
 #endif
@@ -151,14 +151,14 @@ bool Clock::configureAPB(RccSysClockConfig cfg) {
 	else if (cfg.APB1_prescale == 4) 	{ apb1_div = 5;	}
 	else if (cfg.APB1_prescale == 8) 	{ apb1_div = 6;	}
 	else if (cfg.APB1_prescale == 16)	{ apb1_div = 7;	}
-	RCC->CFGR |= (apb1_div << RCC_CFGR_PPRE1);
+	RCC->CFGR |= (apb1_div << RCC_CFGR_PPRE1_Pos);
 	
 	uint32_t apb2_div = 1;
 	if 		(cfg.APB2_prescale == 2)	{ apb2_div = 4;	}
 	else if (cfg.APB2_prescale == 4) 	{ apb2_div = 5;	}
 	else if (cfg.APB2_prescale == 8) 	{ apb2_div = 6;	}
 	else if (cfg.APB2_prescale == 16)	{ apb2_div = 7;	}
-	RCC->CFGR |= (apb2_div << RCC_CFGR_PPRE2);
+	RCC->CFGR |= (apb2_div << RCC_CFGR_PPRE2_Pos);
 	
 	return true;
 	
@@ -260,12 +260,22 @@ bool Clock::enableMaxClock() {
 			return false;
 		}
 		
+		// Set AHB & APB prescalers.
+		if (!configureAHB(maxSysClockCfg)) { return false; }		
+		printf("Configured AHB.\n");		
+		if (!configureAPB(maxSysClockCfg)) { return false; }		
 		printf("Set PLL..\n");
+		
+		// Make sure PLL is disabled.
+		RCC->CR &= ~RCC_CR_PLLON;
+		while ((RCC->CR & RCC_CR_PLLRDY)) {
+			// TODO: Timeout handling.
+		}
 		
 		// Set PLL configuration parameters.
 		uint32_t pllmul = 0;
 		if (maxSysClockCfg.PLLM >= 2) { pllmul = maxSysClockCfg.PLLM - 2; }
-		RCC->CFGR |= pllmul << RCC_CFGR_PLLMULL;
+		RCC->CFGR |= pllmul << RCC_CFGR_PLLMULL_Pos;
 		
 		printf("Enable PLL..\n");
 		
@@ -277,19 +287,12 @@ bool Clock::enableMaxClock() {
 		
 		printf("PLLRDY check.\n");
 		
-		// Set AHB speeds.
-		if (!configureAHB(maxSysClockCfg)) { return false; }
-		
-		printf("Configured AHB.\n");
-		
 		// Enable PLL as input.
 		RCC->CFGR &= ~(RCC_CFGR_SW);
 		RCC->CFGR |= RCC_CFGR_SW_PLL;
 		while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) { }	// Wait for PLL to stabilise.
 		
 		printf("PLL stable.\n");
-		
-		if (!configureAPB(maxSysClockCfg)) { return false; }
 		
 		printf("Set new clock...\n");
 		

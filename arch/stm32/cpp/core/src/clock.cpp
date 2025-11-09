@@ -216,10 +216,12 @@ bool Clock::enableMaxClock() {
 
 #if defined __stm32f1
 	// Set Flash latency. Set pre-fetch buffer enabled.
+	// TODO: check whether PFB is needed.
 	// - 0 wait states, if 0 < SYSCLK  24 MHz
 	// - 1 wait state, if 24 MHz < SYSCLK  48 MHz
 	// - 2 wait states, if 48 MHz < SYSCLK  72 MHz
-	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
+	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY_Pos);
+	FLASH->ACR |= FLASH_ACR_PRFTBE;
 	
 	// Configure sysclock.
 	uint32_t newSysClock;

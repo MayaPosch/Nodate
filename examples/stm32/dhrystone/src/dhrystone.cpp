@@ -171,7 +171,7 @@ int main () {
 		printf ("\n");
 	}
 	
-	Number_Of_Runs = 100000;
+	Number_Of_Runs = 10000000; // 10 million
 	/* printf ("Please give the number of runs through the benchmark: ");
 	{
 		int n;
@@ -343,9 +343,9 @@ int main () {
 	while (1) {
 		// Idly blink here.
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_HIGH);
-		timer.delay(1000);
+		timer.delay(5000);
 		GPIO::write(led_port, led_pin, GPIO_LEVEL_LOW);
-		timer.delay(1000);
+		timer.delay(5000);
 	}
 	
 	return 0;

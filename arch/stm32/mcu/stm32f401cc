@@ -1,0 +1,16 @@
+# MCU definition file for the stm32f401cc MCU.
+# Package: UFQFPN 48.
+
+MCU_FAMILY := stm32f4
+MCU_GENUS := stm32f401cc
+MCU_GENUS_CAP := STM32F401xC
+
+MCU := stm32f401cc
+MCU_CORE := stm32f401
+MCU_RAM := 262144
+MCU_PACKAGE := uqfpn48
+
+MCU_FLAGS := -mcpu=cortex-m4 -mthumb
+# -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+
+MCU_LD := stm32f401vctx.ld

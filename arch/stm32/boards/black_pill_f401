@@ -1,4 +1,4 @@
 # Definition file for the STM32 'Black Pill' STM32F401CCU development board.
 
-MCU := stm32f401cc
+MCU := stm32f401xc
 PROGRAMMER := interface/stlink-v2.cfg -f target/stm32f4x.cfg

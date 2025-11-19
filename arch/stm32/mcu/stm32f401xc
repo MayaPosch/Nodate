@@ -1,11 +1,11 @@
-# MCU definition file for the stm32f401cc MCU.
+# MCU definition file for the stm32f401xc MCU.
 # Package: UFQFPN 48.
 
 MCU_FAMILY := stm32f4
-MCU_GENUS := stm32f401cc
+MCU_GENUS := stm32f401xc
 MCU_GENUS_CAP := STM32F401xC
 
-MCU := stm32f401cc
+MCU := stm32f401xc
 MCU_CORE := stm32f401
 MCU_RAM := 262144
 MCU_PACKAGE := uqfpn48

@@ -4,7 +4,7 @@
 
 
 volatile bool led_on = false;
-USART_devices usartTarget = USART_1;
+USART_devices usartTarget = USART_2;
 
 
 void uartCallback(char ch) {

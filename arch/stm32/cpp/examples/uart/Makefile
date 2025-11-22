@@ -13,7 +13,8 @@ NDLANGUAGE ?= cpp
 #BOARD ?= blue_pill
 #BOARD ?= stm32f4-discovery
 #BOARD ?= nucleo-f746zg
-BOARD ?= nucleo-f334r8
+#BOARD ?= nucleo-f334r8
+BOARD ?= black_pill_f401
 
 # Set the MCU and programmer types.
 #

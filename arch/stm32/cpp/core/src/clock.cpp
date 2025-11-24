@@ -454,7 +454,7 @@ bool Clock::enableMaxClock() {
 	else if (maxSysClockCfg.AHB_prescale == 128) 	{ ahb_div = 13; }
 	else if (maxSysClockCfg.AHB_prescale == 256) 	{ ahb_div = 14; }
 	else if (maxSysClockCfg.AHB_prescale == 512) 	{ ahb_div = 15; }
-	RCC->CFGR |= (ahb_div << RCC_CFGR_HPRE);
+	RCC->CFGR |= (ahb_div << RCC_CFGR_HPRE_Pos);
 	
 	// Set APB prescalers.
 	uint32_t apb1_div = 1;
@@ -468,8 +468,8 @@ bool Clock::enableMaxClock() {
 	else if (maxSysClockCfg.APB2_prescale == 4) 	{ apb2_div = 5; 	}
 	else if (maxSysClockCfg.APB2_prescale == 8) 	{ apb2_div = 6; 	}
 	else if (maxSysClockCfg.APB2_prescale == 16)	{ apb2_div = 7; 	}
-	RCC->CFGR |= (apb1_div << RCC_CFGR_PPRE1);
-	RCC->CFGR |= (apb2_div << RCC_CFGR_PPRE2);
+	RCC->CFGR |= (apb1_div << RCC_CFGR_PPRE1_Pos);
+	RCC->CFGR |= (apb2_div << RCC_CFGR_PPRE2_Pos);
 	
 	// Update System core clock variable.
 	SystemCoreClock = newSysClock;

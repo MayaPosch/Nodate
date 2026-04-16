@@ -35,7 +35,7 @@ bool init() {
 	maxSysClockCfg.PLLM		= 25;
 	maxSysClockCfg.PLLN		= 336;
 	maxSysClockCfg.PLLP		= 4;
-	maxSysClockCfg.PLLQ		= 4;
+	maxSysClockCfg.PLLQ		= 7;
 	maxSysClockCfg.AHB_prescale	= 1;
 	maxSysClockCfg.APB1_prescale	= 2;
 	maxSysClockCfg.APB2_prescale	= 1;

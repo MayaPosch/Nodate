@@ -24,8 +24,8 @@ uint8_t boardButtons_count = 1;
 uint8_t boardUSART_count = 3;
 
 bool init() {
-	// Target frequency: 100 MHz.
-	// Input: 25 MHz HSE, no bypass.
+	// Target frequency: 100 MHz from default 16 MHz.
+	// Input: 25 MHz HSE, no bypass. 3.3V for WS calculations.
 	maxSysClockCfg.source 		= RCC_SYSCLOCK_SRC_PLL;
 	maxSysClockCfg.base_freq	= 25000000;
 	maxSysClockCfg.HSE_bypass 	= false;
@@ -33,13 +33,13 @@ bool init() {
 	maxSysClockCfg.PLL_enabled = true;
 	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSE;
 	maxSysClockCfg.PLLM		= 25;
-	maxSysClockCfg.PLLN		= 200;
-	maxSysClockCfg.PLLP		= 2;
-	maxSysClockCfg.PLLQ		= 4;
+	maxSysClockCfg.PLLN		= 400;
+	maxSysClockCfg.PLLP		= 4;
+	maxSysClockCfg.PLLQ		= 9;
 	maxSysClockCfg.AHB_prescale	= 1;
 	maxSysClockCfg.APB1_prescale	= 4;
 	maxSysClockCfg.APB2_prescale	= 2;
-	maxSysClockCfg.FLASH_latency	= 7;
+	maxSysClockCfg.FLASH_latency	= 3;
 
 	// LED
 	BoardLED bl;

@@ -355,7 +355,20 @@ bool Clock::enableMaxClock() {
 
 #if defined __stm32f4
 	// Set Flash latency. Set pre-fetch buffer enabled.
-	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY | FLASH_ACR_PRFTEN);
+	FLASH->ACR |= (maxSysClockCfg.FLASH_latency << FLASH_ACR_LATENCY_Pos);
+	FLASH->ACR |= FLASH_ACR_PRFTEN;
+	FLASH->ACR |= FLASH_ACR_ICEN; // Instruction cache enable.
+	FLASH->ACR |= FLASH_ACR_DCEN; // Data cache enable.
+	
+	
+	// TODO: Wait for new values to take hold.
+	
+	// Set the appropriate voltage scaling output selection (VOS).
+	// Scale 1 mode (b11) allows for up to 100 MHz with F411.
+	// On F401 b11 is equivalent to b10.
+	// TODO: implement PWR VOS per board?
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
+	PWR->CR |= PWR_CR_VOS;
 	
 	// Set the SW sys clock switch to the right input type.
 	uint32_t newSysClock;
@@ -378,7 +391,7 @@ bool Clock::enableMaxClock() {
 		}
 		else if (maxSysClockCfg.PLL_source == RCC_PLLCLOCK_SRC_HSE) {
 			if ((RCC->CR & RCC_CR_HSEON) == 0) {
-				// Enable HSI clock.
+				// Enable HSE clock.
 				RCC->CR |= RCC_CR_HSEON;
 				while ((RCC->CR & RCC_CR_HSERDY) != RCC_CR_HSERDY) {
 					// TODO: Handle timeout.

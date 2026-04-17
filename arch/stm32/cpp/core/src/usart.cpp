@@ -36,27 +36,27 @@ USART_device* USART_list() {
 #if defined RCC_APB1ENR_USART3EN
 #if defined __stm32f0
 	devicesStatic[USART_3].regs = USART3;
-	devicesStatic[USART_3].irqType = USART3_4_IRQn;
+	devicesStatic[USART_3].irqType = USART3_IRQn;
 #else
 	devicesStatic[USART_3].regs = USART3;
 	devicesStatic[USART_3].irqType = USART3_IRQn;
 #endif
 #elif defined RCC_APB1ENR1_USART3EN
-	devicesStatic[USART_2].regs = USART3;
-	devicesStatic[USART_2].irqType = USART3_IRQn;
+	devicesStatic[USART_3].regs = USART3;
+	devicesStatic[USART_3].irqType = USART3_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART4EN
 #if defined __stm32f0
 	devicesStatic[USART_4].regs = UART4;
-	devicesStatic[USART_4].irqType = USART3_4_IRQn;
+	devicesStatic[USART_4].irqType = USART4_IRQn;
 #else
 	devicesStatic[USART_4].regs = UART4;
 	devicesStatic[USART_4].irqType = UART4_IRQn;
 #endif
 #elif defined RCC_APB1ENR1_UART4EN
-	devicesStatic[USART_2].regs = UART4;
-	devicesStatic[USART_2].irqType = UART4_IRQn;
+	devicesStatic[USART_4].regs = UART4;
+	devicesStatic[USART_4].irqType = UART4_IRQn;
 #endif
 
 #if defined RCC_APB1ENR_UART5EN
@@ -359,9 +359,10 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	//instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE);
 #endif
 
-#ifdef STM32F1
+//#ifdef STM32F1
+	// Enable the USART peripheral.
 	instance.regs->CR1 |= USART_CR1_UE;
-#endif
+//#endif
 	
 	// Set the baud rate (BR register).
 	// TODO: adjust for STM32F1.
@@ -394,17 +395,17 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
 	instance.regs->BRR = (((usartClock) + ((baudrate) / 2U)) / (baudrate));
 #endif
 	
-	// Enable the USART via its CR1 register.
-#ifndef __stm32f3
-#ifdef STM32F1
+	// Enable the USART transmitter and receiver via the CR1 register.
+//#ifndef __stm32f3
+//#ifdef STM32F1
 	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE);
-#else
+//#else
 	//instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE | USART_CR1_RXNEIE);
-	instance.regs->CR1 |= USART_CR1_UE;
-#endif
+	//instance.regs->CR1 |= USART_CR1_UE;
+/*#endif
 #else
 	instance.regs->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE);
-#endif
+#endif*/
 	
 	// Save parameters.
 	instance.tx_pin 	= tx_pin;
